@@ -13,8 +13,13 @@
     "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
     "no-console": ["warn", { "allow": ["warn", "error"] }]
   },
-  "ignorePatterns": ["node_modules/", "*.min.js"],
+  "ignorePatterns": ["node_modules/", "*.min.js", "lt/", "en/"],
   "overrides": [
+    {
+      "files": ["scripts/**/*.js"],
+      "env": { "node": true, "es2022": true },
+      "rules": { "no-console": "off" }
+    },
     {
       "files": ["google-apps-script.js"],
       "env": { "browser": false },

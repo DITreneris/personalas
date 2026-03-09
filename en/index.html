@@ -1,9 +1,14 @@
 <!DOCTYPE html>
-<html lang="lt">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>HR kasdienė atrankos sistema – DI promptai</title>
+    
+    <link rel="canonical" href="/en/">
+    <link rel="alternate" hreflang="lt" href="/lt/">
+    <link rel="alternate" hreflang="en" href="/en/">
+    <link rel="alternate" hreflang="x-default" href="/lt/">
+<title>HR daily recruitment system – AI prompts</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <style>html { scroll-behavior: smooth; }</style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,7 +22,7 @@
         }
 
         :root {
-            /* Spin-off Nr. 3 – HR atranka, žalia CTA paletė */
+            /* Spin-off Nr. 3 – HR recruitment, green CTA palette */
             --bg: #F7F8FA;
             --white: #FFFFFF;
             --text: #1A202C;
@@ -57,7 +62,7 @@
             --leading-normal: 1.5;
             --leading-relaxed: 1.6;
 
-            /* Pagrindinis akcentas – žalia; WCAG2AA 4.5:1 */
+            /* Primary accent – green; WCAG2AA 4.5:1 */
             --accent-primary: #0E7A33;
             --accent-primary-hover: #0B6B2D;
             --accent-gold: #0E7A33;
@@ -67,7 +72,7 @@
             --accent-dark: #3C485A;
             --accent-dark-hover: #2D3848;
 
-            /* Hero: žalia, ~15–20% mažesnė saturacija – ramus, autoritetingas HR, ne fintech */
+            /* Hero: green, ~15–20% lower saturation – calm, authoritative HR, not fintech */
             --hero-gradient-start: #1e6b42;
             --hero-gradient-mid: #2a7a52;
             --hero-gradient-end: #4a9572;
@@ -75,19 +80,19 @@
             --cta-text: #FFFFFF;
             --cta-hover: var(--accent-primary-hover);
 
-            /* Hero pagrindinis CTA – baltas mygtukas, žalias tekstas (akys per <1 s) */
+            /* Hero pagrindinis CTA – baltas mygtukas, green text (akys per <1 s) */
             --cta-hero-bg: #FFFFFF;
             --cta-hero-text: #0B6B2D;
             --cta-hero-hover-bg: #F0FDF4;
             --cta-hero-hover-text: #0B6B2D;
 
-            /* Tertiarinė (bibliotekos identitetas) – teal */
+            /* Tertiary (library identity) – teal */
             --tertiary: #0D9488;
             --tertiary-dark: #0a5c54;
             --tertiary-hover: #0f766e;
             --tertiary-light: #CCFBF1;
 
-            /* Semantiniai – suderinti su žalia palete */
+            /* Semantiniai – aligned with green palette */
             --blue: #3C485A;
             --blue-light: #E8ECF0;
             --orange: #0E7A33;
@@ -97,11 +102,11 @@
             --error: #E53E3E;
             --bg-subtle: #F7FAFC;
 
-            /* Community CTA – suderinta su žalia tema */
+            /* Community CTA – aligned with green theme */
             --community-cta-green: #0E7A33;
             --community-cta-green-hover: #0B6B2D;
 
-            /* Lucide ikonų dydžiai – premium SaaS */
+            /* Lucide icon sizes – premium SaaS */
             --icon-size-sm: 16px;
             --icon-size-md: 20px;
             --icon-size-lg: 24px;
@@ -168,7 +173,7 @@
         /* ===== HEADER ===== */
         .header {
             position: relative;
-            /* Premium: radial šviesa centre + gradient + gylis */
+            /* Premium: radial light centre + gradient + gylis */
             background:
                 radial-gradient(ellipse 80% 60% at 50% 20%, rgba(255, 255, 255, 0.14) 0%, transparent 50%),
                 linear-gradient(165deg, var(--hero-gradient-start) 0%, var(--hero-gradient-mid) 45%, var(--hero-gradient-end) 100%);
@@ -180,7 +185,7 @@
             overflow: hidden;
         }
 
-        /* Tamsesnis apatinis dešinys – depth hierarchy */
+        /* Darker bottom right – depth hierarchy */
         .header::before {
             content: '';
             position: absolute;
@@ -375,7 +380,7 @@
             gap: var(--space-16);
         }
 
-        /* CTA – primary (vienas ryškus kelias), secondary (ghost) */
+        /* CTA – primary (one clear path), secondary (ghost) */
         .cta-button {
             display: inline-flex;
             align-items: center;
@@ -475,7 +480,7 @@
             outline-offset: 2px;
         }
 
-        /* Hero secondary – aiškiai silpnesnis už primary, glass */
+        /* Hero secondary – clearly weaker than primary, glass */
         .header .header-cta .cta-button-outline {
             font-size: 15px;
             font-weight: 600;
@@ -553,7 +558,7 @@
             color: var(--white);
         }
 
-        /* ===== MODAL / KONTAKTŲ FORMA (rezervuota būsimai – žr. INTEGRACIJA.md) ===== */
+        /* ===== MODAL / CONTACT FORM (reserved for future – see INTEGRACIJA.md) ===== */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -979,7 +984,7 @@
             margin-bottom: var(--space-16);
         }
 
-        /* Badge sistemos dalis – skaičius kortelėje */
+        /* Badge system part – number on card */
         .number {
             min-width: 40px;
             min-height: 40px;
@@ -999,7 +1004,7 @@
             border: var(--border-width) solid rgba(255, 255, 255, 0.2);
         }
 
-        /* Viduje fazės kortelės fazės numeris / pavadinimas nebėra kartojamas – pakanka fazės header */
+        /* Inside phase card the phase number / title not repeated – phase header is enough */
         .phase-body .prompt .number {
             display: none;
         }
@@ -1305,7 +1310,7 @@
             transition: width 0.5s var(--ease-out);
         }
 
-        /* ===== PHASE ACCORDION (6 fazės) ===== */
+        /* ===== PHASE ACCORDION (6 phases) ===== */
         .phase {
             background: var(--white);
             border: var(--border-width) solid var(--border-subtle);
@@ -1547,7 +1552,7 @@
             line-height: 1.5;
         }
 
-        /* Pagrindinis CTA – vienas brand green, be glow, subtilus shadow */
+        /* Primary CTA – single brand green, be glow, subtle shadow */
         .community-cta-primary {
             display: inline-flex;
             align-items: center;
@@ -1632,7 +1637,7 @@
             margin-bottom: 24px;
         }
         .footer-product-link a {
-            color: #008579; /* WCAG2AA 4.5:1 ant šviesaus fono */
+            color: #008579; /* WCAG2AA 4.5:1 on light background */
             font-weight: 700;
             text-decoration: none;
             text-underline-offset: 3px;
@@ -1851,7 +1856,7 @@
                 bottom: 16px;
             }
 
-            /* Checkbox tap area mobilėje: ≥44px, vizualiai 24px (WCAG) */
+            /* Checkbox tap area on mobile: ≥44px, vizualiai 24px (WCAG) */
             .prompt-done-wrap {
                 min-height: 44px;
                 padding: 12px 0;
@@ -1864,7 +1869,7 @@
             }
         }
 
-        /* Mobile UI First: mažiausias viewport (320–375px) */
+        /* Mobile UI First: minimum viewport (320–375px) */
         @media (max-width: 375px) {
             .container {
                 padding: 24px 16px;
@@ -1978,44 +1983,44 @@
     </style>
 </head>
 <body>
-    <a href="#main-content" class="skip-link">Pereiti prie turinio</a>
+    <a href="#main-content" class="skip-link">Skip to content</a>
     <div class="container">
         <main id="main-content">
 
         <!-- HERO -->
         <header class="header">
             <div class="header-badges">
-                <a href="https://www.promptanatomy.app/" class="badge" target="_blank" rel="noopener noreferrer" aria-label="Pilna Promptų anatomija – interaktyvus mokymas (atidaroma naujame lange)">Promptų anatomija</a>
-                <span class="badge badge-spinoff" role="status" aria-label="HR kasdienė atrankos sistema, Spin-off Nr. 3">Spin-off Nr. 3</span>
+                <a href="https://www.promptanatomy.app/" class="badge" target="_blank" rel="noopener noreferrer" aria-label="Full Prompt anatomy – interactive training (opens in new tab)">Prompt anatomy</a>
+                <span class="badge badge-spinoff" role="status" aria-label="HR daily recruitment system, Spin-off No. 3">Spin-off Nr. 3</span>
             </div>
-            <h1>DI atrankos sistema<br>Personalo vadovui</h1>
-            <p>Veikianti atrankos struktūra per ~30 min.</p>
-            <ul class="header-phases" aria-label="6 sistemos fazės">
-                <li><button type="button" class="header-phase-link is-active" data-phase="1">1. Diagnostika</button></li>
-                <li><button type="button" class="header-phase-link" data-phase="2">2. Profilis</button></li>
-                <li><button type="button" class="header-phase-link" data-phase="3">3. Pritraukimas</button></li>
-                <li><button type="button" class="header-phase-link" data-phase="4">4. Atranka</button></li>
-                <li><button type="button" class="header-phase-link" data-phase="5">5. Pasiūlymas</button></li>
-                <li><button type="button" class="header-phase-link" data-phase="6">6. Išlaikymas</button></li>
+            <h1>AI recruitment system<br>For HR leaders</h1>
+            <p>Working recruitment structure in ~30 min.</p>
+            <ul class="header-phases" aria-label="6 system phases">
+                <li><button type="button" class="header-phase-link is-active" data-phase="1">1. Diagnosis</button></li>
+                <li><button type="button" class="header-phase-link" data-phase="2">2. Profile</button></li>
+                <li><button type="button" class="header-phase-link" data-phase="3">3. Attraction</button></li>
+                <li><button type="button" class="header-phase-link" data-phase="4">4. Selection</button></li>
+                <li><button type="button" class="header-phase-link" data-phase="5">5. Offer</button></li>
+                <li><button type="button" class="header-phase-link" data-phase="6">6. Retention</button></li>
             </ul>
             <div class="header-cta">
-                <a href="#progressIndicator" class="cta-button" aria-label="Peržiūrėti sistemą – progresas ir fazės">Peržiūrėti sistemą</a>
-                <nav class="lang-switcher" aria-label="Kalbos pasirinkimas">
-                    <button type="button" id="langLtBtn" class="lang-btn" aria-label="Perjungti į lietuvių kalbą">LT</button>
-                    <button type="button" id="langEnBtn" class="lang-btn" aria-label="Perjungti į anglų kalbą">EN</button>
+                <a href="#progressIndicator" class="cta-button" aria-label="View system – progress and phases">View system</a>
+                <nav class="lang-switcher" aria-label="Language selection">
+                    <button type="button" id="langLtBtn" class="lang-btn" aria-label="Switch to Lithuanian">LT</button>
+                    <button type="button" id="langEnBtn" class="lang-btn" aria-label="Switch to English">EN</button>
                 </nav>
             </div>
         </header>
 
         <!-- KĄ ŠI SISTEMA PADEDA IŠSPRĘSTI -->
         <section class="objectives" aria-labelledby="objectives-title">
-            <h2 id="objectives-title"><span class="icon-wrap" aria-hidden="true"><i data-lucide="target" class="icon icon--md"></i></span> Ką ši sistema padeda išspręsti</h2>
-            <p class="objectives-intro">Ji skirta tam, kad nustotumėte švaistyti laiką „tuščioms“ paieškoms!</p>
+            <h2 id="objectives-title"><span class="icon-wrap" aria-hidden="true"><i data-lucide="target" class="icon icon--md"></i></span> What this system helps solve</h2>
+            <p class="objectives-intro">It helps you stop wasting time on “empty” searches!</p>
             <ul>
-                <li><strong>Nulinis srautas?</strong> Sugeneruokite pritraukiančius skelbimus ir paieškos žinutes.</li>
-                <li><strong>Netinkami žmonės?</strong> Tiksliai apibrėžkite profilį ir atsirinkite geriausius.</li>
-                <li><strong>Lėtas tempas?</strong> Identifikuokite „butelio kakliuką“ per 5 minutes.</li>
-                <li><strong>Prarandami talentai?</strong> Pateikite pasiūlymą, kurio neįmanoma atsisakyti.</li>
+                <li><strong>Zero pipeline?</strong> Generate compelling job ads and outreach messages.</li>
+                <li><strong>Wrong people?</strong> Define the profile precisely and select the best.</li>
+                <li><strong>Slow pace?</strong> Identify the bottleneck in 5 minutes.</li>
+                <li><strong>Losing talent?</strong> Make an offer they can't refuse.</li>
             </ul>
         </section>
 
@@ -2023,735 +2028,731 @@
         <section class="instructions" aria-labelledby="instructions-title">
             <h2 class="instructions-title" id="instructions-title">
                 <span class="icon-wrap" aria-hidden="true"><i data-lucide="book-open" class="icon icon--md"></i></span>
-                <span>Kaip naudoti šią sistemą</span>
-                <span class="prompt-time" role="status" aria-label="Orientacinis laikas: 3–5 min per žingsnį">~3–5 min per žingsnį</span>
+                <span>How to use this system</span>
+                <span class="prompt-time" role="status" aria-label="Estimated time: 3–5 min per step">~3–5 min per step</span>
             </h2>
             <ol>
-                <li>Pasirink fazę, paspausk ir atidaryk. Tada pasirink konkretų promptą.</li>
-                <li>Spausk <strong>„Kopijuoti promptą“</strong> arba <code>Ctrl+C</code> / <code>Cmd+C</code> ant pasirinkto prompto.</li>
-                <li>Įklijuok į ChatGPT, Claude ar kitą DI (dirbtinio intelekto) įrankį.</li>
-                <li>Jei prompte yra <code>[įmonė]</code>, <code>[pozicija]</code>, <code>[atlygis]</code>, <code>[ ]</code> ar kiti laukai – pakeisk savo duomenimis. DI vaidmens („Tu esi…“) keisti nereikia.</li>
+                <li>Choose a phase, click and open. Then pick a specific prompt.</li>
+                <li>Click <strong>“Copy prompt”</strong> or <code>Ctrl+C</code> / <code>Cmd+C</code> on the selected prompt.</li>
+                <li>Paste into ChatGPT, Claude or another AI tool.</li>
+                <li>If the prompt has <code>[company]</code>, <code>[role]</code>, <code>[salary]</code>, <code>[ ]</code> or other placeholders – replace with your data. Do not change the AI role (“You are…”).</li>
             </ol>
         </section>
 
-        <!-- PROGRESS INDICATOR (S1) – Sistema: X / 6 fazės -->
+        <!-- PROGRESS INDICATOR (S1) – System: X / 6 phases -->
         <div class="progress-wrap" id="progressIndicator" aria-live="polite" aria-atomic="true">
-            <p id="progressText">Sistema: 0 / 6 fazės</p>
-            <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="6" aria-label="Progresas: 0 iš 6 fazių">
+            <p id="progressText">System: 0 / 6 phases</p>
+            <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="6" aria-label="Progress: 0 of 6 phases">
                 <div class="progress-bar-fill" id="progressBarFill" style="width: 0%;"></div>
             </div>
         </div>
 
-        <!-- PROMPT 1 – FAZĖ 1 Diagnostika -->
+        <!-- PROMPT 1 – PHASE 1 Diagnosis -->
         <article class="prompt" data-phase="1">
             <div class="prompt-header">
                 <div class="prompt-meta">
-                    <div class="number">FAZĖ 1</div>
-                    <div class="category">Diagnostika</div>
+                    <div class="number">PHASE 1</div>
+                    <div class="category">Diagnosis</div>
                     <span class="prompt-time">~5–10 min</span>
                 </div>
-                <h2 class="prompt-title">Kur stringame?</h2>
-                <p class="prompt-desc">Padėk suprasti mūsų atrankos iššūkius</p>
+                <h2 class="prompt-title">Where are we stuck?</h2>
+                <p class="prompt-desc">Help understand our recruitment challenges</p>
             </div>
             <div class="prompt-body">
                 <div class="code-block" 
                      id="block1" 
                      role="button"
                      tabindex="0"
-                     aria-label="Pasirinkti ir kopijuoti promptą 1"
+                     aria-label="Select and copy prompt 1"
                      onclick="selectText(this)"
                      onkeydown="handleCodeBlockKeydown(event, this)">
-                    <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Kopijuoti</span>
-                    <pre class="code-text" id="prompt1">Tu esi atrankos analitikas. Tavo tikslas – pagal skaičius nustatyti, kur atrankoje stringame ir ką pakeisti.
+                    <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Copy</span>
+                    <pre class="code-text" id="prompt1">You are a recruitment analyst. Your goal is to identify where recruitment is stuck and what to change, using the numbers.
 
-Padėk man suprasti mūsų atrankos iššūkius.
+Help me understand our recruitment challenges.
 
-Turime:
-- Kandidatų skaičius: [ ]
-- Pokalbių skaičius: [ ]
-- Pasiūlymų skaičius: [ ]
-- Kiek priėmė pasiūlymą: [ ]
+We have:
+- Number of candidates: [ ]
+- Number of interviews: [ ]
+- Number of offers: [ ]
+- How many accepted: [ ]
 
-Pasakyk paprastai:
-1. Kur labiausiai stringame?
-2. Kodėl taip gali būti?
-3. Ką galime pakeisti jau šią savaitę?</pre>
+Explain simply:
+1. Where are we most stuck?
+2. Why might that be?
+3. What can we change this week?</pre>
                 </div>
-                <div class="info-box" role="note" aria-label="Informacija: promptas 1">
+                <div class="info-box" role="note" aria-label="Information: prompt 1">
                     <div class="info-item">
                         <span class="info-icon" aria-hidden="true"><i data-lucide="lightbulb" class="icon icon--md"></i></span>
                         <div class="info-content">
-                            <strong>Naudok kai:</strong>
-                            <p>Nori greitai suprasti, kur stringa atranka. Kai matome skaičius, lengviau nuspręsti, kur dėti pastangas.</p>
-                            <p><strong>Tai nėra klausimynas.</strong> Nukopijuok šį tekstą ir įklijuok į ChatGPT arba Claude.</p>
+                            <strong>Use when:</strong>
+                            <p>You want to quickly see where recruitment is stuck. Numbers make it easier to decide where to focus.</p>
+                            <p><strong>This is not a survey.</strong> Copy this text and paste into ChatGPT or Claude.</p>
                         </div>
                     </div>
                     <div class="info-item info-item-replace">
                         <span class="info-icon" aria-hidden="true"><i data-lucide="pencil" class="icon icon--md"></i></span>
                         <div class="info-content">
-                            <strong>Pakeisk prieš naudodamas:</strong>
-                            <p>Skaičius (kandidatų, pokalbių, pasiūlymų, priėmė) – įrašyk savo skaičius į laukus [ ].</p>
+                            <strong>Replace before using:</strong>
+                            <p>Numbers (candidates, interviews, offers, accepted) – put your numbers in the [ ] fields.</p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="prompt-footer">
-                <p class="prompt-cta">Nukopijuok ir įklijuok į ChatGPT arba Claude – tai šio žingsnio tikslas.</p>
+                <p class="prompt-cta">Copy and paste into ChatGPT or Claude – that's the goal of this step.</p>
                 <button class="btn" 
                         onclick="copyPrompt(this, 'prompt1')"
-                        aria-label="Kopijuoti promptą 1 į mainų atmintinę"
+                        aria-label="Copy prompt 1 to clipboard"
                         data-prompt-id="prompt1">
                     <span aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i></span>
-                    <span>Kopijuoti promptą</span>
+                    <span>Copy prompt</span>
                 </button>
                 <label class="prompt-done-wrap">
-                    <input type="checkbox" class="prompt-done" data-prompt-id="1" aria-label="Pažymėti, kad atlikai šį žingsnį">
-                    <span>Pažymėjau kaip atlikau</span>
+                    <input type="checkbox" class="prompt-done" data-prompt-id="1" aria-label="Mark as done">
+                    <span>Marked as done</span>
                 </label>
             </div>
         </article>
 
-        <!-- PROMPT 2 – FAZĖ 2 Profilis -->
+        <!-- PROMPT 2 – PHASE 2 Profile -->
         <article class="prompt" data-phase="2">
             <div class="prompt-header">
                 <div class="prompt-meta">
-                    <div class="number">FAZĖ 2</div>
-                    <div class="category">Profilis</div>
+                    <div class="number">PHASE 2</div>
+                    <div class="category">Profile</div>
                     <span class="prompt-time">~5–10 min</span>
                 </div>
-                <h2 class="prompt-title">Koks žmogus mums iš tikrųjų tinka?</h2>
-                <p class="prompt-desc">Padėk aiškiai aprašyti idealų kandidatą pozicijai</p>
+                <h2 class="prompt-title">Who really fits us?</h2>
+                <p class="prompt-desc">Help describe the ideal candidate for the role</p>
             </div>
             <div class="prompt-body">
                 <div class="code-block" 
                      id="block2" 
                      role="button"
                      tabindex="0"
-                     aria-label="Pasirinkti ir kopijuoti promptą 2"
+                     aria-label="Select and copy prompt 2"
                      onclick="selectText(this)"
                      onkeydown="handleCodeBlockKeydown(event, this)">
-                    <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Kopijuoti</span>
-                    <pre class="code-text" id="prompt2">Tu esi kandidatų profilio specialistas. Tavo tikslas – aiškiai aprašyti idealų kandidatą pozicijai (savybės, ko išmokyti, motyvacija).
+                    <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Copy</span>
+                    <pre class="code-text" id="prompt2">You are a candidate profile specialist. Your goal is to clearly describe the ideal candidate for the role (traits, what can be taught, motivation).
 
-Padėk aiškiai aprašyti, koks žmogus mums labiausiai tiktų.
+Help me clearly describe who would fit us best.
 
-Įmonė/sritis: [įmonė]
-Pozicija: [ ]
-Geriausias darbuotojas šioje rolėje: [koks jis?]
-Kodėl anksčiau žmonės išeidavo: [ ]
+Company/field: [company]
+Role: [ ]
+Best performer in this role: [what are they like?]
+Why people left before: [ ]
 
-Atsakyk paprastai:
-1. Kokias 5 savybes privalo turėti?
-2. Ko galima išmokyti?
-3. Kodėl toks žmogus svarstytų keisti darbą?
-4. Ko jis labiausiai bijotų?</pre>
+Answer simply:
+1. What 5 traits must they have?
+2. What can be taught?
+3. Why would this person consider changing jobs?
+4. What would they fear most?</pre>
                 </div>
-                <div class="info-box" role="note" aria-label="Informacija: promptas 2">
+                <div class="info-box" role="note" aria-label="Information: prompt 2">
                     <div class="info-item">
                         <span class="info-icon" aria-hidden="true"><i data-lucide="lightbulb" class="icon icon--md"></i></span>
                         <div class="info-content">
-                            <strong>Naudok kai:</strong>
-                            <p>Aprašai idealų kandidatą pozicijai. Kai žinome, ko ieškome, lengviau atpažinti tinkamą žmogų.</p>
+                            <strong>Use when:</strong>
+                            <p>You're describing the ideal candidate. When we know what we want, it's easier to spot the right person.</p>
                         </div>
                     </div>
                     <div class="info-item info-item-replace">
                         <span class="info-icon" aria-hidden="true"><i data-lucide="pencil" class="icon icon--md"></i></span>
                         <div class="info-content">
-                            <strong>Pakeisk prieš naudodamas:</strong>
-                            <p>[įmonė] → įmonės pavadinimas arba sritis (pvz. IT startupas, mažmeninė prekyba); [pozicija] → pareigos; geriausias darbuotojas – trumpas aprašymas; kodėl išeidavo – priežastis arba „–“.</p>
+                            <strong>Replace before using:</strong>
+                            <p>[company] → company name or field (e.g. IT startup, retail); [role] → job title; best performer – short description; why they left – reason or “–”.</p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="prompt-footer">
-                <p class="prompt-cta">Įklijuok į ChatGPT arba Claude ir pakeisk laukus savo duomenimis.</p>
+                <p class="prompt-cta">Paste into ChatGPT or Claude and replace the fields with your data.</p>
                 <button class="btn" 
                         onclick="copyPrompt(this, 'prompt2')"
-                        aria-label="Kopijuoti promptą 2 į mainų atmintinę"
+                        aria-label="Copy prompt 2 to clipboard"
                         data-prompt-id="prompt2">
                     <span aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i></span>
-                    <span>Kopijuoti promptą</span>
+                    <span>Copy prompt</span>
                 </button>
                 <label class="prompt-done-wrap">
-                    <input type="checkbox" class="prompt-done" data-prompt-id="2" aria-label="Pažymėti, kad atlikai šį žingsnį">
-                    <span>Pažymėjau kaip atlikau</span>
+                    <input type="checkbox" class="prompt-done" data-prompt-id="2" aria-label="Mark as done">
+                    <span>Marked as done</span>
                 </label>
             </div>
         </article>
 
-        <!-- PROMPT 3 – FAZĖ 3 Pritraukimas -->
+        <!-- PROMPT 3 – PHASE 3 Attraction -->
         <article class="prompt" data-phase="3">
             <div class="prompt-header">
                 <div class="prompt-meta">
-                    <div class="number">FAZĖ 3</div>
-                    <div class="category">Pritraukimas</div>
+                    <div class="number">PHASE 3</div>
+                    <div class="category">Attraction</div>
                     <span class="prompt-time">~3–5 min</span>
                 </div>
-                <h2 class="prompt-title">Perrašyk darbo skelbimą paprastai</h2>
-                <p class="prompt-desc">Kad žmogus jaustų, jog skelbimas rašytas jam</p>
+                <h2 class="prompt-title">Rewrite the job ad in plain language</h2>
+                <p class="prompt-desc">So the person feels the ad is for them</p>
             </div>
             <div class="prompt-body">
                 <div class="code-block" 
                      id="block3" 
                      role="button"
                      tabindex="0"
-                     aria-label="Pasirinkti ir kopijuoti promptą 3"
+                     aria-label="Select and copy prompt 3"
                      onclick="selectText(this)"
                      onkeydown="handleCodeBlockKeydown(event, this)">
-                    <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Kopijuoti</span>
-                    <pre class="code-text" id="prompt3">Tu esi darbo skelbimų redaktorius. Tavo tikslas – perrašyti skelbimą paprasta kalba, kad kandidatas jaustų, jog rašoma būtent jam.
+                    <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Copy</span>
+                    <pre class="code-text" id="prompt3">You are a job ad editor. Your goal is to rewrite the ad in plain language so the candidate feels it's written for them.
 
-Perrašyk šį darbo skelbimą taip, kad žmogus jaustų, jog jis rašytas jam.
+Rewrite this job ad so the person feels it's written for them.
 
-Įmonė/sritis: [įmonė]
-Tekstas: [įklijuok]
+Company/field: [company]
+Text: [paste here]
 
-Padaryk:
-- Aiški pradžia
-- Paprasta kalba
-- Konkretūs pavyzdžiai
-- Aiškus kvietimas kandidatuoti</pre>
+Do:
+- Clear opening
+- Plain language
+- Concrete examples
+- Clear call to apply</pre>
                 </div>
-                <div class="info-box" role="note" aria-label="Informacija: promptas 3">
+                <div class="info-box" role="note" aria-label="Information: prompt 3">
                     <div class="info-item">
                         <span class="info-icon" aria-hidden="true"><i data-lucide="lightbulb" class="icon icon--md"></i></span>
                         <div class="info-content">
-                            <strong>Naudok kai:</strong>
-                            <p>Perrašai skelbimą paprasta kalba. Paprastas ir aiškus tekstas pritraukia tinkamus kandidatus.</p>
+                            <strong>Use when:</strong>
+                            <p>You're rewriting the ad in plain language. Clear, simple text attracts the right candidates.</p>
                         </div>
                     </div>
                     <div class="info-item info-item-replace">
                         <span class="info-icon" aria-hidden="true"><i data-lucide="pencil" class="icon icon--md"></i></span>
                         <div class="info-content">
-                            <strong>Pakeisk prieš naudodamas:</strong>
-                            <p>[įmonė] → įmonės pavadinimas arba sritis (nebūtina, bet padeda pritaikyti toną); [įklijuok] → įklijuok savo darbo skelbimo tekstą.</p>
+                            <strong>Replace before using:</strong>
+                            <p>[company] → company name or field (optional but helps tone); [paste] → paste your job ad text.</p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="prompt-footer">
-                <p class="prompt-cta">Nukopijuok ir įklijuok į ChatGPT arba Claude – tai šio žingsnio tikslas.</p>
+                <p class="prompt-cta">Copy and paste into ChatGPT or Claude – that's the goal of this step.</p>
                 <button class="btn" 
                         onclick="copyPrompt(this, 'prompt3')"
-                        aria-label="Kopijuoti promptą 3 į mainų atmintinę"
+                        aria-label="Copy prompt 3 to clipboard"
                         data-prompt-id="prompt3">
                     <span aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i></span>
-                    <span>Kopijuoti promptą</span>
+                    <span>Copy prompt</span>
                 </button>
                 <label class="prompt-done-wrap">
-                    <input type="checkbox" class="prompt-done" data-prompt-id="3" aria-label="Pažymėti, kad atlikai šį žingsnį">
-                    <span>Pažymėjau kaip atlikau</span>
+                    <input type="checkbox" class="prompt-done" data-prompt-id="3" aria-label="Mark as done">
+                    <span>Marked as done</span>
                 </label>
             </div>
         </article>
 
-        <!-- PROMPT 4 – FAZĖ 3 Pritraukimas -->
+        <!-- PROMPT 4 – PHASE 3 Attraction -->
         <article class="prompt" data-phase="3">
             <div class="prompt-header">
                 <div class="prompt-meta">
-                    <div class="number">FAZĖ 3</div>
-                    <div class="category">Pritraukimas</div>
+                    <div class="number">PHASE 3</div>
+                    <div class="category">Attraction</div>
                     <span class="prompt-time">~3–5 min</span>
                 </div>
-                <h2 class="prompt-title">Kaip šiandien rasti daugiau žmonių?</h2>
-                <p class="prompt-desc">3 paprasti būdai – LinkedIn, pažįstami, tiesioginis parašas</p>
+                <h2 class="prompt-title">How to find more people today?</h2>
+                <p class="prompt-desc">3 simple ways – LinkedIn, network, direct message</p>
             </div>
             <div class="prompt-body">
                 <div class="code-block" 
                      id="block4" 
                      role="button"
                      tabindex="0"
-                     aria-label="Pasirinkti ir kopijuoti promptą 4"
+                     aria-label="Select and copy prompt 4"
                      onclick="selectText(this)"
                      onkeydown="handleCodeBlockKeydown(event, this)">
-                    <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Kopijuoti</span>
-                    <pre class="code-text" id="prompt4">Tu esi kandidatų paieškos konsultantas. Tavo tikslas – pasiūlyti konkrečius, paprastus būdus rasti daugiau kandidatų (LinkedIn, pažįstami, tiesioginis kontaktas).
+                    <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Copy</span>
+                    <pre class="code-text" id="prompt4">You are a candidate sourcing consultant. Your goal is to suggest concrete, simple ways to find more candidates (LinkedIn, network, direct outreach).
 
-Duok man 3 paprastus būdus šiandien rasti daugiau kandidatų šiai pozicijai:
+Give me 3 simple ways to find more candidates for this role today:
 
-Įmonė/sritis: [įmonė]
-Pozicija: [ ]
+Company/field: [company]
+Role: [ ]
 
-Pasiūlyk:
-- Ką parašyti LinkedIn
-- Kaip paklausti pažįstamų
-- Kaip parašyti žmogui tiesiogiai</pre>
+Suggest:
+- What to write on LinkedIn
+- How to ask your network
+- How to message someone directly</pre>
                 </div>
-                <div class="info-box" role="note" aria-label="Informacija: promptas 4">
+                <div class="info-box" role="note" aria-label="Information: prompt 4">
                     <div class="info-item">
                         <span class="info-icon" aria-hidden="true"><i data-lucide="lightbulb" class="icon icon--md"></i></span>
                         <div class="info-content">
-                            <strong>Naudok kai:</strong>
-                            <p>Reikia daugiau kandidatų – LinkedIn, pažįstami, tiesioginis parašas. Paprasti žingsniai, ne tik skelbimai.</p>
+                            <strong>Use when:</strong>
+                            <p>You need more candidates – LinkedIn, network, direct message. Simple steps, not just job boards.</p>
                         </div>
                     </div>
                     <div class="info-item info-item-replace">
                         <span class="info-icon" aria-hidden="true"><i data-lucide="pencil" class="icon icon--md"></i></span>
                         <div class="info-content">
-                            <strong>Pakeisk prieš naudodamas:</strong>
-                            <p>[įmonė] → įmonės pavadinimas arba sritis; [pozicija] → tavo pozicija (pvz. Pardavimų vadovas).</p>
+                            <strong>Replace before using:</strong>
+                            <p>[company] → company name or field; [role] → your role (e.g. Sales manager).</p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="prompt-footer">
-                <p class="prompt-cta">Nukopijuok, įklijuok į DI įrankį ir pakeisk [įmonė], [pozicija] savo duomenimis.</p>
+                <p class="prompt-cta">Copy, paste into your AI tool and replace [company], [role] with your data.</p>
                 <button class="btn" 
                         onclick="copyPrompt(this, 'prompt4')"
-                        aria-label="Kopijuoti promptą 4 į mainų atmintinę"
+                        aria-label="Copy prompt 4 to clipboard"
                         data-prompt-id="prompt4">
                     <span aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i></span>
-                    <span>Kopijuoti promptą</span>
+                    <span>Copy prompt</span>
                 </button>
                 <label class="prompt-done-wrap">
-                    <input type="checkbox" class="prompt-done" data-prompt-id="4" aria-label="Pažymėti, kad atlikai šį žingsnį">
-                    <span>Pažymėjau kaip atlikau</span>
+                    <input type="checkbox" class="prompt-done" data-prompt-id="4" aria-label="Mark as done">
+                    <span>Marked as done</span>
                 </label>
             </div>
         </article>
 
-        <!-- PROMPT 5 – FAZĖ 4 Atranka -->
+        <!-- PROMPT 5 – PHASE 4 Selection -->
         <article class="prompt" data-phase="4">
             <div class="prompt-header">
                 <div class="prompt-meta">
-                    <div class="number">FAZĖ 4</div>
-                    <div class="category">Atranka</div>
+                    <div class="number">PHASE 4</div>
+                    <div class="category">Selection</div>
                     <span class="prompt-time">~5–10 min</span>
                 </div>
-                <h2 class="prompt-title">Kaip geriau pravesti pokalbį?</h2>
-                <p class="prompt-desc">Paprastas pokalbio planas – klausimai ir į ką atkreipti dėmesį</p>
+                <h2 class="prompt-title">How to run a better interview?</h2>
+                <p class="prompt-desc">Simple interview plan – questions and what to watch for</p>
             </div>
             <div class="prompt-body">
                 <div class="code-block" 
                      id="block5" 
                      role="button"
                      tabindex="0"
-                     aria-label="Pasirinkti ir kopijuoti promptą 5"
+                     aria-label="Select and copy prompt 5"
                      onclick="selectText(this)"
                      onkeydown="handleCodeBlockKeydown(event, this)">
-                    <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Kopijuoti</span>
-                    <pre class="code-text" id="prompt5">Tu esi atrankos pokalbių specialistas. Tavo tikslas – sukurti paprastą pokalbio planą: klausimus, kurie padeda suprasti žmogų, ir į ką atkreipti dėmesį.
+                    <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Copy</span>
+                    <pre class="code-text" id="prompt5">You are an interview specialist. Your goal is to create a simple interview plan: questions that help understand the person, and what to watch for.
 
-Sukurk paprastą pokalbio planą šiai pozicijai:
+Create a simple interview plan for this role:
 
-Įmonė/sritis: [įmonė]
-Pozicija: [ ]
+Company/field: [company]
+Role: [ ]
 
-Duok:
-- 5 klausimus, kurie padeda suprasti žmogų
-- 3 situacinius klausimus
-- Kaip suprasti, ar žmogus tikrai tiks
-- Į ką atkreipti dėmesį</pre>
+Give:
+- 5 questions that help understand the person
+- 3 situational questions
+- How to tell if they're really a fit
+- What to watch for</pre>
                 </div>
-                <div class="info-box" role="note" aria-label="Informacija: promptas 5">
+                <div class="info-box" role="note" aria-label="Information: prompt 5">
                     <div class="info-item">
                         <span class="info-icon" aria-hidden="true"><i data-lucide="lightbulb" class="icon icon--md"></i></span>
                         <div class="info-content">
-                            <strong>Naudok kai:</strong>
-                            <p>Ruoši pokalbį ar nori geresnių klausimų. Struktūra padeda išgirsti tai, kas iš tikrųjų svarbu.</p>
+                            <strong>Use when:</strong>
+                            <p>You're preparing for an interview or want better questions. Structure helps you hear what really matters.</p>
                         </div>
                     </div>
                     <div class="info-item info-item-replace">
                         <span class="info-icon" aria-hidden="true"><i data-lucide="pencil" class="icon icon--md"></i></span>
                         <div class="info-content">
-                            <strong>Pakeisk prieš naudodamas:</strong>
-                            <p>[įmonė] → įmonės pavadinimas arba sritis; [pozicija] → tavo pozicija.</p>
+                            <strong>Replace before using:</strong>
+                            <p>[company] → company name or field; [role] → your role.</p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="prompt-footer">
-                <p class="prompt-cta">Nukopijuok ir įklijuok į ChatGPT arba Claude – tai šio žingsnio tikslas.</p>
+                <p class="prompt-cta">Copy and paste into ChatGPT or Claude – that's the goal of this step.</p>
                 <button class="btn" 
                         onclick="copyPrompt(this, 'prompt5')"
-                        aria-label="Kopijuoti promptą 5 į mainų atmintinę"
+                        aria-label="Copy prompt 5 to clipboard"
                         data-prompt-id="prompt5">
                     <span aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i></span>
-                    <span>Kopijuoti promptą</span>
+                    <span>Copy prompt</span>
                 </button>
                 <label class="prompt-done-wrap">
-                    <input type="checkbox" class="prompt-done" data-prompt-id="5" aria-label="Pažymėti, kad atlikai šį žingsnį">
-                    <span>Pažymėjau kaip atlikau</span>
+                    <input type="checkbox" class="prompt-done" data-prompt-id="5" aria-label="Mark as done">
+                    <span>Marked as done</span>
                 </label>
             </div>
         </article>
 
-        <!-- PROMPT 6 – FAZĖ 4 Atranka -->
+        <!-- PROMPT 6 – PHASE 4 Selection -->
         <article class="prompt" data-phase="4">
             <div class="prompt-header">
                 <div class="prompt-meta">
-                    <div class="number">FAZĖ 4</div>
-                    <div class="category">Atranka</div>
+                    <div class="number">PHASE 4</div>
+                    <div class="category">Selection</div>
                     <span class="prompt-time">~5 min</span>
                 </div>
-                <h2 class="prompt-title">Kodėl kandidatai atsisako?</h2>
-                <p class="prompt-desc">Suprask priežastis ir kaip apie tai kalbėti</p>
+                <h2 class="prompt-title">Why do candidates decline?</h2>
+                <p class="prompt-desc">Understand reasons and how to talk about it</p>
             </div>
             <div class="prompt-body">
                 <div class="code-block" 
                      id="block6" 
                      role="button"
                      tabindex="0"
-                     aria-label="Pasirinkti ir kopijuoti promptą 6"
+                     aria-label="Select and copy prompt 6"
                      onclick="selectText(this)"
                      onkeydown="handleCodeBlockKeydown(event, this)">
-                    <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Kopijuoti</span>
-                    <pre class="code-text" id="prompt6">Tu esi pasiūlymų ir atsisakymų analitikas. Tavo tikslas – išaiškinti galimas atsisakymo priežastis ir pasiūlyti, kaip kalbėti su kandidatu bei ką pagerinti.
+                    <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Copy</span>
+                    <pre class="code-text" id="prompt6">You are an offer and decline analyst. Your goal is to uncover possible reasons for decline and suggest how to talk to the candidate and what to improve.
 
-Padėk suprasti, kodėl kandidatai gali atsisakyti mūsų pasiūlymo.
+Help me understand why candidates might decline our offer.
 
-Įmonė/sritis: [įmonė]
-Pozicija: [ ]
-Atlygis: [ ]
-Ką siūlome: [ ]
+Company/field: [company]
+Role: [ ]
+Salary: [ ]
+What we offer: [ ]
 
-Duok:
-1. 3 galimas priežastis
-2. Kaip apie tai kalbėti su kandidatu
-3. Ką galėtume pagerinti</pre>
+Give:
+1. 3 possible reasons
+2. How to talk about it with the candidate
+3. What we could improve</pre>
                 </div>
-                <div class="info-box" role="note" aria-label="Informacija: promptas 6">
+                <div class="info-box" role="note" aria-label="Information: prompt 6">
                     <div class="info-item">
                         <span class="info-icon" aria-hidden="true"><i data-lucide="lightbulb" class="icon icon--md"></i></span>
                         <div class="info-content">
-                            <strong>Naudok kai:</strong>
-                            <p>Kandidatai dažnai atsisako – nori suprasti kodėl. Supratus priežastis, galime koreguoti pasiūlymą arba komunikaciją.</p>
+                            <strong>Use when:</strong>
+                            <p>Candidates often decline – you want to understand why. Knowing reasons helps you adjust the offer or communication.</p>
                         </div>
                     </div>
                     <div class="info-item info-item-replace">
                         <span class="info-icon" aria-hidden="true"><i data-lucide="pencil" class="icon icon--md"></i></span>
                         <div class="info-content">
-                            <strong>Pakeisk prieš naudodamas:</strong>
-                            <p>[įmonė], [pozicija], [atlygis], [ką siūlome] – įrašyk savo duomenis.</p>
+                            <strong>Replace before using:</strong>
+                            <p>[company], [role], [salary], [what we offer] – fill in your data.</p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="prompt-footer">
-                <p class="prompt-cta">Įklijuok į ChatGPT arba Claude – pakeisk įmonę, poziciją, atlygį ir ką siūlote.</p>
+                <p class="prompt-cta">Paste into ChatGPT or Claude – replace company, role, salary and what you offer.</p>
                 <button class="btn" 
                         onclick="copyPrompt(this, 'prompt6')"
-                        aria-label="Kopijuoti promptą 6 į mainų atmintinę"
+                        aria-label="Copy prompt 6 to clipboard"
                         data-prompt-id="prompt6">
                     <span aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i></span>
-                    <span>Kopijuoti promptą</span>
+                    <span>Copy prompt</span>
                 </button>
                 <label class="prompt-done-wrap">
-                    <input type="checkbox" class="prompt-done" data-prompt-id="6" aria-label="Pažymėti, kad atlikai šį žingsnį">
-                    <span>Pažymėjau kaip atlikau</span>
+                    <input type="checkbox" class="prompt-done" data-prompt-id="6" aria-label="Mark as done">
+                    <span>Marked as done</span>
                 </label>
             </div>
         </article>
 
-        <!-- PROMPT 7 – FAZĖ 5 Pasiūlymas -->
+        <!-- PROMPT 7 – PHASE 5 Offer -->
         <article class="prompt" data-phase="5">
             <div class="prompt-header">
                 <div class="prompt-meta">
-                    <div class="number">FAZĖ 5</div>
-                    <div class="category">Pasiūlymas</div>
+                    <div class="number">PHASE 5</div>
+                    <div class="category">Offer</div>
                     <span class="prompt-time">~5 min</span>
                 </div>
-                <h2 class="prompt-title">Kaip geriau pristatyti pasiūlymą?</h2>
-                <p class="prompt-desc">Suformuluok pasiūlymą taip, kad žmogus jaustų vertę</p>
+                <h2 class="prompt-title">How to present the offer better?</h2>
+                <p class="prompt-desc">Phrase the offer so the person feels the value</p>
             </div>
             <div class="prompt-body">
                 <div class="code-block" 
                      id="block7" 
                      role="button"
                      tabindex="0"
-                     aria-label="Pasirinkti ir kopijuoti promptą 7"
+                     aria-label="Select and copy prompt 7"
                      onclick="selectText(this)"
                      onkeydown="handleCodeBlockKeydown(event, this)">
-                    <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Kopijuoti</span>
-                    <pre class="code-text" id="prompt7">Tu esi darbo pasiūlymų formuluotojas. Tavo tikslas – suformuluoti pasiūlymą trumpai ir aiškiai, pabrėžiant vertę ir laikantis draugiško, profesionalaus tono.
+                    <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Copy</span>
+                    <pre class="code-text" id="prompt7">You are a job offer writer. Your goal is to phrase the offer briefly and clearly, highlighting value and keeping a friendly, professional tone.
 
-Padėk suformuluoti darbo pasiūlymą taip, kad žmogus jaustų vertę.
+Help me phrase a job offer so the person feels the value.
 
-Įmonė/sritis: [įmonė]
-Pozicija: [ ]
-Ką siūlome: [ ]
+Company/field: [company]
+Role: [ ]
+What we offer: [ ]
 
-Padaryk:
-- Trumpą ir aiškų tekstą
-- Pabrėžk svarbiausią naudą
-- Draugišką, bet profesionalų toną</pre>
+Do:
+- Short, clear text
+- Highlight the main benefit
+- Friendly but professional tone</pre>
                 </div>
-                <div class="info-box" role="note" aria-label="Informacija: promptas 7">
+                <div class="info-box" role="note" aria-label="Information: prompt 7">
                     <div class="info-item">
                         <span class="info-icon" aria-hidden="true"><i data-lucide="lightbulb" class="icon icon--md"></i></span>
                         <div class="info-content">
-                            <strong>Naudok kai:</strong>
-                            <p>Formuluoji pasiūlymą kandidatui. Kai žmogus mato vertę, lengviau priimti sprendimą.</p>
+                            <strong>Use when:</strong>
+                            <p>You're wording an offer. When they see the value, the decision is easier.</p>
                         </div>
                     </div>
                     <div class="info-item info-item-replace">
                         <span class="info-icon" aria-hidden="true"><i data-lucide="pencil" class="icon icon--md"></i></span>
                         <div class="info-content">
-                            <strong>Pakeisk prieš naudodamas:</strong>
-                            <p>[įmonė], [pozicija], [ką siūlome] – įrašyk savo duomenis.</p>
+                            <strong>Replace before using:</strong>
+                            <p>[company], [role], [what we offer] – fill in your data.</p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="prompt-footer">
-                <p class="prompt-cta">Nukopijuok ir įklijuok į ChatGPT arba Claude – tai šio žingsnio tikslas.</p>
+                <p class="prompt-cta">Copy and paste into ChatGPT or Claude – that's the goal of this step.</p>
                 <button class="btn" 
                         onclick="copyPrompt(this, 'prompt7')"
-                        aria-label="Kopijuoti promptą 7 į mainų atmintinę"
+                        aria-label="Copy prompt 7 to clipboard"
                         data-prompt-id="prompt7">
                     <span aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i></span>
-                    <span>Kopijuoti promptą</span>
+                    <span>Copy prompt</span>
                 </button>
                 <label class="prompt-done-wrap">
-                    <input type="checkbox" class="prompt-done" data-prompt-id="7" aria-label="Pažymėti, kad atlikai šį žingsnį">
-                    <span>Pažymėjau kaip atlikau</span>
+                    <input type="checkbox" class="prompt-done" data-prompt-id="7" aria-label="Mark as done">
+                    <span>Marked as done</span>
                 </label>
             </div>
         </article>
 
-        <!-- PROMPT 8 – FAZĖ 6 Išlaikymas -->
+        <!-- PROMPT 8 – PHASE 6 Retention -->
         <article class="prompt" data-phase="6">
             <div class="prompt-header">
                 <div class="prompt-meta">
-                    <div class="number">FAZĖ 6</div>
-                    <div class="category">Išlaikymas</div>
+                    <div class="number">PHASE 6</div>
+                    <div class="category">Retention</div>
                     <span class="prompt-time">~5–10 min</span>
                 </div>
-                <h2 class="prompt-title">Kaip padėti naujam žmogui pirmus 3 mėnesius?</h2>
-                <p class="prompt-desc">Paprastas 3 mėnesių planas – savaitė, mėnuo, 3 mėn., vadovo pagalba</p>
+                <h2 class="prompt-title">How to help the new person in the first 3 months?</h2>
+                <p class="prompt-desc">Simple 3‑month plan – week one, month one, 3 months, manager support</p>
             </div>
             <div class="prompt-body">
                 <div class="code-block" 
                      id="block8" 
                      role="button"
                      tabindex="0"
-                     aria-label="Pasirinkti ir kopijuoti promptą 8"
+                     aria-label="Select and copy prompt 8"
                      onclick="selectText(this)"
                      onkeydown="handleCodeBlockKeydown(event, this)">
-                    <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Kopijuoti</span>
-                    <pre class="code-text" id="prompt8">Tu esi naujokų adaptacijos specialistas. Tavo tikslas – sukurti paprastą 3 mėnesių planą: ką suprasti pirmą savaitę, ko tikėtis po mėnesio ir 3 mėn., kaip vadovas gali padėti.
+                    <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Copy</span>
+                    <pre class="code-text" id="prompt8">You are a new hire onboarding specialist. Your goal is to create a simple 3‑month plan: what to understand in week one, what to expect after 1 and 3 months, how the manager can help.
 
-Sukurk paprastą 3 mėnesių planą naujam darbuotojui.
+Create a simple 3‑month plan for a new employee.
 
-Įmonė/sritis: [įmonė]
-Pozicija: [ ]
+Company/field: [company]
+Role: [ ]
 
-Duok:
-- Ką jis turėtų suprasti pirmą savaitę
-- Ko iš jo tikimės po mėnesio
-- Ką turėtų mokėti po 3 mėnesių
-- Kaip vadovas gali padėti</pre>
+Give:
+- What they should understand in the first week
+- What we expect after one month
+- What they should be able to do after 3 months
+- How the manager can help</pre>
                 </div>
-                <div class="info-box" role="note" aria-label="Informacija: promptas 8">
+                <div class="info-box" role="note" aria-label="Information: prompt 8">
                     <div class="info-item">
                         <span class="info-icon" aria-hidden="true"><i data-lucide="lightbulb" class="icon icon--md"></i></span>
                         <div class="info-content">
-                            <strong>Naudok kai:</strong>
-                            <p>Planuoji naujo darbuotojo pirmus mėnesius. Aiškūs lūkesčiai ir pagalba mažina išeitį per bandymo laikotarpį.</p>
+                            <strong>Use when:</strong>
+                            <p>You're planning a new hire's first months. Clear expectations and support reduce early turnover.</p>
                         </div>
                     </div>
                     <div class="info-item info-item-replace">
                         <span class="info-icon" aria-hidden="true"><i data-lucide="pencil" class="icon icon--md"></i></span>
                         <div class="info-content">
-                            <strong>Pakeisk prieš naudodamas:</strong>
-                            <p>[įmonė] → įmonės pavadinimas arba sritis; [pozicija] → tavo pozicija.</p>
+                            <strong>Replace before using:</strong>
+                            <p>[company] → company name or field; [role] → your role.</p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="prompt-footer">
-                <p class="prompt-cta">Nukopijuok ir įklijuok – įrašyk įmonę, poziciją ir gauk planą.</p>
+                <p class="prompt-cta">Copy and paste – enter company and role and get the plan.</p>
                 <button class="btn" 
                         onclick="copyPrompt(this, 'prompt8')"
-                        aria-label="Kopijuoti promptą 8 į mainų atmintinę"
+                        aria-label="Copy prompt 8 to clipboard"
                         data-prompt-id="prompt8">
                     <span aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i></span>
-                    <span>Kopijuoti promptą</span>
+                    <span>Copy prompt</span>
                 </button>
                 <label class="prompt-done-wrap">
-                    <input type="checkbox" class="prompt-done" data-prompt-id="8" aria-label="Pažymėti, kad atlikai šį žingsnį">
-                    <span>Pažymėjau kaip atlikau</span>
+                    <input type="checkbox" class="prompt-done" data-prompt-id="8" aria-label="Mark as done">
+                    <span>Marked as done</span>
                 </label>
             </div>
         </article>
 
-        <!-- PROMPT 9 – FAZĖ 6 Išlaikymas -->
+        <!-- PROMPT 9 – PHASE 6 Retention -->
         <article class="prompt" data-phase="6">
             <div class="prompt-header">
                 <div class="prompt-meta">
-                    <div class="number">FAZĖ 6</div>
-                    <div class="category">Išlaikymas</div>
+                    <div class="number">PHASE 6</div>
+                    <div class="category">Retention</div>
                     <span class="prompt-time">~5 min</span>
                 </div>
-                <h2 class="prompt-title">Kodėl žmonės išeina?</h2>
-                <p class="prompt-desc">Išanalizuok priežastis ir ką galime pakeisti greitai</p>
+                <h2 class="prompt-title">Why do people leave?</h2>
+                <p class="prompt-desc">Analyse reasons and what we can change quickly</p>
             </div>
             <div class="prompt-body">
                 <div class="code-block"
                      id="block9"
                      role="button"
                      tabindex="0"
-                     aria-label="Pasirinkti ir kopijuoti promptą 9"
+                     aria-label="Select and copy prompt 9"
                      onclick="selectText(this)"
                      onkeydown="handleCodeBlockKeydown(event, this)">
-                    <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Kopijuoti</span>
-                    <pre class="code-text" id="prompt9">Tu esi darbuotojų išlaikymo analitikas. Tavo tikslas – išanalizuoti išėjimų priežastis, neaiškumus ir lūkesčių neatitikimus, pasiūlyti greitus pakeitimus.
+                    <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Copy</span>
+                    <pre class="code-text" id="prompt9">You are an employee retention analyst. Your goal is to analyse reasons for leaving, unclear expectations and mismatches, and suggest quick changes.
 
-Padėk išanalizuoti, kodėl žmonės išeina per pirmus 6 mėnesius.
+Help me analyse why people leave in the first 6 months.
 
-Priežastys, kurias girdėjome: [ ]
+Reasons we've heard: [ ]
 
-Pasakyk:
-1. Kur galime būti neaiškūs?
-2. Kur lūkesčiai nesutampa?
-3. Ką galime pakeisti greitai?</pre>
+Tell me:
+1. Where might we be unclear?
+2. Where do expectations not match?
+3. What can we change quickly?</pre>
                 </div>
-                <div class="info-box" role="note" aria-label="Informacija: promptas 9">
+                <div class="info-box" role="note" aria-label="Information: prompt 9">
                     <div class="info-item">
                         <span class="info-icon" aria-hidden="true"><i data-lucide="lightbulb" class="icon icon--md"></i></span>
                         <div class="info-content">
-                            <strong>Naudok kai:</strong>
-                            <p>Žmonės išeina per pirmus mėnesius – nori suprasti kodėl. Supratus priežastis, galime veikti proaktyviai.</p>
+                            <strong>Use when:</strong>
+                            <p>People leave in the first months – you want to understand why. Knowing reasons helps you act proactively.</p>
                         </div>
                     </div>
                     <div class="info-item info-item-replace">
                         <span class="info-icon" aria-hidden="true"><i data-lucide="pencil" class="icon icon--md"></i></span>
                         <div class="info-content">
-                            <strong>Pakeisk prieš naudodamas:</strong>
-                            <p>[priežastys] – įrašyk, ką girdėjote, kodėl žmonės išeina (arba „dar nežinome“).</p>
+                            <strong>Replace before using:</strong>
+                            <p>[reasons] – enter what you've heard about why people left (or “we don't know yet”).</p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="prompt-footer">
-                <p class="prompt-cta">Nukopijuok ir įklijuok į ChatGPT arba Claude – tai šio žingsnio tikslas.</p>
+                <p class="prompt-cta">Copy and paste into ChatGPT or Claude – that's the goal of this step.</p>
                 <button class="btn"
                         onclick="copyPrompt(this, 'prompt9')"
-                        aria-label="Kopijuoti promptą 9 į mainų atmintinę"
+                        aria-label="Copy prompt 9 to clipboard"
                         data-prompt-id="prompt9">
                     <span aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i></span>
-                    <span>Kopijuoti promptą</span>
+                    <span>Copy prompt</span>
                 </button>
                 <label class="prompt-done-wrap">
-                    <input type="checkbox" class="prompt-done" data-prompt-id="9" aria-label="Pažymėti, kad atlikai šį žingsnį">
-                    <span>Pažymėjau kaip atlikau</span>
+                    <input type="checkbox" class="prompt-done" data-prompt-id="9" aria-label="Mark as done">
+                    <span>Marked as done</span>
                 </label>
             </div>
         </article>
 
-        <!-- PROMPT 10 – FAZĖ 6 Išlaikymas -->
+        <!-- PROMPT 10 – PHASE 6 Retention -->
         <article class="prompt" data-phase="6">
             <div class="prompt-header">
                 <div class="prompt-meta">
-                    <div class="number">FAZĖ 6</div>
-                    <div class="category">Išlaikymas</div>
+                    <div class="number">PHASE 6</div>
+                    <div class="category">Retention</div>
                     <span class="prompt-time">~5–10 min</span>
                 </div>
-                <h2 class="prompt-title">Pagrindinis promptas (vienas viskam)</h2>
-                <p class="prompt-desc">Vienas integruotas atrankos planas – nuo problemos iki pirmų mėnesių</p>
+                <h2 class="prompt-title">Master prompt (one for everything)</h2>
+                <p class="prompt-desc">One integrated recruitment plan – from problem to first months</p>
             </div>
             <div class="prompt-body">
                 <div class="code-block"
                      id="block10"
                      role="button"
                      tabindex="0"
-                     aria-label="Pasirinkti ir kopijuoti promptą 10"
+                     aria-label="Select and copy prompt 10"
                      onclick="selectText(this)"
                      onkeydown="handleCodeBlockKeydown(event, this)">
-                    <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Kopijuoti</span>
-                    <pre class="code-text" id="prompt10">Tu esi HR atrankos strategas. Tavo tikslas – vienoje vietoje sudėlioti visą atrankos planą: nuo problemos ir savaitės veiksmų iki skelbimo, pokalbių, sutikimo tikimybės ir pirmų 3 mėnesių palaikymo. Rašyk paprastai, tik konkrečiais veiksmais.
+                    <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Copy</span>
+                    <pre class="code-text" id="prompt10">You are an HR recruitment strategist. Your goal is to put the full recruitment plan in one place: from the problem and weekly actions to the ad, interviews, acceptance likelihood, and first 3 months of support. Write simply, with concrete actions only.
 
-Padėk man paprastai ir aiškiai sutvarkyti atranką šiai pozicijai:
+Help me organise recruitment for this role simply and clearly:
 
-Įmonė/sritis: [įmonė]
-Pozicija: [ ]
-Kiek žmonių kandidatuoja: [ ]
-Kur stringame: [ ]
-Ką jau bandėme: [ ]
+Company/field: [company]
+Role: [ ]
+How many people are applying: [ ]
+Where we're stuck: [ ]
+What we've already tried: [ ]
 
-Duok:
-1. Kur problema
-2. Ką daryti šią savaitę
-3. Kaip pagerinti darbo skelbimą
-4. Kaip geriau vesti pokalbius
-5. Kaip padidinti tikimybę, kad žmogus sutiks
-6. Kaip padėti jam neišeiti per pirmus 3 mėnesius
-
-Rašyk paprastai.
-Duok tik konkrečius veiksmus.
-Be sudėtingų terminų.</pre>
+Give:
+1. Where's the problem
+2. What to do this week
+3. How to improve the job ad
+4. How to run better interviews
+5. How to increase the chance they accept
+6. How to help them stay the first 3 months</pre>
                 </div>
-                <div class="info-box" role="note" aria-label="Informacija: promptas 10">
+                <div class="info-box" role="note" aria-label="Information: prompt 10">
                     <div class="info-item">
                         <span class="info-icon" aria-hidden="true"><i data-lucide="lightbulb" class="icon icon--md"></i></span>
                         <div class="info-content">
-                            <strong>Naudok kai:</strong>
-                            <p>Norėtum vieną integruotą atrankos planą. Viskas vienoje vietoje: problema, savaitė, skelbimas, pokalbiai, sutikimas, pirmi mėnesiai.</p>
+                            <strong>Use when:</strong>
+                            <p>You want one integrated plan. Everything in one place: problem, week, ad, interviews, acceptance, first months.</p>
                         </div>
                     </div>
                     <div class="info-item info-item-replace">
                         <span class="info-icon" aria-hidden="true"><i data-lucide="pencil" class="icon icon--md"></i></span>
                         <div class="info-content">
-                            <strong>Pakeisk prieš naudodamas:</strong>
-                            <p>[įmonė], [pozicija], kandidatų skaičius, kur stringame, ką bandėme – įrašyk savo duomenis.</p>
+                            <strong>Replace before using:</strong>
+                            <p>[company], [role], candidate count, where we're stuck, what we tried – fill in your data.</p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="prompt-footer">
-                <p class="prompt-cta">Šis promptas apima viską – nukopijuok, įklijuok ir pildyk savo duomenimis.</p>
+                <p class="prompt-cta">This prompt covers everything – copy, paste and fill in your data.</p>
                 <button class="btn"
                         onclick="copyPrompt(this, 'prompt10')"
-                        aria-label="Kopijuoti promptą 10 į mainų atmintinę"
+                        aria-label="Copy prompt 10 to clipboard"
                         data-prompt-id="prompt10">
                     <span aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i></span>
-                    <span>Kopijuoti promptą</span>
+                    <span>Copy prompt</span>
                 </button>
                 <label class="prompt-done-wrap">
-                    <input type="checkbox" class="prompt-done" data-prompt-id="10" aria-label="Pažymėti, kad atlikai šį žingsnį">
-                    <span>Pažymėjau kaip atlikau</span>
+                    <input type="checkbox" class="prompt-done" data-prompt-id="10" aria-label="Mark as done">
+                    <span>Marked as done</span>
                 </label>
             </div>
         </article>
 
         <section class="community" id="community" aria-labelledby="community-title">
-            <h2 id="community-title">Sistema sukurta.<br>Nori daugiau?</h2>
-            <a href="https://chat.whatsapp.com/It49fzTl1n90huRCoWWkwu?mode=gi_t" class="community-cta-primary" target="_blank" rel="noopener noreferrer" aria-label="Atidaryti Promptų anatomija WhatsApp grupę naujame lange">Prisijungti prie WhatsApp grupės</a>
-            <a href="https://www.promptanatomy.app/" class="community-cta-secondary" target="_blank" rel="noopener noreferrer" aria-label="Pilna Promptų anatomija – interaktyvus mokymas (atidaroma naujame lange)">Promptų anatomija →</a>
+            <h2 id="community-title">System created.<br>Want more?</h2>
+            <a href="https://chat.whatsapp.com/It49fzTl1n90huRCoWWkwu?mode=gi_t" class="community-cta-primary" target="_blank" rel="noopener noreferrer" aria-label="Open Prompt anatomy WhatsApp group in new tab">Join WhatsApp group</a>
+            <a href="https://www.promptanatomy.app/" class="community-cta-secondary" target="_blank" rel="noopener noreferrer" aria-label="Full Prompt anatomy – interactive training (opens in new tab)">Prompt anatomy →</a>
         </section>
 
         <footer class="footer">
-            <h3>Sėkmės atrankoje <span class="icon-wrap" aria-hidden="true"><i data-lucide="rocket" class="icon icon--md"></i></span></h3>
-            <p>Nepamiršk pakeisti <strong>[įmonė]</strong>, <strong>[pozicija]</strong>, <strong>[atlygis]</strong>, <strong>[kandidatų skaičius]</strong> ir kitus laukus savo duomenimis.</p>
-            <p class="footer-product-link">Tai Spin-off Nr. 3 iš „Promptų anatomijos“.</p>
-            <p class="footer-contact">Promptų anatomija: <a href="https://www.promptanatomy.app/" target="_blank" rel="noopener noreferrer">promptanatomy.app</a> | El. paštas: <a href="mailto:info@promptanatomy.app">info@promptanatomy.app</a></p>
+            <h3>Good luck with recruitment <span class="icon-wrap" aria-hidden="true"><i data-lucide="rocket" class="icon icon--md"></i></span></h3>
+            <p>Remember to replace <strong>[company]</strong>, <strong>[role]</strong>, <strong>[salary]</strong>, <strong>[candidate count]</strong> and other placeholders with your data.</p>
+            <p class="footer-product-link">This is Spin-off No. 3 from “Prompt anatomy”.</p>
+            <p class="footer-contact">Prompt anatomy: <a href="https://www.promptanatomy.app/" target="_blank" rel="noopener noreferrer">promptanatomy.app</a> | Email: <a href="mailto:info@promptanatomy.app">info@promptanatomy.app</a></p>
             <div class="tags" role="list">
-                <span class="tag" role="listitem"><span class="icon-wrap" aria-hidden="true"><i data-lucide="users" class="icon icon--sm"></i></span> HR atranka</span>
-                <span class="tag" role="listitem"><span class="icon-wrap" aria-hidden="true"><i data-lucide="book-marked" class="icon icon--sm"></i></span> 10 promptų</span>
-                <span class="tag" role="listitem"><span class="icon-wrap" aria-hidden="true"><i data-lucide="zap" class="icon icon--sm"></i></span> Veiksmų fokusas</span>
-                <span class="tag" role="listitem"><span class="icon-wrap" aria-hidden="true"><i data-lucide="target" class="icon icon--sm"></i></span> Kasdienės atrankos problemos</span>
+                <span class="tag" role="listitem"><span class="icon-wrap" aria-hidden="true"><i data-lucide="users" class="icon icon--sm"></i></span> HR recruitment</span>
+                <span class="tag" role="listitem"><span class="icon-wrap" aria-hidden="true"><i data-lucide="book-marked" class="icon icon--sm"></i></span> 10 prompts</span>
+                <span class="tag" role="listitem"><span class="icon-wrap" aria-hidden="true"><i data-lucide="zap" class="icon icon--sm"></i></span> Action focus</span>
+                <span class="tag" role="listitem"><span class="icon-wrap" aria-hidden="true"><i data-lucide="target" class="icon icon--sm"></i></span> Daily recruitment problems</span>
             </div>
             <div class="copyright">
-                <p>&copy; 2026 Tomas Staniulis. Mokymų medžiaga. Visos teisės saugomos. <a href="privatumas.html">Privatumas</a></p>
+                <p>&copy; 2026 Tomas Staniulis. Training material. All rights reserved. <a href="privatumas.html">Privacy</a></p>
             </div>
         </footer>
 
         </main>
     </div>
 
-    <textarea class="hidden" id="hiddenTextarea" aria-label="Kopijuojamo teksto laukas" aria-hidden="true"></textarea>
+    <textarea class="hidden" id="hiddenTextarea" aria-label="Field for text to copy" aria-hidden="true"></textarea>
     
     <div class="toast" 
          id="toast" 
          role="status" 
          aria-live="polite" 
          aria-atomic="true"
-         aria-label="Kopijavimo pranešimas">
+         aria-label="Copy notification">
         <div class="toast-icon" aria-hidden="true"><i data-lucide="check" class="icon icon--lg"></i></div>
-        <span>Nukopijuota.</span>
+        <span>Copied.</span>
     </div>
 
     <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
-    <script src="generator.js"></script>
+    <script src="../generator.js"></script>
 </body>
 </html>
