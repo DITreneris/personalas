@@ -835,7 +835,7 @@
             border: 1px solid rgba(14, 122, 51, 0.25);
             border-radius: var(--r-card);
             padding: var(--space-28) var(--space-32);
-            margin-bottom: var(--space-32);
+            margin-bottom: var(--space-24);
             box-shadow: var(--shadow-medium), 0 1px 0 rgba(255, 255, 255, 0.6) inset;
         }
 
@@ -846,7 +846,22 @@
             margin-bottom: var(--space-24);
             display: flex;
             align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
             gap: var(--space-12);
+        }
+
+        .instructions-title-main {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-12);
+            flex: 1 1 auto;
+            min-width: min(100%, 12rem);
+        }
+
+        .instructions-title-meta {
+            flex-shrink: 0;
+            margin-left: auto;
         }
 
         .instructions ol {
@@ -858,11 +873,49 @@
         .instructions li {
             font-size: 18px;
             margin-bottom: var(--space-16);
-            line-height: 1.6;
+            line-height: 1.65;
             color: var(--text);
             position: relative;
             padding-left: var(--space-12);
             counter-increment: item;
+        }
+
+        .instructions-li-stack {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-12);
+            align-items: stretch;
+        }
+
+        .instructions-li-lead {
+            display: block;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .instructions-subcard {
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid rgba(14, 122, 51, 0.14);
+            border-radius: var(--r-btn);
+            padding: var(--space-16) var(--space-20);
+            box-shadow: none;
+        }
+
+        .instructions-subrow {
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--text);
+            margin: 0 0 var(--space-12) 0;
+        }
+
+        .instructions-subrow:last-child {
+            margin-bottom: 0;
+        }
+
+        .instructions-subrow strong {
+            font-weight: 800;
+            color: var(--accent-dark);
+            margin-right: 4px;
         }
 
         .instructions li::before {
@@ -876,17 +929,18 @@
 
         
         .instructions code {
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid rgba(14, 122, 51, 0.2);
-            padding: 10px 18px;
-            min-height: 40px;
-            border-radius: var(--r-badge);
+            background: rgba(255, 255, 255, 0.65);
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            padding: 2px 8px;
+            min-height: 0;
+            border-radius: 8px;
             font-family: 'JetBrains Mono', monospace;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
             color: var(--accent-dark);
-            line-height: 1.4;
-            box-shadow: 0 1px 3px rgba(60, 72, 90, 0.08);
+            line-height: 1.45;
+            box-shadow: none;
+            vertical-align: baseline;
         }
 
         
@@ -1146,6 +1200,19 @@
             border-radius: var(--r-badge);
             margin-left: var(--space-12);
             border: var(--border-width) solid var(--border-subtle);
+        }
+
+        .instructions-title .prompt-time {
+            margin-left: 0;
+            padding: 4px 10px;
+            min-height: 0;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-light);
+            background: rgba(255, 255, 255, 0.55);
+            border: 1px solid rgba(14, 122, 51, 0.12);
+            border-radius: 8px;
+            box-shadow: none;
         }
 
         
@@ -1977,6 +2044,15 @@
                 flex-wrap: wrap;
             }
 
+            .instructions-title-meta {
+                width: 100%;
+                margin-left: 0;
+            }
+
+            .instructions-title-meta .prompt-time {
+                margin-left: 0;
+            }
+
             .header {
                 padding: 32px 20px;
             }
@@ -2230,15 +2306,19 @@
         
         <section class="instructions" aria-labelledby="instructions-title">
             <h2 class="instructions-title" id="instructions-title">
-                <span class="icon-wrap" aria-hidden="true"><i data-lucide="book-open" class="icon icon--md"></i></span>
-                <span>How to use this system for US hiring</span>
-                <span class="prompt-time" role="status" aria-label="Estimated time: 3–5 min per step">~3–5 min per step</span>
+                <span class="instructions-title-main">
+                    <span class="icon-wrap" aria-hidden="true"><i data-lucide="book-open" class="icon icon--md"></i></span>
+                    <span>How to use the US hiring prompt system</span>
+                </span>
+                <span class="instructions-title-meta">
+                    <span class="prompt-time" role="status" aria-label="4 steps, about 3–5 minutes per step">4 steps · 3–5 min / step</span>
+                </span>
             </h2>
             <ol>
                 <li>Choose a phase, open it, then pick a specific prompt.</li>
                 <li>Click <strong>“Copy prompt”</strong> or <code>Ctrl+C</code> / <code>Cmd+C</code> on the selected prompt.</li>
                 <li>Paste into ChatGPT, Claude, Gemini, or another AI tool.</li>
-                <li>Replace placeholders such as <code>[company]</code>, <code>[role]</code>, <code>[location]</code>, and <code>[salary range]</code>. Use US location formats such as <code>New York, NY</code>, <code>San Francisco, CA 94105</code>, <code>Remote – US</code>, or <code>Hybrid – Austin, TX</code>; use <code>MM/DD/YYYY</code>, and follow US contact standards. Address fields: <code>Street Address</code>, <code>City</code>, <code>State</code>, <code>Zip Code</code>. Phone format: <code>+1 (XXX) XXX-XXXX</code>, for example <code>+1 (415) 555-0198</code>.</li>
+                <li class="instructions-li-stack"><span class="instructions-li-lead">Replace bracket placeholders with your data before you send the prompt.</span><div class="instructions-subcard" role="region" aria-label="Placeholders and US format examples"><p class="instructions-subrow"><strong>Placeholders:</strong> <code>[company]</code>, <code>[role]</code>, <code>[location]</code>, <code>[salary range]</code></p><p class="instructions-subrow"><strong>Locations:</strong> <code>New York, NY</code>, <code>San Francisco, CA 94105</code>, <code>Remote – US</code>, <code>Hybrid – Austin, TX</code></p><p class="instructions-subrow"><strong>Dates:</strong> <code>MM/DD/YYYY</code>. <strong>Address fields:</strong> <code>Street Address</code>, <code>City</code>, <code>State</code>, <code>Zip Code</code>.</p><p class="instructions-subrow"><strong>Phone format:</strong> <code>+1 (XXX) XXX-XXXX</code>, for example <code>+1 (415) 555-0198</code>.</p></div></li>
             </ol>
         </section>
 

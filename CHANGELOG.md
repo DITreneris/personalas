@@ -22,6 +22,7 @@ Visi reikšmingi pakeitimai projekte dokumentuojami čia. Formatas pagal [Keep a
 
 ### Pakeista
 
+- **[UI] Instrukcijų blokas ([index.html](index.html), [scripts/build-locale-pages.js](scripts/build-locale-pages.js)):** tylesni „token“ stiliai `.instructions code`, kompaktiškesnis laiko ženklelis, antraštės eilutė su meta dešinėje, mažesnis tarpas iki DUK, 4 žingsnis su vidiniu `instructions-subcard` (LT šaltinyje + EN per `EN_REPLACEMENTS`); [tests/structure.test.js](tests/structure.test.js) – lankstesni JAV formato assertai.
 - **LT turinys ([index.html](index.html)):** pilnas DUK lietuvių kalba ir `lang="lt"`; instrukcijos suvienodintos į „jūs“; progreso eilutė „Sistema: … iš 6 fazių“; šuolių meniu įvadas (dalyvis + „pereisite“); 5-o prompto antraštė „Kaip geriau vesti pokalbį?“; Telegram CTA „Sekite Telegram kanale“ ir aiškesnis `aria-label` (kanalas).
 - **EN build ir runtime ([scripts/build-locale-pages.js](scripts/build-locale-pages.js), [generator.js](generator.js)):** visi atitinkami LT→EN `EN_REPLACEMENTS`; matomas progresas EN „System: … of 6 phases“; JSON-LD `Organization.name` – **Prompt Anatomy**; `PRIVACY_EN` – Series No. 3, H1 „Privacy Policy“; master `PROMPTS_EN` – natūralesnė „first three months“ formulė; darbo skelbimo info – „commas as thousands separators“; neutralus „Join on Telegram“; prekės ženklo rašyba nuorodose (po bendro vertimo).
 - **Testai:** [tests/structure.test.js](tests/structure.test.js) – regresija: `lt/index.html` neturi angliškos DUK antraštės `Common questions before you start`.

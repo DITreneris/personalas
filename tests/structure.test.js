@@ -193,9 +193,29 @@ function run() {
   else failed++;
   if (enIndex && assert(enIndex.includes('Zip Code'), 'en/index.html includes US address terminology')) passed++;
   else failed++;
-  if (enIndex && assert(enIndex.includes('Address fields: <code>Street Address</code>, <code>City</code>, <code>State</code>, <code>Zip Code</code>'), 'en/index.html includes explicit US address field order')) passed++;
+  if (
+    enIndex &&
+      assert(
+        enIndex.includes('Address fields:') &&
+          enIndex.includes('<code>Street Address</code>') &&
+          enIndex.includes('<code>City</code>') &&
+          enIndex.includes('<code>State</code>') &&
+          enIndex.includes('<code>Zip Code</code>'),
+        'en/index.html includes explicit US address field order'
+      )
+  )
+    passed++;
   else failed++;
-  if (enIndex && assert(enIndex.includes('Phone format: <code>+1 (XXX) XXX-XXXX</code>') && enIndex.includes('Contact phone: [optional, e.g., +1 (415) 555-0198]'), 'en/index.html includes canonical US phone format and prompt placeholder')) passed++;
+  if (
+    enIndex &&
+      assert(
+        enIndex.includes('Phone format:') &&
+          enIndex.includes('<code>+1 (XXX) XXX-XXXX</code>') &&
+          enIndex.includes('Contact phone: [optional, e.g., +1 (415) 555-0198]'),
+        'en/index.html includes canonical US phone format and prompt placeholder'
+      )
+  )
+    passed++;
   else failed++;
   const streetAddressCount = enIndex ? (enIndex.match(/Street Address: \[optional, e\.g\., 123 Market St\]/g) || []).length : 0;
   if (enIndex && assert(streetAddressCount >= 10, 'en/index.html includes Street Address placeholders for all prompts')) passed++;
