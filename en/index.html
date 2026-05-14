@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-US">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     
     <link rel="canonical" href="/en/">
     <link rel="alternate" hreflang="lt" href="/lt/">
-    <link rel="alternate" hreflang="en" href="/en/">
-    <link rel="alternate" hreflang="x-default" href="/lt/">
-<title>HR daily recruitment system – AI prompts</title>
+    <link rel="alternate" hreflang="en-US" href="/en/">
+    <link rel="alternate" hreflang="x-default" href="/en/">
+<title>HR hiring system – AI prompts for US teams</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <style>html { scroll-behavior: smooth; }</style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,14 +22,14 @@
         }
 
         :root {
-            /* Spin-off Nr. 3 – HR recruitment, green CTA palette */
+            
             --bg: #F7F8FA;
             --white: #FFFFFF;
             --text: #1A202C;
             --text-light: #4A5568;
             --border: #CBD5E0;
 
-            /* Design tokens – premium SaaS (C-level) */
+            
             --r-card: 16px;
             --r-btn: 12px;
             --r-badge: 10px;
@@ -50,29 +50,29 @@
             --space-28: 28px;
             --space-32: 32px;
 
-            /* Motion – C-level (nuoseklus ritmas) */
+            
             --duration-fast: 150ms;
             --duration-normal: 250ms;
             --duration-slow: 400ms;
             --ease-out: cubic-bezier(0.33, 1, 0.68, 1);
             --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 
-            /* Tipografija – leading */
+            
             --leading-tight: 1.25;
             --leading-normal: 1.5;
             --leading-relaxed: 1.6;
 
-            /* Primary accent – green; WCAG2AA 4.5:1 */
+            
             --accent-primary: #0E7A33;
             --accent-primary-hover: #0B6B2D;
             --accent-gold: #0E7A33;
             --accent-gold-dark: #0B6B2D;
 
-            /* Antrinis akcentas (tamsiai pilka) – hero, outline mygtukai */
+            
             --accent-dark: #3C485A;
             --accent-dark-hover: #2D3848;
 
-            /* Hero: green, ~15–20% lower saturation – calm, authoritative HR, not fintech */
+            
             --hero-gradient-start: #1e6b42;
             --hero-gradient-mid: #2a7a52;
             --hero-gradient-end: #4a9572;
@@ -80,19 +80,19 @@
             --cta-text: #FFFFFF;
             --cta-hover: var(--accent-primary-hover);
 
-            /* Hero pagrindinis CTA – baltas mygtukas, green text (akys per <1 s) */
+            
             --cta-hero-bg: #FFFFFF;
             --cta-hero-text: #0B6B2D;
             --cta-hero-hover-bg: #F0FDF4;
             --cta-hero-hover-text: #0B6B2D;
 
-            /* Tertiary (library identity) – teal */
+            
             --tertiary: #0D9488;
             --tertiary-dark: #0a5c54;
             --tertiary-hover: #0f766e;
             --tertiary-light: #CCFBF1;
 
-            /* Semantiniai – aligned with green palette */
+            
             --blue: #3C485A;
             --blue-light: #E8ECF0;
             --orange: #0E7A33;
@@ -102,17 +102,17 @@
             --error: #E53E3E;
             --bg-subtle: #F7FAFC;
 
-            /* Community CTA – aligned with green theme */
+            
             --community-cta-green: #0E7A33;
             --community-cta-green-hover: #0B6B2D;
 
-            /* Lucide icon sizes – premium SaaS */
+            
             --icon-size-sm: 16px;
             --icon-size-md: 20px;
             --icon-size-lg: 24px;
         }
 
-        /* Lucide ikonos – nuoseklus stilius */
+        
         .icon {
             display: inline-block;
             width: var(--icon-size-md);
@@ -134,7 +134,7 @@
             vertical-align: middle;
         }
 
-        /* Skip link – prieinamumas (matomas tik su focus) */
+        
         .skip-link {
             position: absolute;
             left: -9999px;
@@ -170,10 +170,10 @@
             padding: 60px var(--space-24);
         }
 
-        /* ===== HEADER ===== */
+        
         .header {
             position: relative;
-            /* Premium: radial light centre + gradient + gylis */
+            
             background:
                 radial-gradient(ellipse 80% 60% at 50% 20%, rgba(255, 255, 255, 0.14) 0%, transparent 50%),
                 linear-gradient(165deg, var(--hero-gradient-start) 0%, var(--hero-gradient-mid) 45%, var(--hero-gradient-end) 100%);
@@ -185,7 +185,7 @@
             overflow: hidden;
         }
 
-        /* Darker bottom right – depth hierarchy */
+        
         .header::before {
             content: '';
             position: absolute;
@@ -195,7 +195,7 @@
             z-index: 0;
         }
 
-        /* 2–3% grain – premium micro-texture */
+        
         .header::after {
             content: '';
             position: absolute;
@@ -224,7 +224,7 @@
             margin-bottom: var(--space-24);
         }
 
-        /* Badge/Chip – brand komponentas (ne utilitarinis tag) */
+        
         .badge {
             display: inline-flex;
             align-items: center;
@@ -366,7 +366,7 @@
             font-weight: 500;
         }
 
-        /* Daugiau oro tarp H1 → sub → CTA */
+        
         .header-cta {
             display: flex;
             align-items: center;
@@ -380,7 +380,7 @@
             gap: var(--space-16);
         }
 
-        /* CTA – primary (one clear path), secondary (ghost) */
+        
         .cta-button {
             display: inline-flex;
             align-items: center;
@@ -402,7 +402,7 @@
             outline: none;
         }
 
-        /* Hero: pagrindinis CTA – solid white, power, premium, hover dinamika */
+        
         .header .header-cta .cta-button {
             background: var(--cta-hero-bg);
             color: var(--cta-hero-text);
@@ -480,7 +480,7 @@
             outline-offset: 2px;
         }
 
-        /* Hero secondary – clearly weaker than primary, glass */
+        
         .header .header-cta .cta-button-outline {
             font-size: 15px;
             font-weight: 600;
@@ -558,7 +558,7 @@
             color: var(--white);
         }
 
-        /* ===== MODAL / CONTACT FORM (reserved for future – see INTEGRACIJA.md) ===== */
+        
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -790,7 +790,7 @@
             line-height: 1.6;
         }
 
-        /* ===== INSTRUCTIONS BOX – vizualinis svoris, sisteminis kbd ===== */
+        
         .instructions {
             background: linear-gradient(180deg, var(--orange-light) 0%, #E8F5EE 100%);
             border: 1px solid rgba(14, 122, 51, 0.25);
@@ -835,7 +835,7 @@
             font-size: 20px;
         }
 
-        /* kbd/code – vienoda UI kalba (ne raw tag) */
+        
         .instructions code {
             background: rgba(255, 255, 255, 0.9);
             border: 1px solid rgba(14, 122, 51, 0.2);
@@ -850,7 +850,7 @@
             box-shadow: 0 1px 3px rgba(60, 72, 90, 0.08);
         }
 
-        /* ===== LEARNING OBJECTIVES (M1) – elevation, premium ritmas ===== */
+        
         .objectives {
             background: linear-gradient(180deg, var(--white) 0%, #FAFBFC 100%);
             border: 1px solid var(--border-subtle);
@@ -894,7 +894,7 @@
             color: var(--accent-dark);
         }
 
-        /* Checkmark – brand svoris, micro-depth, premium */
+        
         .objectives li::before {
             content: '';
             position: absolute;
@@ -940,7 +940,7 @@
             color: var(--text);
         }
 
-        /* Badge sistemos dalis – vienodas stilius su .badge */
+        
         .prompt-time {
             display: inline-flex;
             align-items: center;
@@ -955,7 +955,7 @@
             border: var(--border-width) solid var(--border-subtle);
         }
 
-        /* ===== PROMPT CARD (PromptCard) ===== */
+        
         .prompt {
             background: var(--white);
             border: 1px solid rgba(0, 0, 0, 0.06);
@@ -984,7 +984,7 @@
             margin-bottom: var(--space-16);
         }
 
-        /* Badge system part – number on card */
+        
         .number {
             min-width: 40px;
             min-height: 40px;
@@ -1004,7 +1004,7 @@
             border: var(--border-width) solid rgba(255, 255, 255, 0.2);
         }
 
-        /* Inside phase card the phase number / title not repeated – phase header is enough */
+        
         .phase-body .prompt .number {
             display: none;
         }
@@ -1012,7 +1012,7 @@
             display: none;
         }
 
-        /* Badge sistemos dalis – kategorija */
+        
         .category {
             padding: 10px 18px;
             min-height: 40px;
@@ -1043,12 +1043,12 @@
             font-weight: 400;
         }
 
-        /* ===== PROMPT BODY + PromptCard (code-block) ===== */
+        
         .prompt-body {
             padding: var(--space-24) var(--space-32);
         }
 
-        /* PromptCard – code-style premium, left accent, enterprise feel */
+        
         .code-block {
             background: linear-gradient(to right, rgba(14, 122, 51, 0.04) 0%, var(--bg-subtle) 12px);
             border: 1px solid var(--border-subtle-dark);
@@ -1072,7 +1072,7 @@
             outline-offset: 2px;
         }
 
-        /* Mini toolbar – Lucide ikona + tekstas */
+        
         .code-block-toolbar {
             position: absolute;
             top: var(--space-12);
@@ -1122,7 +1122,7 @@
             display: block;
         }
 
-        /* Info box – subtilus tint, small caps title, icon su circle */
+        
         .info-box {
             background: rgba(204, 251, 241, 0.4);
             border: 1px solid rgba(13, 148, 136, 0.12);
@@ -1192,7 +1192,7 @@
             margin-bottom: 4px;
         }
 
-        /* ===== BUTTON ===== */
+        
         .prompt-footer {
             padding: var(--space-24) var(--space-32);
             background: var(--bg-subtle);
@@ -1277,7 +1277,7 @@
             outline-offset: 2px;
         }
 
-        /* ===== PROGRESS INDICATOR (S1) ===== */
+        
         .progress-wrap {
             background: var(--orange-light);
             border: var(--border-width) solid rgba(14, 122, 51, 0.2);
@@ -1310,7 +1310,7 @@
             transition: width 0.5s var(--ease-out);
         }
 
-        /* ===== PHASE ACCORDION (6 phases) ===== */
+        
         .phase {
             background: var(--white);
             border: var(--border-width) solid var(--border-subtle);
@@ -1415,7 +1415,7 @@
             margin-bottom: 0;
         }
 
-        /* ===== KAS TOLIAU (S2) ===== */
+        
         .next-steps {
             background: var(--white);
             border: var(--border-width) solid rgba(13, 148, 136, 0.25);
@@ -1451,7 +1451,7 @@
             padding: 16px 18px;
             min-height: 44px;
             line-height: 24px;
-            background: #008579; /* WCAG2AA 4.5:1 su baltu tekstu */
+            background: #008579; 
             color: white;
             text-decoration: none;
             border-radius: var(--r-btn);
@@ -1485,7 +1485,7 @@
             background: var(--orange-light);
         }
 
-        /* ===== TOAST ===== */
+        
         .toast {
             position: fixed;
             bottom: var(--space-32);
@@ -1526,7 +1526,7 @@
             color: white;
         }
 
-        /* ===== BENDRUOMENĖ (puslapio pabaiga) ===== */
+        
         .community {
             margin-top: var(--space-32);
             padding: var(--space-24) var(--space-32);
@@ -1552,7 +1552,7 @@
             line-height: 1.5;
         }
 
-        /* Primary CTA – single brand green, be glow, subtle shadow */
+        
         .community-cta-primary {
             display: inline-flex;
             align-items: center;
@@ -1581,7 +1581,7 @@
             outline-offset: 2px;
         }
 
-        /* Antrinis CTA – outline, ne konkuruoja su pagrindiniu */
+        
         .community-cta-secondary {
             display: inline-flex;
             align-items: center;
@@ -1608,7 +1608,7 @@
             outline-offset: 2px;
         }
 
-        /* ===== FOOTER ===== */
+        
         .footer {
             margin-top: var(--space-32);
             padding: var(--space-32);
@@ -1637,7 +1637,7 @@
             margin-bottom: 24px;
         }
         .footer-product-link a {
-            color: #008579; /* WCAG2AA 4.5:1 on light background */
+            color: #008579; 
             font-weight: 700;
             text-decoration: none;
             text-underline-offset: 3px;
@@ -1699,14 +1699,14 @@
             outline-offset: 2px;
         }
 
-        /* ===== UTILITIES ===== */
+        
         .hidden {
             position: absolute;
             left: -9999px;
             opacity: 0;
         }
 
-        /* ===== RESPONSIVE ===== */
+        
         @media (max-width: 1024px) {
             .container {
                 padding: 50px 24px;
@@ -1856,7 +1856,7 @@
                 bottom: 16px;
             }
 
-            /* Checkbox tap area on mobile: ≥44px, vizualiai 24px (WCAG) */
+            
             .prompt-done-wrap {
                 min-height: 44px;
                 padding: 12px 0;
@@ -1869,7 +1869,7 @@
             }
         }
 
-        /* Mobile UI First: minimum viewport (320–375px) */
+        
         @media (max-width: 375px) {
             .container {
                 padding: 24px 16px;
@@ -1956,7 +1956,7 @@
             }
         }
 
-        /* ===== PRINT ===== */
+        
         @media print {
             body {
                 background: white;
@@ -1973,7 +1973,7 @@
             }
         }
 
-        /* ===== ACCESSIBILITY ===== */
+        
         @media (prefers-reduced-motion: reduce) {
             * {
                 animation-duration: 0.01ms !important;
@@ -1987,21 +1987,21 @@
     <div class="container">
         <main id="main-content">
 
-        <!-- HERO -->
+        
         <header class="header">
             <div class="header-badges">
-                <a href="https://www.promptanatomy.app/" class="badge" target="_blank" rel="noopener noreferrer" aria-label="Full Prompt anatomy – interactive training (opens in new tab)">Prompt anatomy</a>
-                <span class="badge badge-spinoff" role="status" aria-label="HR daily recruitment system, Spin-off No. 3">Spin-off Nr. 3</span>
+                <a href="https://www.promptanatomy.app/" class="badge" target="_blank" rel="noopener noreferrer" aria-label="Full Prompt Anatomy – interactive training (opens in a new tab)">Prompt anatomy</a>
+                <span class="badge badge-spinoff" role="status" aria-label="HR hiring system for US teams, Series No. 3">Series No. 3</span>
             </div>
-            <h1>AI recruitment system<br>For HR leaders</h1>
-            <p>Working recruitment structure in ~30 min.</p>
+            <h1>AI hiring system<br>For US HR teams</h1>
+            <p>Build a practical hiring workflow in about 30 minutes.</p>
             <ul class="header-phases" aria-label="6 system phases">
-                <li><button type="button" class="header-phase-link is-active" data-phase="1">1. Diagnosis</button></li>
-                <li><button type="button" class="header-phase-link" data-phase="2">2. Profile</button></li>
-                <li><button type="button" class="header-phase-link" data-phase="3">3. Attraction</button></li>
-                <li><button type="button" class="header-phase-link" data-phase="4">4. Selection</button></li>
-                <li><button type="button" class="header-phase-link" data-phase="5">5. Offer</button></li>
-                <li><button type="button" class="header-phase-link" data-phase="6">6. Retention</button></li>
+                <li><button type="button" class="header-phase-link is-active" data-phase="1">1. Diagnose</button></li>
+                <li><button type="button" class="header-phase-link" data-phase="2">2. Define the Role</button></li>
+                <li><button type="button" class="header-phase-link" data-phase="3">3. Source Candidates</button></li>
+                <li><button type="button" class="header-phase-link" data-phase="4">4. Screen & Interview</button></li>
+                <li><button type="button" class="header-phase-link" data-phase="5">5. Close the Offer</button></li>
+                <li><button type="button" class="header-phase-link" data-phase="6">6. Onboard & Retain</button></li>
             </ul>
             <div class="header-cta">
                 <a href="#progressIndicator" class="cta-button" aria-label="View system – progress and phases">View system</a>
@@ -2012,34 +2012,34 @@
             </div>
         </header>
 
-        <!-- KĄ ŠI SISTEMA PADEDA IŠSPRĘSTI -->
+        
         <section class="objectives" aria-labelledby="objectives-title">
-            <h2 id="objectives-title"><span class="icon-wrap" aria-hidden="true"><i data-lucide="target" class="icon icon--md"></i></span> What this system helps solve</h2>
-            <p class="objectives-intro">It helps you stop wasting time on “empty” searches!</p>
+            <h2 id="objectives-title"><span class="icon-wrap" aria-hidden="true"><i data-lucide="target" class="icon icon--md"></i></span> What this hiring system helps solve</h2>
+            <p class="objectives-intro">Stop wasting time on low-quality candidate searches.</p>
             <ul>
-                <li><strong>Zero pipeline?</strong> Generate compelling job ads and outreach messages.</li>
-                <li><strong>Wrong people?</strong> Define the profile precisely and select the best.</li>
+                <li><strong>Zero pipeline?</strong> Generate clear job posts and outreach messages.</li>
+                <li><strong>Wrong people?</strong> Define the role precisely and screen for the strongest fit.</li>
                 <li><strong>Slow pace?</strong> Identify the bottleneck in 5 minutes.</li>
-                <li><strong>Losing talent?</strong> Make an offer they can't refuse.</li>
+                <li><strong>Losing talent?</strong> Present a clear offer candidates can evaluate quickly.</li>
             </ul>
         </section>
 
-        <!-- INSTRUCTIONS -->
+        
         <section class="instructions" aria-labelledby="instructions-title">
             <h2 class="instructions-title" id="instructions-title">
                 <span class="icon-wrap" aria-hidden="true"><i data-lucide="book-open" class="icon icon--md"></i></span>
-                <span>How to use this system</span>
+                <span>How to use this system for US hiring</span>
                 <span class="prompt-time" role="status" aria-label="Estimated time: 3–5 min per step">~3–5 min per step</span>
             </h2>
             <ol>
-                <li>Choose a phase, click and open. Then pick a specific prompt.</li>
+                <li>Choose a phase, open it, then pick a specific prompt.</li>
                 <li>Click <strong>“Copy prompt”</strong> or <code>Ctrl+C</code> / <code>Cmd+C</code> on the selected prompt.</li>
-                <li>Paste into ChatGPT, Claude or another AI tool.</li>
-                <li>If the prompt has <code>[company]</code>, <code>[role]</code>, <code>[salary]</code>, <code>[ ]</code> or other placeholders – replace with your data. Do not change the AI role (“You are…”).</li>
+                <li>Paste into ChatGPT, Claude, or another AI tool.</li>
+                <li>Replace placeholders such as <code>[company]</code>, <code>[role]</code>, <code>[location]</code>, and <code>[salary range]</code>. Use US location formats such as <code>New York, NY</code>, <code>San Francisco, CA 94105</code>, <code>Remote – US</code>, or <code>Hybrid – Austin, TX</code>; use <code>MM/DD/YYYY</code>, and follow US contact standards. Address fields: <code>Street Address</code>, <code>City</code>, <code>State</code>, <code>Zip Code</code>. Phone format: <code>+1 (XXX) XXX-XXXX</code>, for example <code>+1 (415) 555-0198</code>.</li>
             </ol>
         </section>
 
-        <!-- PROGRESS INDICATOR (S1) – System: X / 6 phases -->
+        
         <div class="progress-wrap" id="progressIndicator" aria-live="polite" aria-atomic="true">
             <p id="progressText">System: 0 / 6 phases</p>
             <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="6" aria-label="Progress: 0 of 6 phases">
@@ -2047,12 +2047,12 @@
             </div>
         </div>
 
-        <!-- PROMPT 1 – PHASE 1 Diagnosis -->
+        
         <article class="prompt" data-phase="1">
             <div class="prompt-header">
                 <div class="prompt-meta">
                     <div class="number">PHASE 1</div>
-                    <div class="category">Diagnosis</div>
+                    <div class="category">Diagnose</div>
                     <span class="prompt-time">~5–10 min</span>
                 </div>
                 <h2 class="prompt-title">Where are we stuck?</h2>
@@ -2070,6 +2070,13 @@
                     <pre class="code-text" id="prompt1">You are a recruitment analyst. Your goal is to identify where recruitment is stuck and what to change, using the numbers.
 
 Help me understand our recruitment challenges.
+
+Company/location: [company, e.g., New York, NY]
+Role location: [e.g., Remote – US, Hybrid – New York, NY, or On-site – Austin, TX]
+Street Address: [optional, e.g., 123 Market St]
+Role: [job title]
+State: [two-letter State, e.g., NY]
+Zip Code: [optional, e.g., 10001]
 
 We have:
 - Number of candidates: [ ]
@@ -2116,12 +2123,12 @@ Explain simply:
             </div>
         </article>
 
-        <!-- PROMPT 2 – PHASE 2 Profile -->
+        
         <article class="prompt" data-phase="2">
             <div class="prompt-header">
                 <div class="prompt-meta">
                     <div class="number">PHASE 2</div>
-                    <div class="category">Profile</div>
+                    <div class="category">Define the Role</div>
                     <span class="prompt-time">~5–10 min</span>
                 </div>
                 <h2 class="prompt-title">Who really fits us?</h2>
@@ -2140,8 +2147,12 @@ Explain simply:
 
 Help me clearly describe who would fit us best.
 
-Company/field: [company]
-Role: [ ]
+Company/location: [company, e.g., New York, NY]
+Role location: [e.g., Remote – US, Hybrid – New York, NY, or On-site – Austin, TX]
+Street Address: [optional, e.g., 123 Market St]
+Role: [job title]
+State: [two-letter State, e.g., NY]
+Zip Code: [optional, e.g., 10001]
 Best performer in this role: [what are they like?]
 Why people left before: [ ]
 
@@ -2163,7 +2174,7 @@ Answer simply:
                         <span class="info-icon" aria-hidden="true"><i data-lucide="pencil" class="icon icon--md"></i></span>
                         <div class="info-content">
                             <strong>Replace before using:</strong>
-                            <p>[company] → company name or field (e.g. IT startup, retail); [role] → job title; best performer – short description; why they left – reason or “–”.</p>
+                            <p>[company] → company and US location (e.g., New York, NY); [location] → Street Address, City, State, optional Zip Code, or Remote – US; [role] → job title; best performer – short description; why they left – reason or “–”.</p>
                         </div>
                     </div>
                 </div>
@@ -2184,12 +2195,12 @@ Answer simply:
             </div>
         </article>
 
-        <!-- PROMPT 3 – PHASE 3 Attraction -->
+        
         <article class="prompt" data-phase="3">
             <div class="prompt-header">
                 <div class="prompt-meta">
                     <div class="number">PHASE 3</div>
-                    <div class="category">Attraction</div>
+                    <div class="category">Source Candidates</div>
                     <span class="prompt-time">~3–5 min</span>
                 </div>
                 <h2 class="prompt-title">Rewrite the job ad in plain language</h2>
@@ -2208,14 +2219,18 @@ Answer simply:
 
 Rewrite this job ad so the person feels it's written for them.
 
-Company/field: [company]
+Company/location: [company, e.g., San Francisco, CA]
+Role location: [e.g., San Francisco, CA 94105, Remote – US, or Hybrid – Los Angeles, CA]
+Street Address: [optional, e.g., 123 Market St]
 Text: [paste here]
+Compensation: [salary range, e.g., $85,000–$105,000]
 
 Do:
 - Clear opening
 - Plain language
 - Concrete examples
-- Clear call to apply</pre>
+- Clear call to apply
+- US-friendly location and compensation formatting</pre>
                 </div>
                 <div class="info-box" role="note" aria-label="Information: prompt 3">
                     <div class="info-item">
@@ -2229,7 +2244,7 @@ Do:
                         <span class="info-icon" aria-hidden="true"><i data-lucide="pencil" class="icon icon--md"></i></span>
                         <div class="info-content">
                             <strong>Replace before using:</strong>
-                            <p>[company] → company name or field (optional but helps tone); [paste] → paste your job ad text.</p>
+                            <p>[company] → company and US location (e.g., San Francisco, CA); [location] → Street Address, City, State, optional Zip Code, or Remote – US; [salary range] → use $, comma thousands, and decimal points where needed (e.g., $85,000–$105,000 or $1,250.50); [paste] → paste your job ad text.</p>
                         </div>
                     </div>
                 </div>
@@ -2250,12 +2265,12 @@ Do:
             </div>
         </article>
 
-        <!-- PROMPT 4 – PHASE 3 Attraction -->
+        
         <article class="prompt" data-phase="3">
             <div class="prompt-header">
                 <div class="prompt-meta">
                     <div class="number">PHASE 3</div>
-                    <div class="category">Attraction</div>
+                    <div class="category">Source Candidates</div>
                     <span class="prompt-time">~3–5 min</span>
                 </div>
                 <h2 class="prompt-title">How to find more people today?</h2>
@@ -2274,13 +2289,19 @@ Do:
 
 Give me 3 simple ways to find more candidates for this role today:
 
-Company/field: [company]
-Role: [ ]
+Company/location: [company, e.g., New York, NY]
+Role location: [e.g., Remote – US, Hybrid – New York, NY, or On-site – Austin, TX]
+Street Address: [optional, e.g., 123 Market St]
+Role: [job title]
+State: [two-letter State, e.g., NY]
+Zip Code: [optional, e.g., 10001]
+Contact phone: [optional, e.g., +1 (415) 555-0198]
 
 Suggest:
 - What to write on LinkedIn
 - How to ask your network
-- How to message someone directly</pre>
+- How to message someone directly
+- How to format phone or address details if needed (Street Address, City, State, Zip Code, +1 phone)</pre>
                 </div>
                 <div class="info-box" role="note" aria-label="Information: prompt 4">
                     <div class="info-item">
@@ -2294,7 +2315,7 @@ Suggest:
                         <span class="info-icon" aria-hidden="true"><i data-lucide="pencil" class="icon icon--md"></i></span>
                         <div class="info-content">
                             <strong>Replace before using:</strong>
-                            <p>[company] → company name or field; [role] → your role (e.g. Sales manager).</p>
+                            <p>[company] → company and US location (e.g., Austin, TX); [location] → Street Address, City, State, optional Zip Code, or Remote – US; [role] → your role (e.g., Sales Manager); phone numbers, if used, should follow +1 (XXX) XXX-XXXX; use Street Address, City, State, Zip Code for addresses.</p>
                         </div>
                     </div>
                 </div>
@@ -2315,12 +2336,12 @@ Suggest:
             </div>
         </article>
 
-        <!-- PROMPT 5 – PHASE 4 Selection -->
+        
         <article class="prompt" data-phase="4">
             <div class="prompt-header">
                 <div class="prompt-meta">
                     <div class="number">PHASE 4</div>
-                    <div class="category">Selection</div>
+                    <div class="category">Screen & Interview</div>
                     <span class="prompt-time">~5–10 min</span>
                 </div>
                 <h2 class="prompt-title">How to run a better interview?</h2>
@@ -2339,8 +2360,13 @@ Suggest:
 
 Create a simple interview plan for this role:
 
-Company/field: [company]
-Role: [ ]
+Company/location: [company, e.g., New York, NY]
+Role location: [e.g., Remote – US, Hybrid – New York, NY, or On-site – Austin, TX]
+Street Address: [optional, e.g., 123 Market St]
+Role: [job title]
+State: [two-letter State, e.g., NY]
+Zip Code: [optional, e.g., 10001]
+Contact phone: [optional, e.g., +1 (415) 555-0198]
 
 Give:
 - 5 questions that help understand the person
@@ -2360,7 +2386,7 @@ Give:
                         <span class="info-icon" aria-hidden="true"><i data-lucide="pencil" class="icon icon--md"></i></span>
                         <div class="info-content">
                             <strong>Replace before using:</strong>
-                            <p>[company] → company name or field; [role] → your role.</p>
+                            <p>[company] → company and US location (e.g., Chicago, IL); [location] → Street Address, City, State, optional Zip Code, or Remote – US; [role] → your role; dates should use MM/DD/YYYY.</p>
                         </div>
                     </div>
                 </div>
@@ -2381,12 +2407,12 @@ Give:
             </div>
         </article>
 
-        <!-- PROMPT 6 – PHASE 4 Selection -->
+        
         <article class="prompt" data-phase="4">
             <div class="prompt-header">
                 <div class="prompt-meta">
                     <div class="number">PHASE 4</div>
-                    <div class="category">Selection</div>
+                    <div class="category">Screen & Interview</div>
                     <span class="prompt-time">~5 min</span>
                 </div>
                 <h2 class="prompt-title">Why do candidates decline?</h2>
@@ -2405,9 +2431,15 @@ Give:
 
 Help me understand why candidates might decline our offer.
 
-Company/field: [company]
-Role: [ ]
-Salary: [ ]
+Company/location: [company, e.g., New York, NY]
+Role location: [e.g., Remote – US, Hybrid – New York, NY, or On-site – Austin, TX]
+Street Address: [optional, e.g., 123 Market St]
+Role: [job title]
+State: [two-letter State, e.g., NY]
+Zip Code: [optional, e.g., 10001]
+Contact phone: [optional, e.g., +1 (415) 555-0198]
+Salary range: [e.g., $85,000–$105,000]
+Signing bonus or budget: [optional, e.g., $1,250.50]
 What we offer: [ ]
 
 Give:
@@ -2427,13 +2459,13 @@ Give:
                         <span class="info-icon" aria-hidden="true"><i data-lucide="pencil" class="icon icon--md"></i></span>
                         <div class="info-content">
                             <strong>Replace before using:</strong>
-                            <p>[company], [role], [salary], [what we offer] – fill in your data.</p>
+                            <p>[company], [role], [location], [salary range], [what we offer] – use US formats such as New York, NY, Remote – US, and $85,000–$105,000.</p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="prompt-footer">
-                <p class="prompt-cta">Paste into ChatGPT or Claude – replace company, role, salary and what you offer.</p>
+                <p class="prompt-cta">Paste into ChatGPT or Claude – replace company, role, location, salary range, and what you offer.</p>
                 <button class="btn" 
                         onclick="copyPrompt(this, 'prompt6')"
                         aria-label="Copy prompt 6 to clipboard"
@@ -2448,12 +2480,12 @@ Give:
             </div>
         </article>
 
-        <!-- PROMPT 7 – PHASE 5 Offer -->
+        
         <article class="prompt" data-phase="5">
             <div class="prompt-header">
                 <div class="prompt-meta">
                     <div class="number">PHASE 5</div>
-                    <div class="category">Offer</div>
+                    <div class="category">Close the Offer</div>
                     <span class="prompt-time">~5 min</span>
                 </div>
                 <h2 class="prompt-title">How to present the offer better?</h2>
@@ -2472,8 +2504,14 @@ Give:
 
 Help me phrase a job offer so the person feels the value.
 
-Company/field: [company]
-Role: [ ]
+Company/location: [company, e.g., San Francisco, CA]
+Role location: [e.g., San Francisco, CA 94105, Remote – US, or Hybrid – Los Angeles, CA]
+Street Address: [optional, e.g., 123 Market St]
+Role: [job title]
+State: [two-letter State, e.g., CA]
+Zip Code: [optional, e.g., 94105]
+Contact phone: [optional, e.g., +1 (415) 555-0198]
+Salary range: [e.g., $85,000–$105,000]
 What we offer: [ ]
 
 Do:
@@ -2493,7 +2531,7 @@ Do:
                         <span class="info-icon" aria-hidden="true"><i data-lucide="pencil" class="icon icon--md"></i></span>
                         <div class="info-content">
                             <strong>Replace before using:</strong>
-                            <p>[company], [role], [what we offer] – fill in your data.</p>
+                            <p>[company], [role], [location], [salary range], [what we offer] – use City, State, optional Zip Code, or Remote – US for location and fill in financial details using US currency formatting.</p>
                         </div>
                     </div>
                 </div>
@@ -2514,12 +2552,12 @@ Do:
             </div>
         </article>
 
-        <!-- PROMPT 8 – PHASE 6 Retention -->
+        
         <article class="prompt" data-phase="6">
             <div class="prompt-header">
                 <div class="prompt-meta">
                     <div class="number">PHASE 6</div>
-                    <div class="category">Retention</div>
+                    <div class="category">Onboard & Retain</div>
                     <span class="prompt-time">~5–10 min</span>
                 </div>
                 <h2 class="prompt-title">How to help the new person in the first 3 months?</h2>
@@ -2538,8 +2576,14 @@ Do:
 
 Create a simple 3‑month plan for a new employee.
 
-Company/field: [company]
-Role: [ ]
+Company/location: [company, e.g., Seattle, WA]
+Role location: [e.g., Seattle, WA 98101, Remote – US, or Hybrid – Denver, CO]
+Street Address: [optional, e.g., 123 Market St]
+Role: [job title]
+State: [two-letter State, e.g., WA]
+Zip Code: [optional, e.g., 98101]
+Start date: [MM/DD/YYYY]
+Manager contact phone: [+1 (415) 555-0198]
 
 Give:
 - What they should understand in the first week
@@ -2559,7 +2603,7 @@ Give:
                         <span class="info-icon" aria-hidden="true"><i data-lucide="pencil" class="icon icon--md"></i></span>
                         <div class="info-content">
                             <strong>Replace before using:</strong>
-                            <p>[company] → company name or field; [role] → your role.</p>
+                            <p>[company] → company and US location (e.g., Chicago, IL); [location] → Street Address, City, State, optional Zip Code, or Remote – US; [role] → your role; dates should use MM/DD/YYYY.</p>
                         </div>
                     </div>
                 </div>
@@ -2580,16 +2624,16 @@ Give:
             </div>
         </article>
 
-        <!-- PROMPT 9 – PHASE 6 Retention -->
+        
         <article class="prompt" data-phase="6">
             <div class="prompt-header">
                 <div class="prompt-meta">
                     <div class="number">PHASE 6</div>
-                    <div class="category">Retention</div>
+                    <div class="category">Onboard & Retain</div>
                     <span class="prompt-time">~5 min</span>
                 </div>
                 <h2 class="prompt-title">Why do people leave?</h2>
-                <p class="prompt-desc">Analyse reasons and what we can change quickly</p>
+                <p class="prompt-desc">Analyze reasons and what we can change quickly</p>
             </div>
             <div class="prompt-body">
                 <div class="code-block"
@@ -2600,10 +2644,16 @@ Give:
                      onclick="selectText(this)"
                      onkeydown="handleCodeBlockKeydown(event, this)">
                     <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Copy</span>
-                    <pre class="code-text" id="prompt9">You are an employee retention analyst. Your goal is to analyse reasons for leaving, unclear expectations and mismatches, and suggest quick changes.
+                    <pre class="code-text" id="prompt9">You are an employee retention analyst. Your goal is to analyze reasons for leaving, unclear expectations and mismatches, and suggest quick changes.
 
-Help me analyse why people leave in the first 6 months.
+Help me analyze why people leave in the first 6 months.
 
+Company/location: [company, e.g., Chicago, IL]
+Role location: [e.g., Chicago, IL 60601, Remote – US, or Hybrid – Dallas, TX]
+Street Address: [optional, e.g., 123 Market St]
+Role: [job title]
+State: [two-letter State, e.g., IL]
+Zip Code: [optional, e.g., 60601]
 Reasons we've heard: [ ]
 
 Tell me:
@@ -2644,12 +2694,12 @@ Tell me:
             </div>
         </article>
 
-        <!-- PROMPT 10 – PHASE 6 Retention -->
+        
         <article class="prompt" data-phase="6">
             <div class="prompt-header">
                 <div class="prompt-meta">
                     <div class="number">PHASE 6</div>
-                    <div class="category">Retention</div>
+                    <div class="category">Onboard & Retain</div>
                     <span class="prompt-time">~5–10 min</span>
                 </div>
                 <h2 class="prompt-title">Master prompt (one for everything)</h2>
@@ -2666,10 +2716,15 @@ Tell me:
                     <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Copy</span>
                     <pre class="code-text" id="prompt10">You are an HR recruitment strategist. Your goal is to put the full recruitment plan in one place: from the problem and weekly actions to the ad, interviews, acceptance likelihood, and first 3 months of support. Write simply, with concrete actions only.
 
-Help me organise recruitment for this role simply and clearly:
+Help me organize hiring for this role simply and clearly:
 
-Company/field: [company]
-Role: [ ]
+Company/location: [company, e.g., New York, NY]
+Role location: [e.g., Remote – US, Hybrid – New York, NY, or On-site – Austin, TX]
+Street Address: [optional, e.g., 123 Market St]
+Role: [job title]
+State: [two-letter State, e.g., NY]
+Zip Code: [optional, e.g., 10001]
+Contact phone: [optional, e.g., +1 (415) 555-0198]
 How many people are applying: [ ]
 Where we're stuck: [ ]
 What we've already tried: [ ]
@@ -2694,7 +2749,7 @@ Give:
                         <span class="info-icon" aria-hidden="true"><i data-lucide="pencil" class="icon icon--md"></i></span>
                         <div class="info-content">
                             <strong>Replace before using:</strong>
-                            <p>[company], [role], candidate count, where we're stuck, what we tried – fill in your data.</p>
+                            <p>[company], [role], [location], candidate count, where we're stuck, what we tried – fill in your data using Street Address, City, State, optional Zip Code, or Remote – US.</p>
                         </div>
                     </div>
                 </div>
@@ -2718,19 +2773,19 @@ Give:
         <section class="community" id="community" aria-labelledby="community-title">
             <h2 id="community-title">System created.<br>Want more?</h2>
             <a href="https://chat.whatsapp.com/It49fzTl1n90huRCoWWkwu?mode=gi_t" class="community-cta-primary" target="_blank" rel="noopener noreferrer" aria-label="Open Prompt anatomy WhatsApp group in new tab">Join WhatsApp group</a>
-            <a href="https://www.promptanatomy.app/" class="community-cta-secondary" target="_blank" rel="noopener noreferrer" aria-label="Full Prompt anatomy – interactive training (opens in new tab)">Prompt anatomy →</a>
+            <a href="https://www.promptanatomy.app/" class="community-cta-secondary" target="_blank" rel="noopener noreferrer" aria-label="Full Prompt Anatomy – interactive training (opens in a new tab)">Prompt anatomy →</a>
         </section>
 
         <footer class="footer">
-            <h3>Good luck with recruitment <span class="icon-wrap" aria-hidden="true"><i data-lucide="rocket" class="icon icon--md"></i></span></h3>
-            <p>Remember to replace <strong>[company]</strong>, <strong>[role]</strong>, <strong>[salary]</strong>, <strong>[candidate count]</strong> and other placeholders with your data.</p>
-            <p class="footer-product-link">This is Spin-off No. 3 from “Prompt anatomy”.</p>
+            <h3>Good luck with hiring <span class="icon-wrap" aria-hidden="true"><i data-lucide="rocket" class="icon icon--md"></i></span></h3>
+            <p>Remember to replace <strong>[company]</strong>, <strong>[role]</strong>, <strong>[location]</strong>, <strong>[salary range]</strong>, <strong>[candidate count]</strong>, and other placeholders with your data. Use US examples such as <strong>123 Market St, San Francisco, CA 94105</strong>, <strong>Remote – US</strong>, <strong>+1 (415) 555-0198</strong>, and <strong>$1,250.50</strong> where applicable.</p>
+            <p class="footer-product-link">This is Series No. 3 from “Prompt Anatomy”.</p>
             <p class="footer-contact">Prompt anatomy: <a href="https://www.promptanatomy.app/" target="_blank" rel="noopener noreferrer">promptanatomy.app</a> | Email: <a href="mailto:info@promptanatomy.app">info@promptanatomy.app</a></p>
             <div class="tags" role="list">
-                <span class="tag" role="listitem"><span class="icon-wrap" aria-hidden="true"><i data-lucide="users" class="icon icon--sm"></i></span> HR recruitment</span>
+                <span class="tag" role="listitem"><span class="icon-wrap" aria-hidden="true"><i data-lucide="users" class="icon icon--sm"></i></span> US hiring</span>
                 <span class="tag" role="listitem"><span class="icon-wrap" aria-hidden="true"><i data-lucide="book-marked" class="icon icon--sm"></i></span> 10 prompts</span>
                 <span class="tag" role="listitem"><span class="icon-wrap" aria-hidden="true"><i data-lucide="zap" class="icon icon--sm"></i></span> Action focus</span>
-                <span class="tag" role="listitem"><span class="icon-wrap" aria-hidden="true"><i data-lucide="target" class="icon icon--sm"></i></span> Daily recruitment problems</span>
+                <span class="tag" role="listitem"><span class="icon-wrap" aria-hidden="true"><i data-lucide="target" class="icon icon--sm"></i></span> Everyday hiring problems</span>
             </div>
             <div class="copyright">
                 <p>&copy; 2026 Tomas Staniulis. Training material. All rights reserved. <a href="privatumas.html">Privacy</a></p>

@@ -1,22 +1,23 @@
 /**
- * DI Promptų Biblioteka – bendra logika LT/EN
- * Locale nustatomas iš <html lang> (build nustato lt/en). Kalbos perjungiklis – navigacija į /lt/ arba /en/ su hash.
+ * DI Promptų Biblioteka – shared LT/en-US behavior
+ * Locale is detected from <html lang> (build sets lt/en-US). The language switcher navigates to /lt/ or /en/ with the current hash.
  */
 (function() {
     'use strict';
 
     // ===== LOCALE =====
-    var locale = (document.documentElement && document.documentElement.getAttribute('lang')) || 'lt';
+    var rawLocale = (document.documentElement && document.documentElement.getAttribute('lang')) || 'lt';
+    var locale = rawLocale.toLowerCase().indexOf('en') === 0 ? 'en-US' : 'lt';
     var LANG_KEY = 'di_prompt_lib_lang';
 
     function uiText(lt, en) {
         return locale === 'lt' ? lt : en;
     }
 
-    // Fazės pavadinimai (dinamiškai JS)
+    // Phase labels rendered dynamically by JavaScript
     var PHASE_TITLES = {
         lt: { 1: 'Diagnostika', 2: 'Profilis', 3: 'Pritraukimas', 4: 'Atranka', 5: 'Pasiūlymas', 6: 'Išlaikymas' },
-        en: { 1: 'Diagnosis', 2: 'Profile', 3: 'Attraction', 4: 'Selection', 5: 'Offer', 6: 'Retention' }
+        'en-US': { 1: 'Diagnose', 2: 'Define the Role', 3: 'Source Candidates', 4: 'Screen & Interview', 5: 'Close the Offer', 6: 'Onboard & Retain' }
     };
 
     function getPhaseTitle(phase) {
@@ -430,9 +431,9 @@
         }
         if (langEn) {
             langEn.setAttribute('aria-label', uiText('Perjungti į anglų kalbą', 'Switch to English'));
-            if (locale === 'en') langEn.classList.add('is-active');
+            if (locale === 'en-US') langEn.classList.add('is-active');
             langEn.addEventListener('click', function() {
-                try { localStorage.setItem(LANG_KEY, 'en'); } catch (_) { /* ignore */ }
+                try { localStorage.setItem(LANG_KEY, 'en-US'); } catch (_) { /* ignore */ }
                 window.location.href = basePath + 'en/' + (window.location.hash || '');
             });
         }

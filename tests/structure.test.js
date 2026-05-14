@@ -96,7 +96,7 @@ function run() {
   if (assert(html.includes('lang="lt"'), 'HTML lang="lt"')) passed++;
   else failed++;
 
-  // --- LT/EN locale pages (built by npm run build) ---
+  // --- LT/en-US locale pages (built by npm run build) ---
   const ltIndexPath = path.join(__dirname, '..', 'lt', 'index.html');
   const enIndexPath = path.join(__dirname, '..', 'en', 'index.html');
   const ltPrivacyPath = path.join(__dirname, '..', 'lt', 'privatumas.html');
@@ -115,12 +115,12 @@ function run() {
 
   if (ltIndex && assert(ltIndex.includes('lang="lt"'), 'lt/index.html lang="lt"')) passed++;
   else failed++;
-  if (enIndex && assert(enIndex.includes('lang="en"'), 'en/index.html lang="en"')) passed++;
+  if (enIndex && assert(enIndex.includes('lang="en-US"'), 'en/index.html lang="en-US"')) passed++;
   else failed++;
 
-  if (ltIndex && assert(ltIndex.includes('rel="canonical"') && ltIndex.includes('hreflang="lt"') && ltIndex.includes('hreflang="en"') && ltIndex.includes('hreflang="x-default"'), 'lt/index.html canonical ir hreflang')) passed++;
+  if (ltIndex && assert(ltIndex.includes('rel="canonical"') && ltIndex.includes('hreflang="lt"') && ltIndex.includes('hreflang="en-US"') && ltIndex.includes('hreflang="x-default"'), 'lt/index.html canonical ir hreflang')) passed++;
   else failed++;
-  if (enIndex && assert(enIndex.includes('rel="canonical"') && enIndex.includes('hreflang="lt"') && enIndex.includes('hreflang="en"') && enIndex.includes('hreflang="x-default"'), 'en/index.html canonical ir hreflang')) passed++;
+  if (enIndex && assert(enIndex.includes('rel="canonical"') && enIndex.includes('hreflang="lt"') && enIndex.includes('hreflang="en-US"') && enIndex.includes('hreflang="x-default"'), 'en/index.html canonical ir hreflang')) passed++;
   else failed++;
 
   if (enIndex) {
@@ -131,6 +131,40 @@ function run() {
   }
   if (enIndex && assert(enIndex.includes('Skip to content') && (enIndex.includes('Copy prompt') || enIndex.includes('Copy')), 'en/index.html EN stringai')) passed++;
   else failed++;
+
+  if (enIndex && assert(enIndex.includes('New York, NY') || enIndex.includes('San Francisco, CA'), 'en/index.html includes a US city/state example')) passed++;
+  else failed++;
+  if (enIndex && assert(['New York, NY', 'San Francisco, CA', 'Austin, TX', 'Chicago, IL', 'Seattle, WA'].filter((city) => enIndex.includes(city)).length >= 4, 'en/index.html includes multiple US city/state examples')) passed++;
+  else failed++;
+  const roleLocationCount = enIndex ? (enIndex.match(/Role location:/g) || []).length : 0;
+  if (enIndex && assert(roleLocationCount >= 10, 'en/index.html includes role-location placeholders for all prompts')) passed++;
+  else failed++;
+  if (enIndex && assert(enIndex.includes('Remote – US') && enIndex.includes('Hybrid – New York, NY') && enIndex.includes('On-site – Austin, TX'), 'en/index.html includes remote, hybrid, and on-site US location examples')) passed++;
+  else failed++;
+  if (enIndex && assert(enIndex.includes('City, State, optional Zip Code') && enIndex.includes('San Francisco, CA 94105') && enIndex.includes('Seattle, WA 98101'), 'en/index.html includes US location format with optional Zip Code examples')) passed++;
+  else failed++;
+  if (enIndex && assert(/\$\d{1,3}(,\d{3})*(\.\d{2})?/.test(enIndex), 'en/index.html includes US dollar formatting')) passed++;
+  else failed++;
+  if (enIndex && assert(enIndex.includes('MM/DD/YYYY'), 'en/index.html includes US date format guidance')) passed++;
+  else failed++;
+  if (enIndex && assert(enIndex.includes('+1 (415) 555-0198'), 'en/index.html includes US phone format guidance')) passed++;
+  else failed++;
+  if (enIndex && assert(enIndex.includes('Zip Code'), 'en/index.html includes US address terminology')) passed++;
+  else failed++;
+  if (enIndex && assert(enIndex.includes('Address fields: <code>Street Address</code>, <code>City</code>, <code>State</code>, <code>Zip Code</code>'), 'en/index.html includes explicit US address field order')) passed++;
+  else failed++;
+  if (enIndex && assert(enIndex.includes('Phone format: <code>+1 (XXX) XXX-XXXX</code>') && enIndex.includes('Contact phone: [optional, e.g., +1 (415) 555-0198]'), 'en/index.html includes canonical US phone format and prompt placeholder')) passed++;
+  else failed++;
+  const streetAddressCount = enIndex ? (enIndex.match(/Street Address: \[optional, e\.g\., 123 Market St\]/g) || []).length : 0;
+  if (enIndex && assert(streetAddressCount >= 10, 'en/index.html includes Street Address placeholders for all prompts')) passed++;
+  else failed++;
+  if (enIndex && assert(enIndex.includes('State: [two-letter State, e.g., NY]') && enIndex.includes('Zip Code: [optional, e.g., 10001]'), 'en/index.html includes two-letter State and Zip Code placeholders')) passed++;
+  else failed++;
+  if (enIndex && assert(!/(€|\bEUR\b|Postcode|postcode|Colour|colour|organisation|optimise|centre|grey|Analyse|analyse|Spin-off Nr\.)/.test(enIndex), 'en/index.html has no obvious non-US locale fragments')) passed++;
+  else failed++;
+  if (enIndex && assert(!/[ąčęėįšųūžĄČĘĖĮŠŲŪŽ]/.test(enIndex), 'en/index.html has no Lithuanian diacritics')) passed++;
+  else failed++;
+
 
   console.log('\n---');
   console.log(`Rezultatas: ${passed} praeina, ${failed} nepraeina.`);

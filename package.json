@@ -2,7 +2,7 @@
   "name": "di-promptu-biblioteka",
   "version": "1.0.0",
   "private": true,
-  "description": "DI Promptų Biblioteka – statinė HTML platforma",
+  "description": "US-localized HR hiring prompt library – static HTML platform",
   "scripts": {
     "build": "node scripts/build-locale-pages.js",
     "test": "npm run build && node tests/structure.test.js && npm run lint:html && npm run lint:js",
