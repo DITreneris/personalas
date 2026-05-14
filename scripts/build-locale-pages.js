@@ -42,6 +42,7 @@ function injectHead(html, locale, basePath, baseForLinks) {
   const basePathScript = basePath
     ? '<script>window.BASE_PATH = \'' + basePath.replace(/'/g, "\\'") + '\';</script>\n    '
     : '';
+  html = html.replace('href="assets/styles.css"', 'href="../assets/styles.css"');
   html = html.replace(/<script src="generator\.js"><\/script>/, basePathScript + '<script src="../generator.js"></script>');
   return html;
 }
@@ -370,10 +371,10 @@ function applyEnPromptUi(html) {
 
 // ---- Privacy EN ----
 const PRIVACY_EN = {
-  title: 'Privacy policy – AI Prompt Library',
+  title: 'Privacy policy – HR recruitment AI prompts',
   back: '← Back to library',
-  backLink: '← Back to AI Prompt library',
-  intro: '<strong>AI Prompt library</strong> (Content AI system for marketing managers) – minimal app. Briefly about your data.',
+  backLink: '← Back to HR recruitment AI prompt library',
+  intro: '<strong>HR recruitment AI prompts</strong> – static prompt library for recruiting teams. Briefly about your data.',
   q1: 'Do we collect your data?',
   a1: '<strong>No.</strong> We do not collect any personal data at this time. No forms, email collection or server submission.',
   q2: 'What happens on your device?',
@@ -387,16 +388,17 @@ function buildPrivacyEn(html) {
     .replace('<html lang="lt">', '<html lang="en">')
     .replace(/<title>.*?<\/title>/, '<title>' + PRIVACY_EN.title + '</title>')
     .replace('href="favicon.svg"', 'href="../favicon.svg"')
+    .replace('href="assets/styles.css"', 'href="../assets/styles.css"')
     .replace('← Grįžti į biblioteką', '← Back to library')
     .replace('Privatumo politika', 'Privacy policy')
-    .replace(/<p><strong>DI Promptų biblioteka.*?<\/p>/, '<p>' + PRIVACY_EN.intro + '</p>')
+    .replace(/<p class="intro"><strong>HR atrankos DI promptai.*?<\/p>/, '<p class="intro">' + PRIVACY_EN.intro + '</p>')
     .replace('Ar renkame tavo duomenis?', PRIVACY_EN.q1)
     .replace(/<p><strong>Ne\.<\/strong>.*?serverius\.<\/p>/, '<p>' + PRIVACY_EN.a1 + '</p>')
     .replace('Kas vyksta tavo įrenginyje?', PRIVACY_EN.q2)
     .replace(/<p>Tik naršyklės.*?įrenginyje\.<\/p>/, '<p>' + PRIVACY_EN.a2 + '</p>')
     .replace('Jei vėliau bus forma', PRIVACY_EN.q3)
     .replace(/<p>Jei įjungsime.*?naudojame\.<\/p>/, '<p>' + PRIVACY_EN.a3 + '</p>')
-    .replace('← Grįžti į DI Promptų biblioteką', PRIVACY_EN.backLink);
+    .replace('← Grįžti į HR atrankos DI promptų biblioteką', PRIVACY_EN.backLink);
 }
 
 // ---- Main ----
@@ -407,7 +409,9 @@ function main() {
   // LT
   let ltIndex = injectHead(indexHtml, 'lt', BASE_PATH, BASE_FOR_LINKS);
   write('lt/index.html', ltIndex);
-  let ltPrivacy = privacyHtml.replace('href="favicon.svg"', 'href="../favicon.svg"');
+  let ltPrivacy = privacyHtml
+    .replace('href="favicon.svg"', 'href="../favicon.svg"')
+    .replace('href="assets/styles.css"', 'href="../assets/styles.css"');
   write('lt/privatumas.html', ltPrivacy);
 
   // EN
@@ -417,7 +421,6 @@ function main() {
   write('en/index.html', enIndex);
 
   let enPrivacy = buildPrivacyEn(privacyHtml);
-  enPrivacy = enPrivacy.replace('href="../favicon.svg"', 'href="../favicon.svg"');
   write('en/privatumas.html', enPrivacy);
 
   console.log('Build done: lt/index.html, lt/privatumas.html, en/index.html, en/privatumas.html');

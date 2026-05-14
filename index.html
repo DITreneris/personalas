@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>HR kasdienė atrankos sistema – DI promptai</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <style>html { scroll-behavior: smooth; }</style>
+    <link rel="stylesheet" href="assets/styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
@@ -14,97 +14,6 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        }
-
-        :root {
-            /* Spin-off Nr. 3 – HR atranka, žalia CTA paletė */
-            --bg: #F7F8FA;
-            --white: #FFFFFF;
-            --text: #1A202C;
-            --text-light: #4A5568;
-            --border: #CBD5E0;
-
-            /* Design tokens – premium SaaS (C-level) */
-            --r-card: 16px;
-            --r-btn: 12px;
-            --r-badge: 10px;
-            --r-hero: 24px;
-            --border-width: 1px;
-            --border-subtle: rgba(203, 213, 224, 0.6);
-            --border-subtle-dark: rgba(60, 72, 90, 0.15);
-            --shadow-soft: 0 2px 8px rgba(60, 72, 90, 0.06), 0 1px 2px rgba(60, 72, 90, 0.04);
-            --shadow-medium: 0 4px 16px rgba(60, 72, 90, 0.08), 0 2px 4px rgba(60, 72, 90, 0.04);
-            --shadow-elevated: 0 10px 30px rgba(0, 0, 0, 0.06), 0 4px 12px rgba(0, 0, 0, 0.03);
-            --shadow-card: var(--shadow-soft);
-            --shadow-card-hover: var(--shadow-medium);
-            --space-8: 8px;
-            --space-12: 12px;
-            --space-16: 16px;
-            --space-20: 20px;
-            --space-24: 24px;
-            --space-28: 28px;
-            --space-32: 32px;
-
-            /* Motion – C-level (nuoseklus ritmas) */
-            --duration-fast: 150ms;
-            --duration-normal: 250ms;
-            --duration-slow: 400ms;
-            --ease-out: cubic-bezier(0.33, 1, 0.68, 1);
-            --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
-
-            /* Tipografija – leading */
-            --leading-tight: 1.25;
-            --leading-normal: 1.5;
-            --leading-relaxed: 1.6;
-
-            /* Pagrindinis akcentas – žalia; WCAG2AA 4.5:1 */
-            --accent-primary: #0E7A33;
-            --accent-primary-hover: #0B6B2D;
-            --accent-gold: #0E7A33;
-            --accent-gold-dark: #0B6B2D;
-
-            /* Antrinis akcentas (tamsiai pilka) – hero, outline mygtukai */
-            --accent-dark: #3C485A;
-            --accent-dark-hover: #2D3848;
-
-            /* Hero: žalia, ~15–20% mažesnė saturacija – ramus, autoritetingas HR, ne fintech */
-            --hero-gradient-start: #1e6b42;
-            --hero-gradient-mid: #2a7a52;
-            --hero-gradient-end: #4a9572;
-            --cta-bg: #0E7A33;
-            --cta-text: #FFFFFF;
-            --cta-hover: var(--accent-primary-hover);
-
-            /* Hero pagrindinis CTA – baltas mygtukas, žalias tekstas (akys per <1 s) */
-            --cta-hero-bg: #FFFFFF;
-            --cta-hero-text: #0B6B2D;
-            --cta-hero-hover-bg: #F0FDF4;
-            --cta-hero-hover-text: #0B6B2D;
-
-            /* Tertiarinė (bibliotekos identitetas) – teal */
-            --tertiary: #0D9488;
-            --tertiary-dark: #0a5c54;
-            --tertiary-hover: #0f766e;
-            --tertiary-light: #CCFBF1;
-
-            /* Semantiniai – suderinti su žalia palete */
-            --blue: #3C485A;
-            --blue-light: #E8ECF0;
-            --orange: #0E7A33;
-            --orange-light: #ECFDF5;
-            --green: #38A169;
-            --green-dark: #2F855A;
-            --error: #E53E3E;
-            --bg-subtle: #F7FAFC;
-
-            /* Community CTA – suderinta su žalia tema */
-            --community-cta-green: #0E7A33;
-            --community-cta-green-hover: #0B6B2D;
-
-            /* Lucide ikonų dydžiai – premium SaaS */
-            --icon-size-sm: 16px;
-            --icon-size-md: 20px;
-            --icon-size-lg: 24px;
         }
 
         /* Lucide ikonos – nuoseklus stilius */
@@ -1965,14 +1874,6 @@
             .prompt {
                 page-break-inside: avoid;
                 border: 2px solid #000;
-            }
-        }
-
-        /* ===== ACCESSIBILITY ===== */
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                animation-duration: 0.01ms !important;
-                transition-duration: 0.01ms !important;
             }
         }
     </style>
