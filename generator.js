@@ -1,5 +1,5 @@
 /**
- * DI Promptų Biblioteka – shared LT/en-US behavior
+ * Personalas – shared LT/en-US behavior
  * Locale is detected from <html lang> (build sets lt/en-US). The language switcher navigates to /lt/ or /en/ with the current hash.
  */
 (function() {
@@ -35,18 +35,19 @@
     };
 
     // ===== PAGALBINĖS FUNKCIJOS =====
-    var copyTimeout = null;
+    var copyPromptDebounceTimer = null;
     var isCopying = false;
 
-    function debounce(func, delay) {
+    function debounceCopyPrompt(func, delay) {
         return function() {
             var args = arguments;
-            clearTimeout(copyTimeout);
-            copyTimeout = setTimeout(function() { func.apply(this, args); }.bind(this), delay);
+            var ctx = this;
+            clearTimeout(copyPromptDebounceTimer);
+            copyPromptDebounceTimer = setTimeout(function() { func.apply(ctx, args); }, delay);
         };
     }
 
-    function selectText(element) {
+    function selectTextInternal(element) {
         if (!element) return;
         try {
             var pre = element.querySelector('pre');
@@ -61,21 +62,7 @@
         } catch (_) { /* fallback */ }
     }
 
-    function handleCodeBlockKeydown(event, element) {
-        if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            selectText(element);
-            var promptId = element.querySelector('pre') ? element.querySelector('pre').id : null;
-            if (promptId) {
-                var button = element.closest('.prompt') ? element.closest('.prompt').querySelector('.btn') : null;
-                if (button) {
-                    setTimeout(function() { copyPrompt(button, promptId); }, 300);
-                }
-            }
-        }
-    }
-
-    function copyPrompt(button, promptId) {
+    function copyPromptInternal(button, promptId) {
         if (isCopying) return;
         if (!button || !promptId) {
             showError(button, uiText('Klaida: trūksta parametrų', 'Error: missing parameters'));
@@ -98,6 +85,28 @@
                 .catch(function() { fallbackCopy(promptText, button); });
         } else {
             fallbackCopy(promptText, button);
+        }
+    }
+
+    function scheduleCopyAfterCodeBlockActivate(button, promptId) {
+        if (!button || !promptId) return;
+        setTimeout(function() { copyPromptInternal(button, promptId); }, 300);
+    }
+
+    function activateCodeBlock(element) {
+        if (!element) return;
+        selectTextInternal(element);
+        var pre = element.querySelector('pre');
+        var promptId = pre && pre.id ? pre.id : null;
+        if (!promptId) return;
+        var button = element.closest('.prompt') ? element.closest('.prompt').querySelector('.btn') : null;
+        if (button) scheduleCopyAfterCodeBlockActivate(button, promptId);
+    }
+
+    function handleCodeBlockKeydown(event, element) {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            activateCodeBlock(element);
         }
     }
 
@@ -192,8 +201,9 @@
     }
 
     // ===== GLOBAL (HTML onclick/onkeydown) =====
-    window.selectText = debounce(selectText, CONFIG.DEBOUNCE_DELAY);
-    window.copyPrompt = debounce(copyPrompt, CONFIG.DEBOUNCE_DELAY);
+    window.selectText = selectTextInternal;
+    window.copyPrompt = debounceCopyPrompt(copyPromptInternal, CONFIG.DEBOUNCE_DELAY);
+    window.activateCodeBlock = activateCodeBlock;
     window.handleCodeBlockKeydown = handleCodeBlockKeydown;
 
     document.addEventListener('keydown', function(event) {
@@ -247,7 +257,7 @@
         if (textEl) {
             textEl.textContent = phaseCount === 6
                 ? uiText('Puiku – atlikai visas 6 fazes.', 'Great – you\'ve completed all 6 phases.')
-                : uiText('Sistema: ' + phaseCount + ' / 6 fazės', 'System: ' + phaseCount + ' / 6 phases');
+                : uiText('Sistema: ' + phaseCount + ' iš 6 fazių', 'System: ' + phaseCount + ' of 6 phases');
         }
         if (fillEl) fillEl.style.width = (phaseCount / 6 * 100) + '%';
         if (barEl) {
@@ -331,8 +341,13 @@
         function setActiveHeaderPhase(phaseNum) {
             headerPhaseButtons.forEach(function(btn) {
                 var btnPhase = parseInt(btn.getAttribute('data-phase'), 10);
-                if (btnPhase === phaseNum) btn.classList.add('is-active');
-                else btn.classList.remove('is-active');
+                if (btnPhase === phaseNum) {
+                    btn.classList.add('is-active');
+                    btn.setAttribute('aria-current', 'true');
+                } else {
+                    btn.classList.remove('is-active');
+                    btn.removeAttribute('aria-current');
+                }
             });
         }
         setActiveHeaderPhase(defaultOpenPhase);
@@ -394,6 +409,7 @@
                     if (phaseObj) {
                         closeAllExcept(phaseObj);
                         setOpen(phaseObj, true);
+                        setActiveHeaderPhase(phaseNum);
                         setTimeout(function() {
                             try { target.scrollIntoView({ block: 'start' }); } catch (_) { /* ignore */ }
                         }, 0);
@@ -422,20 +438,32 @@
         var langLt = document.getElementById('langLtBtn');
         var langEn = document.getElementById('langEnBtn');
         if (langLt) {
-            langLt.setAttribute('aria-label', uiText('Perjungti į lietuvių kalbą', 'Switch to Lithuanian'));
-            if (locale === 'lt') langLt.classList.add('is-active');
-            langLt.addEventListener('click', function() {
-                try { localStorage.setItem(LANG_KEY, 'lt'); } catch (_) { /* ignore */ }
-                window.location.href = basePath + 'lt/' + (window.location.hash || '');
-            });
+            if (locale === 'lt') {
+                langLt.classList.add('is-active');
+                langLt.disabled = true;
+                langLt.setAttribute('aria-current', 'true');
+                langLt.setAttribute('aria-label', uiText('Lietuvių kalba (dabartinė)', 'Lithuanian (current)'));
+            } else {
+                langLt.setAttribute('aria-label', uiText('Perjungti į lietuvių kalbą', 'Switch to Lithuanian'));
+                langLt.addEventListener('click', function() {
+                    try { localStorage.setItem(LANG_KEY, 'lt'); } catch (_) { /* ignore */ }
+                    window.location.href = basePath + 'lt/' + (window.location.hash || '');
+                });
+            }
         }
         if (langEn) {
-            langEn.setAttribute('aria-label', uiText('Perjungti į anglų kalbą', 'Switch to English'));
-            if (locale === 'en-US') langEn.classList.add('is-active');
-            langEn.addEventListener('click', function() {
-                try { localStorage.setItem(LANG_KEY, 'en-US'); } catch (_) { /* ignore */ }
-                window.location.href = basePath + 'en/' + (window.location.hash || '');
-            });
+            if (locale === 'en-US') {
+                langEn.classList.add('is-active');
+                langEn.disabled = true;
+                langEn.setAttribute('aria-current', 'true');
+                langEn.setAttribute('aria-label', uiText('Anglų kalba (dabartinė)', 'English (current)'));
+            } else {
+                langEn.setAttribute('aria-label', uiText('Perjungti į anglų kalbą', 'Switch to English'));
+                langEn.addEventListener('click', function() {
+                    try { localStorage.setItem(LANG_KEY, 'en-US'); } catch (_) { /* ignore */ }
+                    window.location.href = basePath + 'en/' + (window.location.hash || '');
+                });
+            }
         }
     }
 

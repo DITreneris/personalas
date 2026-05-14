@@ -1,18 +1,20 @@
 # Personalas – HR Hiring Prompts
 
-**Pastaba:** npm paketo vardas repozitorijoje yra `di-promptu-biblioteka` ([package.json](package.json)); produktas / GitHub repo – „Personalas“.
-
 Statinė HTML platforma: 10 HR atrankos promptų. Pasirinkti → kopijuoti → įklijuoti į ChatGPT, Claude ar Gemini. Anglų puslapis lokalizuotas JAV komandoms (`en-US`: valiuta, data, telefonas ir lokacijos pavyzdžiai).
 
-**Live:** [https://ditreneris.github.io/personalas/](https://ditreneris.github.io/personalas/)
+**Production (numatytasis):** [https://promptanatomy.help](https://promptanatomy.help) – **Vercel**; build komanda repozitorijoje – `npm test` (įskaitant `npm run build`, žr. [vercel.json](vercel.json)). **Alternatyva:** GitHub Pages (`https://ditreneris.github.io/<repo>/`) – build metu nustatykite `SITE_ORIGIN` ir `BASE_PATH` (žr. [DEPLOYMENT.md](DEPLOYMENT.md)).
+
+**SEO ir build:** `npm run build` generuoja `lt/`, `en/`, `robots.txt`, `sitemap.xml` ir papildo `index.html` / `privatumas.html` šaknies `<head>`. Numatytai: `SITE_ORIGIN=https://promptanatomy.help`, tuščias `BASE_PATH` (šaknis ant domeno). Vercel **Preview**: projekto nustatymuose galite nustatyti `SITE_PUBLIC_BASE` (pilna vieša bazė be galo `/`, pvz. `https://xxx.vercel.app`). GitHub Actions CI vis dar naudoja `SITE_ORIGIN=https://ditreneris.github.io` ir `BASE_PATH=/<repo>/`. Po build šaknies HTML gali skirtis nuo minimalaus šaltinio – prieš commit tik kitus failus: `git checkout -- index.html privatumas.html`.
+
+**OG paveikslėlis:** `npm run generate:og` sukuria [images/og-default.png](images/og-default.png) (1200×630, reikia `sharp`).
 
 **Dokumentacija:** visų doc nuorodų indeksas – [docs/INDEX.md](docs/INDEX.md) (procesas: [docs/process/development.md](docs/process/development.md), saugumas: [docs/security.md](docs/security.md), LT/EN: [docs/language-guidelines-en-lt.md](docs/language-guidelines-en-lt.md)).
 
 ---
 
-**Deploy:** GitHub Pages from `main` (Actions → Deploy to GitHub Pages).
+**GitHub Pages (pasirinktinai):** push į `main` → Actions → **Deploy to GitHub Pages**.
 
-**First-time setup:** enable Pages in [Settings → Pages](https://github.com/DITreneris/personalas/settings/pages) → **Build and deployment** → Source: **GitHub Actions**. After that, the “Deploy to GitHub Pages” workflow runs on every push to `main`.
+**Pirmas kartas:** [Settings → Pages](https://github.com/DITreneris/personalas/settings/pages) → **Build and deployment** → šaltinis: **GitHub Actions**.
 
 ```bash
 git remote add personalas https://github.com/DITreneris/personalas.git

@@ -4,11 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     
-    <link rel="canonical" href="/en/">
-    <link rel="alternate" hreflang="lt" href="/lt/">
-    <link rel="alternate" hreflang="en-US" href="/en/">
-    <link rel="alternate" hreflang="x-default" href="/en/">
-<title>HR hiring system – AI prompts for US teams</title>
+    <link rel="canonical" href="https://promptanatomy.help/en/">
+    <link rel="alternate" hreflang="lt" href="https://promptanatomy.help/lt/">
+    <link rel="alternate" hreflang="en-US" href="https://promptanatomy.help/en/">
+    <link rel="alternate" hreflang="x-default" href="https://promptanatomy.help/en/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="HR hiring system – AI prompts for US teams">
+    <meta property="og:description" content="Ten ready-to-use AI prompts for US hiring: diagnostics, role definition, job posts, sourcing, interviews, offers, and onboarding. Copy into ChatGPT or Claude—about 30 minutes end-to-end.">
+    <meta property="og:url" content="https://promptanatomy.help/en/">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:locale:alternate" content="lt_LT">
+    <meta property="og:image" content="https://promptanatomy.help/images/og-default.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:type" content="image/png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="HR hiring system – AI prompts for US teams">
+    <meta name="twitter:description" content="Ten ready-to-use AI prompts for US hiring: diagnostics, role definition, job posts, sourcing, interviews, offers, and onboarding. Copy into ChatGPT or Claude—about 30 minutes end-to-end.">
+    <meta name="twitter:image" content="https://promptanatomy.help/images/og-default.png">
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","name":"Personalas – US hiring prompts","url":"https://promptanatomy.help/","inLanguage":["en-US"]},{"@type":"Organization","name":"Prompt Anatomy","url":"https://promptanatomy.help/","sameAs":["https://t.me/prompt_anatomy"]}]}</script>
+<meta name="description" content="Ten ready-to-use AI prompts for US hiring: diagnostics, role definition, job posts, sourcing, interviews, offers, and onboarding. Copy into ChatGPT or Claude—about 30 minutes end-to-end.">
+    <title>HR hiring system – AI prompts for US teams</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <style>html { scroll-behavior: smooth; }</style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -326,6 +342,9 @@
         .header-phase-link {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+            min-height: 44px;
             padding: 6px 12px;
             border-radius: 999px;
             border: 1px solid rgba(255, 255, 255, 0.45);
@@ -473,6 +492,16 @@
             color: var(--cta-hero-text);
             background: var(--cta-hero-bg);
             border-color: rgba(255, 255, 255, 0.5);
+        }
+        .lang-btn:disabled {
+            cursor: default;
+        }
+        .lang-btn:disabled:hover,
+        .lang-btn:disabled:focus-visible {
+            color: var(--cta-hero-text);
+            background: var(--cta-hero-bg);
+            border-color: rgba(255, 255, 255, 0.5);
+            outline: none;
         }
 
         .cta-button:hover {
@@ -883,33 +912,77 @@
         .faq-intro {
             font-size: 16px;
             color: var(--text-light);
-            margin-bottom: var(--space-24);
+            margin-bottom: var(--space-20);
             line-height: 1.55;
         }
 
-        .faq dl {
-            margin: 0;
+        .faq-details {
+            margin-bottom: var(--space-8);
+            border: var(--border-width) solid var(--border-subtle);
+            border-radius: var(--r-btn);
+            background: var(--bg-subtle);
+            overflow: hidden;
         }
 
-        .faq dt {
+        .faq-details:last-child {
+            margin-bottom: 0;
+        }
+
+        .faq-summary {
+            list-style: none;
+            cursor: pointer;
+            padding: var(--space-16) var(--space-20);
             font-size: 17px;
             font-weight: 700;
             color: var(--text);
-            margin-top: var(--space-20);
-            margin-bottom: var(--space-8);
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            gap: var(--space-12);
+            user-select: none;
         }
 
-        .faq dt:first-of-type {
-            margin-top: 0;
+        .faq-summary::-webkit-details-marker {
+            display: none;
         }
 
-        .faq dd {
-            margin: 0;
-            padding: 0 0 0 var(--space-12);
+        .faq-summary::after {
+            content: '';
+            margin-left: auto;
+            width: 10px;
+            height: 10px;
+            border-right: 2px solid var(--accent-dark);
+            border-bottom: 2px solid var(--accent-dark);
+            transform: rotate(45deg);
+            transition: transform var(--duration-normal) var(--ease-out);
+            flex-shrink: 0;
+        }
+
+        .faq-details[open] .faq-summary::after {
+            transform: rotate(-135deg);
+        }
+
+        .faq-summary:hover {
+            background: rgba(46, 158, 126, 0.08);
+        }
+
+        .faq-summary:focus-visible {
+            outline: 3px solid var(--brand-prompt-anatomy-accent);
+            outline-offset: 2px;
+        }
+
+        .faq-panel {
+            padding: 0 var(--space-20) var(--space-16);
+            padding-left: calc(var(--space-20) + var(--space-12));
             border-left: 3px solid var(--tertiary);
+            margin-left: var(--space-20);
             font-size: 16px;
             line-height: 1.6;
             color: var(--text-light);
+        }
+
+        .faq-details[open] .faq-summary {
+            border-bottom: 1px solid var(--border-subtle);
         }
 
         
@@ -2120,11 +2193,11 @@
         
         <header class="header">
             <div class="header-badges">
-                <a href="https://www.promptanatomy.app/" class="badge" target="_blank" rel="noopener noreferrer" aria-label="Full Prompt Anatomy – interactive training (opens in a new tab)">Prompt anatomy</a>
+                <a href="https://www.promptanatomy.app/" class="badge" target="_blank" rel="noopener noreferrer" aria-label="Full Prompt Anatomy – interactive training (opens in a new tab)">Prompt Anatomy</a>
                 <span class="badge badge-spinoff" role="status" aria-label="HR hiring system for US teams, Series No. 3">Series No. 3</span>
             </div>
             <h1>AI hiring system<br>For US HR teams</h1>
-            <p>Build a practical hiring workflow in about 30 minutes.</p>
+            <p>A Prompt Anatomy ecosystem helper—a practical hiring workflow in about 30 minutes.</p>
             <ul class="header-phases" aria-label="6 system phases">
                 <li><button type="button" class="header-phase-link is-active" data-phase="1">1. Diagnose</button></li>
                 <li><button type="button" class="header-phase-link" data-phase="2">2. Define the Role</button></li>
@@ -2169,28 +2242,38 @@
             </ol>
         </section>
 
-        <section class="faq" aria-labelledby="faq-title">
+        <section class="faq" lang="en" aria-labelledby="faq-title">
             <h2 id="faq-title"><span class="icon-wrap" aria-hidden="true"><i data-lucide="help-circle" class="icon icon--md"></i></span> Common questions before you start</h2>
-            <p class="faq-intro">Quick notes before you copy the first prompt.</p>
-            <dl>
-                <dt>Do I have to go through all 6 phases in order?</dt>
-                <dd>No, but the sequence reflects the full recruitment cycle from diagnosis to retention. It’s usually best to start at phase 1 and move according to your situation.</dd>
-                <dt>Do I need to change the “You are…” line at the start of the prompt?</dt>
-                <dd>No. Only change bracket placeholders and numbers – the AI role is already phrased to give a clear result.</dd>
-                <dt>Is this a survey or an applicant tracking system (ATS)?</dt>
-                <dd>No. These are texts you copy and paste into your AI tool – no server runs recruitment for you.</dd>
-                <dt>How long does one step take?</dt>
-                <dd>About 3–5 minutes to prepare and copy; the actual AI chat depends on your questions and answers.</dd>
-                <dt>Does it work for a small company or a solo HR person?</dt>
-                <dd>Yes. The prompts are universal – what matters is filling placeholders with your context, not generic phrases.</dd>
-                <dt>Can I use just one or a few prompts?</dt>
-                <dd>Yes. You can start with one problem (e.g. job ad or interview) and return to others later.</dd>
-            </dl>
+            <p class="faq-intro">Short notes before you copy the first prompt.</p>
+            <details class="faq-details">
+                <summary class="faq-summary">Do I have to go through all 6 phases in order?</summary>
+                <div class="faq-panel">No, but the sequence reflects the full recruitment cycle from diagnosis to retention. It is usually best to start at phase 1 and move according to your situation.</div>
+            </details>
+            <details class="faq-details">
+                <summary class="faq-summary">Do I need to change the &quot;You are…&quot; line at the start of the prompt?</summary>
+                <div class="faq-panel">No. Only change bracket placeholders and numbers – the AI role is already phrased to give a clear result.</div>
+            </details>
+            <details class="faq-details">
+                <summary class="faq-summary">Is this a survey or an applicant tracking system (ATS)?</summary>
+                <div class="faq-panel">No. These are texts you copy and paste into your AI tool – no server runs recruitment for you.</div>
+            </details>
+            <details class="faq-details">
+                <summary class="faq-summary">How long does one step take?</summary>
+                <div class="faq-panel">About 3–5 minutes to prepare and copy; the actual AI chat depends on your questions and answers.</div>
+            </details>
+            <details class="faq-details">
+                <summary class="faq-summary">Does it work for a small company or a solo HR person?</summary>
+                <div class="faq-panel">Yes. The prompts are universal – what matters is filling placeholders with your context, not generic phrases.</div>
+            </details>
+            <details class="faq-details">
+                <summary class="faq-summary">Can I use just one or a few prompts?</summary>
+                <div class="faq-panel">Yes. You can start with one problem (e.g. job ad or interview) and return to others later.</div>
+            </details>
         </section>
 
         
         <div class="progress-wrap" id="progressIndicator" aria-live="polite" aria-atomic="true">
-            <p id="progressText">System: 0 / 6 phases</p>
+            <p id="progressText">System: 0 of 6 phases</p>
             <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="6" aria-label="Progress: 0 of 6 phases">
                 <div class="progress-bar-fill" id="progressBarFill" style="width: 0%;"></div>
             </div>
@@ -2230,7 +2313,7 @@
                      role="button"
                      tabindex="0"
                      aria-label="Select and copy prompt 1"
-                     onclick="selectText(this)"
+                     onclick="activateCodeBlock(this)"
                      onkeydown="handleCodeBlockKeydown(event, this)">
                     <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Copy</span>
                     <pre class="code-text" id="prompt1">You are a recruitment analyst. Your goal is to identify where recruitment is stuck and what to change, using the numbers.
@@ -2275,7 +2358,7 @@ Explain simply:
             </div>
             <div class="prompt-footer">
                 <p class="prompt-cta">Copy and paste into ChatGPT or Claude – that's the goal of this step.</p>
-                <button class="btn" 
+                <button type="button" class="btn" 
                         onclick="copyPrompt(this, 'prompt1')"
                         aria-label="Copy prompt 1 to clipboard"
                         data-prompt-id="prompt1">
@@ -2306,7 +2389,7 @@ Explain simply:
                      role="button"
                      tabindex="0"
                      aria-label="Select and copy prompt 2"
-                     onclick="selectText(this)"
+                     onclick="activateCodeBlock(this)"
                      onkeydown="handleCodeBlockKeydown(event, this)">
                     <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Copy</span>
                     <pre class="code-text" id="prompt2">You are a candidate profile specialist. Your goal is to clearly describe the ideal candidate for the role (traits, what can be taught, motivation).
@@ -2347,7 +2430,7 @@ Answer simply:
             </div>
             <div class="prompt-footer">
                 <p class="prompt-cta">Paste into ChatGPT or Claude and replace the fields with your data.</p>
-                <button class="btn" 
+                <button type="button" class="btn" 
                         onclick="copyPrompt(this, 'prompt2')"
                         aria-label="Copy prompt 2 to clipboard"
                         data-prompt-id="prompt2">
@@ -2378,7 +2461,7 @@ Answer simply:
                      role="button"
                      tabindex="0"
                      aria-label="Select and copy prompt 3"
-                     onclick="selectText(this)"
+                     onclick="activateCodeBlock(this)"
                      onkeydown="handleCodeBlockKeydown(event, this)">
                     <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Copy</span>
                     <pre class="code-text" id="prompt3">You are a job ad editor. Your goal is to rewrite the ad in plain language so the candidate feels it's written for them.
@@ -2410,14 +2493,14 @@ Do:
                         <span class="info-icon" aria-hidden="true"><i data-lucide="pencil" class="icon icon--md"></i></span>
                         <div class="info-content">
                             <strong>Replace before using:</strong>
-                            <p>[company] → company and US location (e.g., San Francisco, CA); [location] → Street Address, City, State, optional Zip Code, or Remote – US; [salary range] → use $, comma thousands, and decimal points where needed (e.g., $85,000–$105,000 or $1,250.50); [paste] → paste your job ad text.</p>
+                            <p>[company] → company and US location (e.g., San Francisco, CA); [location] → Street Address, City, State, optional Zip Code, or Remote – US; [salary range] → use $, commas as thousands separators, and decimal points where needed (e.g., $85,000–$105,000 or $1,250.50); [paste] → paste your job ad text.</p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="prompt-footer">
                 <p class="prompt-cta">Copy and paste into ChatGPT or Claude – that's the goal of this step.</p>
-                <button class="btn" 
+                <button type="button" class="btn" 
                         onclick="copyPrompt(this, 'prompt3')"
                         aria-label="Copy prompt 3 to clipboard"
                         data-prompt-id="prompt3">
@@ -2448,7 +2531,7 @@ Do:
                      role="button"
                      tabindex="0"
                      aria-label="Select and copy prompt 4"
-                     onclick="selectText(this)"
+                     onclick="activateCodeBlock(this)"
                      onkeydown="handleCodeBlockKeydown(event, this)">
                     <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Copy</span>
                     <pre class="code-text" id="prompt4">You are a candidate sourcing consultant. Your goal is to suggest concrete, simple ways to find more candidates (LinkedIn, network, direct outreach).
@@ -2488,7 +2571,7 @@ Suggest:
             </div>
             <div class="prompt-footer">
                 <p class="prompt-cta">Copy, paste into your AI tool and replace [company], [role] with your data.</p>
-                <button class="btn" 
+                <button type="button" class="btn" 
                         onclick="copyPrompt(this, 'prompt4')"
                         aria-label="Copy prompt 4 to clipboard"
                         data-prompt-id="prompt4">
@@ -2519,7 +2602,7 @@ Suggest:
                      role="button"
                      tabindex="0"
                      aria-label="Select and copy prompt 5"
-                     onclick="selectText(this)"
+                     onclick="activateCodeBlock(this)"
                      onkeydown="handleCodeBlockKeydown(event, this)">
                     <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Copy</span>
                     <pre class="code-text" id="prompt5">You are an interview specialist. Your goal is to create a simple interview plan: questions that help understand the person, and what to watch for.
@@ -2559,7 +2642,7 @@ Give:
             </div>
             <div class="prompt-footer">
                 <p class="prompt-cta">Copy and paste into ChatGPT or Claude – that's the goal of this step.</p>
-                <button class="btn" 
+                <button type="button" class="btn" 
                         onclick="copyPrompt(this, 'prompt5')"
                         aria-label="Copy prompt 5 to clipboard"
                         data-prompt-id="prompt5">
@@ -2590,7 +2673,7 @@ Give:
                      role="button"
                      tabindex="0"
                      aria-label="Select and copy prompt 6"
-                     onclick="selectText(this)"
+                     onclick="activateCodeBlock(this)"
                      onkeydown="handleCodeBlockKeydown(event, this)">
                     <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Copy</span>
                     <pre class="code-text" id="prompt6">You are an offer and decline analyst. Your goal is to uncover possible reasons for decline and suggest how to talk to the candidate and what to improve.
@@ -2632,7 +2715,7 @@ Give:
             </div>
             <div class="prompt-footer">
                 <p class="prompt-cta">Paste into ChatGPT or Claude – replace company, role, location, salary range, and what you offer.</p>
-                <button class="btn" 
+                <button type="button" class="btn" 
                         onclick="copyPrompt(this, 'prompt6')"
                         aria-label="Copy prompt 6 to clipboard"
                         data-prompt-id="prompt6">
@@ -2663,7 +2746,7 @@ Give:
                      role="button"
                      tabindex="0"
                      aria-label="Select and copy prompt 7"
-                     onclick="selectText(this)"
+                     onclick="activateCodeBlock(this)"
                      onkeydown="handleCodeBlockKeydown(event, this)">
                     <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Copy</span>
                     <pre class="code-text" id="prompt7">You are a job offer writer. Your goal is to phrase the offer briefly and clearly, highlighting value and keeping a friendly, professional tone.
@@ -2704,7 +2787,7 @@ Do:
             </div>
             <div class="prompt-footer">
                 <p class="prompt-cta">Copy and paste into ChatGPT or Claude – that's the goal of this step.</p>
-                <button class="btn" 
+                <button type="button" class="btn" 
                         onclick="copyPrompt(this, 'prompt7')"
                         aria-label="Copy prompt 7 to clipboard"
                         data-prompt-id="prompt7">
@@ -2735,7 +2818,7 @@ Do:
                      role="button"
                      tabindex="0"
                      aria-label="Select and copy prompt 8"
-                     onclick="selectText(this)"
+                     onclick="activateCodeBlock(this)"
                      onkeydown="handleCodeBlockKeydown(event, this)">
                     <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Copy</span>
                     <pre class="code-text" id="prompt8">You are a new hire onboarding specialist. Your goal is to create a simple 3‑month plan: what to understand in week one, what to expect after 1 and 3 months, how the manager can help.
@@ -2776,7 +2859,7 @@ Give:
             </div>
             <div class="prompt-footer">
                 <p class="prompt-cta">Copy and paste – enter company and role and get the plan.</p>
-                <button class="btn" 
+                <button type="button" class="btn" 
                         onclick="copyPrompt(this, 'prompt8')"
                         aria-label="Copy prompt 8 to clipboard"
                         data-prompt-id="prompt8">
@@ -2807,7 +2890,7 @@ Give:
                      role="button"
                      tabindex="0"
                      aria-label="Select and copy prompt 9"
-                     onclick="selectText(this)"
+                     onclick="activateCodeBlock(this)"
                      onkeydown="handleCodeBlockKeydown(event, this)">
                     <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Copy</span>
                     <pre class="code-text" id="prompt9">You are an employee retention analyst. Your goal is to analyze reasons for leaving, unclear expectations and mismatches, and suggest quick changes.
@@ -2846,7 +2929,7 @@ Tell me:
             </div>
             <div class="prompt-footer">
                 <p class="prompt-cta">Copy and paste into ChatGPT or Claude – that's the goal of this step.</p>
-                <button class="btn"
+                <button type="button" class="btn"
                         onclick="copyPrompt(this, 'prompt9')"
                         aria-label="Copy prompt 9 to clipboard"
                         data-prompt-id="prompt9">
@@ -2877,7 +2960,7 @@ Tell me:
                      role="button"
                      tabindex="0"
                      aria-label="Select and copy prompt 10"
-                     onclick="selectText(this)"
+                     onclick="activateCodeBlock(this)"
                      onkeydown="handleCodeBlockKeydown(event, this)">
                     <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Copy</span>
                     <pre class="code-text" id="prompt10">You are an HR recruitment strategist. Your goal is to put the full recruitment plan in one place: from the problem and weekly actions to the ad, interviews, acceptance likelihood, and first 3 months of support. Write simply, with concrete actions only.
@@ -2901,7 +2984,7 @@ Give:
 3. How to improve the job ad
 4. How to run better interviews
 5. How to increase the chance they accept
-6. How to help them stay the first 3 months</pre>
+6. How to help them stay for the first three months</pre>
                 </div>
                 <div class="info-box" role="note" aria-label="Information: prompt 10">
                     <div class="info-item">
@@ -2922,7 +3005,7 @@ Give:
             </div>
             <div class="prompt-footer">
                 <p class="prompt-cta">This prompt covers everything – copy, paste and fill in your data.</p>
-                <button class="btn"
+                <button type="button" class="btn"
                         onclick="copyPrompt(this, 'prompt10')"
                         aria-label="Copy prompt 10 to clipboard"
                         data-prompt-id="prompt10">
@@ -2938,15 +3021,15 @@ Give:
 
         <section class="community" id="community" aria-labelledby="community-title">
             <h2 id="community-title">System created.<br>Want more?</h2>
-            <a href="https://t.me/prompt_anatomy" class="community-cta-primary" target="_blank" rel="noopener noreferrer" aria-label="Open Prompt anatomy Telegram channel in new tab">Join Telegram group</a>
-            <a href="https://www.promptanatomy.app/" class="community-cta-secondary" target="_blank" rel="noopener noreferrer" aria-label="Full Prompt Anatomy – interactive training (opens in a new tab)">Prompt anatomy →</a>
+            <a href="https://t.me/prompt_anatomy" class="community-cta-primary" target="_blank" rel="noopener noreferrer" aria-label="Open Prompt Anatomy on Telegram in a new tab">Join on Telegram</a>
+            <a href="https://www.promptanatomy.app/" class="community-cta-secondary" target="_blank" rel="noopener noreferrer" aria-label="Full Prompt Anatomy – interactive training (opens in a new tab)">Prompt Anatomy →</a>
         </section>
 
         <footer class="footer">
             <h3>Good luck with hiring <span class="icon-wrap" aria-hidden="true"><i data-lucide="rocket" class="icon icon--md"></i></span></h3>
             <p>Remember to replace <strong>[company]</strong>, <strong>[role]</strong>, <strong>[location]</strong>, <strong>[salary range]</strong>, <strong>[candidate count]</strong>, and other placeholders with your data. Use US examples such as <strong>123 Market St, San Francisco, CA 94105</strong>, <strong>Remote – US</strong>, <strong>+1 (415) 555-0198</strong>, and <strong>$1,250.50</strong> where applicable.</p>
             <p class="footer-product-link">This is Series No. 3 from “Prompt Anatomy”.</p>
-            <p class="footer-contact">Prompt anatomy: <a href="https://www.promptanatomy.app/" target="_blank" rel="noopener noreferrer">promptanatomy.app</a> | Email: <a href="mailto:info@promptanatomy.app">info@promptanatomy.app</a></p>
+            <p class="footer-contact">Prompt Anatomy: <a href="https://www.promptanatomy.app/" target="_blank" rel="noopener noreferrer">promptanatomy.app</a> | Email: <a href="mailto:info@promptanatomy.app">info@promptanatomy.app</a></p>
             <div class="tags" role="list">
                 <span class="tag" role="listitem"><span class="icon-wrap" aria-hidden="true"><i data-lucide="users" class="icon icon--sm"></i></span> US hiring</span>
                 <span class="tag" role="listitem"><span class="icon-wrap" aria-hidden="true"><i data-lucide="book-marked" class="icon icon--sm"></i></span> 10 prompts</span>

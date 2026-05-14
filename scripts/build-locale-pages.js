@@ -1,7 +1,9 @@
 /**
  * Build LT/en-US locale pages from root index.html and privatumas.html.
- * Usage: BASE_PATH=/04_personalas/ node scripts/build-locale-pages.js
- * Output: lt/index.html, lt/privatumas.html, en/index.html, en/privatumas.html
+ * Usage (GitHub Pages subpath): BASE_PATH=/personalas/ SITE_ORIGIN=https://ditreneris.github.io node scripts/build-locale-pages.js
+ * Usage (Vercel / custom domain root): SITE_ORIGIN=https://promptanatomy.help node scripts/build-locale-pages.js
+ * Optional override: SITE_PUBLIC_BASE=https://preview.vercel.app (full public origin, no trailing slash)
+ * Output: lt/index.html, lt/privatumas.html, en/index.html, en/privatumas.html, robots.txt, sitemap.xml
  */
 'use strict';
 
@@ -9,10 +11,23 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.join(__dirname, '..');
+
+const SITE_ORIGIN = (process.env.SITE_ORIGIN || 'https://promptanatomy.help').replace(/\/+$/, '');
 const rawBase = process.env.BASE_PATH || '';
 const BASE_PATH = rawBase ? rawBase.replace(/\/*$/, '') + '/' : '';
-// For canonical/hreflang: use '/' when BASE_PATH empty so local dev (e.g. /lt/) resolves correctly
-const BASE_FOR_LINKS = BASE_PATH || '/';
+const SITE_PUBLIC_BASE = (process.env.SITE_PUBLIC_BASE || '').trim().replace(/\/+$/, '');
+
+/** Full public site base URL with trailing slash (canonical / OG / sitemap). */
+function absoluteBaseSlash() {
+  if (SITE_PUBLIC_BASE) {
+    return SITE_PUBLIC_BASE + '/';
+  }
+  if (BASE_PATH) {
+    const seg = BASE_PATH.replace(/^\/+|\/+$/g, '') + '/';
+    return SITE_ORIGIN + '/' + seg;
+  }
+  return SITE_ORIGIN + '/';
+}
 
 function ensureDir(dir) {
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
@@ -28,16 +43,102 @@ function write(file, content) {
   fs.writeFileSync(outPath, content, 'utf8');
 }
 
+function escapeHtmlAttr(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;');
+}
+
+function extractTitle(html) {
+  const m = html.match(/<title>([^<]*)<\/title>/i);
+  return m ? m[1].trim() : '';
+}
+
+function extractMetaDescription(html) {
+  const m = html.match(/<meta\s+name="description"\s+content="([^"]*)"/i);
+  return m ? m[1].trim() : '';
+}
+
+function buildJsonLdWebsiteGraph(locale) {
+  const base = absoluteBaseSlash().replace(/\/+$/, '');
+  const inLang = locale === 'lt' ? 'lt' : 'en-US';
+  const graph = [
+    {
+      '@type': 'WebSite',
+      name: locale === 'lt' ? 'Personalas – HR DI promptų rinkinys' : 'Personalas – US hiring prompts',
+      url: base + '/',
+      inLanguage: [inLang],
+    },
+    {
+      '@type': 'Organization',
+      name: locale === 'lt' ? 'Promptų anatomija' : 'Prompt Anatomy',
+      url: base + '/',
+      sameAs: ['https://t.me/prompt_anatomy'],
+    },
+  ];
+  return (
+    '<script type="application/ld+json">' +
+    JSON.stringify({ '@context': 'https://schema.org', '@graph': graph }).replace(/</g, '\\u003c') +
+    '</script>'
+  );
+}
+
+function buildJsonLdWebPage(locale, pageUrl, name, description) {
+  const graph = [
+    {
+      '@type': 'WebPage',
+      name: name,
+      description: description,
+      url: pageUrl,
+      inLanguage: locale === 'lt' ? 'lt' : 'en-US',
+      isPartOf: { '@type': 'WebSite', url: absoluteBaseSlash().replace(/\/+$/, '') + '/' },
+    },
+  ];
+  return (
+    '<script type="application/ld+json">' +
+    JSON.stringify({ '@context': 'https://schema.org', '@graph': graph }).replace(/</g, '\\u003c') +
+    '</script>'
+  );
+}
+
 // ---- Inject SEO and script path ----
-function injectHead(html, locale, basePath, baseForLinks) {
-  const base = baseForLinks != null ? baseForLinks : basePath;
-  const canonical = base + locale + '/';
-  const linkCanonical = '<link rel="canonical" href="' + canonical + '">';
-  const linkLt = '<link rel="alternate" hreflang="lt" href="' + base + 'lt/">';
-  const linkEn = '<link rel="alternate" hreflang="en-US" href="' + base + 'en/">';
-  const linkDefault = '<link rel="alternate" hreflang="x-default" href="' + base + 'en/">';
-  const seoBlock = '\n    ' + [linkCanonical, linkLt, linkEn, linkDefault].join('\n    ') + '\n';
-  html = html.replace(/<meta name="viewport"[^>]*>\s*/i, '$&' + seoBlock);
+function injectHead(html, locale, basePath) {
+  const abs = absoluteBaseSlash();
+  const canonicalUrl = abs + locale + '/';
+  const linkCanonical = '<link rel="canonical" href="' + escapeHtmlAttr(canonicalUrl) + '">';
+  const linkLt = '<link rel="alternate" hreflang="lt" href="' + escapeHtmlAttr(abs + 'lt/') + '">';
+  const linkEn = '<link rel="alternate" hreflang="en-US" href="' + escapeHtmlAttr(abs + 'en/') + '">';
+  const linkDefault = '<link rel="alternate" hreflang="x-default" href="' + escapeHtmlAttr(abs + 'en/') + '">';
+  const title = extractTitle(html);
+  const description = extractMetaDescription(html);
+  const ogImage = abs + 'images/og-default.png';
+  const ogLocale = locale === 'lt' ? 'lt_LT' : 'en_US';
+  const ogLocaleAlt = locale === 'lt' ? 'en_US' : 'lt_LT';
+
+  const socialBlock = [
+    '<meta property="og:type" content="website">',
+    '<meta property="og:title" content="' + escapeHtmlAttr(title) + '">',
+    '<meta property="og:description" content="' + escapeHtmlAttr(description) + '">',
+    '<meta property="og:url" content="' + escapeHtmlAttr(canonicalUrl) + '">',
+    '<meta property="og:locale" content="' + ogLocale + '">',
+    '<meta property="og:locale:alternate" content="' + ogLocaleAlt + '">',
+    '<meta property="og:image" content="' + escapeHtmlAttr(ogImage) + '">',
+    '<meta property="og:image:width" content="1200">',
+    '<meta property="og:image:height" content="630">',
+    '<meta property="og:image:type" content="image/png">',
+    '<meta name="twitter:card" content="summary_large_image">',
+    '<meta name="twitter:title" content="' + escapeHtmlAttr(title) + '">',
+    '<meta name="twitter:description" content="' + escapeHtmlAttr(description) + '">',
+    '<meta name="twitter:image" content="' + escapeHtmlAttr(ogImage) + '">',
+  ].join('\n    ');
+
+  const jsonLd = buildJsonLdWebsiteGraph(locale);
+  const seoBlock =
+    '\n    ' +
+    [linkCanonical, linkLt, linkEn, linkDefault, socialBlock, jsonLd].join('\n    ') +
+    '\n';
+  html = html.replace(/(<meta name="viewport"[^>]*>\s*)(<meta name="description")/i, '$1' + seoBlock + '$2');
 
   const basePathScript = basePath
     ? '<script>window.BASE_PATH = \'' + basePath.replace(/'/g, "\\'") + '\';</script>\n    '
@@ -46,10 +147,192 @@ function injectHead(html, locale, basePath, baseForLinks) {
   return html;
 }
 
+function injectPrivacyHead(html, locale, pathSuffix, title, description) {
+  const abs = absoluteBaseSlash();
+  const canonicalUrl = abs + pathSuffix;
+  const ogImage = abs + 'images/og-default.png';
+  const ogLocale = locale === 'lt' ? 'lt_LT' : 'en_US';
+  const ogLocaleAlt = locale === 'lt' ? 'en_US' : 'lt_LT';
+  const block = [
+    '<link rel="canonical" href="' + escapeHtmlAttr(canonicalUrl) + '">',
+    '<link rel="alternate" hreflang="lt" href="' + escapeHtmlAttr(abs + 'lt/privatumas.html') + '">',
+    '<link rel="alternate" hreflang="en-US" href="' + escapeHtmlAttr(abs + 'en/privatumas.html') + '">',
+    '<link rel="alternate" hreflang="x-default" href="' + escapeHtmlAttr(abs + 'en/privatumas.html') + '">',
+    '<meta name="description" content="' + escapeHtmlAttr(description) + '">',
+    '<meta property="og:type" content="website">',
+    '<meta property="og:title" content="' + escapeHtmlAttr(title) + '">',
+    '<meta property="og:description" content="' + escapeHtmlAttr(description) + '">',
+    '<meta property="og:url" content="' + escapeHtmlAttr(canonicalUrl) + '">',
+    '<meta property="og:locale" content="' + ogLocale + '">',
+    '<meta property="og:locale:alternate" content="' + ogLocaleAlt + '">',
+    '<meta property="og:image" content="' + escapeHtmlAttr(ogImage) + '">',
+    '<meta property="og:image:width" content="1200">',
+    '<meta property="og:image:height" content="630">',
+    '<meta property="og:image:type" content="image/png">',
+    '<meta name="twitter:card" content="summary_large_image">',
+    '<meta name="twitter:title" content="' + escapeHtmlAttr(title) + '">',
+    '<meta name="twitter:description" content="' + escapeHtmlAttr(description) + '">',
+    '<meta name="twitter:image" content="' + escapeHtmlAttr(ogImage) + '">',
+    buildJsonLdWebPage(locale, canonicalUrl, title, description),
+  ].join('\n    ');
+  return html.replace(/(<meta name="viewport"[^>]*>\s*)(<title)/i, '$1' + block + '\n    $2');
+}
+
+function writeRobotsAndSitemap() {
+  const abs = absoluteBaseSlash().replace(/\/+$/, '');
+  const sitemapUrl = abs + '/sitemap.xml';
+  const robots = 'User-agent: *\nAllow: /\n\nSitemap: ' + sitemapUrl + '\n';
+  write('robots.txt', robots);
+
+  const urls = [
+    abs + '/',
+    abs + '/lt/',
+    abs + '/en/',
+    abs + '/privatumas.html',
+    abs + '/lt/privatumas.html',
+    abs + '/en/privatumas.html',
+  ];
+  const locs = urls
+    .map(function (u) {
+      return '  <url><loc>' + u + '</loc></url>';
+    })
+    .join('\n');
+  const sitemap =
+    '<?xml version="1.0" encoding="UTF-8"?>\n' +
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
+    locs +
+    '\n</urlset>\n';
+  write('sitemap.xml', sitemap);
+}
+
+function buildRootSeoFragment() {
+  const base = absoluteBaseSlash().replace(/\/+$/, '');
+  const img = base + '/images/og-default.png';
+  const desc =
+    'Dešimt DI promptų HR atrankai: diagnostika, profilis, skelbimas, šaltiniai, pokalbiai, pasiūlymas. Kopijuok į ChatGPT arba Claude – praktinė sistema per ~30 min.';
+  const lines = [
+    '<link rel="canonical" href="' + base + '/">',
+    '<link rel="alternate" hreflang="lt" href="' + base + '/lt/">',
+    '<link rel="alternate" hreflang="en-US" href="' + base + '/en/">',
+    '<link rel="alternate" hreflang="x-default" href="' + base + '/en/">',
+    '<meta property="og:type" content="website">',
+    '<meta property="og:title" content="HR kasdienė atrankos sistema – DI promptai">',
+    '<meta property="og:description" content="' + escapeHtmlAttr(desc) + '">',
+    '<meta property="og:url" content="' + base + '/">',
+    '<meta property="og:locale" content="lt_LT">',
+    '<meta property="og:locale:alternate" content="en_US">',
+    '<meta property="og:image" content="' + img + '">',
+    '<meta property="og:image:width" content="1200">',
+    '<meta property="og:image:height" content="630">',
+    '<meta property="og:image:type" content="image/png">',
+    '<meta name="twitter:card" content="summary_large_image">',
+    '<meta name="twitter:title" content="HR kasdienė atrankos sistema – DI promptai">',
+    '<meta name="twitter:description" content="' + escapeHtmlAttr(desc) + '">',
+    '<meta name="twitter:image" content="' + img + '">',
+    '<script type="application/ld+json">' +
+      JSON.stringify({
+        '@context': 'https://schema.org',
+        '@graph': [
+          {
+            '@type': 'WebSite',
+            name: 'Personalas – HR DI promptų rinkinys',
+            url: base + '/',
+            inLanguage: ['lt'],
+          },
+          {
+            '@type': 'Organization',
+            name: 'Promptų anatomija',
+            url: base + '/',
+            sameAs: ['https://t.me/prompt_anatomy'],
+          },
+        ],
+      }).replace(/</g, '\\u003c') +
+      '</script>',
+  ];
+  return lines.join('\n    ') + '\n    ';
+}
+
+/** Idempotent: strip any prior head SEO between viewport and meta description, then inject root SEO. */
+function finalizeRootIndexHtml() {
+  let html = read('index.html');
+  html = html.replace(
+    /(<meta name="viewport"[^>]*>\s*)(?:[\s\S]*?)(<meta name="description")/i,
+    '$1$2'
+  );
+  const frag = buildRootSeoFragment();
+  html = html.replace(/(<meta name="viewport"[^>]*>\s*)(<meta name="description")/i, '$1' + frag + '$2');
+  html = html.replace(/<script>window\.BASE_PATH = '[^']*';<\/script>\s*\n?\s*/g, '');
+  if (BASE_PATH) {
+    const basePathScript =
+      '<script>window.BASE_PATH = \'' + BASE_PATH.replace(/'/g, "\\'") + '\';</script>\n    ';
+    html = html.replace(
+      /<script src="generator\.js"><\/script>/,
+      basePathScript + '<script src="generator.js"></script>'
+    );
+  }
+  write('index.html', html);
+}
+
+function buildRootPrivacyFragment() {
+  const base = absoluteBaseSlash().replace(/\/+$/, '');
+  const img = base + '/images/og-default.png';
+  const desc =
+    'Personalas – statinė svetainė su HR DI promptų rinkiniu. Asmens duomenų nerinkame; pažymėti žingsniai saugomi tik naršyklės localStorage.';
+  const lines = [
+    '<link rel="canonical" href="' + base + '/privatumas.html">',
+    '<link rel="alternate" hreflang="lt" href="' + base + '/lt/privatumas.html">',
+    '<link rel="alternate" hreflang="en-US" href="' + base + '/en/privatumas.html">',
+    '<link rel="alternate" hreflang="x-default" href="' + base + '/en/privatumas.html">',
+    '<meta name="description" content="' + escapeHtmlAttr(desc) + '">',
+    '<meta property="og:type" content="website">',
+    '<meta property="og:title" content="Privatumo politika – Personalas">',
+    '<meta property="og:description" content="' + escapeHtmlAttr(desc) + '">',
+    '<meta property="og:url" content="' + base + '/privatumas.html">',
+    '<meta property="og:locale" content="lt_LT">',
+    '<meta property="og:locale:alternate" content="en_US">',
+    '<meta property="og:image" content="' + img + '">',
+    '<meta property="og:image:width" content="1200">',
+    '<meta property="og:image:height" content="630">',
+    '<meta property="og:image:type" content="image/png">',
+    '<meta name="twitter:card" content="summary_large_image">',
+    '<meta name="twitter:title" content="Privatumo politika – Personalas">',
+    '<meta name="twitter:description" content="' + escapeHtmlAttr(desc) + '">',
+    '<meta name="twitter:image" content="' + img + '">',
+    '<script type="application/ld+json">' +
+      JSON.stringify({
+        '@context': 'https://schema.org',
+        '@graph': [
+          {
+            '@type': 'WebPage',
+            name: 'Privatumo politika – Personalas',
+            description: desc,
+            url: base + '/privatumas.html',
+            inLanguage: 'lt',
+            isPartOf: { '@type': 'WebSite', url: base + '/' },
+          },
+        ],
+      }).replace(/</g, '\\u003c') +
+      '</script>',
+  ];
+  return lines.join('\n    ') + '\n    ';
+}
+
+function finalizeRootPrivacyHtml() {
+  let html = read('privatumas.html');
+  html = html.replace(/(<meta name="viewport"[^>]*>\s*)(?:[\s\S]*?)(<title)/i, '$1$2');
+  const frag = buildRootPrivacyFragment();
+  html = html.replace(/(<meta name="viewport"[^>]*>\s*)(<title)/i, '$1' + frag + '$2');
+  write('privatumas.html', html);
+}
+
 // ---- EN replacement pairs (order: more specific first) ----
 const EN_REPLACEMENTS = [
   ['<html lang="lt">', '<html lang="en-US">'],
   ['<title>HR kasdienė atrankos sistema – DI promptai</title>', '<title>HR hiring system – AI prompts for US teams</title>'],
+  [
+    '<meta name="description" content="Dešimt DI promptų HR atrankai: diagnostika, profilis, skelbimas, šaltiniai, pokalbiai, pasiūlymas. Kopijuok į ChatGPT arba Claude – praktinė sistema per ~30 min.">',
+    '<meta name="description" content="Ten ready-to-use AI prompts for US hiring: diagnostics, role definition, job posts, sourcing, interviews, offers, and onboarding. Copy into ChatGPT or Claude—about 30 minutes end-to-end.">',
+  ],
   ['Pereiti prie turinio', 'Skip to content'],
   ['Kalbos pasirinkimas', 'Language selection'],
   ['Perjungti į lietuvių kalbą', 'Switch to Lithuanian'],
@@ -57,7 +340,10 @@ const EN_REPLACEMENTS = [
   ['Pilna Promptų anatomija – interaktyvus mokymas (atidaroma naujame lange)', 'Full Prompt Anatomy – interactive training (opens in a new tab)'],
   ['HR kasdienė atrankos sistema, Spin-off Nr. 3', 'HR hiring system for US teams, Series No. 3'],
   ['DI atrankos sistema<br>Personalo vadovui', 'AI hiring system<br>For US HR teams'],
-  ['Veikianti atrankos struktūra per ~30 min.', 'Build a practical hiring workflow in about 30 minutes.'],
+  [
+    'Pagalbinė versija iš Promptų anatomijos ekosistemos — veikianti atrankos struktūra per ~30 min.',
+    'A Prompt Anatomy ecosystem helper—a practical hiring workflow in about 30 minutes.',
+  ],
   ['6 sistemos fazės', '6 system phases'],
   ['1. Diagnostika', '1. Diagnose'],
   ['2. Profilis', '2. Define the Role'],
@@ -81,37 +367,38 @@ const EN_REPLACEMENTS = [
   ['Orientacinis laikas: 3–5 min per žingsnį', 'Estimated time: 3–5 min per step'],
   ['~3–5 min per žingsnį', '~3–5 min per step'],
   ['per žingsnį', 'per step'],
-  ['Pasirink fazę, paspausk ir atidaryk. Tada pasirink konkretų promptą.', 'Choose a phase, open it, then pick a specific prompt.'],
-  ['Spausk <strong>„Kopijuoti promptą“</strong> arba <code>Ctrl+C</code> / <code>Cmd+C</code> ant pasirinkto prompto.', 'Click <strong>“Copy prompt”</strong> or <code>Ctrl+C</code> / <code>Cmd+C</code> on the selected prompt.'],
-  ['Įklijuok į ChatGPT, Claude, Gemini ar kitą DI (dirbtinio intelekto) įrankį.', 'Paste into ChatGPT, Claude, Gemini, or another AI tool.'],
-  ['Jei prompte yra <code>[įmonė]</code>, <code>[pozicija]</code>, <code>[atlygis]</code>, <code>[ ]</code> ar kiti laukai – pakeisk savo duomenimis. DI vaidmens („Tu esi…“) keisti nereikia.', 'Replace placeholders such as <code>[company]</code>, <code>[role]</code>, <code>[location]</code>, and <code>[salary range]</code>. Use US location formats such as <code>New York, NY</code>, <code>San Francisco, CA 94105</code>, <code>Remote – US</code>, or <code>Hybrid – Austin, TX</code>; use <code>MM/DD/YYYY</code>, and follow US contact standards. Address fields: <code>Street Address</code>, <code>City</code>, <code>State</code>, <code>Zip Code</code>. Phone format: <code>+1 (XXX) XXX-XXXX</code>, for example <code>+1 (415) 555-0198</code>.'],
-  ['Ne, bet seka atspindi pilną atrankos ciklą nuo diagnostikos iki išlaikymo. Dažniausiai verta pradėti nuo 1 fazės ir judėti pagal savo situaciją.', 'No, but the sequence reflects the full recruitment cycle from diagnosis to retention. It’s usually best to start at phase 1 and move according to your situation.'],
-  ['Ne. Keisk tik laukus laužtiniuose skliaustuose ir skaičius – DI vaidmuo jau suformuluotas taip, kad gautum aiškų rezultatą.', 'No. Only change bracket placeholders and numbers – the AI role is already phrased to give a clear result.'],
-  ['Ne. Tai tekstai, kuriuos nukopijuoji ir įklijuoji į savo DI įrankį – joks serveris nevykdo atrankos už tave.', 'No. These are texts you copy and paste into your AI tool – no server runs recruitment for you.'],
-  ['Orientaciniai ~3–5 minutės pasiruošimui ir kopijavimui; pats pokalbis su DI priklauso nuo tavo klausimų ir atsakymų.', 'About 3–5 minutes to prepare and copy; the actual AI chat depends on your questions and answers.'],
-  ['Taip. Promptai universalesni – svarbu pildyti laukus savo kontekstu, ne bendromis frazėmis.', 'Yes. The prompts are universal – what matters is filling placeholders with your context, not generic phrases.'],
-  ['Taip. Gali pradėti nuo vienos problemos (pvz. skelbimo ar pokalbio) ir grįžti prie kitų vėliau.', 'Yes. You can start with one problem (e.g. job ad or interview) and return to others later.'],
-  ['Trumpai – ką verta žinoti prieš kopijuojant pirmą promptą.', 'Quick notes before you copy the first prompt.'],
-  ['Geriausia eiti iš eilės nuo 1 iki 10. Paspaudę nuorodą pereisi prie atitinkamo prompto.', 'Best to go in order from 1 to 10. Click a link to jump to that prompt.'],
+  ['Pasirinkite fazę, atidarykite ją, tada pasirinkite konkretų promptą.', 'Choose a phase, open it, then pick a specific prompt.'],
+  ['Spustelėkite <strong>„Kopijuoti promptą“</strong> arba naudokite <code>Ctrl+C</code> / <code>Cmd+C</code> ant pasirinkto prompto.', 'Click <strong>“Copy prompt”</strong> or <code>Ctrl+C</code> / <code>Cmd+C</code> on the selected prompt.'],
+  ['Įklijuokite į ChatGPT, Claude, Gemini ar kitą DI (dirbtinio intelekto) įrankį.', 'Paste into ChatGPT, Claude, Gemini, or another AI tool.'],
+  ['Jei prompte yra <code>[įmonė]</code>, <code>[pozicija]</code>, <code>[atlygis]</code>, <code>[ ]</code> ar kiti laukai – pakeiskite savo duomenimis. DI vaidmens („Tu esi…“) keisti nereikia.', 'Replace placeholders such as <code>[company]</code>, <code>[role]</code>, <code>[location]</code>, and <code>[salary range]</code>. Use US location formats such as <code>New York, NY</code>, <code>San Francisco, CA 94105</code>, <code>Remote – US</code>, or <code>Hybrid – Austin, TX</code>; use <code>MM/DD/YYYY</code>, and follow US contact standards. Address fields: <code>Street Address</code>, <code>City</code>, <code>State</code>, <code>Zip Code</code>. Phone format: <code>+1 (XXX) XXX-XXXX</code>, for example <code>+1 (415) 555-0198</code>.'],
+  ['<section class="faq" lang="lt" aria-labelledby="faq-title">', '<section class="faq" lang="en" aria-labelledby="faq-title">'],
+  ['Dažni klausimai prieš pradedant', 'Common questions before you start'],
+  ['Trumpi atsakymai prieš kopijuojant pirmąjį promptą.', 'Short notes before you copy the first prompt.'],
   ['Ar būtina eiti visas 6 fazes iš eilės?', 'Do I have to go through all 6 phases in order?'],
-  ['Ar reikia keisti eilutę „Tu esi…“ prompto pradžioje?', 'Do I need to change the “You are…” line at the start of the prompt?'],
-  ['Ar tai klausimynas ar automatinė atrankų sistema (ATS)?', 'Is this a survey or an applicant tracking system (ATS)?'],
+  ['Ne, bet seka atspindi visą atrankos ciklą nuo diagnostikos iki išlaikymo. Paprastai geriausia pradėti nuo 1 fazės ir judėti pagal savo situaciją.', 'No, but the sequence reflects the full recruitment cycle from diagnosis to retention. It is usually best to start at phase 1 and move according to your situation.'],
+  ['Ar reikia keisti eilutę „Tu esi…“ prompto pradžioje?', 'Do I need to change the &quot;You are…&quot; line at the start of the prompt?'],
+  ['Ne. Keiskite tik laužtiniuose skliaustuose esančius vietininkus ir skaičius – DI vaidmuo jau suformuluotas aiškiam rezultatui.', 'No. Only change bracket placeholders and numbers – the AI role is already phrased to give a clear result.'],
+  ['Ar tai klausimynas ar kandidatų valdymo sistema (ATS)?', 'Is this a survey or an applicant tracking system (ATS)?'],
+  ['Ne. Tai tekstai, kuriuos kopijuojate ir įklijuojate į savo DI įrankį – joks serveris neatlieka atrankos už jus.', 'No. These are texts you copy and paste into your AI tool – no server runs recruitment for you.'],
   ['Kiek laiko užtrunka vienas žingsnis?', 'How long does one step take?'],
-  ['Ar tinka mažai įmonei ar HR vienui?', 'Does it work for a small company or a solo HR person?'],
+  ['Maždaug 3–5 minutes pasiruošti ir nukopijuoti; pats pokalbis su DI priklauso nuo jūsų klausimų ir atsakymų.', 'About 3–5 minutes to prepare and copy; the actual AI chat depends on your questions and answers.'],
+  ['Ar tinka mažai įmonei ar vienam HR specialistui?', 'Does it work for a small company or a solo HR person?'],
+  ['Taip. Promptai universūs – svarbu užpildyti vietininkus savo kontekstu, o ne bendrinėmis frazėmis.', 'Yes. The prompts are universal – what matters is filling placeholders with your context, not generic phrases.'],
   ['Ar galiu naudoti tik vieną ar kelis promptus?', 'Can I use just one or a few prompts?'],
-  ['Dažniausi klausimai prieš startą', 'Common questions before you start'],
+  ['Taip. Galite pradėti nuo vienos problemos (pvz., skelbimo ar pokalbio) ir vėliau grįžti prie kitų.', 'Yes. You can start with one problem (e.g. job ad or interview) and return to others later.'],
+  ['Geriausia eiti iš eilės nuo 1 iki 10. Paspaudus nuorodą pereisite prie atitinkamo prompto.', 'Best to go in order from 1 to 10. Click a link to jump to that prompt.'],
   ['Kas toliau?', 'What’s next?'],
   ['1. Kur stringame?', '1. Where are we stuck?'],
   ['2. Koks žmogus mums iš tikrųjų tinka?', '2. Who really fits us?'],
   ['3. Perrašyk darbo skelbimą paprastai', '3. Rewrite the job ad in plain language'],
   ['4. Kaip šiandien rasti daugiau žmonių?', '4. How to find more people today?'],
-  ['5. Kaip geriau pravesti pokalbį?', '5. How to run a better interview?'],
+  ['5. Kaip geriau vesti pokalbį?', '5. How to run a better interview?'],
   ['6. Kodėl kandidatai atsisako?', '6. Why do candidates decline?'],
   ['7. Kaip geriau pristatyti pasiūlymą?', '7. How to present the offer better?'],
   ['8. Kaip padėti naujam žmogui pirmus 3 mėnesius?', '8. How to support a new hire in the first 3 months?'],
   ['9. Kodėl žmonės išeina?', '9. Why do people leave?'],
   ['10. Pagrindinis promptas (vienas viskam)', '10. Master prompt (one for everything)'],
-  ['Sistema: 0 / 6 fazės', 'System: 0 / 6 phases'],
+  ['Sistema: 0 iš 6 fazių', 'System: 0 of 6 phases'],
   ['Progresas: 0 iš 6 fazių', 'Progress: 0 of 6 phases'],
   ['Pasirinkti ir kopijuoti promptą ', 'Select and copy prompt '],
   [' į mainų atmintinę', ' to clipboard'],
@@ -126,10 +413,13 @@ const EN_REPLACEMENTS = [
   ['Kopijavimo pranešimas', 'Copy notification'],
   ['Kopijuojamo teksto laukas', 'Field for text to copy'],
   ['Sistema sukurta.<br>Nori daugiau?', 'System created.<br>Want more?'],
-  ['Atidaryti Promptų anatomija Telegram kanalą naujame lange', 'Open Prompt anatomy Telegram channel in new tab'],
-  ['Prisijungti prie Telegram grupės', 'Join Telegram group'],
+  ['Atidaryti „Promptų anatomijos“ Telegram kanalą naujame lange', 'Open Prompt Anatomy on Telegram in a new tab'],
+  ['Sekite Telegram kanale', 'Join on Telegram'],
   ['Promptų anatomija →', 'Prompt anatomy →'],
   ['Promptų anatomija', 'Prompt anatomy'],
+  ['">Prompt anatomy</a>', '">Prompt Anatomy</a>'],
+  ['Prompt anatomy →', 'Prompt Anatomy →'],
+  ['Prompt anatomy:', 'Prompt Anatomy:'],
   ['Sėkmės atrankoje', 'Good luck with hiring'],
   ['Nepamiršk pakeisti <strong>[įmonė]</strong>, <strong>[pozicija]</strong>, <strong>[atlygis]</strong>, <strong>[kandidatų skaičius]</strong> ir kitus laukus savo duomenimis.', 'Remember to replace <strong>[company]</strong>, <strong>[role]</strong>, <strong>[location]</strong>, <strong>[salary range]</strong>, <strong>[candidate count]</strong>, and other placeholders with your data. Use US examples such as <strong>123 Market St, San Francisco, CA 94105</strong>, <strong>Remote – US</strong>, <strong>+1 (415) 555-0198</strong>, and <strong>$1,250.50</strong> where applicable.'],
   ['Tai Spin-off Nr. 3 iš „Promptų anatomijos“.', 'This is Series No. 3 from “Prompt Anatomy”.'],
@@ -142,7 +432,7 @@ const EN_REPLACEMENTS = [
   ['Mokymų medžiaga. Visos teisės saugomos.', 'Training material. All rights reserved.'],
   ['Privatumas', 'Privacy'],
   ['FAZĖ ', 'PHASE '],
-  ['Sistema: X / 6 fazės', 'System: X / 6 phases'],
+  ['Sistema: X iš 6 fazių', 'System: X of 6 phases'],
   ['progresas ir fazės', 'progress and phases'],
   ['Copy promptą', 'Copy prompt'],
   // CSS comments (EN build)
@@ -150,7 +440,10 @@ const EN_REPLACEMENTS = [
   ['Pagrindinis akcentas – žalia', 'Primary accent – green'],
   ['Hero: žalia,', 'Hero: green,'],
   ['žalias tekstas', 'green text'],
-  ['Tertiarinė (bibliotekos identitetas)', 'Tertiary (library identity)'],
+  [
+    'Tertiarinė – PA ekosistemos akcentas (--color-ecosystem-1), ne HR žalia',
+    'Tertiary – PA ecosystem accent (--color-ecosystem-1), not HR green',
+  ],
   ['suderinti su žalia palete', 'aligned with green palette'],
   ['suderinta su žalia tema', 'aligned with green theme'],
   ['Lucide ikonų dydžiai', 'Lucide icon sizes'],
@@ -179,7 +472,7 @@ const EN_REPLACEMENTS = [
   ['[įmonė] → įmonės pavadinimas arba sritis (pvz. IT startupas, mažmeninė prekyba); [pozicija] → pareigos; geriausias darbuotojas – trumpas aprašymas; kodėl išeidavo – priežastis arba „–“.', '[company] → company and US location (e.g., New York, NY); [location] → Street Address, City, State, optional Zip Code, or Remote – US; [role] → job title; best performer – short description; why they left – reason or “–”.'],
   ['Įklijuok į ChatGPT arba Claude ir pakeisk laukus savo duomenimis.', 'Paste into ChatGPT or Claude and replace the fields with your data.'],
   ['Perrašai skelbimą paprasta kalba. Paprastas ir aiškus tekstas pritraukia tinkamus kandidatus.', 'You\'re rewriting the ad in plain language. Clear, simple text attracts the right candidates.'],
-  ['[įmonė] → įmonės pavadinimas arba sritis (nebūtina, bet padeda pritaikyti toną); [įklijuok] → įklijuok savo darbo skelbimo tekstą.', '[company] → company and US location (e.g., San Francisco, CA); [location] → Street Address, City, State, optional Zip Code, or Remote – US; [salary range] → use $, comma thousands, and decimal points where needed (e.g., $85,000–$105,000 or $1,250.50); [paste] → paste your job ad text.'],
+  ['[įmonė] → įmonės pavadinimas arba sritis (nebūtina, bet padeda pritaikyti toną); [įklijuok] → įklijuok savo darbo skelbimo tekstą.', '[company] → company and US location (e.g., San Francisco, CA); [location] → Street Address, City, State, optional Zip Code, or Remote – US; [salary range] → use $, commas as thousands separators, and decimal points where needed (e.g., $85,000–$105,000 or $1,250.50); [paste] → paste your job ad text.'],
   ['Reikia daugiau kandidatų – LinkedIn, pažįstami, tiesioginis parašas. Paprasti žingsniai, ne tik skelbimai.', 'You need more candidates – LinkedIn, network, direct message. Simple steps, not just job boards.'],
   ['[įmonė] → įmonės pavadinimas arba sritis; [pozicija] → tavo pozicija (pvz. Pardavimų vadovas).', '[company] → company and US location (e.g., Austin, TX); [location] → Street Address, City, State, optional Zip Code, or Remote – US; [role] → your role (e.g., Sales Manager); phone numbers, if used, should follow +1 (XXX) XXX-XXXX; use Street Address, City, State, Zip Code for addresses.'],
   ['Nukopijuok, įklijuok į DI įrankį ir pakeisk [įmonė], [pozicija] savo duomenimis.', 'Copy, paste into your AI tool and replace [company], [role] with your data.'],
@@ -382,7 +675,7 @@ Give:
 3. How to improve the job ad
 4. How to run better interviews
 5. How to increase the chance they accept
-6. How to help them stay the first 3 months`
+6. How to help them stay for the first three months`
 ];
 
 // Apply EN replacements to html
@@ -418,7 +711,7 @@ function applyEnReplacements(html) {
 const EN_PROMPT_UI = [
   { title: 'Where are we stuck?', desc: 'Help understand our recruitment challenges', infoUse: 'You want to quickly see where recruitment is stuck. Numbers make it easier to decide where to focus.', infoReplace: 'Numbers (candidates, interviews, offers, accepted) – put your numbers in the [ ] fields.', cta: 'Copy and paste into ChatGPT or Claude – that\'s the goal of this step.' },
   { title: 'Who really fits us?', desc: 'Help describe the ideal candidate for the role', infoUse: 'You\'re describing the ideal candidate. When we know what we want, it\'s easier to spot the right person.', infoReplace: '[company] → company and US location (e.g., New York, NY); [location] → Street Address, City, State, optional Zip Code, or Remote – US; [role] → job title; best performer – short description; why they left – reason or “–”.', cta: 'Paste into ChatGPT or Claude and replace the fields with your data.' },
-  { title: 'Rewrite the job ad in plain language', desc: 'So the person feels the ad is for them', infoUse: 'You\'re rewriting the ad in plain language. Clear, simple text attracts the right candidates.', infoReplace: '[company] → company and US location (e.g., San Francisco, CA); [location] → Street Address, City, State, optional Zip Code, or Remote – US; [salary range] → use $, comma thousands, and decimal points where needed (e.g., $85,000–$105,000 or $1,250.50); [paste] → paste your job ad text.', cta: 'Copy and paste into ChatGPT or Claude – that\'s the goal of this step.' },
+  { title: 'Rewrite the job ad in plain language', desc: 'So the person feels the ad is for them', infoUse: 'You\'re rewriting the ad in plain language. Clear, simple text attracts the right candidates.', infoReplace: '[company] → company and US location (e.g., San Francisco, CA); [location] → Street Address, City, State, optional Zip Code, or Remote – US; [salary range] → use $, commas as thousands separators, and decimal points where needed (e.g., $85,000–$105,000 or $1,250.50); [paste] → paste your job ad text.', cta: 'Copy and paste into ChatGPT or Claude – that\'s the goal of this step.' },
   { title: 'How to find more people today?', desc: '3 simple ways – LinkedIn, network, direct message', infoUse: 'You need more candidates – LinkedIn, network, direct message. Simple steps, not just job boards.', infoReplace: '[company] → company and US location (e.g., Austin, TX); [location] → Street Address, City, State, optional Zip Code, or Remote – US; [role] → your role (e.g., Sales Manager); phone numbers, if used, should follow +1 (XXX) XXX-XXXX; use Street Address, City, State, Zip Code for addresses.', cta: 'Copy, paste into your AI tool and replace [company], [role] with your data.' },
   { title: 'How to run a better interview?', desc: 'Simple interview plan – questions and what to watch for', infoUse: 'You\'re preparing for an interview or want better questions. Structure helps you hear what really matters.', infoReplace: '[company] → company and US location (e.g., Chicago, IL); [location] → Street Address, City, State, optional Zip Code, or Remote – US; [role] → your role; dates should use MM/DD/YYYY.', cta: 'Copy and paste into ChatGPT or Claude – that\'s the goal of this step.' },
   { title: 'Why do candidates decline?', desc: 'Understand reasons and how to talk about it', infoUse: 'Candidates often decline – you want to understand why. Knowing reasons helps you adjust the offer or communication.', infoReplace: '[company], [role], [location], [salary range], [what we offer] – use US formats such as New York, NY, Remote – US, and $85,000–$105,000.', cta: 'Paste into ChatGPT or Claude – replace company, role, location, salary range, and what you offer.' },
@@ -431,7 +724,7 @@ const EN_PROMPT_UI = [
 function applyEnPromptUi(html) {
   const titles = [
     'Kur stringame?', 'Koks žmogus mums iš tikrųjų tinka?', 'Perrašyk darbo skelbimą paprastai',
-    'Kaip šiandien rasti daugiau žmonių?', 'Kaip geriau pravesti pokalbį?', 'Kodėl kandidatai atsisako?',
+    'Kaip šiandien rasti daugiau žmonių?', 'Kaip geriau vesti pokalbį?', 'Kodėl kandidatai atsisako?',
     'Kaip geriau pristatyti pasiūlymą?', 'Kaip padėti naujam žmogui pirmus 3 mėnesius?', 'Kodėl žmonės išeina?',
     'Pagrindinis promptas (vienas viskam)'
   ];
@@ -459,10 +752,11 @@ function applyEnPromptUi(html) {
 
 // ---- Privacy EN ----
 const PRIVACY_EN = {
-  title: 'Privacy Policy – US Hiring Prompt Library',
-  back: '← Back to library',
-  backLink: '← Back to US Hiring Prompt Library',
-  intro: '<strong>Personalas</strong> – US hiring prompt library for HR teams (Spin-off No. 3 from Prompt Anatomy). Minimal static app; English UI is <code>en-US</code>. Briefly about your data.',
+  title: 'Privacy Policy – Personalas',
+  back: '← Back to Personalas',
+  backLink: '← Back to Personalas',
+  intro:
+    '<strong>Personalas</strong> – US hiring prompts for HR teams (Series No. 3 from Prompt Anatomy). Minimal static app; English UI is <code>en-US</code>. Briefly about your data.',
   q1: 'Do we collect your data?',
   a1: '<strong>No.</strong> We do not collect any personal data at this time. No forms, email collection or server submission.',
   q2: 'What happens on your device?',
@@ -476,8 +770,11 @@ function buildPrivacyEn(html) {
     .replace('<html lang="lt">', '<html lang="en-US">')
     .replace(/<title>.*?<\/title>/, '<title>' + PRIVACY_EN.title + '</title>')
     .replace('href="favicon.svg"', 'href="../favicon.svg"')
-    .replace('← Grįžti į biblioteką', '← Back to library')
-    .replace('Privatumo politika', 'Privacy policy')
+    .replace(
+      '<a href="index.html" class="back">← Grįžti į Personalą</a>',
+      '<a href="index.html" class="back">' + PRIVACY_EN.back + '</a>'
+    )
+    .replace('Privatumo politika', 'Privacy Policy')
     .replace(/<p><strong>Personalas<\/strong>[^]*?<\/p>/, '<p>' + PRIVACY_EN.intro + '</p>')
     .replace('Ar renkame tavo duomenis?', PRIVACY_EN.q1)
     .replace(/<p><strong>Ne\.<\/strong>.*?serverius\.<\/p>/, '<p>' + PRIVACY_EN.a1 + '</p>')
@@ -485,32 +782,70 @@ function buildPrivacyEn(html) {
     .replace(/<p>Tik naršyklės.*?įrenginyje\.<\/p>/, '<p>' + PRIVACY_EN.a2 + '</p>')
     .replace('Jei vėliau bus forma', PRIVACY_EN.q3)
     .replace(/<p>Jei įjungsime.*?naudojame\.<\/p>/, '<p>' + PRIVACY_EN.a3 + '</p>')
-    .replace('← Grįžti į Personalą', PRIVACY_EN.backLink);
+    .replace(
+      '<p style="margin-top: 2rem;"><a href="index.html">← Grįžti į Personalą</a></p>',
+      '<p style="margin-top: 2rem;"><a href="index.html">' + PRIVACY_EN.backLink + '</a></p>'
+    );
+}
+
+/** Strip injected SEO between viewport and meta description so locale builds work after finalizeRootIndexHtml. */
+function stripIndexForLocaleBuild(html) {
+  return html.replace(
+    /(<meta name="viewport"[^>]*>\s*)(?:[\s\S]*?)(<meta name="description")/i,
+    '$1$2'
+  );
+}
+
+/** Strip injected SEO between viewport and <title> for privacy locale builds. */
+function stripPrivacyForLocaleBuild(html) {
+  return html.replace(/(<meta name="viewport"[^>]*>\s*)(?:[\s\S]*?)(<title)/i, '$1$2');
 }
 
 // ---- Main ----
 function main() {
-  let indexHtml = read('index.html');
-  let privacyHtml = read('privatumas.html');
+  let indexHtml = stripIndexForLocaleBuild(read('index.html'));
+  let privacyHtml = stripPrivacyForLocaleBuild(read('privatumas.html'));
+
+  const privacyLtDesc =
+    'Personalas – statinė svetainė su HR DI promptų rinkiniu. Asmens duomenų nerinkame; pažymėti žingsniai saugomi tik naršyklės localStorage.';
+  const privacyEnDesc =
+    'Personalas – static site with US hiring prompts for HR teams. We do not collect personal data; progress uses browser localStorage only.';
 
   // LT
-  let ltIndex = injectHead(indexHtml, 'lt', BASE_PATH, BASE_FOR_LINKS);
+  let ltIndex = injectHead(indexHtml, 'lt', BASE_PATH);
   write('lt/index.html', ltIndex);
   let ltPrivacy = privacyHtml.replace('href="favicon.svg"', 'href="../favicon.svg"');
+  ltPrivacy = injectPrivacyHead(
+    ltPrivacy,
+    'lt',
+    'lt/privatumas.html',
+    'Privatumo politika – Personalas',
+    privacyLtDesc
+  );
   write('lt/privatumas.html', ltPrivacy);
 
   // EN
   let enIndex = applyEnReplacements(indexHtml);
   enIndex = applyEnPromptUi(enIndex);
-  enIndex = injectHead(enIndex, 'en', BASE_PATH, BASE_FOR_LINKS);
+  enIndex = injectHead(enIndex, 'en', BASE_PATH);
   write('en/index.html', enIndex);
 
   let enPrivacy = buildPrivacyEn(privacyHtml);
   enPrivacy = enPrivacy.replace('href="../favicon.svg"', 'href="../favicon.svg"');
+  enPrivacy = injectPrivacyHead(enPrivacy, 'en', 'en/privatumas.html', PRIVACY_EN.title, privacyEnDesc);
   write('en/privatumas.html', enPrivacy);
 
-  console.log('Build done: lt/index.html, lt/privatumas.html, en/index.html, en/privatumas.html');
-  console.log('BASE_PATH:', BASE_PATH || '(empty)');
+  writeRobotsAndSitemap();
+
+  finalizeRootIndexHtml();
+
+  finalizeRootPrivacyHtml();
+
+  console.log('Build done: lt/index.html, lt/privatumas.html, en/index.html, en/privatumas.html, robots.txt, sitemap.xml');
+  console.log('BASE_PATH:', BASE_PATH || '(root – no subpath)');
+  console.log('SITE_ORIGIN:', SITE_ORIGIN);
+  console.log('SITE_PUBLIC_BASE:', SITE_PUBLIC_BASE || '(not set)');
+  console.log('Absolute base:', absoluteBaseSlash());
 }
 
 main();

@@ -23,6 +23,9 @@ jobs:
 
       - name: Run tests (structure + lint)
         run: npm test
+        env:
+          BASE_PATH: /${{ github.event.repository.name }}/
+          SITE_ORIGIN: https://ditreneris.github.io
 
       - name: Accessibility check (pa11y)
         run: |

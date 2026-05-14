@@ -1,0 +1,350 @@
+# Cursor Rules - DI Promptų Biblioteka Projektas
+
+## 🎯 Projekto Apžvalga
+Šis projektas yra interaktyvi HTML platforma verslo analitikams su Google Sheets integracija. Visi taisykles turi atsižvelgti į statinio HTML pobūdį, saugumą ir konfidencialumą.
+
+**Agentams:** Rolės ir workflow – [AGENTS.md](AGENTS.md). Dokumentų valdymas ir atsakomybės – [docs/DOCUMENTATION.md](docs/DOCUMENTATION.md). Pakeitimų istorija – [CHANGELOG.md](CHANGELOG.md).
+
+---
+
+## 📝 Q&A – Kalbos ir tono praktika (vartotojui matomas tekstas)
+
+- **Kreipinys:** naudoti **Tu** (ne Jūs): tavo, tau, tu, atlikai, naudojai, gausi, galėsi ir t. t.
+- **Stilius:** paprasta lietuvių kalba, **lakoniškai** – trumpi sakiniai, be pertekliaus.
+- **Tonas:** **motyvacinė, palaikanti** – skatina veikti, bet **be patetikos** (be per didelio entuziazmo, dramos ar tuščios šlovinimo).
+- **Check:** prieš commit patikrinti, ar vartotojui matomi tekstai atitinka Tu + lakonišką, palaikantį toną.
+
+---
+
+## 🔒 SAUGUMAS (Security)
+
+### API Keys ir Konfidencialūs Duomenys
+- ❌ **NIEKADA** nekomituokite API keys, slaptažodžių ar jautrių duomenų į Git
+- ✅ Naudokite `.env` failus arba konfigūracijos failus, kurie yra `.gitignore`
+- ✅ Google Apps Script URL turi būti konfigūruojamas per kintamuosius, ne hardcoded
+- ✅ Jei reikia, naudokite environment variables arba konfigūracijos failus
+- ⚠️ **Google Script URL** faile `index.html` turi būti placeholder, ne tikras URL
+
+### Input Validacija
+- ✅ **VISADA** validuokite visus vartotojo įvestus duomenis (email, tekstas)
+- ✅ Naudokite HTML5 validaciją (`required`, `type="email"`) + JavaScript validaciją
+- ✅ Sanitizuokite visus duomenis prieš siuntimą į backend
+- ✅ Apsaugokite nuo XSS atakų - naudokite `textContent` vietoj `innerHTML` kai įmanoma
+- ✅ Validuokite email formatą su regex: `/^[^\s@]+@[^\s@]+\.[^\s@]+$/`
+
+### Google Apps Script Saugumas
+- ✅ Apps Script turi validuoti gautus duomenis
+- ✅ Naudokite try-catch blokus visose kritinėse vietose
+- ✅ Nerodykite detalių klaidų pranešimų vartotojams (saugumo rizika)
+- ✅ Loginkite klaidas serverio pusėje, bet neeksportuokite jautrių duomenų
+
+### CORS ir Cross-Origin Saugumas
+- ✅ Google Apps Script naudoja `no-cors` režimą - supraskite ribojimus
+- ✅ Jei keičiate į `cors`, įsitikinkite, kad tikrinamas `Origin` header
+- ⚠️ **NIEKADA** neleiskite bet kokiam domenui siųsti užklausų be validacijos
+
+### CAPTCHA ir Spam Apsauga
+- ⚠️ **Rekomenduojama** pridėti Google reCAPTCHA kontaktų formai
+- ✅ Implementuokite rate limiting (ribokite užklausų skaičių per laiką)
+- ✅ Validuokite, kad forma nėra tuščia arba su tik spam duomenimis
+
+### Duomenų Saugumas
+- ✅ Jautrų duomenų (email, vardai) saugojimas Google Sheets turi atitikti GDPR
+- ✅ Įsitikinkite, kad Google Sheets dokumentas turi tinkamas prieigos teises
+- ✅ Svarstykite duomenų šifravimą, jei saugomi labai jautrūs duomenys
+
+---
+
+## 🔐 KONFIDENCIALUMAS (Confidentiality)
+
+### GDPR ir Duomenų Apsauga
+- ✅ Kontaktų formoje **PRIVALOMA** informuoti apie duomenų rinkimą
+- ✅ Pridėkite privatumo politikos nuorodą
+- ✅ Suteikite galimybę atšaukti sutikimą
+- ✅ Duomenys turi būti saugomi tik tiek, kiek reikia
+
+### Jautrių Duomenų Valdymas
+- ❌ **NIEKADA** neloginkite jautrių duomenų į browser console production aplinkoje
+- ✅ Naudokite `console.warn` arba `console.error` tik development režime
+- ✅ Pašalinkite visus debug log'us prieš production deployment
+
+### Verslo Informacijos Apsauga
+- ⚠️ Projekte yra verslo logika ir promptų šablonai - saugokite kaip verslo paslaptį
+- ✅ Naudokite `.gitignore` tam, kad neatsitiktinai nekomituotumėte jautrių failų
+- ✅ Jei dalijatės kodu, patikrinkite, kad nėra hardcoded verslo duomenų
+
+### Trečiųjų Šalių Integracijos
+- ✅ Google Sheets integracija - patikrinkite Google privatumo politiką
+- ✅ Jei naudojate EmailJS ar kitas paslaugas, perskaitykite jų duomenų apsaugos politikas
+- ✅ Informuokite vartotojus apie trečiųjų šalių paslaugas
+
+---
+
+## ✨ KOKYBĖ (Quality)
+
+### Kodas Standartai
+- ✅ **Kodas turi būti skaitomas ir suprantamas** - naudokite aiškius kintamųjų vardus
+- ✅ Funkcijos turi turėti vieną atsakomybę (Single Responsibility Principle)
+- ✅ Naudokite `'use strict'` JavaScript failuose
+- ✅ Komentuokite sudėtingą logiką, bet ne akivaizdžius dalykus
+- ✅ Naudokite consistent code style (indentacija, kabliataškiai, etc.)
+
+### Error Handling
+- ✅ **VISADA** naudokite try-catch blokus asinchroninėms operacijoms
+- ✅ Rodykite vartotojui suprantamus klaidos pranešimus
+- ✅ Loginkite detales klaidas development režime
+- ✅ Turėkite fallback mechanizmus (pvz., fallbackCopy funkcija)
+
+### Performance
+- ✅ Minimizuokite DOM manipuliacijas - naudokite batch updates
+- ✅ Naudokite debounce funkcijas, kai reikia (pvz., input validacija)
+- ✅ Optimizuokite CSS - naudokite CSS kintamuosius, kad būtų lengviau valdyti
+- ✅ Minimizuokite JavaScript failų dydį - pašalinkite nenaudojamą kodą
+- ✅ Naudokite `async/await` vietoj callback hell
+
+### Accessibility (Prieinamumas)
+- ✅ **PRIVALOMA** naudoti semantinius HTML elementus (`<header>`, `<nav>`, `<main>`, `<footer>`)
+- ✅ Pridėkite `aria-label`, `aria-describedby`, `role` atributus, kur reikia
+- ✅ Formos turi turėti `<label>` elementus su `for` atributais
+- ✅ Klaviatūros navigacija - visi interaktyvūs elementai turi būti pasiekiami per Tab
+- ✅ Pridėkite `tabindex` atributus, kur reikia
+- ✅ Palaikykite `prefers-reduced-motion` media query
+- ✅ Naudokite kontrastingas spalvas (WCAG AA standartas minimum)
+
+### Browser Compatibility
+- ✅ Testuokite visose pagrindinėse naršyklėse (Chrome, Firefox, Safari, Edge)
+- ✅ Naudokite fallback sprendimus senesnėms naršyklėms (pvz., `execCommand('copy')`)
+- ✅ Patikrinkite, ar veikia mobile naršyklėse
+- ✅ Naudokite feature detection, ne browser detection
+
+### Testing
+- ⚠️ **Rekomenduojama** pridėti unit testus kritinėms funkcijoms
+- ✅ Testuokite visus user flows rankiniu būdu prieš commit
+- ✅ Testuokite error scenarijus (pvz., network klaidos, invalid input)
+- ✅ Patikrinkite, ar veikia su JavaScript išjungtu (graceful degradation)
+
+---
+
+## 📚 DOKUMENTACIJOS VALDYMAS (Documentation)
+
+### Dokumentacijos Standartai
+- ✅ **VISI** failai turi turėti aiškų paskirtį ir struktūrą
+- ✅ README.md turi aprašyti projektą, kaip jį paleisti ir naudoti
+- ✅ Kodo komentarai turi būti lietuvių kalba (nes projektas lietuvių kalba)
+- ✅ Funkcijos turi turėti JSDoc komentarus su parametrais ir return tipais
+
+### Dokumentacijos Atnaujinimas
+- ⚠️ **PRIVALOMA** atnaujinti dokumentaciją, kai keičiamas kodas
+- ✅ Jei pridedate naują funkciją, atnaujinkite README.md
+- ✅ Jei keičiate API arba konfigūraciją, atnaujinkite INTEGRACIJA.md
+- ✅ **Release** – būtina atnaujinti CHANGELOG.md (sekciją „Nereleisuota“ perkelti į naują versiją su data). Versijavimas – Semantic Versioning.
+- ✅ Dokumentų atsakomybės ir kada ką atnaujinti – žr. docs/DOCUMENTATION.md
+- ✅ Dokumentuokite breaking changes
+
+### Dokumentacijos Struktūra
+- ✅ README.md - projekto apžvalga, instaliacija, naudojimas
+- ✅ CHANGELOG.md - versijų pakeitimų istorija (Keep a Changelog, SemVer). **Release** = atnaujinti CHANGELOG („Nereleisuota“ → nauja versija su data).
+- ✅ docs/DOCUMENTATION.md - dokumentų inventorius, atsakomybės, archyvavimo taisyklės (žr. kada ką atnaujinti).
+- ✅ INTEGRACIJA.md - detali integracijos instrukcija
+- ✅ VARIANTU_PALYGINIMAS.md - palyginimas tarp variantų
+- ✅ AGENTS.md - agentų rolės, workflow, commit prefiksai
+- ✅ feedback-schema.md - Feedback Store duomenų schema
+- ✅ Kodo komentarai - inline dokumentacija sudėtingoms vietoms
+
+### Verslo Dokumentacija
+- ⚠️ Jei yra verslo logika arba procesai, dokumentuokite juos
+- ✅ Promptų šablonai turi būti aiškiai aprašyti
+- ✅ Verslo taisyklės ir apribojimai turi būti dokumentuoti
+
+---
+
+## 📋 DARBO PLANAVIMAS (Work Planning)
+
+### Task Breakdown
+- ✅ **VISADA** suskaidykite dideles užduotis į mažesnes, valdomas dalis
+- ✅ Kiekviena užduotis turi turėti aiškų tikslą ir rezultatą
+- ✅ Prioritizuokite užduotis pagal verslo reikšmę ir riziką
+- ✅ Įvertinkite užduočių sudėtingumą prieš pradedant
+
+### Version Control
+- ✅ **PRIVALOMA** naudoti Git su prasmingais commit pranešimais
+- ✅ Commit pranešimai turi būti aiškūs ir aprašantys, ką keičiate
+- ✅ Formatas: `[Tipas] Trumpas aprašymas` (pvz., `[Fix] Pataisyta email validacija`)
+- ✅ Commit tipai: `[Feature]`, `[Fix]`, `[Docs]`, `[Refactor]`, `[Security]`, `[Style]`
+- ✅ Agentų prefiksai (žr. AGENTS.md): `[Content]`, `[Curriculum]`, `[UI]`, `[QA]`, `[Orchestrator]`
+- ✅ **NIEKADA** nekomituokite jautrių duomenų arba laikinų failų
+
+### Branch Strategy
+- ⚠️ **Rekomenduojama** naudoti feature branches didesnėms funkcijoms
+- ✅ `main` branch turi būti stabilus ir veikiantis
+- ✅ Testuokite pakeitimus prieš merge į main
+
+### Code Review
+- ⚠️ Jei dirbate komandoje, **PRIVALOMA** code review prieš merge
+- ✅ Patikrinkite saugumą, kokybę ir dokumentaciją
+- ✅ Įsitikinkite, kad nėra hardcoded duomenų
+
+### Deployment
+- ✅ **PRIVALOMA** testuoti pakeitimus local aplinkoje prieš deployment
+- ✅ Patikrinkite, ar visos funkcijos veikia po pakeitimų
+- ✅ Įsitikinkite, kad nėra console.error arba warning production kode
+- ✅ Patikrinkite, ar veikia su production konfigūracija (Google Script URL, etc.)
+
+---
+
+## 🤖 AGENTŲ SISTEMA (Agent System)
+
+### Agentų rolės
+- **Content** – promptai, tekstai, aprašymai
+- **Curriculum** – turinio struktūra, seka, mokymosi logika
+- **UI/UX** – dizainas, prieinamumas, vartotojo patirtis
+- **QA** – kokybės tikrinimas (kodas + turinys)
+- **Orchestrator** – koordinacija, prioritetai, užduočių valdymas
+
+### Workflow
+- Prieš pakeitimus: žr. AGENTS.md workflow seką
+- Prieš PR: naudokite .github/PULL_REQUEST_TEMPLATE.md
+- CI: lint, test, a11y per .github/workflows/ci.yml
+
+### Feedback Store
+- Grįžtamasis ryšys ir metrikos: žr. feedback-schema.md
+- Šaltiniai: Google Sheets, analytics, QA rezultatai
+
+---
+
+## 🎨 GERIAUSIOS PRAKTIKOS (Best Practices)
+
+### HTML Struktūra
+- ✅ Naudokite semantinius HTML5 elementus
+- ✅ Pridėkite `lang` atributą (`lang="lt"` lietuvių kalbai)
+- ✅ Meta tags turi būti teisingi (charset, viewport, etc.)
+- ✅ Naudokite descriptive ID ir class vardus
+
+### CSS Organizacija
+- ✅ Naudokite CSS kintamuosius (`:root`) spalvoms ir dydžiams
+- ✅ Organizuokite CSS logiškai (reset, variables, components, utilities)
+- ✅ Naudokite BEM arba panašią metodologiją, jei reikia
+- ✅ Responsive design - mobile-first approach
+- ✅ Naudokite `prefers-reduced-motion` accessibility
+
+### JavaScript Organizacija
+- ✅ Organizuokite kodą logiškai (config, helpers, main functions)
+- ✅ Naudokite IIFE (Immediately Invoked Function Expression) arba modules
+- ✅ Atskirkite concerns (UI, business logic, API calls)
+- ✅ Naudokite const/let, ne var
+- ✅ Avoid global variables - naudokite namespaces arba modules
+
+### Naming Conventions
+- ✅ Kintamieji ir funkcijos: `camelCase`
+- ✅ Konstantos: `UPPER_SNAKE_CASE`
+- ✅ CSS klasės: `kebab-case` arba `BEM`
+- ✅ Failai: `kebab-case` (pvz., `google-apps-script.js`)
+
+### Code Reusability
+- ✅ **DRY** (Don't Repeat Yourself) - nenaudokite kopijuoto kodo
+- ✅ Sukurkite reusable funkcijas
+- ✅ Naudokite helper funkcijas bendroms operacijoms
+
+### Maintainability
+- ✅ Kodas turi būti lengvai suprantamas po 6 mėnesių
+- ✅ Naudokite aiškius kintamųjų ir funkcijų vardus
+- ✅ Komentuokite "kodėl", ne "ką" (kodas turi būti aiškus be komentarų)
+- ✅ Refactoring - nuolat tobulinkite kodą
+
+---
+
+## 🚨 KONKRETŪS PROJEKTO REIKALAVIMAI
+
+### Google Apps Script Integracija
+- ✅ **PRIVALOMA** patikrinti, ar `GOOGLE_SCRIPT_URL` nėra hardcoded production kode
+- ✅ Naudokite placeholder: `'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE'`
+- ✅ Dokumentuokite, kaip nustatyti URL INTEGRACIJA.md faile
+- ✅ Testuokite integraciją su mock duomenimis
+
+### Kontaktų Forma
+- ✅ **PRIVALOMA** email validacija (HTML5 + JavaScript)
+- ✅ Rodykite loading state siunčiant formą
+- ✅ Rodykite success/error pranešimus vartotojui
+- ✅ Reset formą po sėkmingo submit
+- ✅ Accessibility - visi laukai turi labels ir ARIA atributus
+
+### Promptų Funkcionalumas
+- ✅ Kopijavimo funkcija turi veikti visose naršyklėse (fallback)
+- ✅ Rodykite visual feedback (toast, button state)
+- ✅ Klaviatūros navigacija turi veikti (Tab, Enter, Space)
+- ✅ Accessibility - code blocks turi būti pasiekiami per klaviatūrą
+
+### Responsive Design
+- ✅ **PRIVALOMA** testuoti mobile, tablet, desktop
+- ✅ Naudokite mobile-first approach
+- ✅ Testuokite skirtingus ekranų dydžius (320px, 768px, 1024px, 1920px)
+
+---
+
+## 📝 COMMIT MESSAGE FORMAT
+
+```
+[Tipas] Trumpas aprašymas (iki 50 simbolių)
+
+Detalesnis aprašymas, jei reikia (iki 72 simbolių per eilutę)
+
+Tipai:
+- [Feature] - nauja funkcija
+- [Fix] - klaidos taisymas
+- [Docs] - dokumentacijos pakeitimai (pvz. [Docs] CHANGELOG: 1.1.0 – pridėta X)
+- [Refactor] - kodo refactoring
+- [Security] - saugumo pakeitimai
+- [Style] - stiliaus pakeitimai (formatavimas, CSS)
+- [Test] - testų pridėjimas arba pakeitimai
+- [Chore] - build, config, dependencies
+```
+
+---
+
+## ⚠️ RIBOJIMAI IR ĮSPĖJIMAI
+
+### Ką NIEKADA nedaryti:
+- ❌ Nekomituokite jautrių duomenų (API keys, passwords, real URLs)
+- ❌ Nenaudokite `eval()` arba `innerHTML` su vartotojo duomenimis
+- ❌ Nerodykite detalių klaidų pranešimų vartotojams (saugumo rizika)
+- ❌ Nenaudokite hardcoded verslo duomenų kode
+- ❌ Nekomituokite `.env` failų arba konfigūracijos su realiais duomenimis
+
+### Ką VISADA daryti:
+- ✅ Validuokite visus vartotojo įvestus duomenis
+- ✅ Naudokite try-catch blokus asinchroninėms operacijoms
+- ✅ Testuokite pakeitimus prieš commit
+- ✅ Atnaujinkite dokumentaciją, kai keičiate kodą
+- ✅ Naudokite semantinius HTML elementus
+- ✅ Pridėkite accessibility atributus
+
+---
+
+## 🔍 CODE REVIEW CHECKLIST
+
+Prieš commit, patikrinkite:
+- [ ] Ar nėra hardcoded jautrių duomenų?
+- [ ] Ar visi vartotojo input'ai yra validuojami?
+- [ ] Ar yra error handling kritinėse vietose?
+- [ ] Ar dokumentacija atnaujinta pagal pakeitimus? (žr. docs/DOCUMENTATION.md)
+- [ ] Jei release – ar CHANGELOG.md atnaujintas ir versija atitinka SemVer?
+- [ ] Ar kodas veikia visose naršyklėse?
+- [ ] Ar accessibility reikalavimai įvykdyti?
+- [ ] Ar nėra console.log production kode?
+- [ ] Ar commit pranešimas aiškus ir aprašantis?
+
+---
+
+## 📞 PAGALBA
+
+Jei kyla klausimų dėl šių taisyklių:
+1. Perskaitykite atitinkamą sekciją dar kartą
+2. Patikrinkite dokumentaciją: README.md, INTEGRACIJA.md, [docs/DOCUMENTATION.md](docs/DOCUMENTATION.md), [CHANGELOG.md](CHANGELOG.md)
+3. Agentų rolės ir workflow – [AGENTS.md](AGENTS.md)
+4. Jei reikia, konsultuokitės su komandos nariais
+
+---
+
+**Paskutinis atnaujinimas:** 2026-02-18  
+**Projekto kalba:** Lietuvių kalba  
+**Projekto tipas:** Statinis HTML su JavaScript ir Google Apps Script integracija

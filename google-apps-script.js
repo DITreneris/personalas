@@ -58,9 +58,9 @@ function doPost(e) {
  */
 function sendEmailNotification(data) {
   const recipientEmail = 'your-email@example.com'; // Pakeiskite į savo email
-  const subject = 'Nauja užklausa iš DI Bibliotekos';
+  const subject = 'Nauja užklausa iš Personalas';
   const body = `
-Nauja užklausa iš DI Promptų Bibliotekos:
+Nauja užklausa iš Personalas:
 
 El. paštas: ${data.email}
 Vardas: ${data.name || 'Nenurodytas'}

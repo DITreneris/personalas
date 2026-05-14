@@ -117,12 +117,52 @@ function run() {
 
   if (ltIndex && assert(ltIndex.includes('lang="lt"'), 'lt/index.html lang="lt"')) passed++;
   else failed++;
+  if (ltIndex && assert(!ltIndex.includes('Common questions before you start'), 'lt/index.html: DUK lietuvių kalba (nėra angliškos FAQ antraštės)')) passed++;
+  else failed++;
   if (enIndex && assert(enIndex.includes('lang="en-US"'), 'en/index.html lang="en-US"')) passed++;
   else failed++;
 
   if (ltIndex && assert(ltIndex.includes('rel="canonical"') && ltIndex.includes('hreflang="lt"') && ltIndex.includes('hreflang="en-US"') && ltIndex.includes('hreflang="x-default"'), 'lt/index.html canonical ir hreflang')) passed++;
   else failed++;
   if (enIndex && assert(enIndex.includes('rel="canonical"') && enIndex.includes('hreflang="lt"') && enIndex.includes('hreflang="en-US"') && enIndex.includes('hreflang="x-default"'), 'en/index.html canonical ir hreflang')) passed++;
+  else failed++;
+
+  const canonicalHttps = /<link rel="canonical" href="https:/;
+  if (ltIndex && assert(canonicalHttps.test(ltIndex), 'lt/index.html canonical naudoja absoliutų HTTPS URL')) passed++;
+  else failed++;
+  if (enIndex && assert(canonicalHttps.test(enIndex), 'en/index.html canonical naudoja absoliutų HTTPS URL')) passed++;
+  else failed++;
+  if (ltIndex && assert(ltIndex.includes('og:image" content="https://'), 'lt/index.html OG image absoliutus HTTPS')) passed++;
+  else failed++;
+  if (enIndex && assert(enIndex.includes('og:image" content="https://'), 'en/index.html OG image absoliutus HTTPS')) passed++;
+  else failed++;
+  if (ltIndex && assert(ltIndex.includes('<meta name="description"'), 'lt/index.html meta description')) passed++;
+  else failed++;
+  if (enIndex && assert(enIndex.includes('<meta name="description"'), 'en/index.html meta description')) passed++;
+  else failed++;
+  if (ltIndex && assert(ltIndex.includes('application/ld+json'), 'lt/index.html JSON-LD')) passed++;
+  else failed++;
+  if (enIndex && assert(enIndex.includes('application/ld+json'), 'en/index.html JSON-LD')) passed++;
+  else failed++;
+
+  const ltPrivacy = readFile(ltPrivacyPath);
+  const enPrivacy = readFile(enPrivacyPath);
+  if (ltPrivacy && assert(canonicalHttps.test(ltPrivacy), 'lt/privatumas.html canonical HTTPS')) passed++;
+  else failed++;
+  if (enPrivacy && assert(canonicalHttps.test(enPrivacy), 'en/privatumas.html canonical HTTPS')) passed++;
+  else failed++;
+  if (ltPrivacy && assert(ltPrivacy.includes('property="og:image"'), 'lt/privatumas.html OG image')) passed++;
+  else failed++;
+  if (enPrivacy && assert(enPrivacy.includes('property="og:image"'), 'en/privatumas.html OG image')) passed++;
+  else failed++;
+
+  const robotsPath = path.join(__dirname, '..', 'robots.txt');
+  const sitemapPath = path.join(__dirname, '..', 'sitemap.xml');
+  const robots = readFile(robotsPath);
+  const sitemap = readFile(sitemapPath);
+  if (assert(robots !== null && robots.includes('Sitemap: https://'), 'robots.txt su absoliučiu Sitemap URL')) passed++;
+  else failed++;
+  if (assert(sitemap !== null && sitemap.includes('<urlset') && sitemap.includes('<loc>https://'), 'sitemap.xml su absoliučiais loc')) passed++;
   else failed++;
 
   if (enIndex) {

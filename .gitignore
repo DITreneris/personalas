@@ -20,14 +20,17 @@ Desktop.ini
 
 # ─── Cursor / plans (development) ───
 .cursor/
-.cursorrules
 
-# ─── Development docs & markdown (ne į repo) ───
+# ─── Markdown: ignoruoti pagal nutylėjimą, išimtys – versijuojami doc ───
 *.md
 !README.md
 !CHANGELOG.md
 !INTEGRACIJA.md
-docs/
+!DEPLOYMENT.md
+!AGENTS.md
+!MUST_TODO.md
+!MVP_ROADMAP.md
+!feedback-schema.md
 
 # ─── Temporary & build ───
 *.tmp
@@ -41,7 +44,6 @@ build/
 
 # ─── Node ───
 node_modules/
-package-lock.json
 yarn.lock
 npm-debug.log*
 
@@ -50,6 +52,7 @@ npm-debug.log*
 .env.local
 .env.*.local
 *.pem
+.vercel/
 
 # ─── Optional: jei nori laikyti repo dar minimalesnį ───
 # google-apps-script.js

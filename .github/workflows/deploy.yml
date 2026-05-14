@@ -1,4 +1,4 @@
-# GitHub Pages deploy – statinė DI Promptų Biblioteka
+# GitHub Pages deploy – Personalas (statinė svetainė)
 # Reikalavimas: Repo Settings → Pages → Build and deployment: GitHub Actions
 # Nuoroda: https://github.com/DITreneris/spinoff01 (QA standartas)
 
@@ -29,6 +29,9 @@ jobs:
           node-version: '20'
       - run: npm install
       - run: npm test
+        env:
+          BASE_PATH: /${{ github.event.repository.name }}/
+          SITE_ORIGIN: https://ditreneris.github.io
 
   deploy:
     needs: test
@@ -46,6 +49,7 @@ jobs:
       - run: npm run build
         env:
           BASE_PATH: /${{ github.event.repository.name }}/
+          SITE_ORIGIN: https://ditreneris.github.io
       - name: Strip node_modules from Pages artifact
         run: rm -rf node_modules
         shell: bash
