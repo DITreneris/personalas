@@ -9,20 +9,25 @@ on:
 jobs:
   lint-and-test:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: Install dependencies
         run: npm install
 
-      - name: Run tests (structure + lint)
-        run: npm test
+      - name: Run tests (structure + lint; retry on validator.nu flakiness)
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 15
+          max_attempts: 3
+          retry_wait_seconds: 25
+          command: npm test
         env:
           BASE_PATH: /${{ github.event.repository.name }}/
           SITE_ORIGIN: https://ditreneris.github.io

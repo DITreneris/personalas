@@ -48,6 +48,8 @@ Visi reikšmingi pakeitimai projekte dokumentuojami čia. Formatas pagal [Keep a
 
 ### Pataisyta
 
+- **GitHub Actions:** `deploy.yml` ir `ci.yml` – Node **22** (Actions Node 20 deprecation); `npm test` su **3 bandymais** (`nick-fields/retry@v3`), kad sumažinti `html5.validator.nu` tinklo trikdžių riziką; test job `timeout-minutes` padidintas iki **20**.
+
 - **GitHub Pages:** prieš `upload-pages-artifact` deploy job šalina `node_modules`, kad artefakte liktų tik statiniai failai.
 - **Deploy workflow:** `test` job nebekartoja `npm run build` prieš `npm test` (build jau įeina į `npm test`).
 
