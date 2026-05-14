@@ -5,9 +5,10 @@
   "description": "US-localized HR hiring prompt library – static HTML platform",
   "scripts": {
     "build": "node scripts/build-locale-pages.js",
-    "test": "npm run build && node tests/structure.test.js && npm run lint:html && npm run lint:js",
+    "test": "npm run build && node tests/structure.test.js && npm run lint:html && npm run lint:html:locales && npm run lint:js",
     "test:structure": "node tests/structure.test.js",
     "lint:html": "npx html-validator-cli --file index.html",
+    "lint:html:locales": "npx html-validator-cli --file lt/index.html && npx html-validator-cli --file en/index.html && npx html-validator-cli --file lt/privatumas.html && npx html-validator-cli --file en/privatumas.html",
     "lint:js": "eslint . --ext .js"
   },
   "devDependencies": {
@@ -16,5 +17,5 @@
     "pa11y": "^6.2.3",
     "serve": "^14.2.1",
     "wait-on": "^8.0.1"
-    }
+  }
 }

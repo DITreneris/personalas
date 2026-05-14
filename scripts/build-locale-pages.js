@@ -83,8 +83,34 @@ const EN_REPLACEMENTS = [
   ['per žingsnį', 'per step'],
   ['Pasirink fazę, paspausk ir atidaryk. Tada pasirink konkretų promptą.', 'Choose a phase, open it, then pick a specific prompt.'],
   ['Spausk <strong>„Kopijuoti promptą“</strong> arba <code>Ctrl+C</code> / <code>Cmd+C</code> ant pasirinkto prompto.', 'Click <strong>“Copy prompt”</strong> or <code>Ctrl+C</code> / <code>Cmd+C</code> on the selected prompt.'],
-  ['Įklijuok į ChatGPT, Claude ar kitą DI (dirbtinio intelekto) įrankį.', 'Paste into ChatGPT, Claude, or another AI tool.'],
+  ['Įklijuok į ChatGPT, Claude, Gemini ar kitą DI (dirbtinio intelekto) įrankį.', 'Paste into ChatGPT, Claude, Gemini, or another AI tool.'],
   ['Jei prompte yra <code>[įmonė]</code>, <code>[pozicija]</code>, <code>[atlygis]</code>, <code>[ ]</code> ar kiti laukai – pakeisk savo duomenimis. DI vaidmens („Tu esi…“) keisti nereikia.', 'Replace placeholders such as <code>[company]</code>, <code>[role]</code>, <code>[location]</code>, and <code>[salary range]</code>. Use US location formats such as <code>New York, NY</code>, <code>San Francisco, CA 94105</code>, <code>Remote – US</code>, or <code>Hybrid – Austin, TX</code>; use <code>MM/DD/YYYY</code>, and follow US contact standards. Address fields: <code>Street Address</code>, <code>City</code>, <code>State</code>, <code>Zip Code</code>. Phone format: <code>+1 (XXX) XXX-XXXX</code>, for example <code>+1 (415) 555-0198</code>.'],
+  ['Ne, bet seka atspindi pilną atrankos ciklą nuo diagnostikos iki išlaikymo. Dažniausiai verta pradėti nuo 1 fazės ir judėti pagal savo situaciją.', 'No, but the sequence reflects the full recruitment cycle from diagnosis to retention. It’s usually best to start at phase 1 and move according to your situation.'],
+  ['Ne. Keisk tik laukus laužtiniuose skliaustuose ir skaičius – DI vaidmuo jau suformuluotas taip, kad gautum aiškų rezultatą.', 'No. Only change bracket placeholders and numbers – the AI role is already phrased to give a clear result.'],
+  ['Ne. Tai tekstai, kuriuos nukopijuoji ir įklijuoji į savo DI įrankį – joks serveris nevykdo atrankos už tave.', 'No. These are texts you copy and paste into your AI tool – no server runs recruitment for you.'],
+  ['Orientaciniai ~3–5 minutės pasiruošimui ir kopijavimui; pats pokalbis su DI priklauso nuo tavo klausimų ir atsakymų.', 'About 3–5 minutes to prepare and copy; the actual AI chat depends on your questions and answers.'],
+  ['Taip. Promptai universalesni – svarbu pildyti laukus savo kontekstu, ne bendromis frazėmis.', 'Yes. The prompts are universal – what matters is filling placeholders with your context, not generic phrases.'],
+  ['Taip. Gali pradėti nuo vienos problemos (pvz. skelbimo ar pokalbio) ir grįžti prie kitų vėliau.', 'Yes. You can start with one problem (e.g. job ad or interview) and return to others later.'],
+  ['Trumpai – ką verta žinoti prieš kopijuojant pirmą promptą.', 'Quick notes before you copy the first prompt.'],
+  ['Geriausia eiti iš eilės nuo 1 iki 10. Paspaudę nuorodą pereisi prie atitinkamo prompto.', 'Best to go in order from 1 to 10. Click a link to jump to that prompt.'],
+  ['Ar būtina eiti visas 6 fazes iš eilės?', 'Do I have to go through all 6 phases in order?'],
+  ['Ar reikia keisti eilutę „Tu esi…“ prompto pradžioje?', 'Do I need to change the “You are…” line at the start of the prompt?'],
+  ['Ar tai klausimynas ar automatinė atrankų sistema (ATS)?', 'Is this a survey or an applicant tracking system (ATS)?'],
+  ['Kiek laiko užtrunka vienas žingsnis?', 'How long does one step take?'],
+  ['Ar tinka mažai įmonei ar HR vienui?', 'Does it work for a small company or a solo HR person?'],
+  ['Ar galiu naudoti tik vieną ar kelis promptus?', 'Can I use just one or a few prompts?'],
+  ['Dažniausi klausimai prieš startą', 'Common questions before you start'],
+  ['Kas toliau?', 'What’s next?'],
+  ['1. Kur stringame?', '1. Where are we stuck?'],
+  ['2. Koks žmogus mums iš tikrųjų tinka?', '2. Who really fits us?'],
+  ['3. Perrašyk darbo skelbimą paprastai', '3. Rewrite the job ad in plain language'],
+  ['4. Kaip šiandien rasti daugiau žmonių?', '4. How to find more people today?'],
+  ['5. Kaip geriau pravesti pokalbį?', '5. How to run a better interview?'],
+  ['6. Kodėl kandidatai atsisako?', '6. Why do candidates decline?'],
+  ['7. Kaip geriau pristatyti pasiūlymą?', '7. How to present the offer better?'],
+  ['8. Kaip padėti naujam žmogui pirmus 3 mėnesius?', '8. How to support a new hire in the first 3 months?'],
+  ['9. Kodėl žmonės išeina?', '9. Why do people leave?'],
+  ['10. Pagrindinis promptas (vienas viskam)', '10. Master prompt (one for everything)'],
   ['Sistema: 0 / 6 fazės', 'System: 0 / 6 phases'],
   ['Progresas: 0 iš 6 fazių', 'Progress: 0 of 6 phases'],
   ['Pasirinkti ir kopijuoti promptą ', 'Select and copy prompt '],
@@ -100,8 +126,8 @@ const EN_REPLACEMENTS = [
   ['Kopijavimo pranešimas', 'Copy notification'],
   ['Kopijuojamo teksto laukas', 'Field for text to copy'],
   ['Sistema sukurta.<br>Nori daugiau?', 'System created.<br>Want more?'],
-  ['Atidaryti Promptų anatomija WhatsApp grupę naujame lange', 'Open Prompt anatomy WhatsApp group in new tab'],
-  ['Prisijungti prie WhatsApp grupės', 'Join WhatsApp group'],
+  ['Atidaryti Promptų anatomija Telegram kanalą naujame lange', 'Open Prompt anatomy Telegram channel in new tab'],
+  ['Prisijungti prie Telegram grupės', 'Join Telegram group'],
   ['Promptų anatomija →', 'Prompt anatomy →'],
   ['Promptų anatomija', 'Prompt anatomy'],
   ['Sėkmės atrankoje', 'Good luck with hiring'],
@@ -436,7 +462,7 @@ const PRIVACY_EN = {
   title: 'Privacy Policy – US Hiring Prompt Library',
   back: '← Back to library',
   backLink: '← Back to US Hiring Prompt Library',
-  intro: '<strong>US Hiring Prompt Library</strong> – a minimal prompt workflow for HR teams. Briefly about your data.',
+  intro: '<strong>Personalas</strong> – US hiring prompt library for HR teams (Spin-off No. 3 from Prompt Anatomy). Minimal static app; English UI is <code>en-US</code>. Briefly about your data.',
   q1: 'Do we collect your data?',
   a1: '<strong>No.</strong> We do not collect any personal data at this time. No forms, email collection or server submission.',
   q2: 'What happens on your device?',
@@ -452,14 +478,14 @@ function buildPrivacyEn(html) {
     .replace('href="favicon.svg"', 'href="../favicon.svg"')
     .replace('← Grįžti į biblioteką', '← Back to library')
     .replace('Privatumo politika', 'Privacy policy')
-    .replace(/<p><strong>DI Promptų biblioteka.*?<\/p>/, '<p>' + PRIVACY_EN.intro + '</p>')
+    .replace(/<p><strong>Personalas<\/strong>[^]*?<\/p>/, '<p>' + PRIVACY_EN.intro + '</p>')
     .replace('Ar renkame tavo duomenis?', PRIVACY_EN.q1)
     .replace(/<p><strong>Ne\.<\/strong>.*?serverius\.<\/p>/, '<p>' + PRIVACY_EN.a1 + '</p>')
     .replace('Kas vyksta tavo įrenginyje?', PRIVACY_EN.q2)
     .replace(/<p>Tik naršyklės.*?įrenginyje\.<\/p>/, '<p>' + PRIVACY_EN.a2 + '</p>')
     .replace('Jei vėliau bus forma', PRIVACY_EN.q3)
     .replace(/<p>Jei įjungsime.*?naudojame\.<\/p>/, '<p>' + PRIVACY_EN.a3 + '</p>')
-    .replace('← Grįžti į DI Promptų biblioteką', PRIVACY_EN.backLink);
+    .replace('← Grįžti į Personalą', PRIVACY_EN.backLink);
 }
 
 // ---- Main ----

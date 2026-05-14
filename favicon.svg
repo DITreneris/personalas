@@ -1,4 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" aria-hidden="true">
-  <rect width="32" height="32" rx="6" fill="#008579"/>
-  <path fill="white" d="M10 8v16h2V14h6v-2h-6V8h-2z"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Prompts anatomija">
+  <defs>
+    <linearGradient id="favicon-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#050d14"/>
+      <stop offset="100%" stop-color="#103b5a"/>
+    </linearGradient>
+  </defs>
+  <rect width="32" height="32" rx="8" fill="url(#favicon-bg)"/>
+  <path fill="#fbd304" transform="translate(4 3)" d="M13.5 1.5 4.5 14.25h6L8.25 22.5 19.5 9.75h-6L13.5 1.5z"/>
 </svg>

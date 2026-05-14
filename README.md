@@ -1,8 +1,12 @@
 # Personalas – HR Hiring Prompts
 
-Static HTML platform with 10 HR hiring prompts. The generated English experience is localized for US teams (`en-US`) with US currency, date, phone, and location examples.
+**Pastaba:** npm paketo vardas repozitorijoje yra `di-promptu-biblioteka` ([package.json](package.json)); produktas / GitHub repo – „Personalas“.
+
+Statinė HTML platforma: 10 HR atrankos promptų. Pasirinkti → kopijuoti → įklijuoti į ChatGPT, Claude ar Gemini. Anglų puslapis lokalizuotas JAV komandoms (`en-US`: valiuta, data, telefonas ir lokacijos pavyzdžiai).
 
 **Live:** [https://ditreneris.github.io/personalas/](https://ditreneris.github.io/personalas/)
+
+**Dokumentacija:** visų doc nuorodų indeksas – [docs/INDEX.md](docs/INDEX.md) (procesas: [docs/process/development.md](docs/process/development.md), saugumas: [docs/security.md](docs/security.md), LT/EN: [docs/language-guidelines-en-lt.md](docs/language-guidelines-en-lt.md)).
 
 ---
 

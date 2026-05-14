@@ -1,11 +1,12 @@
 /**
- * Google Apps Script kodas kontaktų formai
- * 
- * Instrukcijos:
- * 1. Eikite į Google Sheets → Extensions → Apps Script
- * 2. Ištrinkite visą kodą ir įklijuokite šį
- * 3. Išsaugokite ir publikuokite kaip Web App
- * 4. Nukopijuokite Web App URL ir pridėkite į index.html
+ * Google Apps Script – pavyzdinis kodas būsimai kontaktų formai.
+ * Statinei GitHub Pages svetainei neprivaloma: forma čia nėra įjungta.
+ *
+ * Jei įjungsite formą:
+ * 1. Google Sheets → Extensions → Apps Script
+ * 2. Įklijuokite šį kodą, išsaugokite, publikuokite kaip Web App
+ * 3. Web App URL įdėkite į formos `action` ar fetch iš index.html
+ * Žr. taip pat [INTEGRACIJA.md](INTEGRACIJA.md).
  */
 
 function doPost(e) {

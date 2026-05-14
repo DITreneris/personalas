@@ -30,5 +30,9 @@ jobs:
           npx wait-on -t 60000 http://127.0.0.1:3000/
           npx pa11y http://127.0.0.1:3000/ --config .pa11yrc.json
           npx pa11y http://127.0.0.1:3000/privatumas.html --config .pa11yrc.json
+          npx pa11y http://127.0.0.1:3000/lt/ --config .pa11yrc.json
+          npx pa11y http://127.0.0.1:3000/en/ --config .pa11yrc.json
+          npx pa11y http://127.0.0.1:3000/lt/privatumas.html --config .pa11yrc.json
+          npx pa11y http://127.0.0.1:3000/en/privatumas.html --config .pa11yrc.json
         env:
           CI: true

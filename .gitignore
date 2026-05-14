@@ -25,6 +25,8 @@ Desktop.ini
 # ─── Development docs & markdown (ne į repo) ───
 *.md
 !README.md
+!CHANGELOG.md
+!INTEGRACIJA.md
 docs/
 
 # ─── Temporary & build ───

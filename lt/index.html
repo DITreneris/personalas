@@ -86,11 +86,17 @@
             --cta-hero-hover-bg: #F0FDF4;
             --cta-hero-hover-text: #0B6B2D;
 
-            /* Tertiarinė (bibliotekos identitetas) – teal */
-            --tertiary: #0D9488;
-            --tertiary-dark: #0a5c54;
-            --tertiary-hover: #0f766e;
-            --tertiary-light: #CCFBF1;
+            /* Prompt Anatomy (motina) – frontend/src/index.css @theme + favicon gradient */
+            --brand-prompt-anatomy-dark: #0b1320;
+            --brand-prompt-anatomy: #103b5a;
+            --brand-prompt-anatomy-accent: #cfa73a;
+            --brand-prompt-anatomy-accent-hover: #e8b93c;
+
+            /* Tertiarinė – PA ekosistemos akcentas (--color-ecosystem-1), ne HR žalia */
+            --tertiary: #2e9e7e;
+            --tertiary-dark: #1f6d5c;
+            --tertiary-hover: #27856d;
+            --tertiary-light: #e8f5f1;
 
             /* Semantiniai – suderinti su žalia palete */
             --blue: #3C485A;
@@ -259,11 +265,15 @@
             text-decoration: none;
             cursor: pointer;
             background: rgba(255, 255, 255, 0.17);
+            box-shadow:
+                0 1px 4px rgba(0, 0, 0, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.22),
+                0 0 0 1px rgba(207, 167, 58, 0.5);
         }
         .header-badges a.badge:hover,
         .header-badges a.badge:focus-visible {
             background: rgba(255, 255, 255, 0.28);
-            outline: 2px solid white;
+            outline: 2px solid var(--brand-prompt-anatomy-accent);
             outline-offset: 2px;
         }
 
@@ -850,6 +860,116 @@
             box-shadow: 0 1px 3px rgba(60, 72, 90, 0.08);
         }
 
+        /* ===== FAQ (prieš startą) ===== */
+        .faq {
+            background: var(--white);
+            border: var(--border-width) solid var(--border-subtle);
+            border-radius: var(--r-card);
+            padding: var(--space-28) var(--space-32);
+            margin-bottom: var(--space-32);
+            box-shadow: var(--shadow-card);
+        }
+
+        .faq h2 {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--accent-dark);
+            margin-bottom: var(--space-12);
+            display: flex;
+            align-items: center;
+            gap: var(--space-12);
+        }
+
+        .faq-intro {
+            font-size: 16px;
+            color: var(--text-light);
+            margin-bottom: var(--space-24);
+            line-height: 1.55;
+        }
+
+        .faq dl {
+            margin: 0;
+        }
+
+        .faq dt {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text);
+            margin-top: var(--space-20);
+            margin-bottom: var(--space-8);
+        }
+
+        .faq dt:first-of-type {
+            margin-top: 0;
+        }
+
+        .faq dd {
+            margin: 0;
+            padding: 0 0 0 var(--space-12);
+            border-left: 3px solid var(--tertiary);
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--text-light);
+        }
+
+        /* ===== Šuolis į promptą (1–10) ===== */
+        .jump-nav {
+            background: linear-gradient(180deg, var(--blue-light) 0%, var(--white) 100%);
+            border: var(--border-width) solid var(--border-subtle);
+            border-radius: var(--r-card);
+            padding: var(--space-24) var(--space-28);
+            margin-bottom: var(--space-32);
+            box-shadow: var(--shadow-card);
+        }
+
+        .jump-nav h2 {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--accent-dark);
+            margin-bottom: var(--space-12);
+        }
+
+        .jump-nav-intro {
+            font-size: 15px;
+            color: var(--text-light);
+            margin-bottom: var(--space-16);
+            line-height: 1.5;
+        }
+
+        .jump-nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px 14px;
+        }
+
+        .jump-nav a {
+            display: inline-flex;
+            align-items: center;
+            min-height: 44px;
+            padding: 8px 14px;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--accent-primary);
+            text-decoration: none;
+            border-radius: var(--r-btn);
+            border: 1px solid rgba(14, 122, 51, 0.35);
+            background: var(--white);
+            transition: background var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out);
+        }
+
+        .jump-nav a:hover {
+            background: var(--orange-light);
+            border-color: var(--accent-primary);
+        }
+
+        .jump-nav a:focus-visible {
+            outline: 3px solid var(--accent-gold);
+            outline-offset: 2px;
+        }
+
         /* ===== LEARNING OBJECTIVES (M1) – elevation, premium ritmas ===== */
         .objectives {
             background: linear-gradient(180deg, var(--white) 0%, #FAFBFC 100%);
@@ -1020,7 +1140,7 @@
             align-items: center;
             background: var(--tertiary-light);
             color: var(--tertiary-dark);
-            border: var(--border-width) solid rgba(13, 148, 136, 0.35);
+            border: var(--border-width) solid rgba(46, 158, 126, 0.35);
             border-radius: var(--r-badge);
             font-size: 12px;
             font-weight: 700;
@@ -1125,7 +1245,7 @@
         /* Info box – subtilus tint, small caps title, icon su circle */
         .info-box {
             background: rgba(204, 251, 241, 0.4);
-            border: 1px solid rgba(13, 148, 136, 0.12);
+            border: 1px solid rgba(46, 158, 126, 0.12);
             border-radius: var(--r-btn);
             padding: var(--space-24) var(--space-24);
             display: flex;
@@ -1142,7 +1262,7 @@
         .info-item + .info-item {
             margin-top: 20px;
             padding-top: 20px;
-            border-top: 1px solid rgba(13, 148, 136, 0.15);
+            border-top: 1px solid rgba(46, 158, 126, 0.15);
         }
 
         .info-icon {
@@ -1155,7 +1275,7 @@
             min-width: 32px;
             min-height: 32px;
             border-radius: 50%;
-            background: rgba(13, 148, 136, 0.15);
+            background: rgba(46, 158, 126, 0.15);
         }
         .info-icon .icon {
             color: var(--tertiary-dark);
@@ -1418,7 +1538,7 @@
         /* ===== KAS TOLIAU (S2) ===== */
         .next-steps {
             background: var(--white);
-            border: var(--border-width) solid rgba(13, 148, 136, 0.25);
+            border: var(--border-width) solid rgba(46, 158, 126, 0.28);
             border-radius: var(--r-card);
             padding: var(--space-24) var(--space-32);
             margin-bottom: var(--space-32);
@@ -1451,7 +1571,7 @@
             padding: 16px 18px;
             min-height: 44px;
             line-height: 24px;
-            background: #008579; /* WCAG2AA 4.5:1 su baltu tekstu */
+            background: var(--tertiary); /* PA ecosystem-1; WCAG2AA su baltu tekstu */
             color: white;
             text-decoration: none;
             border-radius: var(--r-btn);
@@ -1461,11 +1581,11 @@
         }
 
         .next-steps-links a:hover {
-            background: #006d62;
+            background: var(--tertiary-dark);
         }
 
         .next-steps-links a:focus-visible {
-            outline: 3px solid var(--accent-gold);
+            outline: 3px solid var(--brand-prompt-anatomy-accent);
             outline-offset: 2px;
         }
 
@@ -1581,30 +1701,30 @@
             outline-offset: 2px;
         }
 
-        /* Antrinis CTA – outline, ne konkuruoja su pagrindiniu */
+        /* Antrinis CTA – Prompt Anatomy (motinos brendas), ne HR žalia */
         .community-cta-secondary {
             display: inline-flex;
             align-items: center;
             margin-top: 16px;
             padding: 12px 20px;
-            border: 2px solid var(--accent-dark);
+            border: 2px solid var(--brand-prompt-anatomy);
             border-radius: var(--r-btn);
             font-size: 16px;
             font-weight: 600;
-            color: var(--accent-dark);
+            color: var(--brand-prompt-anatomy);
             background: transparent;
             text-decoration: none;
             transition: background 0.2s, color 0.2s, border-color 0.2s;
         }
 
         .community-cta-secondary:hover {
-            background: var(--blue-light);
-            color: var(--text);
-            border-color: var(--text);
+            background: rgba(207, 167, 58, 0.14);
+            color: var(--brand-prompt-anatomy-dark);
+            border-color: var(--brand-prompt-anatomy-accent);
         }
 
         .community-cta-secondary:focus-visible {
-            outline: 3px solid var(--accent-gold);
+            outline: 3px solid var(--brand-prompt-anatomy-accent);
             outline-offset: 2px;
         }
 
@@ -1637,7 +1757,7 @@
             margin-bottom: 24px;
         }
         .footer-product-link a {
-            color: #008579; /* WCAG2AA 4.5:1 ant šviesaus fono */
+            color: var(--brand-prompt-anatomy); /* PA navy; WCAG2AA ant šviesaus fono */
             font-weight: 700;
             text-decoration: none;
             text-underline-offset: 3px;
@@ -1646,7 +1766,8 @@
         .footer-product-link a:hover,
         .footer-product-link a:focus-visible {
             text-decoration: underline;
-            outline: 2px solid #008579;
+            color: var(--brand-prompt-anatomy-dark);
+            outline: 2px solid var(--brand-prompt-anatomy-accent);
             outline-offset: 2px;
         }
 
@@ -1856,6 +1977,15 @@
                 bottom: 16px;
             }
 
+            .faq,
+            .jump-nav {
+                padding: 20px 16px;
+            }
+
+            .jump-nav ul {
+                flex-direction: column;
+            }
+
             /* Checkbox tap area mobilėje: ≥44px, vizualiai 24px (WCAG) */
             .prompt-done-wrap {
                 min-height: 44px;
@@ -2034,9 +2164,28 @@
             <ol>
                 <li>Pasirink fazę, paspausk ir atidaryk. Tada pasirink konkretų promptą.</li>
                 <li>Spausk <strong>„Kopijuoti promptą“</strong> arba <code>Ctrl+C</code> / <code>Cmd+C</code> ant pasirinkto prompto.</li>
-                <li>Įklijuok į ChatGPT, Claude ar kitą DI (dirbtinio intelekto) įrankį.</li>
+                <li>Įklijuok į ChatGPT, Claude, Gemini ar kitą DI (dirbtinio intelekto) įrankį.</li>
                 <li>Jei prompte yra <code>[įmonė]</code>, <code>[pozicija]</code>, <code>[atlygis]</code>, <code>[ ]</code> ar kiti laukai – pakeisk savo duomenimis. DI vaidmens („Tu esi…“) keisti nereikia.</li>
             </ol>
+        </section>
+
+        <section class="faq" aria-labelledby="faq-title">
+            <h2 id="faq-title"><span class="icon-wrap" aria-hidden="true"><i data-lucide="help-circle" class="icon icon--md"></i></span> Dažniausi klausimai prieš startą</h2>
+            <p class="faq-intro">Trumpai – ką verta žinoti prieš kopijuojant pirmą promptą.</p>
+            <dl>
+                <dt>Ar būtina eiti visas 6 fazes iš eilės?</dt>
+                <dd>Ne, bet seka atspindi pilną atrankos ciklą nuo diagnostikos iki išlaikymo. Dažniausiai verta pradėti nuo 1 fazės ir judėti pagal savo situaciją.</dd>
+                <dt>Ar reikia keisti eilutę „Tu esi…“ prompto pradžioje?</dt>
+                <dd>Ne. Keisk tik laukus laužtiniuose skliaustuose ir skaičius – DI vaidmuo jau suformuluotas taip, kad gautum aiškų rezultatą.</dd>
+                <dt>Ar tai klausimynas ar automatinė atrankų sistema (ATS)?</dt>
+                <dd>Ne. Tai tekstai, kuriuos nukopijuoji ir įklijuoji į savo DI įrankį – joks serveris nevykdo atrankos už tave.</dd>
+                <dt>Kiek laiko užtrunka vienas žingsnis?</dt>
+                <dd>Orientaciniai ~3–5 minutės pasiruošimui ir kopijavimui; pats pokalbis su DI priklauso nuo tavo klausimų ir atsakymų.</dd>
+                <dt>Ar tinka mažai įmonei ar HR vienui?</dt>
+                <dd>Taip. Promptai universalesni – svarbu pildyti laukus savo kontekstu, ne bendromis frazėmis.</dd>
+                <dt>Ar galiu naudoti tik vieną ar kelis promptus?</dt>
+                <dd>Taip. Gali pradėti nuo vienos problemos (pvz. skelbimo ar pokalbio) ir grįžti prie kitų vėliau.</dd>
+            </dl>
         </section>
 
         <!-- PROGRESS INDICATOR (S1) – Sistema: X / 6 fazės -->
@@ -2046,6 +2195,23 @@
                 <div class="progress-bar-fill" id="progressBarFill" style="width: 0%;"></div>
             </div>
         </div>
+
+        <nav class="jump-nav" aria-labelledby="jump-nav-title">
+            <h2 id="jump-nav-title">Kas toliau?</h2>
+            <p class="jump-nav-intro">Geriausia eiti iš eilės nuo 1 iki 10. Paspaudę nuorodą pereisi prie atitinkamo prompto.</p>
+            <ul>
+                <li><a href="#block1">1. Kur stringame?</a></li>
+                <li><a href="#block2">2. Koks žmogus mums iš tikrųjų tinka?</a></li>
+                <li><a href="#block3">3. Perrašyk darbo skelbimą paprastai</a></li>
+                <li><a href="#block4">4. Kaip šiandien rasti daugiau žmonių?</a></li>
+                <li><a href="#block5">5. Kaip geriau pravesti pokalbį?</a></li>
+                <li><a href="#block6">6. Kodėl kandidatai atsisako?</a></li>
+                <li><a href="#block7">7. Kaip geriau pristatyti pasiūlymą?</a></li>
+                <li><a href="#block8">8. Kaip padėti naujam žmogui pirmus 3 mėnesius?</a></li>
+                <li><a href="#block9">9. Kodėl žmonės išeina?</a></li>
+                <li><a href="#block10">10. Pagrindinis promptas (vienas viskam)</a></li>
+            </ul>
+        </nav>
 
         <!-- PROMPT 1 – FAZĖ 1 Diagnostika -->
         <article class="prompt" data-phase="1">
@@ -2721,7 +2887,7 @@ Be sudėtingų terminų.</pre>
 
         <section class="community" id="community" aria-labelledby="community-title">
             <h2 id="community-title">Sistema sukurta.<br>Nori daugiau?</h2>
-            <a href="https://chat.whatsapp.com/It49fzTl1n90huRCoWWkwu?mode=gi_t" class="community-cta-primary" target="_blank" rel="noopener noreferrer" aria-label="Atidaryti Promptų anatomija WhatsApp grupę naujame lange">Prisijungti prie WhatsApp grupės</a>
+            <a href="https://t.me/prompt_anatomy" class="community-cta-primary" target="_blank" rel="noopener noreferrer" aria-label="Atidaryti Promptų anatomija Telegram kanalą naujame lange">Prisijungti prie Telegram grupės</a>
             <a href="https://www.promptanatomy.app/" class="community-cta-secondary" target="_blank" rel="noopener noreferrer" aria-label="Pilna Promptų anatomija – interaktyvus mokymas (atidaroma naujame lange)">Promptų anatomija →</a>
         </section>
 

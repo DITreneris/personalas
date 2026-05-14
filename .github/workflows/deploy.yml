@@ -28,7 +28,6 @@ jobs:
         with:
           node-version: '20'
       - run: npm install
-      - run: npm run build
       - run: npm test
 
   deploy:
@@ -47,6 +46,9 @@ jobs:
       - run: npm run build
         env:
           BASE_PATH: /${{ github.event.repository.name }}/
+      - name: Strip node_modules from Pages artifact
+        run: rm -rf node_modules
+        shell: bash
       - uses: actions/upload-pages-artifact@v3
         with:
           path: .

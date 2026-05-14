@@ -75,6 +75,8 @@ function run() {
   else failed++;
   if (assert(html.includes('privatumas.html'), 'Nuoroda į privatumas.html')) passed++;
   else failed++;
+  if (assert(html.includes('t.me/prompt_anatomy'), 'Telegram bendruomenė (t.me/prompt_anatomy)')) passed++;
+  else failed++;
 
   // --- Konfigūracija ir kritinės funkcijos ---
   if (assert(html.includes('generator.js'), 'generator.js prijungtas')) passed++;
