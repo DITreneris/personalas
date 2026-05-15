@@ -1,4 +1,4 @@
-# GitHub Pages deploy – statinė DI Promptų Biblioteka
+# GitHub Pages deploy – Personalas (statinė svetainė)
 # Reikalavimas: Repo Settings → Pages → Build and deployment: GitHub Actions
 # Nuoroda: https://github.com/DITreneris/spinoff01 (QA standartas)
 
@@ -21,15 +21,23 @@ concurrency:
 jobs:
   test:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
-          node-version: '20'
+          node-version: '22'
       - run: npm install
-      - run: npm run build
-      - run: npm test
+      - name: Run tests (retry on validator.nu flakiness)
+        uses: nick-fields/retry@v4
+        with:
+          timeout_minutes: 15
+          max_attempts: 5
+          retry_wait_seconds: 40
+          command: npm test
+        env:
+          BASE_PATH: /${{ github.event.repository.name }}/
+          SITE_ORIGIN: https://ditreneris.github.io
 
   deploy:
     needs: test
@@ -39,14 +47,18 @@ jobs:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
-          node-version: '20'
+          node-version: '22'
       - run: npm install
       - run: npm run build
         env:
           BASE_PATH: /${{ github.event.repository.name }}/
+          SITE_ORIGIN: https://ditreneris.github.io
+      - name: Strip node_modules from Pages artifact
+        run: rm -rf node_modules
+        shell: bash
       - uses: actions/upload-pages-artifact@v3
         with:
           path: .

@@ -73,11 +73,17 @@ html {
     --cta-hero-hover-bg: #F0FDF4;
     --cta-hero-hover-text: #0B6B2D;
 
-    /* Tertiarinė (bibliotekos identitetas) – teal */
-    --tertiary: #0D9488;
-    --tertiary-dark: #0a5c54;
-    --tertiary-hover: #0f766e;
-    --tertiary-light: #CCFBF1;
+    /* Prompt Anatomy (motina) – ekosistemos akcentas */
+    --brand-prompt-anatomy-dark: #0b1320;
+    --brand-prompt-anatomy: #103b5a;
+    --brand-prompt-anatomy-accent: #cfa73a;
+    --brand-prompt-anatomy-accent-hover: #e8b93c;
+
+    /* Tertiarinė – PA ekosistemos akcentas */
+    --tertiary: #2e9e7e;
+    --tertiary-dark: #1f6d5c;
+    --tertiary-hover: #27856d;
+    --tertiary-light: #e8f5f1;
 
     /* Semantiniai – suderinti su žalia palete */
     --blue: #3C485A;

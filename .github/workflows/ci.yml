@@ -9,20 +9,29 @@ on:
 jobs:
   lint-and-test:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: Install dependencies
         run: npm install
 
-      - name: Run tests (structure + lint)
-        run: npm test
+      # retry@v4 runs on Node 24 (avoids actions/checkout@v4 Node 20 deprecation noise).
+      - name: Run tests (structure + lint; retry on validator.nu flakiness)
+        uses: nick-fields/retry@v4
+        with:
+          timeout_minutes: 15
+          max_attempts: 5
+          retry_wait_seconds: 40
+          command: npm test
+        env:
+          BASE_PATH: /${{ github.event.repository.name }}/
+          SITE_ORIGIN: https://ditreneris.github.io
 
       - name: Accessibility check (pa11y)
         run: |
@@ -30,5 +39,9 @@ jobs:
           npx wait-on -t 60000 http://127.0.0.1:3000/
           npx pa11y http://127.0.0.1:3000/ --config .pa11yrc.json
           npx pa11y http://127.0.0.1:3000/privatumas.html --config .pa11yrc.json
+          npx pa11y http://127.0.0.1:3000/lt/ --config .pa11yrc.json
+          npx pa11y http://127.0.0.1:3000/en/ --config .pa11yrc.json
+          npx pa11y http://127.0.0.1:3000/lt/privatumas.html --config .pa11yrc.json
+          npx pa11y http://127.0.0.1:3000/en/privatumas.html --config .pa11yrc.json
         env:
           CI: true

@@ -4,11 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     
-    <link rel="canonical" href="/lt/">
-    <link rel="alternate" hreflang="lt" href="/lt/">
-    <link rel="alternate" hreflang="en" href="/en/">
-    <link rel="alternate" hreflang="x-default" href="/lt/">
-<title>HR kasdienė atrankos sistema – DI promptai</title>
+    <link rel="canonical" href="https://promptanatomy.help/lt/">
+    <link rel="alternate" hreflang="lt" href="https://promptanatomy.help/lt/">
+    <link rel="alternate" hreflang="en-US" href="https://promptanatomy.help/en/">
+    <link rel="alternate" hreflang="x-default" href="https://promptanatomy.help/en/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="HR kasdienė atrankos sistema – DI promptai">
+    <meta property="og:description" content="Dešimt DI promptų HR atrankai: diagnostika, profilis, skelbimas, šaltiniai, pokalbiai, pasiūlymas. Kopijuok į ChatGPT arba Claude – praktinė sistema per ~30 min.">
+    <meta property="og:url" content="https://promptanatomy.help/lt/">
+    <meta property="og:locale" content="lt_LT">
+    <meta property="og:locale:alternate" content="en_US">
+    <meta property="og:image" content="https://promptanatomy.help/images/og-default.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:type" content="image/png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="HR kasdienė atrankos sistema – DI promptai">
+    <meta name="twitter:description" content="Dešimt DI promptų HR atrankai: diagnostika, profilis, skelbimas, šaltiniai, pokalbiai, pasiūlymas. Kopijuok į ChatGPT arba Claude – praktinė sistema per ~30 min.">
+    <meta name="twitter:image" content="https://promptanatomy.help/images/og-default.png">
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","name":"Personalas – HR DI promptų rinkinys","url":"https://promptanatomy.help/","inLanguage":["lt"]},{"@type":"Organization","name":"Promptų anatomija","url":"https://promptanatomy.help/","sameAs":["https://t.me/prompt_anatomy"]}]}</script>
+<meta name="description" content="Dešimt DI promptų HR atrankai: diagnostika, profilis, skelbimas, šaltiniai, pokalbiai, pasiūlymas. Kopijuok į ChatGPT arba Claude – praktinė sistema per ~30 min.">
+    <title>HR kasdienė atrankos sistema – DI promptai</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="stylesheet" href="../assets/styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,6 +35,103 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+
+        :root {
+            /* Spin-off Nr. 3 – HR atranka, žalia CTA paletė */
+            --bg: #F7F8FA;
+            --white: #FFFFFF;
+            --text: #1A202C;
+            --text-light: #4A5568;
+            --border: #CBD5E0;
+
+            /* Design tokens – premium SaaS (C-level) */
+            --r-card: 16px;
+            --r-btn: 12px;
+            --r-badge: 10px;
+            --r-hero: 24px;
+            --border-width: 1px;
+            --border-subtle: rgba(203, 213, 224, 0.6);
+            --border-subtle-dark: rgba(60, 72, 90, 0.15);
+            --shadow-soft: 0 2px 8px rgba(60, 72, 90, 0.06), 0 1px 2px rgba(60, 72, 90, 0.04);
+            --shadow-medium: 0 4px 16px rgba(60, 72, 90, 0.08), 0 2px 4px rgba(60, 72, 90, 0.04);
+            --shadow-elevated: 0 10px 30px rgba(0, 0, 0, 0.06), 0 4px 12px rgba(0, 0, 0, 0.03);
+            --shadow-card: var(--shadow-soft);
+            --shadow-card-hover: var(--shadow-medium);
+            --space-8: 8px;
+            --space-12: 12px;
+            --space-16: 16px;
+            --space-20: 20px;
+            --space-24: 24px;
+            --space-28: 28px;
+            --space-32: 32px;
+
+            /* Motion – C-level (nuoseklus ritmas) */
+            --duration-fast: 150ms;
+            --duration-normal: 250ms;
+            --duration-slow: 400ms;
+            --ease-out: cubic-bezier(0.33, 1, 0.68, 1);
+            --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+            /* Tipografija – leading */
+            --leading-tight: 1.25;
+            --leading-normal: 1.5;
+            --leading-relaxed: 1.6;
+
+            /* Pagrindinis akcentas – žalia; WCAG2AA 4.5:1 */
+            --accent-primary: #0E7A33;
+            --accent-primary-hover: #0B6B2D;
+            --accent-gold: #0E7A33;
+            --accent-gold-dark: #0B6B2D;
+
+            /* Antrinis akcentas (tamsiai pilka) – hero, outline mygtukai */
+            --accent-dark: #3C485A;
+            --accent-dark-hover: #2D3848;
+
+            /* Hero: žalia, ~15–20% mažesnė saturacija – ramus, autoritetingas HR, ne fintech */
+            --hero-gradient-start: #1e6b42;
+            --hero-gradient-mid: #2a7a52;
+            --hero-gradient-end: #4a9572;
+            --cta-bg: #0E7A33;
+            --cta-text: #FFFFFF;
+            --cta-hover: var(--accent-primary-hover);
+
+            /* Hero pagrindinis CTA – baltas mygtukas, žalias tekstas (akys per <1 s) */
+            --cta-hero-bg: #FFFFFF;
+            --cta-hero-text: #0B6B2D;
+            --cta-hero-hover-bg: #F0FDF4;
+            --cta-hero-hover-text: #0B6B2D;
+
+            /* Prompt Anatomy (motina) – frontend/src/index.css @theme + favicon gradient */
+            --brand-prompt-anatomy-dark: #0b1320;
+            --brand-prompt-anatomy: #103b5a;
+            --brand-prompt-anatomy-accent: #cfa73a;
+            --brand-prompt-anatomy-accent-hover: #e8b93c;
+
+            /* Tertiarinė – PA ekosistemos akcentas (--color-ecosystem-1), ne HR žalia */
+            --tertiary: #2e9e7e;
+            --tertiary-dark: #1f6d5c;
+            --tertiary-hover: #27856d;
+            --tertiary-light: #e8f5f1;
+
+            /* Semantiniai – suderinti su žalia palete */
+            --blue: #3C485A;
+            --blue-light: #E8ECF0;
+            --orange: #0E7A33;
+            --orange-light: #ECFDF5;
+            --green: #38A169;
+            --green-dark: #2F855A;
+            --error: #E53E3E;
+            --bg-subtle: #F7FAFC;
+
+            /* Community CTA – suderinta su žalia tema */
+            --community-cta-green: #0E7A33;
+            --community-cta-green-hover: #0B6B2D;
+
+            /* Lucide ikonų dydžiai – premium SaaS */
+            --icon-size-sm: 16px;
+            --icon-size-md: 20px;
+            --icon-size-lg: 24px;
         }
 
         /* Lucide ikonos – nuoseklus stilius */
@@ -168,11 +281,15 @@
             text-decoration: none;
             cursor: pointer;
             background: rgba(255, 255, 255, 0.17);
+            box-shadow:
+                0 1px 4px rgba(0, 0, 0, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.22),
+                0 0 0 1px rgba(207, 167, 58, 0.5);
         }
         .header-badges a.badge:hover,
         .header-badges a.badge:focus-visible {
             background: rgba(255, 255, 255, 0.28);
-            outline: 2px solid white;
+            outline: 2px solid var(--brand-prompt-anatomy-accent);
             outline-offset: 2px;
         }
 
@@ -225,6 +342,9 @@
         .header-phase-link {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+            min-height: 44px;
             padding: 6px 12px;
             border-radius: 999px;
             border: 1px solid rgba(255, 255, 255, 0.45);
@@ -372,6 +492,16 @@
             color: var(--cta-hero-text);
             background: var(--cta-hero-bg);
             border-color: rgba(255, 255, 255, 0.5);
+        }
+        .lang-btn:disabled {
+            cursor: default;
+        }
+        .lang-btn:disabled:hover,
+        .lang-btn:disabled:focus-visible {
+            color: var(--cta-hero-text);
+            background: var(--cta-hero-bg);
+            border-color: rgba(255, 255, 255, 0.5);
+            outline: none;
         }
 
         .cta-button:hover {
@@ -705,7 +835,7 @@
             border: 1px solid rgba(14, 122, 51, 0.25);
             border-radius: var(--r-card);
             padding: var(--space-28) var(--space-32);
-            margin-bottom: var(--space-32);
+            margin-bottom: var(--space-24);
             box-shadow: var(--shadow-medium), 0 1px 0 rgba(255, 255, 255, 0.6) inset;
         }
 
@@ -716,7 +846,22 @@
             margin-bottom: var(--space-24);
             display: flex;
             align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
             gap: var(--space-12);
+        }
+
+        .instructions-title-main {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-12);
+            flex: 1 1 auto;
+            min-width: min(100%, 12rem);
+        }
+
+        .instructions-title-meta {
+            flex-shrink: 0;
+            margin-left: auto;
         }
 
         .instructions ol {
@@ -728,11 +873,49 @@
         .instructions li {
             font-size: 18px;
             margin-bottom: var(--space-16);
-            line-height: 1.6;
+            line-height: 1.65;
             color: var(--text);
             position: relative;
             padding-left: var(--space-12);
             counter-increment: item;
+        }
+
+        .instructions-li-stack {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-12);
+            align-items: stretch;
+        }
+
+        .instructions-li-lead {
+            display: block;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .instructions-subcard {
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid rgba(14, 122, 51, 0.14);
+            border-radius: var(--r-btn);
+            padding: var(--space-16) var(--space-20);
+            box-shadow: none;
+        }
+
+        .instructions-subrow {
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--text);
+            margin: 0 0 var(--space-12) 0;
+        }
+
+        .instructions-subrow:last-child {
+            margin-bottom: 0;
+        }
+
+        .instructions-subrow strong {
+            font-weight: 800;
+            color: var(--accent-dark);
+            margin-right: 4px;
         }
 
         .instructions li::before {
@@ -744,19 +927,174 @@
             font-size: 20px;
         }
 
-        /* kbd/code – vienoda UI kalba (ne raw tag) */
+        /* kbd/code – „quiet tokens“ tik instrukcijų bloke */
         .instructions code {
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid rgba(14, 122, 51, 0.2);
-            padding: 10px 18px;
-            min-height: 40px;
-            border-radius: var(--r-badge);
+            background: rgba(255, 255, 255, 0.65);
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            padding: 2px 8px;
+            min-height: 0;
+            border-radius: 8px;
             font-family: 'JetBrains Mono', monospace;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
             color: var(--accent-dark);
-            line-height: 1.4;
-            box-shadow: 0 1px 3px rgba(60, 72, 90, 0.08);
+            line-height: 1.45;
+            box-shadow: none;
+            vertical-align: baseline;
+        }
+
+        /* ===== FAQ (prieš startą) – kanoninė kalba EN, <details> ===== */
+        .faq {
+            background: var(--white);
+            border: var(--border-width) solid var(--border-subtle);
+            border-radius: var(--r-card);
+            padding: var(--space-28) var(--space-32);
+            margin-bottom: var(--space-32);
+            box-shadow: var(--shadow-card);
+        }
+
+        .faq h2 {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--accent-dark);
+            margin-bottom: var(--space-12);
+            display: flex;
+            align-items: center;
+            gap: var(--space-12);
+        }
+
+        .faq-intro {
+            font-size: 16px;
+            color: var(--text-light);
+            margin-bottom: var(--space-20);
+            line-height: 1.55;
+        }
+
+        .faq-details {
+            margin-bottom: var(--space-8);
+            border: var(--border-width) solid var(--border-subtle);
+            border-radius: var(--r-btn);
+            background: var(--bg-subtle);
+            overflow: hidden;
+        }
+
+        .faq-details:last-child {
+            margin-bottom: 0;
+        }
+
+        .faq-summary {
+            list-style: none;
+            cursor: pointer;
+            padding: var(--space-16) var(--space-20);
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text);
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            gap: var(--space-12);
+            user-select: none;
+        }
+
+        .faq-summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .faq-summary::after {
+            content: '';
+            margin-left: auto;
+            width: 10px;
+            height: 10px;
+            border-right: 2px solid var(--accent-dark);
+            border-bottom: 2px solid var(--accent-dark);
+            transform: rotate(45deg);
+            transition: transform var(--duration-normal) var(--ease-out);
+            flex-shrink: 0;
+        }
+
+        .faq-details[open] .faq-summary::after {
+            transform: rotate(-135deg);
+        }
+
+        .faq-summary:hover {
+            background: rgba(46, 158, 126, 0.08);
+        }
+
+        .faq-summary:focus-visible {
+            outline: 3px solid var(--brand-prompt-anatomy-accent);
+            outline-offset: 2px;
+        }
+
+        .faq-panel {
+            padding: 0 var(--space-20) var(--space-16);
+            padding-left: calc(var(--space-20) + var(--space-12));
+            border-left: 3px solid var(--tertiary);
+            margin-left: var(--space-20);
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--text-light);
+        }
+
+        .faq-details[open] .faq-summary {
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        /* ===== Šuolis į promptą (1–10) ===== */
+        .jump-nav {
+            background: linear-gradient(180deg, var(--blue-light) 0%, var(--white) 100%);
+            border: var(--border-width) solid var(--border-subtle);
+            border-radius: var(--r-card);
+            padding: var(--space-24) var(--space-28);
+            margin-bottom: var(--space-32);
+            box-shadow: var(--shadow-card);
+        }
+
+        .jump-nav h2 {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--accent-dark);
+            margin-bottom: var(--space-12);
+        }
+
+        .jump-nav-intro {
+            font-size: 15px;
+            color: var(--text-light);
+            margin-bottom: var(--space-16);
+            line-height: 1.5;
+        }
+
+        .jump-nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px 14px;
+        }
+
+        .jump-nav a {
+            display: inline-flex;
+            align-items: center;
+            min-height: 44px;
+            padding: 8px 14px;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--accent-primary);
+            text-decoration: none;
+            border-radius: var(--r-btn);
+            border: 1px solid rgba(14, 122, 51, 0.35);
+            background: var(--white);
+            transition: background var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out);
+        }
+
+        .jump-nav a:hover {
+            background: var(--orange-light);
+            border-color: var(--accent-primary);
+        }
+
+        .jump-nav a:focus-visible {
+            outline: 3px solid var(--accent-gold);
+            outline-offset: 2px;
         }
 
         /* ===== LEARNING OBJECTIVES (M1) – elevation, premium ritmas ===== */
@@ -849,7 +1187,7 @@
             color: var(--text);
         }
 
-        /* Badge sistemos dalis – vienodas stilius su .badge */
+        /* Badge sistemos dalis – prompt kortelėse */
         .prompt-time {
             display: inline-flex;
             align-items: center;
@@ -862,6 +1200,19 @@
             border-radius: var(--r-badge);
             margin-left: var(--space-12);
             border: var(--border-width) solid var(--border-subtle);
+        }
+
+        .instructions-title .prompt-time {
+            margin-left: 0;
+            padding: 4px 10px;
+            min-height: 0;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-light);
+            background: rgba(255, 255, 255, 0.55);
+            border: 1px solid rgba(14, 122, 51, 0.12);
+            border-radius: 8px;
+            box-shadow: none;
         }
 
         /* ===== PROMPT CARD (PromptCard) ===== */
@@ -929,7 +1280,7 @@
             align-items: center;
             background: var(--tertiary-light);
             color: var(--tertiary-dark);
-            border: var(--border-width) solid rgba(13, 148, 136, 0.35);
+            border: var(--border-width) solid rgba(46, 158, 126, 0.35);
             border-radius: var(--r-badge);
             font-size: 12px;
             font-weight: 700;
@@ -1034,7 +1385,7 @@
         /* Info box – subtilus tint, small caps title, icon su circle */
         .info-box {
             background: rgba(204, 251, 241, 0.4);
-            border: 1px solid rgba(13, 148, 136, 0.12);
+            border: 1px solid rgba(46, 158, 126, 0.12);
             border-radius: var(--r-btn);
             padding: var(--space-24) var(--space-24);
             display: flex;
@@ -1051,7 +1402,7 @@
         .info-item + .info-item {
             margin-top: 20px;
             padding-top: 20px;
-            border-top: 1px solid rgba(13, 148, 136, 0.15);
+            border-top: 1px solid rgba(46, 158, 126, 0.15);
         }
 
         .info-icon {
@@ -1064,7 +1415,7 @@
             min-width: 32px;
             min-height: 32px;
             border-radius: 50%;
-            background: rgba(13, 148, 136, 0.15);
+            background: rgba(46, 158, 126, 0.15);
         }
         .info-icon .icon {
             color: var(--tertiary-dark);
@@ -1327,7 +1678,7 @@
         /* ===== KAS TOLIAU (S2) ===== */
         .next-steps {
             background: var(--white);
-            border: var(--border-width) solid rgba(13, 148, 136, 0.25);
+            border: var(--border-width) solid rgba(46, 158, 126, 0.28);
             border-radius: var(--r-card);
             padding: var(--space-24) var(--space-32);
             margin-bottom: var(--space-32);
@@ -1360,7 +1711,7 @@
             padding: 16px 18px;
             min-height: 44px;
             line-height: 24px;
-            background: #008579; /* WCAG2AA 4.5:1 su baltu tekstu */
+            background: var(--tertiary); /* PA ecosystem-1; WCAG2AA su baltu tekstu */
             color: white;
             text-decoration: none;
             border-radius: var(--r-btn);
@@ -1370,11 +1721,11 @@
         }
 
         .next-steps-links a:hover {
-            background: #006d62;
+            background: var(--tertiary-dark);
         }
 
         .next-steps-links a:focus-visible {
-            outline: 3px solid var(--accent-gold);
+            outline: 3px solid var(--brand-prompt-anatomy-accent);
             outline-offset: 2px;
         }
 
@@ -1490,30 +1841,30 @@
             outline-offset: 2px;
         }
 
-        /* Antrinis CTA – outline, ne konkuruoja su pagrindiniu */
+        /* Antrinis CTA – Prompt Anatomy (motinos brendas), ne HR žalia */
         .community-cta-secondary {
             display: inline-flex;
             align-items: center;
             margin-top: 16px;
             padding: 12px 20px;
-            border: 2px solid var(--accent-dark);
+            border: 2px solid var(--brand-prompt-anatomy);
             border-radius: var(--r-btn);
             font-size: 16px;
             font-weight: 600;
-            color: var(--accent-dark);
+            color: var(--brand-prompt-anatomy);
             background: transparent;
             text-decoration: none;
             transition: background 0.2s, color 0.2s, border-color 0.2s;
         }
 
         .community-cta-secondary:hover {
-            background: var(--blue-light);
-            color: var(--text);
-            border-color: var(--text);
+            background: rgba(207, 167, 58, 0.14);
+            color: var(--brand-prompt-anatomy-dark);
+            border-color: var(--brand-prompt-anatomy-accent);
         }
 
         .community-cta-secondary:focus-visible {
-            outline: 3px solid var(--accent-gold);
+            outline: 3px solid var(--brand-prompt-anatomy-accent);
             outline-offset: 2px;
         }
 
@@ -1546,7 +1897,7 @@
             margin-bottom: 24px;
         }
         .footer-product-link a {
-            color: #008579; /* WCAG2AA 4.5:1 ant šviesaus fono */
+            color: var(--brand-prompt-anatomy); /* PA navy; WCAG2AA ant šviesaus fono */
             font-weight: 700;
             text-decoration: none;
             text-underline-offset: 3px;
@@ -1555,7 +1906,8 @@
         .footer-product-link a:hover,
         .footer-product-link a:focus-visible {
             text-decoration: underline;
-            outline: 2px solid #008579;
+            color: var(--brand-prompt-anatomy-dark);
+            outline: 2px solid var(--brand-prompt-anatomy-accent);
             outline-offset: 2px;
         }
 
@@ -1692,6 +2044,15 @@
                 flex-wrap: wrap;
             }
 
+            .instructions-title-meta {
+                width: 100%;
+                margin-left: 0;
+            }
+
+            .instructions-title-meta .prompt-time {
+                margin-left: 0;
+            }
+
             .header {
                 padding: 32px 20px;
             }
@@ -1763,6 +2124,15 @@
                 left: 12px;
                 right: 12px;
                 bottom: 16px;
+            }
+
+            .faq,
+            .jump-nav {
+                padding: 20px 16px;
+            }
+
+            .jump-nav ul {
+                flex-direction: column;
             }
 
             /* Checkbox tap area mobilėje: ≥44px, vizualiai 24px (WCAG) */
@@ -1881,6 +2251,14 @@
                 border: 2px solid #000;
             }
         }
+
+        /* ===== ACCESSIBILITY ===== */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1895,7 +2273,7 @@
                 <span class="badge badge-spinoff" role="status" aria-label="HR kasdienė atrankos sistema, Spin-off Nr. 3">Spin-off Nr. 3</span>
             </div>
             <h1>DI atrankos sistema<br>Personalo vadovui</h1>
-            <p>Veikianti atrankos struktūra per ~30 min.</p>
+            <p>Pagalbinė versija iš Promptų anatomijos ekosistemos — veikianti atrankos struktūra per ~30 min.</p>
             <ul class="header-phases" aria-label="6 sistemos fazės">
                 <li><button type="button" class="header-phase-link is-active" data-phase="1">1. Diagnostika</button></li>
                 <li><button type="button" class="header-phase-link" data-phase="2">2. Profilis</button></li>
@@ -1928,25 +2306,75 @@
         <!-- INSTRUCTIONS -->
         <section class="instructions" aria-labelledby="instructions-title">
             <h2 class="instructions-title" id="instructions-title">
-                <span class="icon-wrap" aria-hidden="true"><i data-lucide="book-open" class="icon icon--md"></i></span>
-                <span>Kaip naudoti šią sistemą</span>
-                <span class="prompt-time" role="status" aria-label="Orientacinis laikas: 3–5 min per žingsnį">~3–5 min per žingsnį</span>
+                <span class="instructions-title-main">
+                    <span class="icon-wrap" aria-hidden="true"><i data-lucide="book-open" class="icon icon--md"></i></span>
+                    <span>Kaip naudoti US atrankos promptų sistemą</span>
+                </span>
+                <span class="instructions-title-meta">
+                    <span class="prompt-time" role="status" aria-label="4 žingsniai, apie 3–5 min vienam žingsniui">4 žingsniai · 3–5 min / žingsnis</span>
+                </span>
             </h2>
             <ol>
-                <li>Pasirink fazę, paspausk ir atidaryk. Tada pasirink konkretų promptą.</li>
-                <li>Spausk <strong>„Kopijuoti promptą“</strong> arba <code>Ctrl+C</code> / <code>Cmd+C</code> ant pasirinkto prompto.</li>
-                <li>Įklijuok į ChatGPT, Claude ar kitą DI (dirbtinio intelekto) įrankį.</li>
-                <li>Jei prompte yra <code>[įmonė]</code>, <code>[pozicija]</code>, <code>[atlygis]</code>, <code>[ ]</code> ar kiti laukai – pakeisk savo duomenimis. DI vaidmens („Tu esi…“) keisti nereikia.</li>
+                <li>Pasirinkite fazę, atidarykite ją, tada pasirinkite konkretų promptą.</li>
+                <li>Spustelėkite <strong>„Kopijuoti promptą“</strong> arba naudokite <code>Ctrl+C</code> / <code>Cmd+C</code> ant pasirinkto prompto.</li>
+                <li>Įklijuokite į ChatGPT, Claude, Gemini ar kitą DI (dirbtinio intelekto) įrankį.</li>
+                <li class="instructions-li-stack"><span class="instructions-li-lead">Jei prompte yra laužtinių laukų, įrašykite savo duomenis.</span><div class="instructions-subcard" role="region" aria-label="Vietininkų pavyzdžiai ir DI vaidmuo"><p class="instructions-subrow"><strong>Pavyzdžiai:</strong> <code>[įmonė]</code>, <code>[pozicija]</code>, <code>[atlygis]</code>, <code>[ ]</code> ir kiti.</p><p class="instructions-subrow"><strong>Pastaba:</strong> DI vaidmens („Tu esi…“) keisti nereikia.</p></div></li>
             </ol>
         </section>
 
-        <!-- PROGRESS INDICATOR (S1) – Sistema: X / 6 fazės -->
+        <section class="faq" lang="lt" aria-labelledby="faq-title">
+            <h2 id="faq-title"><span class="icon-wrap" aria-hidden="true"><i data-lucide="help-circle" class="icon icon--md"></i></span> Dažni klausimai prieš pradedant</h2>
+            <p class="faq-intro">Trumpi atsakymai prieš kopijuojant pirmąjį promptą.</p>
+            <details class="faq-details">
+                <summary class="faq-summary">Ar būtina eiti visas 6 fazes iš eilės?</summary>
+                <div class="faq-panel">Ne, bet seka atspindi visą atrankos ciklą nuo diagnostikos iki išlaikymo. Paprastai geriausia pradėti nuo 1 fazės ir judėti pagal savo situaciją.</div>
+            </details>
+            <details class="faq-details">
+                <summary class="faq-summary">Ar reikia keisti eilutę „Tu esi…“ prompto pradžioje?</summary>
+                <div class="faq-panel">Ne. Keiskite tik laužtiniuose skliaustuose esančius vietininkus ir skaičius – DI vaidmuo jau suformuluotas aiškiam rezultatui.</div>
+            </details>
+            <details class="faq-details">
+                <summary class="faq-summary">Ar tai klausimynas ar kandidatų valdymo sistema (ATS)?</summary>
+                <div class="faq-panel">Ne. Tai tekstai, kuriuos kopijuojate ir įklijuojate į savo DI įrankį – joks serveris neatlieka atrankos už jus.</div>
+            </details>
+            <details class="faq-details">
+                <summary class="faq-summary">Kiek laiko užtrunka vienas žingsnis?</summary>
+                <div class="faq-panel">Maždaug 3–5 minutes pasiruošti ir nukopijuoti; pats pokalbis su DI priklauso nuo jūsų klausimų ir atsakymų.</div>
+            </details>
+            <details class="faq-details">
+                <summary class="faq-summary">Ar tinka mažai įmonei ar vienam HR specialistui?</summary>
+                <div class="faq-panel">Taip. Promptai universūs – svarbu užpildyti vietininkus savo kontekstu, o ne bendrinėmis frazėmis.</div>
+            </details>
+            <details class="faq-details">
+                <summary class="faq-summary">Ar galiu naudoti tik vieną ar kelis promptus?</summary>
+                <div class="faq-panel">Taip. Galite pradėti nuo vienos problemos (pvz., skelbimo ar pokalbio) ir vėliau grįžti prie kitų.</div>
+            </details>
+        </section>
+
+        <!-- PROGRESS INDICATOR (S1) – Sistema: X iš 6 fazių -->
         <div class="progress-wrap" id="progressIndicator" aria-live="polite" aria-atomic="true">
-            <p id="progressText">Sistema: 0 / 6 fazės</p>
+            <p id="progressText">Sistema: 0 iš 6 fazių</p>
             <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="6" aria-label="Progresas: 0 iš 6 fazių">
                 <div class="progress-bar-fill" id="progressBarFill" style="width: 0%;"></div>
             </div>
         </div>
+
+        <nav class="jump-nav" aria-labelledby="jump-nav-title">
+            <h2 id="jump-nav-title">Kas toliau?</h2>
+            <p class="jump-nav-intro">Geriausia eiti iš eilės nuo 1 iki 10. Paspaudus nuorodą pereisite prie atitinkamo prompto.</p>
+            <ul>
+                <li><a href="#block1">1. Kur stringame?</a></li>
+                <li><a href="#block2">2. Koks žmogus mums iš tikrųjų tinka?</a></li>
+                <li><a href="#block3">3. Perrašyk darbo skelbimą paprastai</a></li>
+                <li><a href="#block4">4. Kaip šiandien rasti daugiau žmonių?</a></li>
+                <li><a href="#block5">5. Kaip geriau vesti pokalbį?</a></li>
+                <li><a href="#block6">6. Kodėl kandidatai atsisako?</a></li>
+                <li><a href="#block7">7. Kaip geriau pristatyti pasiūlymą?</a></li>
+                <li><a href="#block8">8. Kaip padėti naujam žmogui pirmus 3 mėnesius?</a></li>
+                <li><a href="#block9">9. Kodėl žmonės išeina?</a></li>
+                <li><a href="#block10">10. Pagrindinis promptas (vienas viskam)</a></li>
+            </ul>
+        </nav>
 
         <!-- PROMPT 1 – FAZĖ 1 Diagnostika -->
         <article class="prompt" data-phase="1">
@@ -1965,7 +2393,7 @@
                      role="button"
                      tabindex="0"
                      aria-label="Pasirinkti ir kopijuoti promptą 1"
-                     onclick="selectText(this)"
+                     onclick="activateCodeBlock(this)"
                      onkeydown="handleCodeBlockKeydown(event, this)">
                     <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Kopijuoti</span>
                     <pre class="code-text" id="prompt1">Tu esi atrankos analitikas. Tavo tikslas – pagal skaičius nustatyti, kur atrankoje stringame ir ką pakeisti.
@@ -2003,7 +2431,7 @@ Pasakyk paprastai:
             </div>
             <div class="prompt-footer">
                 <p class="prompt-cta">Nukopijuok ir įklijuok į ChatGPT arba Claude – tai šio žingsnio tikslas.</p>
-                <button class="btn" 
+                <button type="button" class="btn" 
                         onclick="copyPrompt(this, 'prompt1')"
                         aria-label="Kopijuoti promptą 1 į mainų atmintinę"
                         data-prompt-id="prompt1">
@@ -2034,7 +2462,7 @@ Pasakyk paprastai:
                      role="button"
                      tabindex="0"
                      aria-label="Pasirinkti ir kopijuoti promptą 2"
-                     onclick="selectText(this)"
+                     onclick="activateCodeBlock(this)"
                      onkeydown="handleCodeBlockKeydown(event, this)">
                     <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Kopijuoti</span>
                     <pre class="code-text" id="prompt2">Tu esi kandidatų profilio specialistas. Tavo tikslas – aiškiai aprašyti idealų kandidatą pozicijai (savybės, ko išmokyti, motyvacija).
@@ -2071,7 +2499,7 @@ Atsakyk paprastai:
             </div>
             <div class="prompt-footer">
                 <p class="prompt-cta">Įklijuok į ChatGPT arba Claude ir pakeisk laukus savo duomenimis.</p>
-                <button class="btn" 
+                <button type="button" class="btn" 
                         onclick="copyPrompt(this, 'prompt2')"
                         aria-label="Kopijuoti promptą 2 į mainų atmintinę"
                         data-prompt-id="prompt2">
@@ -2102,7 +2530,7 @@ Atsakyk paprastai:
                      role="button"
                      tabindex="0"
                      aria-label="Pasirinkti ir kopijuoti promptą 3"
-                     onclick="selectText(this)"
+                     onclick="activateCodeBlock(this)"
                      onkeydown="handleCodeBlockKeydown(event, this)">
                     <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Kopijuoti</span>
                     <pre class="code-text" id="prompt3">Tu esi darbo skelbimų redaktorius. Tavo tikslas – perrašyti skelbimą paprasta kalba, kad kandidatas jaustų, jog rašoma būtent jam.
@@ -2137,7 +2565,7 @@ Padaryk:
             </div>
             <div class="prompt-footer">
                 <p class="prompt-cta">Nukopijuok ir įklijuok į ChatGPT arba Claude – tai šio žingsnio tikslas.</p>
-                <button class="btn" 
+                <button type="button" class="btn" 
                         onclick="copyPrompt(this, 'prompt3')"
                         aria-label="Kopijuoti promptą 3 į mainų atmintinę"
                         data-prompt-id="prompt3">
@@ -2168,7 +2596,7 @@ Padaryk:
                      role="button"
                      tabindex="0"
                      aria-label="Pasirinkti ir kopijuoti promptą 4"
-                     onclick="selectText(this)"
+                     onclick="activateCodeBlock(this)"
                      onkeydown="handleCodeBlockKeydown(event, this)">
                     <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Kopijuoti</span>
                     <pre class="code-text" id="prompt4">Tu esi kandidatų paieškos konsultantas. Tavo tikslas – pasiūlyti konkrečius, paprastus būdus rasti daugiau kandidatų (LinkedIn, pažįstami, tiesioginis kontaktas).
@@ -2202,7 +2630,7 @@ Pasiūlyk:
             </div>
             <div class="prompt-footer">
                 <p class="prompt-cta">Nukopijuok, įklijuok į DI įrankį ir pakeisk [įmonė], [pozicija] savo duomenimis.</p>
-                <button class="btn" 
+                <button type="button" class="btn" 
                         onclick="copyPrompt(this, 'prompt4')"
                         aria-label="Kopijuoti promptą 4 į mainų atmintinę"
                         data-prompt-id="prompt4">
@@ -2224,7 +2652,7 @@ Pasiūlyk:
                     <div class="category">Atranka</div>
                     <span class="prompt-time">~5–10 min</span>
                 </div>
-                <h2 class="prompt-title">Kaip geriau pravesti pokalbį?</h2>
+                <h2 class="prompt-title">Kaip geriau vesti pokalbį?</h2>
                 <p class="prompt-desc">Paprastas pokalbio planas – klausimai ir į ką atkreipti dėmesį</p>
             </div>
             <div class="prompt-body">
@@ -2233,7 +2661,7 @@ Pasiūlyk:
                      role="button"
                      tabindex="0"
                      aria-label="Pasirinkti ir kopijuoti promptą 5"
-                     onclick="selectText(this)"
+                     onclick="activateCodeBlock(this)"
                      onkeydown="handleCodeBlockKeydown(event, this)">
                     <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Kopijuoti</span>
                     <pre class="code-text" id="prompt5">Tu esi atrankos pokalbių specialistas. Tavo tikslas – sukurti paprastą pokalbio planą: klausimus, kurie padeda suprasti žmogų, ir į ką atkreipti dėmesį.
@@ -2268,7 +2696,7 @@ Duok:
             </div>
             <div class="prompt-footer">
                 <p class="prompt-cta">Nukopijuok ir įklijuok į ChatGPT arba Claude – tai šio žingsnio tikslas.</p>
-                <button class="btn" 
+                <button type="button" class="btn" 
                         onclick="copyPrompt(this, 'prompt5')"
                         aria-label="Kopijuoti promptą 5 į mainų atmintinę"
                         data-prompt-id="prompt5">
@@ -2299,7 +2727,7 @@ Duok:
                      role="button"
                      tabindex="0"
                      aria-label="Pasirinkti ir kopijuoti promptą 6"
-                     onclick="selectText(this)"
+                     onclick="activateCodeBlock(this)"
                      onkeydown="handleCodeBlockKeydown(event, this)">
                     <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Kopijuoti</span>
                     <pre class="code-text" id="prompt6">Tu esi pasiūlymų ir atsisakymų analitikas. Tavo tikslas – išaiškinti galimas atsisakymo priežastis ir pasiūlyti, kaip kalbėti su kandidatu bei ką pagerinti.
@@ -2335,7 +2763,7 @@ Duok:
             </div>
             <div class="prompt-footer">
                 <p class="prompt-cta">Įklijuok į ChatGPT arba Claude – pakeisk įmonę, poziciją, atlygį ir ką siūlote.</p>
-                <button class="btn" 
+                <button type="button" class="btn" 
                         onclick="copyPrompt(this, 'prompt6')"
                         aria-label="Kopijuoti promptą 6 į mainų atmintinę"
                         data-prompt-id="prompt6">
@@ -2366,7 +2794,7 @@ Duok:
                      role="button"
                      tabindex="0"
                      aria-label="Pasirinkti ir kopijuoti promptą 7"
-                     onclick="selectText(this)"
+                     onclick="activateCodeBlock(this)"
                      onkeydown="handleCodeBlockKeydown(event, this)">
                     <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Kopijuoti</span>
                     <pre class="code-text" id="prompt7">Tu esi darbo pasiūlymų formuluotojas. Tavo tikslas – suformuluoti pasiūlymą trumpai ir aiškiai, pabrėžiant vertę ir laikantis draugiško, profesionalaus tono.
@@ -2401,7 +2829,7 @@ Padaryk:
             </div>
             <div class="prompt-footer">
                 <p class="prompt-cta">Nukopijuok ir įklijuok į ChatGPT arba Claude – tai šio žingsnio tikslas.</p>
-                <button class="btn" 
+                <button type="button" class="btn" 
                         onclick="copyPrompt(this, 'prompt7')"
                         aria-label="Kopijuoti promptą 7 į mainų atmintinę"
                         data-prompt-id="prompt7">
@@ -2432,7 +2860,7 @@ Padaryk:
                      role="button"
                      tabindex="0"
                      aria-label="Pasirinkti ir kopijuoti promptą 8"
-                     onclick="selectText(this)"
+                     onclick="activateCodeBlock(this)"
                      onkeydown="handleCodeBlockKeydown(event, this)">
                     <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Kopijuoti</span>
                     <pre class="code-text" id="prompt8">Tu esi naujokų adaptacijos specialistas. Tavo tikslas – sukurti paprastą 3 mėnesių planą: ką suprasti pirmą savaitę, ko tikėtis po mėnesio ir 3 mėn., kaip vadovas gali padėti.
@@ -2467,7 +2895,7 @@ Duok:
             </div>
             <div class="prompt-footer">
                 <p class="prompt-cta">Nukopijuok ir įklijuok – įrašyk įmonę, poziciją ir gauk planą.</p>
-                <button class="btn" 
+                <button type="button" class="btn" 
                         onclick="copyPrompt(this, 'prompt8')"
                         aria-label="Kopijuoti promptą 8 į mainų atmintinę"
                         data-prompt-id="prompt8">
@@ -2498,7 +2926,7 @@ Duok:
                      role="button"
                      tabindex="0"
                      aria-label="Pasirinkti ir kopijuoti promptą 9"
-                     onclick="selectText(this)"
+                     onclick="activateCodeBlock(this)"
                      onkeydown="handleCodeBlockKeydown(event, this)">
                     <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Kopijuoti</span>
                     <pre class="code-text" id="prompt9">Tu esi darbuotojų išlaikymo analitikas. Tavo tikslas – išanalizuoti išėjimų priežastis, neaiškumus ir lūkesčių neatitikimus, pasiūlyti greitus pakeitimus.
@@ -2531,7 +2959,7 @@ Pasakyk:
             </div>
             <div class="prompt-footer">
                 <p class="prompt-cta">Nukopijuok ir įklijuok į ChatGPT arba Claude – tai šio žingsnio tikslas.</p>
-                <button class="btn"
+                <button type="button" class="btn"
                         onclick="copyPrompt(this, 'prompt9')"
                         aria-label="Kopijuoti promptą 9 į mainų atmintinę"
                         data-prompt-id="prompt9">
@@ -2562,7 +2990,7 @@ Pasakyk:
                      role="button"
                      tabindex="0"
                      aria-label="Pasirinkti ir kopijuoti promptą 10"
-                     onclick="selectText(this)"
+                     onclick="activateCodeBlock(this)"
                      onkeydown="handleCodeBlockKeydown(event, this)">
                     <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Kopijuoti</span>
                     <pre class="code-text" id="prompt10">Tu esi HR atrankos strategas. Tavo tikslas – vienoje vietoje sudėlioti visą atrankos planą: nuo problemos ir savaitės veiksmų iki skelbimo, pokalbių, sutikimo tikimybės ir pirmų 3 mėnesių palaikymo. Rašyk paprastai, tik konkrečiais veiksmais.
@@ -2606,7 +3034,7 @@ Be sudėtingų terminų.</pre>
             </div>
             <div class="prompt-footer">
                 <p class="prompt-cta">Šis promptas apima viską – nukopijuok, įklijuok ir pildyk savo duomenimis.</p>
-                <button class="btn"
+                <button type="button" class="btn"
                         onclick="copyPrompt(this, 'prompt10')"
                         aria-label="Kopijuoti promptą 10 į mainų atmintinę"
                         data-prompt-id="prompt10">
@@ -2622,7 +3050,7 @@ Be sudėtingų terminų.</pre>
 
         <section class="community" id="community" aria-labelledby="community-title">
             <h2 id="community-title">Sistema sukurta.<br>Nori daugiau?</h2>
-            <a href="https://chat.whatsapp.com/It49fzTl1n90huRCoWWkwu?mode=gi_t" class="community-cta-primary" target="_blank" rel="noopener noreferrer" aria-label="Atidaryti Promptų anatomija WhatsApp grupę naujame lange">Prisijungti prie WhatsApp grupės</a>
+            <a href="https://t.me/prompt_anatomy" class="community-cta-primary" target="_blank" rel="noopener noreferrer" aria-label="Atidaryti „Promptų anatomijos“ Telegram kanalą naujame lange">Sekite Telegram kanale</a>
             <a href="https://www.promptanatomy.app/" class="community-cta-secondary" target="_blank" rel="noopener noreferrer" aria-label="Pilna Promptų anatomija – interaktyvus mokymas (atidaroma naujame lange)">Promptų anatomija →</a>
         </section>
 

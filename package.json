@@ -1,13 +1,20 @@
 {
-  "name": "di-promptu-biblioteka",
+  "name": "personalas",
   "version": "1.0.0",
   "private": true,
-  "description": "DI Promptų Biblioteka – statinė HTML platforma",
+  "description": "Personalas – US-localized HR hiring prompts, static HTML site",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DITreneris/personalas.git"
+  },
   "scripts": {
     "build": "node scripts/build-locale-pages.js",
-    "test": "npm run build && node tests/structure.test.js && npm run lint:html && npm run lint:js",
+    "generate:og": "node scripts/generate-og-image.js",
+    "test": "npm run build && node tests/structure.test.js && npm run lint:html && npm run lint:html:privatumas && npm run lint:html:locales && npm run lint:js",
     "test:structure": "node tests/structure.test.js",
-    "lint:html": "npx html-validator-cli --file index.html",
+    "lint:html": "npx html-validator-cli --file index.html --validator=https://html5.validator.nu/",
+    "lint:html:privatumas": "npx html-validator-cli --file privatumas.html --validator=https://html5.validator.nu/",
+    "lint:html:locales": "npx html-validator-cli --file lt/index.html --validator=https://html5.validator.nu/ && npx html-validator-cli --file en/index.html --validator=https://html5.validator.nu/ && npx html-validator-cli --file lt/privatumas.html --validator=https://html5.validator.nu/ && npx html-validator-cli --file en/privatumas.html --validator=https://html5.validator.nu/",
     "lint:js": "eslint . --ext .js"
   },
   "devDependencies": {
@@ -15,6 +22,7 @@
     "html-validator-cli": "^7.0.0",
     "pa11y": "^6.2.3",
     "serve": "^14.2.1",
+    "sharp": "^0.34.5",
     "wait-on": "^8.0.1"
-    }
+  }
 }
