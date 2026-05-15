@@ -11,22 +11,23 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: '22'
 
       - name: Install dependencies
         run: npm install
 
+      # retry@v4 runs on Node 24 (avoids actions/checkout@v4 Node 20 deprecation noise).
       - name: Run tests (structure + lint; retry on validator.nu flakiness)
-        uses: nick-fields/retry@v3
+        uses: nick-fields/retry@v4
         with:
           timeout_minutes: 15
-          max_attempts: 3
-          retry_wait_seconds: 25
+          max_attempts: 5
+          retry_wait_seconds: 40
           command: npm test
         env:
           BASE_PATH: /${{ github.event.repository.name }}/
