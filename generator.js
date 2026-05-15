@@ -1,6 +1,6 @@
 /**
  * Personalas – shared LT/en-US behavior
- * Locale is detected from <html lang> (build sets lt/en-US). The language switcher navigates to /lt/ or /en/ with the current hash.
+ * Locale is detected from <html lang> (build sets lt/en-US). /lt/ shows EN+LT switcher; /en/ has no public LT switcher (LT via direct /lt/ URL).
  */
 (function() {
     'use strict';

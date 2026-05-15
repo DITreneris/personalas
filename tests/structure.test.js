@@ -55,7 +55,7 @@ function run() {
   // --- Šaknies vartai (EN numatytasis) ---
   if (assert(html.includes('lang="en-US"'), 'šaknies index.html lang="en-US" (vartai)')) passed++;
   else failed++;
-  if (assert(html.includes('href="en/"') && html.includes('href="lt/"'), 'vartai: nuorodos į en/ ir lt/')) passed++;
+  if (assert(html.includes('href="en/"') && !html.includes('<a href="lt/'), 'vartai: tik EN nuoroda body (be lt/)')) passed++;
   else failed++;
   if (assert(html.includes('rel="canonical"') && html.includes('/en/">'), 'šaknies canonical į /en/')) passed++;
   else failed++;
@@ -118,7 +118,13 @@ function run() {
   else failed++;
   if (assert(privatumas.includes('lang="en-US"'), 'šaknies privatumas.html lang="en-US"')) passed++;
   else failed++;
-  if (assert(privatumas.includes('en/privatumas.html') && privatumas.includes('lt/privatumas.html'), 'privatumas vartai: EN ir LT nuorodos')) passed++;
+  if (
+    assert(
+      privatumas.includes('en/privatumas.html') && !privatumas.includes('<a href="lt/privatumas.html">'),
+      'privatumas vartai: tik EN nuoroda body'
+    )
+  )
+    passed++;
   else failed++;
 
   // --- Lang LT šablonas ---
@@ -149,6 +155,10 @@ function run() {
   if (ltIndex && assert(!ltIndex.includes('Common questions before you start'), 'lt/index.html: DUK lietuvių kalba (nėra angliškos FAQ antraštės)')) passed++;
   else failed++;
   if (enIndex && assert(enIndex.includes('lang="en-US"'), 'en/index.html lang="en-US"')) passed++;
+  else failed++;
+  if (enIndex && assert(!enIndex.includes('id="langLtBtn"') && !enIndex.includes('class="lang-switcher"'), 'en/index.html be kalbos perjungiklio')) passed++;
+  else failed++;
+  if (ltIndex && assert(ltIndex.includes('id="langEnBtn"'), 'lt/index.html: EN perjungimas')) passed++;
   else failed++;
 
   if (ltIndex && assert(ltIndex.includes('rel="canonical"') && ltIndex.includes('hreflang="lt"') && ltIndex.includes('hreflang="en-US"') && ltIndex.includes('hreflang="x-default"'), 'lt/index.html canonical ir hreflang')) passed++;

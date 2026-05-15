@@ -2,7 +2,7 @@
 
 Statinė HTML platforma: 10 HR atrankos promptų. Pasirinkti → kopijuoti → įklijuoti į ChatGPT, Claude ar Gemini. Anglų puslapis lokalizuotas JAV komandoms (`en-US`: valiuta, data, telefonas ir lokacijos pavyzdžiai).
 
-**Numatytoji kalba ir URL:** lankytojui pagrindinis įėjimas yra **anglų** – **`/en/`**. Šaknies **`/`** ir **`/privatumas.html`** yra lengvi vartai (nuorodos + peradresavimas į EN); pilnas lietuviškas turinys – **`/lt/`** ir šaltiniuose **[`templates/index-lt.html`](templates/index-lt.html)**, **[`templates/privatumas-lt.html`](templates/privatumas-lt.html)** (čia redaguojate LT tekstus ir struktūrą prieš `npm run build`).
+**Numatytoji kalba ir URL:** lankytojui pagrindinis įėjimas yra **anglų** – **`/en/`** (be viešo perjungiklio į LT). Šaknies **`/`** ir **`/privatumas.html`** – tik EN vartai (peradresavimas į `/en/`). **Lietuvių (`/lt/`):** QA / testuotojams – tiesioginė nuoroda; turinys redaguojamas **[`templates/index-lt.html`](templates/index-lt.html)** ir **[`templates/privatumas-lt.html`](templates/privatumas-lt.html)** prieš `npm run build`. Detaliau – [docs/language-guidelines-en-lt.md](docs/language-guidelines-en-lt.md).
 
 **Production (numatytasis):** [https://promptanatomy.help](https://promptanatomy.help) – **Vercel**; build komanda repozitorijoje – `npm test` (įskaitant `npm run build`, žr. [vercel.json](vercel.json)). Ant Vercel **`/`** gali būti serverinis peradresavimas į **`/en/`** (papildomai prie HTML vartų). **Alternatyva:** GitHub Pages (`https://ditreneris.github.io/<repo>/`) – build metu nustatykite `SITE_ORIGIN` ir `BASE_PATH` (žr. [DEPLOYMENT.md](DEPLOYMENT.md)).
 

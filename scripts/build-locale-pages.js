@@ -809,6 +809,11 @@ function stripPrivacyForLocaleBuild(html) {
   return html.replace(/(<meta name="viewport"[^>]*>\s*)(?:[\s\S]*?)(<title)/i, '$1$2');
 }
 
+/** Remove language switcher from generated EN index (US product; LT via direct /lt/ URL only). */
+function stripLanguageSwitcher(html) {
+  return html.replace(/\s*<nav class="lang-switcher"[\s\S]*?<\/nav>\s*/i, '\n');
+}
+
 // ---- Main ----
 function main() {
   let indexHtml = stripIndexForLocaleBuild(read('templates/index-lt.html'));
@@ -835,6 +840,7 @@ function main() {
   // EN
   let enIndex = applyEnReplacements(indexHtml);
   enIndex = applyEnPromptUi(enIndex);
+  enIndex = stripLanguageSwitcher(enIndex);
   enIndex = injectHead(enIndex, 'en', BASE_PATH);
   write('en/index.html', enIndex);
 

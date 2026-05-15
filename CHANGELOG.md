@@ -23,6 +23,7 @@ Visi reikšmingi pakeitimai projekte dokumentuojami čia. Formatas pagal [Keep a
 
 ### Pakeista
 
+- **EN kanonas be viešo LT UI:** [scripts/build-locale-pages.js](scripts/build-locale-pages.js) – `stripLanguageSwitcher()` pašalina kalbos perjungiklį iš generuoto `en/index.html`; šaknies [index.html](index.html) ir [privatumas.html](privatumas.html) vartai – tik EN nuorodos body; [docs/language-guidelines-en-lt.md](docs/language-guidelines-en-lt.md), [README.md](README.md), [AGENTS.md](AGENTS.md), [docs/process/development.md](docs/process/development.md); LT privatumas – „nerenkame“ ([templates/privatumas-lt.html](templates/privatumas-lt.html)); [tests/structure.test.js](tests/structure.test.js) – regresijos EN/LT perjungikliui ir vartams.
 - **[UI] Instrukcijų blokas ([index.html](index.html), [scripts/build-locale-pages.js](scripts/build-locale-pages.js)):** tylesni „token“ stiliai `.instructions code`, kompaktiškesnis laiko ženklelis, antraštės eilutė su meta dešinėje, mažesnis tarpas iki DUK, 4 žingsnis su vidiniu `instructions-subcard` (LT šaltinyje + EN per `EN_REPLACEMENTS`); [tests/structure.test.js](tests/structure.test.js) – lankstesni JAV formato assertai.
 - **LT turinys ([index.html](index.html)):** pilnas DUK lietuvių kalba ir `lang="lt"`; instrukcijos suvienodintos į „jūs“; progreso eilutė „Sistema: … iš 6 fazių“; šuolių meniu įvadas (dalyvis + „pereisite“); 5-o prompto antraštė „Kaip geriau vesti pokalbį?“; Telegram CTA „Sekite Telegram kanale“ ir aiškesnis `aria-label` (kanalas).
 - **EN build ir runtime ([scripts/build-locale-pages.js](scripts/build-locale-pages.js), [generator.js](generator.js)):** visi atitinkami LT→EN `EN_REPLACEMENTS`; matomas progresas EN „System: … of 6 phases“; JSON-LD `Organization.name` – **Prompt Anatomy**; `PRIVACY_EN` – Series No. 3, H1 „Privacy Policy“; master `PROMPTS_EN` – natūralesnė „first three months“ formulė; darbo skelbimo info – „commas as thousands separators“; neutralus „Join on Telegram“; prekės ženklo rašyba nuorodose (po bendro vertimo).
@@ -51,7 +52,7 @@ Visi reikšmingi pakeitimai projekte dokumentuojami čia. Formatas pagal [Keep a
 
 - **HTML5:** šaknies vartų `meta http-equiv="refresh"` – `content` reikšmėje tarpas po kabliataškio (`0; url=…`), kad atitiktų validatorių ([scripts/build-locale-pages.js](scripts/build-locale-pages.js)).
 
-- **GitHub Actions:** `deploy.yml` ir `ci.yml` – Node **22** (Actions Node 20 deprecation); `npm test` su **3 bandymais** (`nick-fields/retry@v3`), kad sumažinti `html5.validator.nu` tinklo trikdžių riziką; test job `timeout-minutes` padidintas iki **20**.
+- **GitHub Actions (CI ir Pages build):** [ci.yml](.github/workflows/ci.yml) ir [deploy.yml](.github/workflows/deploy.yml) – `actions/checkout@v5`, `actions/setup-node@v5` (veiksmų Node 24 runtime, be ankstesnių Node 20 veiksmų deprekacijos įspėjimų); `nick-fields/retry@v4`; `npm test` – iki **5** bandymų su **40** s laukimu tarp bandymų (`html5.validator.nu` tinklo trikdžiai); projektinis Node **22**; `timeout-minutes: 20`. Po pakeitimų **lint-and-test** ir **Deploy to GitHub Pages** darbai praeina sėkmingai.
 
 - **GitHub Pages:** prieš `upload-pages-artifact` deploy job šalina `node_modules`, kad artefakte liktų tik statiniai failai.
 - **Deploy workflow:** `test` job nebekartoja `npm run build` prieš `npm test` (build jau įeina į `npm test`).
