@@ -93,7 +93,7 @@ ORCHESTRATOR AGENT (koordinacija)
 |---------|-----------|
 | `npm install` | Įdiegti priklausomybes |
 | `npm test` | Struktūros testai + lint (HTML, JS) |
-| `npm run lint:html` | HTML validacija (index.html) |
+| `npm run lint:html` | HTML validacija (šaknies `index.html` – vartai) |
 | `npm run lint:js` | ESLint visiems .js failams |
 | CI (GitHub Actions) | Lint, test, pa11y a11y – automatiškai push/PR |
 
@@ -106,6 +106,7 @@ Prieš PR įsitikinti, kad `npm test` praeina. A11y tikrinimas – per CI arba l
 - **Produktas:** kanonas – **Personalas**. Dokumentacijoje nenaudoti atsarginio repo pavadinimo **„marketingas“**. LT tekste vengti žodžio **„biblioteka“** kaip produkto etiketės; EN – vengti **„prompt library“** kaip prekės ženklo (vietoje to – „hiring prompts“, „promptų rinkinys“ ir pan.). Žr. [docs/language-guidelines-en-lt.md](docs/language-guidelines-en-lt.md).
 - **Techninė:** `npm test` privalo praeiti; deploy ir a11y URL – [DEPLOYMENT.md](DEPLOYMENT.md).
 - **Greita paieška** (repo šaknyje, išskyrus `node_modules`): `rg -i "biblioteka|marketingas|prompt.?library|di-promptu-biblioteka"` – PR turi būti aiškiai paaiškinti likučiai arba jų nebūti.
+- **LT turinio šaltinis:** [templates/index-lt.html](templates/index-lt.html), [templates/privatumas-lt.html](templates/privatumas-lt.html) (ne šaknies `index.html` / `privatumas.html` – tai EN vartai po `npm run build`). Numatytoji lankytojo kalba – EN (`/en/`); žr. [docs/language-guidelines-en-lt.md](docs/language-guidelines-en-lt.md).
 
 ---
 

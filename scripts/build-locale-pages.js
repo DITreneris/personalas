@@ -1,8 +1,9 @@
 /**
- * Build LT/en-US locale pages from root index.html and privatumas.html.
+ * Build LT/en-US locale pages from templates (LT source) and root gateway HTML.
  * Usage (GitHub Pages subpath): BASE_PATH=/personalas/ SITE_ORIGIN=https://ditreneris.github.io node scripts/build-locale-pages.js
  * Usage (Vercel / custom domain root): SITE_ORIGIN=https://promptanatomy.help node scripts/build-locale-pages.js
  * Optional override: SITE_PUBLIC_BASE=https://preview.vercel.app (full public origin, no trailing slash)
+ * LT source: templates/index-lt.html, templates/privatumas-lt.html
  * Output: lt/index.html, lt/privatumas.html, en/index.html, en/privatumas.html, robots.txt, sitemap.xml
  */
 'use strict';
@@ -185,9 +186,9 @@ function writeRobotsAndSitemap() {
   write('robots.txt', robots);
 
   const urls = [
-    abs + '/',
-    abs + '/lt/',
     abs + '/en/',
+    abs + '/lt/',
+    abs + '/',
     abs + '/privatumas.html',
     abs + '/lt/privatumas.html',
     abs + '/en/privatumas.html',
@@ -208,25 +209,27 @@ function writeRobotsAndSitemap() {
 function buildRootSeoFragment() {
   const base = absoluteBaseSlash().replace(/\/+$/, '');
   const img = base + '/images/og-default.png';
+  const enLanding = base + '/en/';
   const desc =
-    'Dešimt DI promptų HR atrankai: diagnostika, profilis, skelbimas, šaltiniai, pokalbiai, pasiūlymas. Kopijuok į ChatGPT arba Claude – praktinė sistema per ~30 min.';
+    'Ten ready-to-use AI prompts for US hiring: diagnostics, role definition, job posts, sourcing, interviews, offers, and onboarding. Copy into ChatGPT or Claude—about 30 minutes end-to-end.';
   const lines = [
-    '<link rel="canonical" href="' + base + '/">',
-    '<link rel="alternate" hreflang="lt" href="' + base + '/lt/">',
-    '<link rel="alternate" hreflang="en-US" href="' + base + '/en/">',
-    '<link rel="alternate" hreflang="x-default" href="' + base + '/en/">',
+    '<meta http-equiv="refresh" content="0; url=' + escapeHtmlAttr(enLanding) + '">',
+    '<link rel="canonical" href="' + escapeHtmlAttr(enLanding) + '">',
+    '<link rel="alternate" hreflang="lt" href="' + escapeHtmlAttr(base + '/lt/') + '">',
+    '<link rel="alternate" hreflang="en-US" href="' + escapeHtmlAttr(enLanding) + '">',
+    '<link rel="alternate" hreflang="x-default" href="' + escapeHtmlAttr(enLanding) + '">',
     '<meta property="og:type" content="website">',
-    '<meta property="og:title" content="HR kasdienė atrankos sistema – DI promptai">',
+    '<meta property="og:title" content="HR hiring system – AI prompts for US teams">',
     '<meta property="og:description" content="' + escapeHtmlAttr(desc) + '">',
-    '<meta property="og:url" content="' + base + '/">',
-    '<meta property="og:locale" content="lt_LT">',
-    '<meta property="og:locale:alternate" content="en_US">',
+    '<meta property="og:url" content="' + escapeHtmlAttr(enLanding) + '">',
+    '<meta property="og:locale" content="en_US">',
+    '<meta property="og:locale:alternate" content="lt_LT">',
     '<meta property="og:image" content="' + img + '">',
     '<meta property="og:image:width" content="1200">',
     '<meta property="og:image:height" content="630">',
     '<meta property="og:image:type" content="image/png">',
     '<meta name="twitter:card" content="summary_large_image">',
-    '<meta name="twitter:title" content="HR kasdienė atrankos sistema – DI promptai">',
+    '<meta name="twitter:title" content="HR hiring system – AI prompts for US teams">',
     '<meta name="twitter:description" content="' + escapeHtmlAttr(desc) + '">',
     '<meta name="twitter:image" content="' + img + '">',
     '<script type="application/ld+json">' +
@@ -235,14 +238,14 @@ function buildRootSeoFragment() {
         '@graph': [
           {
             '@type': 'WebSite',
-            name: 'Personalas – HR DI promptų rinkinys',
-            url: base + '/',
-            inLanguage: ['lt'],
+            name: 'Personalas – US hiring prompts',
+            url: enLanding,
+            inLanguage: ['en-US', 'lt'],
           },
           {
             '@type': 'Organization',
-            name: 'Promptų anatomija',
-            url: base + '/',
+            name: 'Prompt Anatomy',
+            url: enLanding,
             sameAs: ['https://t.me/prompt_anatomy'],
           },
         ],
@@ -276,26 +279,29 @@ function finalizeRootIndexHtml() {
 function buildRootPrivacyFragment() {
   const base = absoluteBaseSlash().replace(/\/+$/, '');
   const img = base + '/images/og-default.png';
+  const enPrivacyUrl = base + '/en/privatumas.html';
+  const enSite = base + '/en/';
   const desc =
-    'Personalas – statinė svetainė su HR DI promptų rinkiniu. Asmens duomenų nerinkame; pažymėti žingsniai saugomi tik naršyklės localStorage.';
+    'Personalas – static site with US hiring prompts for HR teams. We do not collect personal data; progress uses browser localStorage only.';
   const lines = [
-    '<link rel="canonical" href="' + base + '/privatumas.html">',
-    '<link rel="alternate" hreflang="lt" href="' + base + '/lt/privatumas.html">',
-    '<link rel="alternate" hreflang="en-US" href="' + base + '/en/privatumas.html">',
-    '<link rel="alternate" hreflang="x-default" href="' + base + '/en/privatumas.html">',
+    '<meta http-equiv="refresh" content="0; url=' + escapeHtmlAttr(enPrivacyUrl) + '">',
+    '<link rel="canonical" href="' + escapeHtmlAttr(enPrivacyUrl) + '">',
+    '<link rel="alternate" hreflang="lt" href="' + escapeHtmlAttr(base + '/lt/privatumas.html') + '">',
+    '<link rel="alternate" hreflang="en-US" href="' + escapeHtmlAttr(enPrivacyUrl) + '">',
+    '<link rel="alternate" hreflang="x-default" href="' + escapeHtmlAttr(enPrivacyUrl) + '">',
     '<meta name="description" content="' + escapeHtmlAttr(desc) + '">',
     '<meta property="og:type" content="website">',
-    '<meta property="og:title" content="Privatumo politika – Personalas">',
+    '<meta property="og:title" content="Privacy Policy – Personalas">',
     '<meta property="og:description" content="' + escapeHtmlAttr(desc) + '">',
-    '<meta property="og:url" content="' + base + '/privatumas.html">',
-    '<meta property="og:locale" content="lt_LT">',
-    '<meta property="og:locale:alternate" content="en_US">',
+    '<meta property="og:url" content="' + escapeHtmlAttr(enPrivacyUrl) + '">',
+    '<meta property="og:locale" content="en_US">',
+    '<meta property="og:locale:alternate" content="lt_LT">',
     '<meta property="og:image" content="' + img + '">',
     '<meta property="og:image:width" content="1200">',
     '<meta property="og:image:height" content="630">',
     '<meta property="og:image:type" content="image/png">',
     '<meta name="twitter:card" content="summary_large_image">',
-    '<meta name="twitter:title" content="Privatumo politika – Personalas">',
+    '<meta name="twitter:title" content="Privacy Policy – Personalas">',
     '<meta name="twitter:description" content="' + escapeHtmlAttr(desc) + '">',
     '<meta name="twitter:image" content="' + img + '">',
     '<script type="application/ld+json">' +
@@ -304,11 +310,11 @@ function buildRootPrivacyFragment() {
         '@graph': [
           {
             '@type': 'WebPage',
-            name: 'Privatumo politika – Personalas',
+            name: 'Privacy Policy – Personalas',
             description: desc,
-            url: base + '/privatumas.html',
-            inLanguage: 'lt',
-            isPartOf: { '@type': 'WebSite', url: base + '/' },
+            url: enPrivacyUrl,
+            inLanguage: 'en-US',
+            isPartOf: { '@type': 'WebSite', url: enSite },
           },
         ],
       }).replace(/</g, '\\u003c') +
@@ -805,8 +811,8 @@ function stripPrivacyForLocaleBuild(html) {
 
 // ---- Main ----
 function main() {
-  let indexHtml = stripIndexForLocaleBuild(read('index.html'));
-  let privacyHtml = stripPrivacyForLocaleBuild(read('privatumas.html'));
+  let indexHtml = stripIndexForLocaleBuild(read('templates/index-lt.html'));
+  let privacyHtml = stripPrivacyForLocaleBuild(read('templates/privatumas-lt.html'));
 
   const privacyLtDesc =
     'Personalas – statinė svetainė su HR DI promptų rinkiniu. Asmens duomenų nerinkame; pažymėti žingsniai saugomi tik naršyklės localStorage.';

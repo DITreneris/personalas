@@ -1,5 +1,8 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    { "source": "/", "destination": "/en/", "permanent": true }
+  ],
   "buildCommand": "npm test",
   "installCommand": "npm install",
   "outputDirectory": ".",

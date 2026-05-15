@@ -1,7 +1,6 @@
 /**
- * Struktūriniai testai – index.html
- * Tikrina, kad puslapyje yra visi būtini elementai (10 promptų, a11y, nuorodos).
- * Paleisti: node tests/structure.test.js (arba npm test)
+ * Struktūriniai testai – šaknies vartai (index.html), LT šablonas (templates/), build lt/en.
+ * Paleisti: node tests/structure.test.js (arba npm test; build vyksta prieš testą)
  */
 'use strict';
 
@@ -10,6 +9,8 @@ const path = require('path');
 
 const INDEX_PATH = path.join(__dirname, '..', 'index.html');
 const PRIVATUMAS_PATH = path.join(__dirname, '..', 'privatumas.html');
+const LT_INDEX_TEMPLATE_PATH = path.join(__dirname, '..', 'templates', 'index-lt.html');
+const LT_PRIVACY_TEMPLATE_PATH = path.join(__dirname, '..', 'templates', 'privatumas-lt.html');
 const GENERATOR_PATH = path.join(__dirname, '..', 'generator.js');
 
 function readFile(filePath) {
@@ -39,63 +40,91 @@ function run() {
     process.exit(1);
   }
 
-  // --- 10 promptų ---
+  const ltTemplate = readFile(LT_INDEX_TEMPLATE_PATH);
+  if (!ltTemplate) {
+    console.error('❌ templates/index-lt.html nerastas:', LT_INDEX_TEMPLATE_PATH);
+    process.exit(1);
+  }
+
+  const ltPrivacyTemplate = readFile(LT_PRIVACY_TEMPLATE_PATH);
+  if (!ltPrivacyTemplate) {
+    console.error('❌ templates/privatumas-lt.html nerastas:', LT_PRIVACY_TEMPLATE_PATH);
+    process.exit(1);
+  }
+
+  // --- Šaknies vartai (EN numatytasis) ---
+  if (assert(html.includes('lang="en-US"'), 'šaknies index.html lang="en-US" (vartai)')) passed++;
+  else failed++;
+  if (assert(html.includes('href="en/"') && html.includes('href="lt/"'), 'vartai: nuorodos į en/ ir lt/')) passed++;
+  else failed++;
+  if (assert(html.includes('rel="canonical"') && html.includes('/en/">'), 'šaknies canonical į /en/')) passed++;
+  else failed++;
+  if (assert(html.includes('http-equiv="refresh"') && html.includes('/en/'), 'šaknies meta refresh į EN')) passed++;
+  else failed++;
+  if (assert(html.includes('privatumas.html'), 'vartai: nuoroda į privatumas.html')) passed++;
+  else failed++;
+
+  // --- 10 promptų (LT šablonas) ---
   for (let i = 1; i <= 10; i++) {
-    if (assert(html.includes(`id="prompt${i}"`), `Prompt ${i} ID (prompt${i}) egzistuoja`)) passed++;
+    if (assert(ltTemplate.includes(`id="prompt${i}"`), `templates/index-lt.html: prompt ${i} ID (prompt${i})`)) passed++;
     else failed++;
   }
   for (let i = 1; i <= 10; i++) {
-    if (assert(html.includes(`id="block${i}"`), `Anchor block${i} egzistuoja`)) passed++;
+    if (assert(ltTemplate.includes(`id="block${i}"`), `templates/index-lt.html: anchor block${i}`)) passed++;
     else failed++;
   }
 
   // --- Kopijuoti mygtukai (10) ---
-  const copyButtons = (html.match(/Kopijuoti promptą/g) || []).length;
-  if (assert(copyButtons >= 10, `Kopijuoti promptą mygtukų: ${copyButtons} (>= 10)`)) passed++;
+  const copyButtons = (ltTemplate.match(/Kopijuoti promptą/g) || []).length;
+  if (assert(copyButtons >= 10, `templates/index-lt.html: Kopijuoti promptą mygtukų: ${copyButtons} (>= 10)`)) passed++;
   else failed++;
 
   // --- Code-block (10) ---
-  const codeBlocks = (html.match(/class="[^"]*code-block[^"]*"/g) || []).length;
-  if (assert(codeBlocks >= 10, `Code-block elementų: ${codeBlocks} (>= 10)`)) passed++;
+  const codeBlocks = (ltTemplate.match(/class="[^"]*code-block[^"]*"/g) || []).length;
+  if (assert(codeBlocks >= 10, `templates/index-lt.html: code-block elementų: ${codeBlocks} (>= 10)`)) passed++;
   else failed++;
 
   // --- Pažymėjau kaip atlikau (10 checkbox) ---
-  const checkboxes = (html.match(/class="[^"]*prompt-done[^"]*"/g) || []).length;
-  if (assert(checkboxes >= 10, `Prompt-done checkbox: ${checkboxes} (>= 10)`)) passed++;
+  const checkboxes = (ltTemplate.match(/class="[^"]*prompt-done[^"]*"/g) || []).length;
+  if (assert(checkboxes >= 10, `templates/index-lt.html: prompt-done checkbox: ${checkboxes} (>= 10)`)) passed++;
   else failed++;
 
-  // --- Prieinamumas / semantika ---
-  if (assert(html.includes('href="#main-content"') && html.includes('skip-link'), 'Skip link į main-content')) passed++;
+  // --- Prieinamumas / semantika (LT šablonas) ---
+  if (assert(ltTemplate.includes('href="#main-content"') && ltTemplate.includes('skip-link'), 'templates/index-lt.html: skip link')) passed++;
   else failed++;
-  if (assert(html.includes('id="main-content"') && html.includes('<main'), 'Main region (main-content)')) passed++;
+  if (assert(ltTemplate.includes('id="main-content"') && ltTemplate.includes('<main'), 'templates/index-lt.html: main region')) passed++;
   else failed++;
-  if (assert(html.includes('id="progressText"') && html.includes('id="progressBarFill"'), 'Progreso indikatorius')) passed++;
+  if (assert(ltTemplate.includes('id="progressText"') && ltTemplate.includes('id="progressBarFill"'), 'templates/index-lt.html: progreso indikatorius')) passed++;
   else failed++;
-  if (assert(html.includes('id="toast"') && html.includes('role="status"'), 'Toast pranešimas')) passed++;
+  if (assert(ltTemplate.includes('id="toast"') && ltTemplate.includes('role="status"'), 'templates/index-lt.html: toast')) passed++;
   else failed++;
-  if (assert(html.includes('privatumas.html'), 'Nuoroda į privatumas.html')) passed++;
-  else failed++;
-  if (assert(html.includes('t.me/prompt_anatomy'), 'Telegram bendruomenė (t.me/prompt_anatomy)')) passed++;
+  if (assert(ltTemplate.includes('t.me/prompt_anatomy'), 'templates/index-lt.html: Telegram')) passed++;
   else failed++;
 
-  // --- Konfigūracija ir kritinės funkcijos ---
-  if (assert(html.includes('generator.js'), 'generator.js prijungtas')) passed++;
+  // --- Konfigūracija ir kritinės funkcijos (LT šablonas) ---
+  if (assert(ltTemplate.includes('generator.js'), 'templates/index-lt.html: generator.js')) passed++;
   else failed++;
-  if (assert(html.includes('copyPrompt') || html.includes('selectText'), 'Kopijavimo funkcijos (generator.js)')) passed++;
+  if (assert(ltTemplate.includes('copyPrompt') || ltTemplate.includes('selectText'), 'Kopijavimo funkcijos (generator.js)')) passed++;
   else failed++;
   const generatorJs = readFile(GENERATOR_PATH);
   if (assert(generatorJs && generatorJs.includes('localStorage') && generatorJs.includes('di_prompt_done_'), 'localStorage progresui (generator.js)')) passed++;
   else failed++;
-  if (assert(html.includes('hiddenTextarea'), 'Fallback textarea kopijavimui')) passed++;
+  if (assert(ltTemplate.includes('hiddenTextarea'), 'templates/index-lt.html: hiddenTextarea')) passed++;
   else failed++;
 
-  // --- Privatumas.html egzistuoja ---
+  // --- Privatumas vartai ir šablonas ---
   const privatumas = readFile(PRIVATUMAS_PATH);
   if (assert(privatumas !== null && privatumas.length > 0, 'privatumas.html egzistuoja')) passed++;
   else failed++;
+  if (assert(privatumas.includes('lang="en-US"'), 'šaknies privatumas.html lang="en-US"')) passed++;
+  else failed++;
+  if (assert(privatumas.includes('en/privatumas.html') && privatumas.includes('lt/privatumas.html'), 'privatumas vartai: EN ir LT nuorodos')) passed++;
+  else failed++;
 
-  // --- Lang ir prieinamumas ---
-  if (assert(html.includes('lang="lt"'), 'HTML lang="lt"')) passed++;
+  // --- Lang LT šablonas ---
+  if (assert(ltTemplate.includes('lang="lt"'), 'templates/index-lt.html lang="lt"')) passed++;
+  else failed++;
+  if (assert(ltPrivacyTemplate.includes('lang="lt"'), 'templates/privatumas-lt.html lang="lt"')) passed++;
   else failed++;
 
   // --- LT/en-US locale pages (built by npm run build) ---

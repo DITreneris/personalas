@@ -19,6 +19,7 @@ Visi reikšmingi pakeitimai projekte dokumentuojami čia. Formatas pagal [Keep a
 - **CI:** `pa11y` papildomai tikrina `/lt/`, `/en/` ir lokalių privatumo puslapių URL.
 - **Testai:** `lint:html:locales` – HTML validacija `lt/` ir `en/` puslapiams po build.
 - **US localization (PR #2, `en-US`):** ataskaita [docs/us-localization-report.md](docs/us-localization-report.md); anglų generuota patirtis su JAV formatais (žr. žemiau „Changed / Tests“ anglišku santraukos stiliumi).
+- **[Orchestrator] Numatytoji lankytojo kalba EN:** šaknies `/` ir `/privatumas.html` – lengvi vartai su nuorodomis į `en/` ir `lt/`; pilnas LT turinys – [templates/index-lt.html](templates/index-lt.html) ir [templates/privatumas-lt.html](templates/privatumas-lt.html); [scripts/build-locale-pages.js](scripts/build-locale-pages.js) skaito šablonus; SEO kanonas ir `x-default` – `/en/`; [vercel.json](vercel.json) – papildomas redirect `/` → `/en/`; dokumentacija ([README.md](README.md), [docs/language-guidelines-en-lt.md](docs/language-guidelines-en-lt.md), [AGENTS.md](AGENTS.md), [docs/process/development.md](docs/process/development.md)).
 
 ### Pakeista
 
@@ -47,6 +48,8 @@ Visi reikšmingi pakeitimai projekte dokumentuojami čia. Formatas pagal [Keep a
 - **US hiring EN (`en-US`):** Phase 5 contact-format guidance; Phase 4 geographic localization; `lang="en-US"` ir `hreflang="en-US"` su išsaugotu `/en/` maršrutu; JAV pavyzdžiai (adresai, datos, telefonai, atlygis); runtime normalizacija į `en-US` (žr. PR #2 santrauką angliškai žemiau).
 
 ### Pataisyta
+
+- **HTML5:** šaknies vartų `meta http-equiv="refresh"` – `content` reikšmėje tarpas po kabliataškio (`0; url=…`), kad atitiktų validatorių ([scripts/build-locale-pages.js](scripts/build-locale-pages.js)).
 
 - **GitHub Actions:** `deploy.yml` ir `ci.yml` – Node **22** (Actions Node 20 deprecation); `npm test` su **3 bandymais** (`nick-fields/retry@v3`), kad sumažinti `html5.validator.nu` tinklo trikdžių riziką; test job `timeout-minutes` padidintas iki **20**.
 
