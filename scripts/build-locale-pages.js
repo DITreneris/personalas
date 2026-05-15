@@ -144,6 +144,7 @@ function injectHead(html, locale, basePath) {
   const basePathScript = basePath
     ? '<script>window.BASE_PATH = \'' + basePath.replace(/'/g, "\\'") + '\';</script>\n    '
     : '';
+  html = html.replace('href="assets/styles.css"', 'href="../assets/styles.css"');
   html = html.replace(/<script src="generator\.js"><\/script>/, basePathScript + '<script src="../generator.js"></script>');
   return html;
 }
@@ -778,22 +779,20 @@ function buildPrivacyEn(html) {
     .replace('<html lang="lt">', '<html lang="en-US">')
     .replace(/<title>.*?<\/title>/, '<title>' + PRIVACY_EN.title + '</title>')
     .replace('href="favicon.svg"', 'href="../favicon.svg"')
+    .replace('href="assets/styles.css"', 'href="../assets/styles.css"')
     .replace(
-      '<a href="index.html" class="back">← Grįžti į Personalą</a>',
-      '<a href="index.html" class="back">' + PRIVACY_EN.back + '</a>'
+      '<a href="index.html" class="btn privacy-back">← Grįžti į Personalą</a>',
+      '<a href="index.html" class="btn privacy-back">' + PRIVACY_EN.back + '</a>'
     )
     .replace('Privatumo politika', 'Privacy Policy')
-    .replace(/<p><strong>Personalas<\/strong>[^]*?<\/p>/, '<p>' + PRIVACY_EN.intro + '</p>')
+    .replace(/<p class="intro"><strong>Personalas<\/strong>[^]*?<\/p>/, '<p class="intro">' + PRIVACY_EN.intro + '</p>')
     .replace('Ar renkame tavo duomenis?', PRIVACY_EN.q1)
     .replace(/<p><strong>Ne\.<\/strong>.*?serverius\.<\/p>/, '<p>' + PRIVACY_EN.a1 + '</p>')
     .replace('Kas vyksta tavo įrenginyje?', PRIVACY_EN.q2)
     .replace(/<p>Tik naršyklės.*?įrenginyje\.<\/p>/, '<p>' + PRIVACY_EN.a2 + '</p>')
     .replace('Jei vėliau bus forma', PRIVACY_EN.q3)
     .replace(/<p>Jei įjungsime.*?naudojame\.<\/p>/, '<p>' + PRIVACY_EN.a3 + '</p>')
-    .replace(
-      '<p style="margin-top: 2rem;"><a href="index.html">← Grįžti į Personalą</a></p>',
-      '<p style="margin-top: 2rem;"><a href="index.html">' + PRIVACY_EN.backLink + '</a></p>'
-    );
+    .replace('← Grįžti į Personalą', PRIVACY_EN.backLink);
 }
 
 /** Strip injected SEO between viewport and meta description so locale builds work after finalizeRootIndexHtml. */
@@ -827,7 +826,9 @@ function main() {
   // LT
   let ltIndex = injectHead(indexHtml, 'lt', BASE_PATH);
   write('lt/index.html', ltIndex);
-  let ltPrivacy = privacyHtml.replace('href="favicon.svg"', 'href="../favicon.svg"');
+  let ltPrivacy = privacyHtml
+    .replace('href="favicon.svg"', 'href="../favicon.svg"')
+    .replace('href="assets/styles.css"', 'href="../assets/styles.css"');
   ltPrivacy = injectPrivacyHead(
     ltPrivacy,
     'lt',

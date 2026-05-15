@@ -22,3 +22,11 @@ Statinė HTML platforma: 10 HR atrankos promptų. Pasirinkti → kopijuoti → �
 git remote add personalas https://github.com/DITreneris/personalas.git
 git push personalas main
 ```
+
+## Contributor workflow
+
+Source of truth:
+
+- **LT turinys ir UI:** [`templates/index-lt.html`](templates/index-lt.html), [`templates/privatumas-lt.html`](templates/privatumas-lt.html); bendri tokenai ir primitivai – [`assets/styles.css`](assets/styles.css); logika – [`generator.js`](generator.js); build – [`scripts/build-locale-pages.js`](scripts/build-locale-pages.js).
+- Šaknies `index.html` / `privatumas.html` – tik EN vartai (build papildo `<head>`); ne redaguokite ranka po `npm run build` be commit intent.
+- **Neredaguokite** generuotų `lt/*` ir `en/*` ranka – po pakeitimų paleiskite `npm run build` (arba `npm test`).
