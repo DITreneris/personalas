@@ -1,278 +1,255 @@
 /**
- * Struktūriniai testai – šaknies vartai (index.html), LT šablonas (templates/), build lt/en.
- * Paleisti: node tests/structure.test.js (arba npm test; build vyksta prieš testą)
+ * Structural tests – root EN gateway (index.html), build pipeline source (templates/),
+ * EN locale build, paid PDF API skeleton, and Stripe success/terms pages.
+ * Run: node tests/structure.test.js (or npm test; build runs first).
  */
 'use strict';
 
 const fs = require('fs');
 const path = require('path');
 
-const INDEX_PATH = path.join(__dirname, '..', 'index.html');
-const PRIVATUMAS_PATH = path.join(__dirname, '..', 'privatumas.html');
-const LT_INDEX_TEMPLATE_PATH = path.join(__dirname, '..', 'templates', 'index-lt.html');
-const LT_PRIVACY_TEMPLATE_PATH = path.join(__dirname, '..', 'templates', 'privatumas-lt.html');
-const GENERATOR_PATH = path.join(__dirname, '..', 'generator.js');
+const ROOT = path.join(__dirname, '..');
+const INDEX_PATH = path.join(ROOT, 'index.html');
+const PRIVATUMAS_PATH = path.join(ROOT, 'privatumas.html');
+const TEMPLATE_INDEX_PATH = path.join(ROOT, 'templates', 'index-lt.html');
+const TEMPLATE_PRIVACY_PATH = path.join(ROOT, 'templates', 'privatumas-lt.html');
+const GENERATOR_PATH = path.join(ROOT, 'generator.js');
 
 function readFile(filePath) {
   try {
     return fs.readFileSync(filePath, 'utf8');
-  } catch (e) {
+  } catch (_e) {
     return null;
   }
 }
 
 function assert(condition, message) {
   if (!condition) {
-    console.error(`❌ ${message}`);
+    console.error(`FAIL: ${message}`);
     return false;
   }
-  console.log(`✅ ${message}`);
+  console.log(`PASS: ${message}`);
   return true;
 }
 
 function run() {
   let passed = 0;
   let failed = 0;
+  const tally = (ok) => { if (ok) passed++; else failed++; };
 
   const html = readFile(INDEX_PATH);
   if (!html) {
-    console.error('❌ index.html nerastas:', INDEX_PATH);
+    console.error('index.html not found:', INDEX_PATH);
     process.exit(1);
   }
 
-  const ltTemplate = readFile(LT_INDEX_TEMPLATE_PATH);
-  if (!ltTemplate) {
-    console.error('❌ templates/index-lt.html nerastas:', LT_INDEX_TEMPLATE_PATH);
+  const template = readFile(TEMPLATE_INDEX_PATH);
+  if (!template) {
+    console.error('templates/index-lt.html (build source) not found:', TEMPLATE_INDEX_PATH);
     process.exit(1);
   }
 
-  const ltPrivacyTemplate = readFile(LT_PRIVACY_TEMPLATE_PATH);
-  if (!ltPrivacyTemplate) {
-    console.error('❌ templates/privatumas-lt.html nerastas:', LT_PRIVACY_TEMPLATE_PATH);
+  const templatePrivacy = readFile(TEMPLATE_PRIVACY_PATH);
+  if (!templatePrivacy) {
+    console.error('templates/privatumas-lt.html (build source) not found:', TEMPLATE_PRIVACY_PATH);
     process.exit(1);
   }
 
-  // --- Šaknies vartai (EN numatytasis) ---
-  if (assert(html.includes('lang="en-US"'), 'šaknies index.html lang="en-US" (vartai)')) passed++;
-  else failed++;
-  if (assert(html.includes('href="en/"') && !html.includes('<a href="lt/'), 'vartai: tik EN nuoroda body (be lt/)')) passed++;
-  else failed++;
-  if (assert(html.includes('rel="canonical"') && html.includes('/en/">'), 'šaknies canonical į /en/')) passed++;
-  else failed++;
-  if (assert(html.includes('http-equiv="refresh"') && html.includes('/en/'), 'šaknies meta refresh į EN')) passed++;
-  else failed++;
-  if (assert(html.includes('privatumas.html'), 'vartai: nuoroda į privatumas.html')) passed++;
-  else failed++;
+  // --- Root EN gateway ---
+  tally(assert(html.includes('lang="en-US"'), 'root index.html lang="en-US" (gateway)'));
+  tally(assert(html.includes('href="en/"') && !html.includes('<a href="lt/'), 'gateway: only EN link in body (no lt/)'));
+  tally(assert(html.includes('rel="canonical"') && html.includes('/en/">'), 'root canonical points to /en/'));
+  tally(assert(html.includes('http-equiv="refresh"') && html.includes('/en/'), 'root meta refresh to EN'));
+  tally(assert(html.includes('privatumas.html'), 'gateway: link to privatumas.html'));
+  tally(assert(!html.includes('hreflang="lt"'), 'root index.html has no hreflang="lt"'));
+  tally(assert(!html.includes('og:locale:alternate'), 'root index.html has no og:locale:alternate'));
 
-  // --- 10 promptų (LT šablonas) ---
+  // --- 10 prompts (template) ---
   for (let i = 1; i <= 10; i++) {
-    if (assert(ltTemplate.includes(`id="prompt${i}"`), `templates/index-lt.html: prompt ${i} ID (prompt${i})`)) passed++;
-    else failed++;
+    tally(assert(template.includes(`id="prompt${i}"`), `templates/index-lt.html: prompt ${i} id (prompt${i})`));
   }
   for (let i = 1; i <= 10; i++) {
-    if (assert(ltTemplate.includes(`id="block${i}"`), `templates/index-lt.html: anchor block${i}`)) passed++;
-    else failed++;
+    tally(assert(template.includes(`id="block${i}"`), `templates/index-lt.html: anchor block${i}`));
   }
 
-  // --- Kopijuoti mygtukai (10) ---
-  const copyButtons = (ltTemplate.match(/Kopijuoti promptą/g) || []).length;
-  if (assert(copyButtons >= 10, `templates/index-lt.html: Kopijuoti promptą mygtukų: ${copyButtons} (>= 10)`)) passed++;
-  else failed++;
+  // --- Copy buttons (10) and shared structure ---
+  const copyButtons = (template.match(/Kopijuoti promptą/g) || []).length;
+  tally(assert(copyButtons >= 10, `templates/index-lt.html: copy buttons (>= 10): ${copyButtons}`));
+  const codeBlocks = (template.match(/class="[^"]*code-block[^"]*"/g) || []).length;
+  tally(assert(codeBlocks >= 10, `templates/index-lt.html: code-block elements (>= 10): ${codeBlocks}`));
+  const checkboxes = (template.match(/class="[^"]*prompt-done[^"]*"/g) || []).length;
+  tally(assert(checkboxes >= 10, `templates/index-lt.html: prompt-done checkboxes (>= 10): ${checkboxes}`));
 
-  // --- Code-block (10) ---
-  const codeBlocks = (ltTemplate.match(/class="[^"]*code-block[^"]*"/g) || []).length;
-  if (assert(codeBlocks >= 10, `templates/index-lt.html: code-block elementų: ${codeBlocks} (>= 10)`)) passed++;
-  else failed++;
+  // --- Accessibility / semantics (template) ---
+  tally(assert(template.includes('href="#main-content"') && template.includes('skip-link'), 'templates/index-lt.html: skip link'));
+  tally(assert(template.includes('id="main-content"') && template.includes('<main'), 'templates/index-lt.html: main region'));
+  tally(assert(template.includes('id="progressText"') && template.includes('id="progressBarFill"'), 'templates/index-lt.html: progress indicator'));
+  tally(assert(template.includes('id="toast"') && template.includes('role="status"'), 'templates/index-lt.html: toast'));
+  tally(assert(template.includes('t.me/prompt_anatomy'), 'templates/index-lt.html: Telegram link'));
 
-  // --- Pažymėjau kaip atlikau (10 checkbox) ---
-  const checkboxes = (ltTemplate.match(/class="[^"]*prompt-done[^"]*"/g) || []).length;
-  if (assert(checkboxes >= 10, `templates/index-lt.html: prompt-done checkbox: ${checkboxes} (>= 10)`)) passed++;
-  else failed++;
-
-  // --- Prieinamumas / semantika (LT šablonas) ---
-  if (assert(ltTemplate.includes('href="#main-content"') && ltTemplate.includes('skip-link'), 'templates/index-lt.html: skip link')) passed++;
-  else failed++;
-  if (assert(ltTemplate.includes('id="main-content"') && ltTemplate.includes('<main'), 'templates/index-lt.html: main region')) passed++;
-  else failed++;
-  if (assert(ltTemplate.includes('id="progressText"') && ltTemplate.includes('id="progressBarFill"'), 'templates/index-lt.html: progreso indikatorius')) passed++;
-  else failed++;
-  if (assert(ltTemplate.includes('id="toast"') && ltTemplate.includes('role="status"'), 'templates/index-lt.html: toast')) passed++;
-  else failed++;
-  if (assert(ltTemplate.includes('t.me/prompt_anatomy'), 'templates/index-lt.html: Telegram')) passed++;
-  else failed++;
-
-  // --- Konfigūracija ir kritinės funkcijos (LT šablonas) ---
-  if (assert(ltTemplate.includes('generator.js'), 'templates/index-lt.html: generator.js')) passed++;
-  else failed++;
-  if (assert(ltTemplate.includes('copyPrompt') || ltTemplate.includes('selectText'), 'Kopijavimo funkcijos (generator.js)')) passed++;
-  else failed++;
+  // --- Critical functions ---
+  tally(assert(template.includes('generator.js'), 'templates/index-lt.html: generator.js script'));
+  tally(assert(template.includes('copyPrompt') || template.includes('selectText'), 'copy functions reference (generator.js)'));
   const generatorJs = readFile(GENERATOR_PATH);
-  if (assert(generatorJs && generatorJs.includes('localStorage') && generatorJs.includes('di_prompt_done_'), 'localStorage progresui (generator.js)')) passed++;
-  else failed++;
-  if (assert(ltTemplate.includes('hiddenTextarea'), 'templates/index-lt.html: hiddenTextarea')) passed++;
-  else failed++;
+  tally(assert(generatorJs && generatorJs.includes('localStorage') && generatorJs.includes('di_prompt_done_'), 'generator.js: localStorage progress'));
+  tally(assert(template.includes('hiddenTextarea'), 'templates/index-lt.html: hiddenTextarea for copy fallback'));
 
-  // --- Privatumas vartai ir šablonas ---
+  // --- Root privacy gateway ---
   const privatumas = readFile(PRIVATUMAS_PATH);
-  if (assert(privatumas !== null && privatumas.length > 0, 'privatumas.html egzistuoja')) passed++;
-  else failed++;
-  if (assert(privatumas.includes('lang="en-US"'), 'šaknies privatumas.html lang="en-US"')) passed++;
-  else failed++;
-  if (
-    assert(
-      privatumas.includes('en/privatumas.html') && !privatumas.includes('<a href="lt/privatumas.html">'),
-      'privatumas vartai: tik EN nuoroda body'
-    )
-  )
-    passed++;
-  else failed++;
+  tally(assert(privatumas !== null && privatumas.length > 0, 'privatumas.html exists'));
+  tally(assert(privatumas && privatumas.includes('lang="en-US"'), 'root privatumas.html lang="en-US"'));
+  tally(assert(privatumas && privatumas.includes('en/privatumas.html') && !privatumas.includes('<a href="lt/privatumas.html">'), 'privacy gateway: only EN link in body'));
+  tally(assert(privatumas && !privatumas.includes('hreflang="lt"'), 'root privatumas.html has no hreflang="lt"'));
 
-  // --- Lang LT šablonas ---
-  if (assert(ltTemplate.includes('lang="lt"'), 'templates/index-lt.html lang="lt"')) passed++;
-  else failed++;
-  if (assert(ltPrivacyTemplate.includes('lang="lt"'), 'templates/privatumas-lt.html lang="lt"')) passed++;
-  else failed++;
+  // --- Built EN locale pages (npm run build) ---
+  const enIndexPath = path.join(ROOT, 'en', 'index.html');
+  const enPrivacyPath = path.join(ROOT, 'en', 'privatumas.html');
 
-  // --- LT/en-US locale pages (built by npm run build) ---
-  const ltIndexPath = path.join(__dirname, '..', 'lt', 'index.html');
-  const enIndexPath = path.join(__dirname, '..', 'en', 'index.html');
-  const ltPrivacyPath = path.join(__dirname, '..', 'lt', 'privatumas.html');
-  const enPrivacyPath = path.join(__dirname, '..', 'en', 'privatumas.html');
-
-  const ltIndex = readFile(ltIndexPath);
   const enIndex = readFile(enIndexPath);
-  if (assert(ltIndex !== null && ltIndex.length > 0, 'lt/index.html egzistuoja')) passed++;
-  else failed++;
-  if (assert(enIndex !== null && enIndex.length > 0, 'en/index.html egzistuoja')) passed++;
-  else failed++;
-  if (assert(readFile(ltPrivacyPath) !== null, 'lt/privatumas.html egzistuoja')) passed++;
-  else failed++;
-  if (assert(readFile(enPrivacyPath) !== null, 'en/privatumas.html egzistuoja')) passed++;
-  else failed++;
+  tally(assert(enIndex !== null && enIndex.length > 0, 'en/index.html exists'));
+  tally(assert(readFile(enPrivacyPath) !== null, 'en/privatumas.html exists'));
 
-  if (ltIndex && assert(ltIndex.includes('lang="lt"'), 'lt/index.html lang="lt"')) passed++;
-  else failed++;
-  if (ltIndex && assert(!ltIndex.includes('Common questions before you start'), 'lt/index.html: DUK lietuvių kalba (nėra angliškos FAQ antraštės)')) passed++;
-  else failed++;
-  if (enIndex && assert(enIndex.includes('lang="en-US"'), 'en/index.html lang="en-US"')) passed++;
-  else failed++;
-  if (enIndex && assert(!enIndex.includes('id="langLtBtn"') && !enIndex.includes('class="lang-switcher"'), 'en/index.html be kalbos perjungiklio')) passed++;
-  else failed++;
-  if (ltIndex && assert(ltIndex.includes('id="langEnBtn"'), 'lt/index.html: EN perjungimas')) passed++;
-  else failed++;
-
-  if (ltIndex && assert(ltIndex.includes('rel="canonical"') && ltIndex.includes('hreflang="lt"') && ltIndex.includes('hreflang="en-US"') && ltIndex.includes('hreflang="x-default"'), 'lt/index.html canonical ir hreflang')) passed++;
-  else failed++;
-  if (enIndex && assert(enIndex.includes('rel="canonical"') && enIndex.includes('hreflang="lt"') && enIndex.includes('hreflang="en-US"') && enIndex.includes('hreflang="x-default"'), 'en/index.html canonical ir hreflang')) passed++;
-  else failed++;
-
-  const canonicalHttps = /<link rel="canonical" href="https:/;
-  if (ltIndex && assert(canonicalHttps.test(ltIndex), 'lt/index.html canonical naudoja absoliutų HTTPS URL')) passed++;
-  else failed++;
-  if (enIndex && assert(canonicalHttps.test(enIndex), 'en/index.html canonical naudoja absoliutų HTTPS URL')) passed++;
-  else failed++;
-  if (ltIndex && assert(ltIndex.includes('og:image" content="https://'), 'lt/index.html OG image absoliutus HTTPS')) passed++;
-  else failed++;
-  if (enIndex && assert(enIndex.includes('og:image" content="https://'), 'en/index.html OG image absoliutus HTTPS')) passed++;
-  else failed++;
-  if (ltIndex && assert(ltIndex.includes('<meta name="description"'), 'lt/index.html meta description')) passed++;
-  else failed++;
-  if (enIndex && assert(enIndex.includes('<meta name="description"'), 'en/index.html meta description')) passed++;
-  else failed++;
-  if (ltIndex && assert(ltIndex.includes('application/ld+json'), 'lt/index.html JSON-LD')) passed++;
-  else failed++;
-  if (enIndex && assert(enIndex.includes('application/ld+json'), 'en/index.html JSON-LD')) passed++;
-  else failed++;
-
-  const ltPrivacy = readFile(ltPrivacyPath);
-  const enPrivacy = readFile(enPrivacyPath);
-  if (ltPrivacy && assert(canonicalHttps.test(ltPrivacy), 'lt/privatumas.html canonical HTTPS')) passed++;
-  else failed++;
-  if (enPrivacy && assert(canonicalHttps.test(enPrivacy), 'en/privatumas.html canonical HTTPS')) passed++;
-  else failed++;
-  if (ltPrivacy && assert(ltPrivacy.includes('property="og:image"'), 'lt/privatumas.html OG image')) passed++;
-  else failed++;
-  if (enPrivacy && assert(enPrivacy.includes('property="og:image"'), 'en/privatumas.html OG image')) passed++;
-  else failed++;
-
-  const robotsPath = path.join(__dirname, '..', 'robots.txt');
-  const sitemapPath = path.join(__dirname, '..', 'sitemap.xml');
-  const robots = readFile(robotsPath);
-  const sitemap = readFile(sitemapPath);
-  if (assert(robots !== null && robots.includes('Sitemap: https://'), 'robots.txt su absoliučiu Sitemap URL')) passed++;
-  else failed++;
-  if (assert(sitemap !== null && sitemap.includes('<urlset') && sitemap.includes('<loc>https://'), 'sitemap.xml su absoliučiais loc')) passed++;
-  else failed++;
+  // No lt/ output
+  tally(assert(!fs.existsSync(path.join(ROOT, 'lt', 'index.html')), 'no lt/index.html (EN-only output)'));
+  tally(assert(!fs.existsSync(path.join(ROOT, 'lt', 'privatumas.html')), 'no lt/privatumas.html (EN-only output)'));
 
   if (enIndex) {
+    tally(assert(enIndex.includes('lang="en-US"'), 'en/index.html lang="en-US"'));
+    tally(assert(!enIndex.includes('id="langLtBtn"') && !enIndex.includes('class="lang-switcher"'), 'en/index.html has no language switcher'));
+    tally(assert(!enIndex.includes('<div class="lt-only-qa-nav"'), 'en/index.html has no lt-only-qa-nav block'));
+    tally(assert(!enIndex.includes('hreflang="lt"'), 'en/index.html has no hreflang="lt"'));
+    tally(assert(!enIndex.includes('og:locale:alternate'), 'en/index.html has no og:locale:alternate'));
+    tally(assert(enIndex.includes('rel="canonical"') && enIndex.includes('hreflang="en-US"') && enIndex.includes('hreflang="x-default"'), 'en/index.html canonical and EN/x-default hreflang'));
+    const canonicalHttps = /<link rel="canonical" href="https:/;
+    tally(assert(canonicalHttps.test(enIndex), 'en/index.html canonical uses absolute HTTPS URL'));
+    tally(assert(enIndex.includes('og:image" content="https://'), 'en/index.html OG image absolute HTTPS'));
+    tally(assert(enIndex.includes('<meta name="description"'), 'en/index.html meta description'));
+    tally(assert(enIndex.includes('application/ld+json'), 'en/index.html JSON-LD'));
+
     for (let i = 1; i <= 10; i++) {
-      if (assert(enIndex.includes('id="prompt' + i + '"') && enIndex.includes('id="block' + i + '"'), 'en/index.html prompt ' + i)) passed++;
-      else failed++;
+      tally(assert(enIndex.includes('id="prompt' + i + '"') && enIndex.includes('id="block' + i + '"'), 'en/index.html prompt ' + i));
     }
+
+    tally(assert(enIndex.includes('Skip to content') && (enIndex.includes('Copy prompt') || enIndex.includes('Copy')), 'en/index.html EN strings'));
+
+    // US localization checks
+    tally(assert(enIndex.includes('New York, NY') || enIndex.includes('San Francisco, CA'), 'en/index.html includes a US city/state example'));
+    tally(assert(['New York, NY', 'San Francisco, CA', 'Austin, TX', 'Chicago, IL', 'Seattle, WA'].filter((c) => enIndex.includes(c)).length >= 4, 'en/index.html includes multiple US city/state examples'));
+    const roleLocationCount = (enIndex.match(/Role location:/g) || []).length;
+    tally(assert(roleLocationCount >= 10, 'en/index.html: role-location placeholders for all prompts'));
+    tally(assert(enIndex.includes('Remote – US') && enIndex.includes('Hybrid – New York, NY') && enIndex.includes('On-site – Austin, TX'), 'en/index.html: remote, hybrid, on-site US examples'));
+    tally(assert(enIndex.includes('City, State, optional Zip Code') && enIndex.includes('San Francisco, CA 94105') && enIndex.includes('Seattle, WA 98101'), 'en/index.html: US location format with optional Zip Code'));
+    tally(assert(/\$\d{1,3}(,\d{3})*(\.\d{2})?/.test(enIndex), 'en/index.html includes US dollar formatting'));
+    tally(assert(enIndex.includes('MM/DD/YYYY'), 'en/index.html includes US date format guidance'));
+    tally(assert(enIndex.includes('+1 (415) 555-0198'), 'en/index.html includes US phone format guidance'));
+    tally(assert(enIndex.includes('Zip Code'), 'en/index.html includes US address terminology'));
+    tally(assert(enIndex.includes('Address fields:') && enIndex.includes('<code>Street Address</code>') && enIndex.includes('<code>City</code>') && enIndex.includes('<code>State</code>') && enIndex.includes('<code>Zip Code</code>'), 'en/index.html: explicit US address field order'));
+    tally(assert(enIndex.includes('Phone format:') && enIndex.includes('<code>+1 (XXX) XXX-XXXX</code>') && enIndex.includes('Contact phone: [optional, e.g., +1 (415) 555-0198]'), 'en/index.html: canonical US phone format'));
+    const streetAddressCount = (enIndex.match(/Street Address: \[optional, e\.g\., 123 Market St\]/g) || []).length;
+    tally(assert(streetAddressCount >= 10, 'en/index.html: Street Address placeholders for all prompts'));
+    tally(assert(enIndex.includes('State: [two-letter State, e.g., NY]') && enIndex.includes('Zip Code: [optional, e.g., 10001]'), 'en/index.html: two-letter State and Zip Code placeholders'));
+    tally(assert(!/(€|\bEUR\b|Postcode|postcode|Colour|colour|organisation|optimise|centre|grey|Analyse|analyse|Spin-off Nr\.)/.test(enIndex), 'en/index.html: no obvious non-US locale fragments'));
+    tally(assert(!/[ąčęėįšųūžĄČĘĖĮŠŲŪŽ]/.test(enIndex), 'en/index.html: no Lithuanian diacritics'));
   }
-  if (enIndex && assert(enIndex.includes('Skip to content') && (enIndex.includes('Copy prompt') || enIndex.includes('Copy')), 'en/index.html EN stringai')) passed++;
-  else failed++;
 
-  if (enIndex && assert(enIndex.includes('New York, NY') || enIndex.includes('San Francisco, CA'), 'en/index.html includes a US city/state example')) passed++;
-  else failed++;
-  if (enIndex && assert(['New York, NY', 'San Francisco, CA', 'Austin, TX', 'Chicago, IL', 'Seattle, WA'].filter((city) => enIndex.includes(city)).length >= 4, 'en/index.html includes multiple US city/state examples')) passed++;
-  else failed++;
-  const roleLocationCount = enIndex ? (enIndex.match(/Role location:/g) || []).length : 0;
-  if (enIndex && assert(roleLocationCount >= 10, 'en/index.html includes role-location placeholders for all prompts')) passed++;
-  else failed++;
-  if (enIndex && assert(enIndex.includes('Remote – US') && enIndex.includes('Hybrid – New York, NY') && enIndex.includes('On-site – Austin, TX'), 'en/index.html includes remote, hybrid, and on-site US location examples')) passed++;
-  else failed++;
-  if (enIndex && assert(enIndex.includes('City, State, optional Zip Code') && enIndex.includes('San Francisco, CA 94105') && enIndex.includes('Seattle, WA 98101'), 'en/index.html includes US location format with optional Zip Code examples')) passed++;
-  else failed++;
-  if (enIndex && assert(/\$\d{1,3}(,\d{3})*(\.\d{2})?/.test(enIndex), 'en/index.html includes US dollar formatting')) passed++;
-  else failed++;
-  if (enIndex && assert(enIndex.includes('MM/DD/YYYY'), 'en/index.html includes US date format guidance')) passed++;
-  else failed++;
-  if (enIndex && assert(enIndex.includes('+1 (415) 555-0198'), 'en/index.html includes US phone format guidance')) passed++;
-  else failed++;
-  if (enIndex && assert(enIndex.includes('Zip Code'), 'en/index.html includes US address terminology')) passed++;
-  else failed++;
-  if (
-    enIndex &&
-      assert(
-        enIndex.includes('Address fields:') &&
-          enIndex.includes('<code>Street Address</code>') &&
-          enIndex.includes('<code>City</code>') &&
-          enIndex.includes('<code>State</code>') &&
-          enIndex.includes('<code>Zip Code</code>'),
-        'en/index.html includes explicit US address field order'
-      )
-  )
-    passed++;
-  else failed++;
-  if (
-    enIndex &&
-      assert(
-        enIndex.includes('Phone format:') &&
-          enIndex.includes('<code>+1 (XXX) XXX-XXXX</code>') &&
-          enIndex.includes('Contact phone: [optional, e.g., +1 (415) 555-0198]'),
-        'en/index.html includes canonical US phone format and prompt placeholder'
-      )
-  )
-    passed++;
-  else failed++;
-  const streetAddressCount = enIndex ? (enIndex.match(/Street Address: \[optional, e\.g\., 123 Market St\]/g) || []).length : 0;
-  if (enIndex && assert(streetAddressCount >= 10, 'en/index.html includes Street Address placeholders for all prompts')) passed++;
-  else failed++;
-  if (enIndex && assert(enIndex.includes('State: [two-letter State, e.g., NY]') && enIndex.includes('Zip Code: [optional, e.g., 10001]'), 'en/index.html includes two-letter State and Zip Code placeholders')) passed++;
-  else failed++;
-  if (enIndex && assert(!/(€|\bEUR\b|Postcode|postcode|Colour|colour|organisation|optimise|centre|grey|Analyse|analyse|Spin-off Nr\.)/.test(enIndex), 'en/index.html has no obvious non-US locale fragments')) passed++;
-  else failed++;
-  if (enIndex && assert(!/[ąčęėįšųūžĄČĘĖĮŠŲŪŽ]/.test(enIndex), 'en/index.html has no Lithuanian diacritics')) passed++;
-  else failed++;
+  const enPrivacy = readFile(enPrivacyPath);
+  if (enPrivacy) {
+    const canonicalHttps = /<link rel="canonical" href="https:/;
+    tally(assert(canonicalHttps.test(enPrivacy), 'en/privatumas.html canonical HTTPS'));
+    tally(assert(enPrivacy.includes('property="og:image"'), 'en/privatumas.html OG image'));
+    tally(assert(!enPrivacy.includes('hreflang="lt"'), 'en/privatumas.html has no hreflang="lt"'));
+    tally(assert(enPrivacy.includes('Stripe') && enPrivacy.includes('Resend'), 'en/privatumas.html discloses paid PDF sub-processors'));
+    tally(assert(!/[ąčęėįšųūžĄČĘĖĮŠŲŪŽ]/.test(enPrivacy), 'en/privatumas.html: no Lithuanian diacritics'));
+  }
 
+  // --- robots.txt and sitemap.xml ---
+  const robotsPath = path.join(ROOT, 'robots.txt');
+  const sitemapPath = path.join(ROOT, 'sitemap.xml');
+  const robots = readFile(robotsPath);
+  const sitemap = readFile(sitemapPath);
+  tally(assert(robots !== null && robots.includes('Sitemap: https://'), 'robots.txt with absolute Sitemap URL'));
+  tally(assert(sitemap !== null && sitemap.includes('<urlset') && sitemap.includes('<loc>https://'), 'sitemap.xml with absolute <loc>'));
+  tally(assert(sitemap && !/\/lt\//.test(sitemap), 'sitemap.xml: no /lt/ entries'));
+  tally(assert(sitemap && sitemap.includes('/en/'), 'sitemap.xml: includes /en/ entry'));
+
+  // --- Paid PDF API skeleton ---
+  const apiDir = path.join(ROOT, 'api');
+  tally(assert(fs.existsSync(path.join(apiDir, 'stripe-webhook.js')), 'api/stripe-webhook.js exists'));
+  tally(assert(fs.existsSync(path.join(apiDir, 'download.js')), 'api/download.js exists'));
+  tally(assert(fs.existsSync(path.join(apiDir, 'download-link.js')), 'api/download-link.js exists'));
+  const fulfillmentPath = path.join(apiDir, '_lib', 'fulfillment.js');
+  tally(assert(fs.existsSync(fulfillmentPath), 'api/_lib/fulfillment.js exists'));
+  const fulfillment = readFile(fulfillmentPath);
+  tally(assert(fulfillment && fulfillment.includes("id: 'beginner'") && fulfillment.includes("id: 'advanced'"), 'fulfillment.js declares beginner and advanced products'));
+  tally(assert(fulfillment && fulfillment.includes('STRIPE_PRICE_BEGINNER_PDF') && fulfillment.includes('STRIPE_PRICE_ADVANCED_PDF'), 'fulfillment.js references both Stripe price env vars'));
+
+  // --- Success page ---
+  const successPath = path.join(ROOT, 'success.html');
+  const success = readFile(successPath);
+  tally(assert(success !== null, 'success.html exists'));
+  tally(assert(success && success.includes('session_id'), 'success.html reads session_id'));
+  tally(assert(success && success.includes('/api/download-link'), 'success.html polls /api/download-link'));
+  tally(assert(success && success.includes('lang="en-US"'), 'success.html lang="en-US"'));
+
+  // --- Terms page ---
+  const termsPath = path.join(ROOT, 'terms.html');
+  const terms = readFile(termsPath);
+  tally(assert(terms !== null, 'terms.html exists'));
+  tally(assert(terms && terms.includes('paid-pdf-license'), 'terms.html has paid-pdf-license anchor'));
+  tally(assert(terms && terms.includes('lang="en-US"'), 'terms.html lang="en-US"'));
+
+  // --- PDF source HTML ---
+  const beginnerPdfHtml = readFile(path.join(ROOT, 'docs', 'pdf-source', 'beginner-personalas-hr.html'));
+  const advancedPdfHtml = readFile(path.join(ROOT, 'docs', 'pdf-source', 'advanced-personalas-hr.html'));
+  tally(assert(beginnerPdfHtml && (beginnerPdfHtml.match(/<section class="page/g) || []).length === 12, 'beginner PDF HTML has 12 pages'));
+  tally(assert(advancedPdfHtml && (advancedPdfHtml.match(/<section class="page/g) || []).length === 24, 'advanced PDF HTML has 24 pages'));
+  tally(assert(beginnerPdfHtml && beginnerPdfHtml.includes('www.promptanatomy.app') && beginnerPdfHtml.includes('promptanatomy.help'), 'beginner PDF branding'));
+  tally(assert(advancedPdfHtml && advancedPdfHtml.includes('www.promptanatomy.app') && advancedPdfHtml.includes('promptanatomy.help'), 'advanced PDF branding'));
+
+  const sotPath = path.join(ROOT, 'config', 'sot.json');
+  const sotRaw = readFile(sotPath);
+  let sot = null;
+  try {
+    sot = sotRaw ? JSON.parse(sotRaw) : null;
+  } catch (_e) {
+    sot = null;
+  }
+  tally(assert(sot && sot.pdfGuides && sot.pdfGuides.beginner && Array.isArray(sot.pdfGuides.beginner.chapters) && sot.pdfGuides.beginner.chapters.length >= 8, 'sot.json beginner chapters'));
+  tally(assert(sot && sot.pdfGuides && sot.pdfGuides.advanced && Array.isArray(sot.pdfGuides.advanced.chapters) && sot.pdfGuides.advanced.chapters.length >= 8, 'sot.json advanced chapters'));
+  tally(assert(sot && Array.isArray(sot.buyerFaq) && sot.buyerFaq.length === 5, 'sot.json buyerFaq has 5 items'));
+
+  const beginnerCover = path.join(ROOT, 'assets', 'pdf-covers', 'beginner.png');
+  tally(assert(fs.existsSync(beginnerCover), 'assets/pdf-covers/beginner.png exists'));
+  const advancedCover = path.join(ROOT, 'assets', 'pdf-covers', 'advanced.png');
+  tally(assert(fs.existsSync(advancedCover), 'assets/pdf-covers/advanced.png exists'));
+  ['beginner', 'advanced'].forEach(function (prefix) {
+    [2, 3, 4].forEach(function (n) {
+      const sample = path.join(ROOT, 'assets', 'pdf-covers', prefix + '-p' + n + '.png');
+      tally(assert(fs.existsSync(sample), 'assets/pdf-covers/' + prefix + '-p' + n + '.png exists'));
+    });
+  });
+
+  // --- PDF CTAs on EN index ---
+  if (enIndex) {
+    tally(assert(enIndex.includes('Beginner') && enIndex.includes('Advanced'), 'en/index.html mentions Beginner and Advanced PDFs'));
+    tally(assert(enIndex.includes('$5.99') && enIndex.includes('$11.99'), 'en/index.html shows $5.99 and $11.99 prices'));
+    tally(assert(enIndex.includes('id="pdf-guides"'), 'en/index.html pdf-guides section'));
+    tally(assert(enIndex.includes('data-product="beginner-pdf"') && enIndex.includes('data-product="advanced-pdf"'), 'PDF Stripe product markers'));
+    tally(assert(enIndex.includes('class="pdf-guide-specs"') && enIndex.includes('12 pages') && enIndex.includes('24 pages'), 'PDF specs row'));
+    tally(assert(enIndex.includes('Personal license') && enIndex.includes('terms.html#paid-pdf-license'), 'PDF personal license line'));
+    tally(assert(enIndex.includes('class="pdf-guide-trust"') && enIndex.includes('Stripe checkout'), 'PDF trust row'));
+    tally(assert(enIndex.includes('id="pdfPreviewDialog"') && enIndex.includes('data-preview-trigger="beginner"'), 'PDF preview dialog'));
+    tally(assert(enIndex.includes('id="pdf-guides-faq"') && enIndex.includes('data-buyer-faq-list'), 'Buyer FAQ hook'));
+    tally(assert(enIndex.includes('class="pdf-author-panel"') && enIndex.includes('promptanatomy.app'), 'Author panel'));
+    tally(assert(success && success.includes('terms.html#paid-pdf-license'), 'success.html license link'));
+  }
 
   console.log('\n---');
-  console.log(`Rezultatas: ${passed} praeina, ${failed} nepraeina.`);
+  console.log(`Result: ${passed} passed, ${failed} failed.`);
   if (failed > 0) {
     process.exit(1);
   }
-  console.log('Visi struktūriniai testai praeina.\n');
+  console.log('All structural tests pass.\n');
 }
 
 run();

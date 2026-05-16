@@ -1,18 +1,25 @@
-# Cursor Rules - DI Promptų Biblioteka Projektas
+# Cursor Rules – Personalas (statinė HTML svetainė)
 
-## 🎯 Projekto Apžvalga
-Šis projektas yra interaktyvi HTML platforma verslo analitikams su Google Sheets integracija. Visi taisykles turi atsižvelgti į statinio HTML pobūdį, saugumą ir konfidencialumą.
+## Projekto apžvalga
+Statinių puslapių projektas **Personalas** – DI promptų rinkinys HR atrankai (US lokalizacija viešame faile). Saugumas: be slaptų raktų repo, be asmens duomenų rinkimo šiuo metu. Agentų rolės – [AGENTS.md](AGENTS.md).
 
-**Agentams:** Rolės ir workflow – [AGENTS.md](AGENTS.md). Dokumentų valdymas ir atsakomybės – [docs/DOCUMENTATION.md](docs/DOCUMENTATION.md). Pakeitimų istorija – [CHANGELOG.md](CHANGELOG.md).
+**Agentams:** Rolės ir workflow – [AGENTS.md](AGENTS.md). Dokumentų valdymas ir atsakomybės – [docs/DOCUMENTATION.md](docs/DOCUMENTATION.md). Pakeitimų istorija – [CHANGELOG.md](CHANGELOG.md). **Kalbos SOT (viešas produktas = anglų):** [docs/language-guidelines-en-lt.md](docs/language-guidelines-en-lt.md).
 
 ---
 
-## 📝 Q&A – Kalbos ir tono praktika (vartotojui matomas tekstas)
+## Kalba – SOT (trumpai)
 
-- **Kreipinys:** naudoti **Tu** (ne Jūs): tavo, tau, tu, atlikai, naudojai, gausi, galėsi ir t. t.
-- **Stilius:** paprasta lietuvių kalba, **lakoniškai** – trumpi sakiniai, be pertekliaus.
-- **Tonas:** **motyvacinė, palaikanti** – skatina veikti, bet **be patetikos** (be per didelio entuziazmo, dramos ar tuščios šlovinimo).
-- **Check:** prieš commit patikrinti, ar vartotojui matomi tekstai atitinka Tu + lakonišką, palaikantį toną.
+- **Viešas produktas:** `en-US`, kanonas **`/en/`**; šaknies `/` – EN vartai; SEO ir bendras OG paveikslėlis – **anglų** (žr. kalbos gaires, *Source of truth*).
+- **LT:** turinio šaltiniai `templates/*-lt.html` ir viešas **`/lt/`** (authoring, QA) – ne numatytoji lankytojo kalba.
+- **Šios taisyklės ir agentų dokumentacija** rašomos LT, nebent aiškiai kitaip.
+
+---
+
+## Q&A – tonas vartotojui matomam tekstui
+
+- **`/lt/` puslapiuose:** kreipinys **tu** (ne jūs), paprasta lietuvių kalba, **lakoniškai** – trumpi sakiniai.
+- **`/en/` puslapiuose:** anglų kalba, US kontekstas (žr. build ir kalbos gaires); tonas profesionalus, aiškus.
+- Prieš commit: atitinkama kalba atitinka puslapio `lang` ir locale kelią.
 
 ---
 
@@ -130,7 +137,7 @@
 ### Dokumentacijos Standartai
 - ✅ **VISI** failai turi turėti aiškų paskirtį ir struktūrą
 - ✅ README.md turi aprašyti projektą, kaip jį paleisti ir naudoti
-- ✅ Kodo komentarai turi būti lietuvių kalba (nes projektas lietuvių kalba)
+- ✅ Kodo komentarai – aiškūs ir glausti; kalba **LT ar EN**, nuosekliai tame pačiame faile/modulyje (viešas UI vis tiek generuojamas į EN per build).
 - ✅ Funkcijos turi turėti JSDoc komentarus su parametrais ir return tipais
 
 ### Dokumentacijos Atnaujinimas
@@ -146,7 +153,6 @@
 - ✅ CHANGELOG.md - versijų pakeitimų istorija (Keep a Changelog, SemVer). **Release** = atnaujinti CHANGELOG („Nereleisuota“ → nauja versija su data).
 - ✅ docs/DOCUMENTATION.md - dokumentų inventorius, atsakomybės, archyvavimo taisyklės (žr. kada ką atnaujinti).
 - ✅ INTEGRACIJA.md - detali integracijos instrukcija
-- ✅ VARIANTU_PALYGINIMAS.md - palyginimas tarp variantų
 - ✅ AGENTS.md - agentų rolės, workflow, commit prefiksai
 - ✅ feedback-schema.md - Feedback Store duomenų schema
 - ✅ Kodo komentarai - inline dokumentacija sudėtingoms vietoms
@@ -188,7 +194,7 @@
 - ✅ **PRIVALOMA** testuoti pakeitimus local aplinkoje prieš deployment
 - ✅ Patikrinkite, ar visos funkcijos veikia po pakeitimų
 - ✅ Įsitikinkite, kad nėra console.error arba warning production kode
-- ✅ Patikrinkite, ar veikia su production konfigūracija (Google Script URL, etc.)
+- ✅ **Numatytoji vieša patirtis – `/en/`:** po deploy patikrinkite kanoną, OG ir a11y pagal [DEPLOYMENT.md](DEPLOYMENT.md) ir [docs/language-guidelines-en-lt.md](docs/language-guidelines-en-lt.md) (SOT).
 
 ---
 
@@ -345,6 +351,6 @@ Jei kyla klausimų dėl šių taisyklių:
 
 ---
 
-**Paskutinis atnaujinimas:** 2026-02-18  
-**Projekto kalba:** Lietuvių kalba  
-**Projekto tipas:** Statinis HTML su JavaScript ir Google Apps Script integracija
+**Paskutinis atnaujinimas:** 2026-05-16  
+**Projekto kalba:** viešas produktas – **anglų (`/en/`)**; agentų dokumentacija ir LT šablonai – LT; SOT – [docs/language-guidelines-en-lt.md](docs/language-guidelines-en-lt.md).  
+**Projekto tipas:** statinė HTML svetainė (build generuoja `lt/` ir `en/`)

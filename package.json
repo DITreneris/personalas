@@ -10,14 +10,26 @@
   "scripts": {
     "build": "node scripts/build-locale-pages.js",
     "generate:og": "node scripts/generate-og-image.js",
-    "test": "npm run build && node tests/structure.test.js && npm run lint:html && npm run lint:html:privatumas && npm run lint:html:locales && npm run lint:js",
+    "test": "npm run build && npm run pdf:validate && node tests/structure.test.js && npm run lint:html && npm run lint:html:privatumas && npm run lint:html:locales && npm run lint:html:static && npm run lint:js",
     "test:structure": "node tests/structure.test.js",
     "lint:html": "npx html-validator-cli --file index.html --validator=https://html5.validator.nu/",
     "lint:html:privatumas": "npx html-validator-cli --file privatumas.html --validator=https://html5.validator.nu/",
-    "lint:html:locales": "npx html-validator-cli --file lt/index.html --validator=https://html5.validator.nu/ && npx html-validator-cli --file en/index.html --validator=https://html5.validator.nu/ && npx html-validator-cli --file lt/privatumas.html --validator=https://html5.validator.nu/ && npx html-validator-cli --file en/privatumas.html --validator=https://html5.validator.nu/",
-    "lint:js": "eslint . --ext .js"
+    "lint:html:locales": "npx html-validator-cli --file en/index.html --validator=https://html5.validator.nu/ && npx html-validator-cli --file en/privatumas.html --validator=https://html5.validator.nu/",
+    "lint:html:static": "npx html-validator-cli --file success.html --validator=https://html5.validator.nu/ && npx html-validator-cli --file terms.html --validator=https://html5.validator.nu/",
+    "lint:js": "eslint . --ext .js",
+    "pdf:validate": "node scripts/build-pdf-html.js",
+    "pdf:export": "node scripts/export-pdf-from-html.js",
+    "pdf:covers": "node scripts/verify-pdf-cover.js",
+    "pdf:covers:preview": "node scripts/verify-pdf-cover.js --preview",
+    "pdf:placeholders": "node scripts/generate-pdf-cover-placeholders.js"
+  },
+  "dependencies": {
+    "@upstash/redis": "^1.34.3",
+    "resend": "^4.0.1",
+    "stripe": "^17.5.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.53.2",
     "eslint": "^8.57.0",
     "html-validator-cli": "^7.0.0",
     "pa11y": "^6.2.3",

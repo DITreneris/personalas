@@ -1,0 +1,113 @@
+{
+  "product": {
+    "name": "Personalas",
+    "series": "Prompt Anatomy Series No. 3",
+    "siteUrl": "https://promptanatomy.help",
+    "motherBrandUrl": "https://www.promptanatomy.app",
+    "contactEmail": "info@promptanatomy.help"
+  },
+  "colors": {
+    "navy": "#103b5a",
+    "gold": "#cfa73a",
+    "blue": "#2B6CB0",
+    "text": "#1A202C",
+    "muted": "#718096"
+  },
+  "theme": {
+    "light": {
+      "accent": "#103b5a",
+      "accentGold": "#cfa73a",
+      "cta": "#2B6CB0"
+    }
+  },
+  "pdfGuides": {
+    "beginner": {
+      "id": "beginner-pdf",
+      "title": "Beginner HR Hiring Guide",
+      "subtitle": "First structured US hiring loop",
+      "pages": 12,
+      "price": 5.99,
+      "priceWas": 15.99,
+      "stripePlaceholder": "REPLACE_BEGINNER_PAYMENT_LINK",
+      "coverImage": "/assets/pdf-covers/beginner.png",
+      "previewPrefix": "beginner",
+      "chapters": [
+        "How to use this guide",
+        "HR Prompt Formula",
+        "Prompts 1–2: Diagnose & profile",
+        "Prompts 3–4: Job ad & sourcing",
+        "Prompt 5: Interview plan",
+        "Prompts 6–7: Decline & offer",
+        "Hiring kickoff checklist",
+        "AI safety for HR",
+        "Glossary & mistakes",
+        "Use this tomorrow",
+        "Sources & Advanced path",
+        "Close & promptanatomy.help"
+      ]
+    },
+    "advanced": {
+      "id": "advanced-pdf",
+      "title": "Advanced HR Hiring Guide",
+      "subtitle": "Scorecards, rubrics & calibration",
+      "pages": 24,
+      "price": 11.99,
+      "priceWas": 22.99,
+      "stripePlaceholder": "REPLACE_ADVANCED_PAYMENT_LINK",
+      "coverImage": "/assets/pdf-covers/advanced.png",
+      "previewPrefix": "advanced",
+      "chapters": [
+        "Scorecards vs rubrics",
+        "Advanced prompts 1–2",
+        "Knockouts & role families",
+        "Inclusive JD & sourcing",
+        "Sourcing quality bar",
+        "Full interview kit",
+        "STAR question bank",
+        "Work-sample prompts",
+        "Rubric: Communication",
+        "Rubric: Ownership & scorecard",
+        "Universal scorecard template",
+        "Calibration training",
+        "Debrief protocol",
+        "Decline & offer scenarios",
+        "Negotiation plays",
+        "Onboarding & retention",
+        "90-day checkpoints",
+        "Master prompt chaining",
+        "Bias guardrails",
+        "Blank rubric worksheet",
+        "Prompt library template",
+        "Team rollout",
+        "Close & promptanatomy.help"
+      ]
+    }
+  },
+  "buyerFaq": [
+    {
+      "id": "faq-license-team",
+      "q": "Can I share this guide with my recruiting team?",
+      "a": "Yes, within your organization. The Personal license covers your HR and hiring team. Do not post the PDF publicly or resell it. Department-wide redistribution outside your company requires permission — email info@promptanatomy.help."
+    },
+    {
+      "id": "faq-multiple-roles",
+      "q": "Can I use it for more than one job opening?",
+      "a": "Yes. Reuse prompts and scorecards for every role you hire. Update competencies and rubrics per role family."
+    },
+    {
+      "id": "faq-lost-email",
+      "q": "What if I lose the download email?",
+      "a": "Email info@promptanatomy.help from your purchase address and we will resend a fresh signed link. Links expire after 7 days; we re-issue on request."
+    },
+    {
+      "id": "faq-refund",
+      "q": "What if I am not satisfied?",
+      "a": "Reply to your Stripe receipt within 14 days for a no-questions refund. We revoke the download link after approval."
+    },
+    {
+      "id": "faq-free-tool",
+      "q": "How does this relate to the free Personalas site?",
+      "a": "The free 10-prompt builder at promptanatomy.help/en/ stays free forever. These PDFs add offline depth: checklists, rubrics, and expanded copy-paste prompts."
+    }
+  ]
+}

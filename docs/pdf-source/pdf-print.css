@@ -1,0 +1,398 @@
+/* Personalas – PDF print stylesheet.
+   Beginner + Advanced HR guides. Browser Save-as-PDF (Letter, margins None, background ON).
+   Brand: footer www.promptanatomy.app every page; promptanatomy.help on cover + closing. */
+
+@page {
+  size: Letter;
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: #FFFFFF;
+  color: #1A202C;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  font-size: 9.5pt;
+  line-height: 1.35;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.page {
+  width: 215.9mm;
+  height: 279.4mm;
+  padding: 14mm 16mm 18mm 16mm;
+  position: relative;
+  break-after: page;
+  page-break-after: always;
+  overflow: hidden;
+}
+
+.page:last-of-type {
+  break-after: auto;
+  page-break-after: auto;
+}
+
+.brand-footer {
+  position: absolute;
+  bottom: 6mm;
+  left: 16mm;
+  right: 16mm;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 8pt;
+  color: #718096;
+  border-top: 1px solid #E2E8F0;
+  padding-top: 2.5mm;
+}
+
+.brand-footer-left {
+  font-weight: 600;
+  color: #103b5a;
+  letter-spacing: 0.02em;
+}
+
+.brand-footer-url {
+  color: #2B6CB0;
+  font-weight: 600;
+}
+
+.brand-footer-right {
+  color: #718096;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  color: #103b5a;
+  margin: 0 0 4mm 0;
+  line-height: 1.2;
+}
+
+h1 { font-size: 24pt; font-weight: 800; }
+h2 { font-size: 15pt; font-weight: 700; margin-bottom: 3mm; }
+h3 { font-size: 11pt; font-weight: 700; margin-top: 3.5mm; margin-bottom: 1.5mm; }
+h4 { font-size: 10pt; font-weight: 700; margin-top: 3mm; margin-bottom: 1mm; }
+
+p { margin: 0 0 2.5mm 0; }
+a { color: #2B6CB0; text-decoration: none; }
+strong { color: #103b5a; }
+
+ul, ol {
+  margin: 0 0 2.5mm 0;
+  padding-left: 5mm;
+}
+
+li { margin-bottom: 1mm; }
+
+hr {
+  border: none;
+  border-top: 1px solid #E2E8F0;
+  margin: 3mm 0;
+}
+
+.page-eyebrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 8pt;
+  color: #718096;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-bottom: 1px solid #E2E8F0;
+  padding-bottom: 1.5mm;
+  margin-bottom: 4mm;
+  font-weight: 600;
+}
+
+.page-eyebrow-tag {
+  background: #cfa73a;
+  color: #103b5a;
+  padding: 0.6mm 2mm;
+  border-radius: 1.2mm;
+  font-size: 8pt;
+}
+
+.cover {
+  background-color: #103b5a;
+  background-image: linear-gradient(160deg, #103b5a 0%, #0b1320 60%, #0a1018 100%);
+  color: #FFFFFF;
+  padding: 26mm 20mm 20mm 20mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 279.4mm;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
+
+.cover h1, .cover h2 { color: #FFFFFF; }
+
+.cover-eyebrow {
+  color: #cfa73a;
+  font-weight: 700;
+  font-size: 10pt;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.cover-title {
+  font-size: 30pt;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-top: 10mm;
+}
+
+.cover-subtitle {
+  color: #FFFFFF;
+  font-size: 13pt;
+  font-weight: 500;
+  margin-top: 6mm;
+  line-height: 1.4;
+}
+
+.cover-meta {
+  color: #E2E8F0;
+  font-size: 11pt;
+  line-height: 1.6;
+  margin-top: 10mm;
+}
+
+.cover-meta strong { color: #cfa73a; }
+
+.cover-spinoff {
+  background: rgba(255, 255, 255, 0.1);
+  border-left: 3px solid #cfa73a;
+  padding: 5mm 6mm;
+  margin-top: 10mm;
+  font-size: 11pt;
+  line-height: 1.5;
+}
+
+.cover-spinoff strong { color: #cfa73a; }
+
+.cover .brand-footer {
+  color: #FFFFFF;
+  border-top: 1px solid rgba(207, 167, 58, 0.45);
+}
+
+.cover .brand-footer-left { color: #FFFFFF; font-weight: 700; }
+.cover .brand-footer-url { color: #cfa73a; font-weight: 700; }
+.cover .brand-footer-right { color: #E2E8F0; }
+
+.callout {
+  background: #F7FAFC;
+  border-left: 3px solid #2B6CB0;
+  padding: 3mm 4mm;
+  border-radius: 0 1.5mm 1.5mm 0;
+  margin: 0 0 3mm 0;
+}
+
+.callout-warn {
+  background: #FFFAF0;
+  border-left-color: #cfa73a;
+}
+
+.callout-danger {
+  background: #FFF5F5;
+  border-left-color: #C53030;
+}
+
+.callout strong {
+  display: block;
+  margin-bottom: 1mm;
+}
+
+.prompt-block {
+  background: #103b5a;
+  color: #E2E8F0;
+  padding: 3mm 4mm;
+  border-radius: 1.5mm;
+  margin: 0 0 3mm 0;
+  font-family: 'JetBrains Mono', Consolas, 'Courier New', monospace;
+  font-size: 7.5pt;
+  line-height: 1.35;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.prompt-block-light {
+  background: #F7FAFC;
+  color: #1A202C;
+  border: 1px solid #E2E8F0;
+}
+
+.prompt-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 8.5pt;
+  color: #718096;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  margin-bottom: 1mm;
+}
+
+.prompt-tag {
+  background: #cfa73a;
+  color: #103b5a;
+  padding: 0.4mm 2mm;
+  border-radius: 1mm;
+  font-size: 7.5pt;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 3mm 0;
+  font-size: 8.5pt;
+  break-inside: avoid;
+}
+
+th {
+  background: #103b5a;
+  color: #FFFFFF;
+  text-align: left;
+  padding: 2mm 2.5mm;
+  font-weight: 600;
+}
+
+td {
+  border: 1px solid #E2E8F0;
+  padding: 2mm 2.5mm;
+  vertical-align: top;
+}
+
+tr:nth-child(even) td { background: #F7FAFC; }
+
+.check-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0 0 3mm 0;
+}
+
+.check-list li {
+  padding-left: 6mm;
+  position: relative;
+  margin-bottom: 1mm;
+}
+
+.check-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.6mm;
+  width: 3.5mm;
+  height: 3.5mm;
+  border: 1.2px solid #2B6CB0;
+  border-radius: 0.6mm;
+}
+
+.compare {
+  display: flex;
+  gap: 3mm;
+  margin: 0 0 4mm 0;
+}
+
+.compare .col {
+  flex: 1;
+  padding: 3.5mm 4mm;
+  border-radius: 1.5mm;
+  font-size: 9pt;
+  line-height: 1.45;
+}
+
+.compare .col-bad {
+  background: #FFF5F5;
+  border: 1px solid #FEB2B2;
+}
+
+.compare .col-good {
+  background: #F0FFF4;
+  border: 1px solid #9AE6B4;
+}
+
+.compare .col-title {
+  font-size: 8.5pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 1.5mm;
+}
+
+.compare .col-bad .col-title { color: #C53030; }
+.compare .col-good .col-title { color: #276749; }
+
+.muted { color: #718096; font-size: 9pt; }
+.tiny { font-size: 8pt; color: #718096; }
+.lead { font-size: 10.5pt; color: #103b5a; line-height: 1.4; margin-bottom: 3.5mm; }
+
+.workflow {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5mm;
+  margin: 0 0 4mm 0;
+}
+
+.workflow .step {
+  flex: 1;
+  background: #F7FAFC;
+  border: 1px solid #E2E8F0;
+  border-top: 3px solid #2B6CB0;
+  border-radius: 1.5mm;
+  padding: 2.5mm;
+  font-size: 8pt;
+}
+
+.workflow .step-num {
+  font-weight: 800;
+  color: #cfa73a;
+  font-size: 11pt;
+}
+
+.workflow .arrow {
+  flex: 0 0 3mm;
+  align-self: center;
+  color: #2B6CB0;
+  font-size: 12pt;
+  font-weight: 800;
+  text-align: center;
+}
+
+.section-tag {
+  display: inline-block;
+  background: #2B6CB0;
+  color: #FFFFFF;
+  padding: 0.6mm 2.5mm;
+  border-radius: 1mm;
+  font-size: 8pt;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.close-block {
+  margin-top: 4mm;
+  padding: 4mm;
+  background: #F7FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 1.5mm;
+}
+
+@media screen {
+  body {
+    background: #ECEEF2;
+    padding: 8mm 0;
+  }
+
+  .page {
+    margin: 0 auto 8mm auto;
+    box-shadow: 0 2px 12px rgba(16, 59, 90, 0.15);
+    background: #FFFFFF;
+  }
+}
