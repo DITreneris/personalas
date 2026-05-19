@@ -23,7 +23,7 @@ Kontekstas: [DEPLOYMENT.md](DEPLOYMENT.md) sekcija „Paid PDF environment varia
 
 ### Repo darbas
 
-- [ ] [templates/index-lt.html](templates/index-lt.html): pakeisti `REPLACE_BEGINNER_PAYMENT_LINK` ir `REPLACE_ADVANCED_PAYMENT_LINK` realiomis Stripe Payment Link URL’omis, tada `npm run build`
+- [ ] [config/sot.json](config/sot.json): įrašyti realias `pdfGuides.beginner.stripePaymentLink` ir `pdfGuides.advanced.stripePaymentLink` (`https://buy.stripe.com/...`), tada `npm run build`
 - [x] Sugeneruoti / atnaujinti Beginner ir Advanced PDF turinį (EN) — žr. [docs/pdf-source/](docs/pdf-source/README.md); `npm run pdf:export`
 - [ ] Įkelti PDF į privatų storage (R2 / S3 / Railway / Vercel Blob); URL → `PDF_BEGINNER_SOURCE_URL`, `PDF_ADVANCED_SOURCE_URL` (su `PDF_SOURCE_AUTH_TOKEN` arba `PDF_SOURCE_AUTH_HEADER`, jei storage reikalauja auth)
 - [x] Lokalus dev: `api/_private/pdfs/beginner-guide.pdf` ir `advanced-guide.pdf` (gitignore; generuojami `npm run pdf:export`)

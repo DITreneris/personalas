@@ -10,9 +10,9 @@ const path = require('path');
 
 const ROOT = path.join(__dirname, '..');
 const INDEX_PATH = path.join(ROOT, 'index.html');
-const PRIVATUMAS_PATH = path.join(ROOT, 'privatumas.html');
+const PRIVACY_GATEWAY_PATH = path.join(ROOT, 'privacy.html');
 const TEMPLATE_INDEX_PATH = path.join(ROOT, 'templates', 'index-lt.html');
-const TEMPLATE_PRIVACY_PATH = path.join(ROOT, 'templates', 'privatumas-lt.html');
+const TEMPLATE_PRIVACY_PATH = path.join(ROOT, 'templates', 'privacy.html');
 const GENERATOR_PATH = path.join(ROOT, 'generator.js');
 
 function readFile(filePath) {
@@ -51,7 +51,7 @@ function run() {
 
   const templatePrivacy = readFile(TEMPLATE_PRIVACY_PATH);
   if (!templatePrivacy) {
-    console.error('templates/privatumas-lt.html (build source) not found:', TEMPLATE_PRIVACY_PATH);
+    console.error('templates/privacy.html (build source) not found:', TEMPLATE_PRIVACY_PATH);
     process.exit(1);
   }
 
@@ -59,8 +59,14 @@ function run() {
   tally(assert(html.includes('lang="en-US"'), 'root index.html lang="en-US" (gateway)'));
   tally(assert(html.includes('href="en/"') && !html.includes('<a href="lt/'), 'gateway: only EN link in body (no lt/)'));
   tally(assert(html.includes('rel="canonical"') && html.includes('/en/">'), 'root canonical points to /en/'));
-  tally(assert(html.includes('http-equiv="refresh"') && html.includes('/en/'), 'root meta refresh to EN'));
-  tally(assert(html.includes('privatumas.html'), 'gateway: link to privatumas.html'));
+  tally(
+    assert(
+      html.includes('http-equiv="refresh"') &&
+        (html.includes('url=en/') || html.includes('/en/')),
+      'root meta refresh to EN'
+    )
+  );
+  tally(assert(html.includes('privacy.html'), 'gateway: link to privacy.html'));
   tally(assert(!html.includes('hreflang="lt"'), 'root index.html has no hreflang="lt"'));
   tally(assert(!html.includes('og:locale:alternate'), 'root index.html has no og:locale:alternate'));
 
@@ -95,23 +101,25 @@ function run() {
   tally(assert(template.includes('hiddenTextarea'), 'templates/index-lt.html: hiddenTextarea for copy fallback'));
 
   // --- Root privacy gateway ---
-  const privatumas = readFile(PRIVATUMAS_PATH);
-  tally(assert(privatumas !== null && privatumas.length > 0, 'privatumas.html exists'));
-  tally(assert(privatumas && privatumas.includes('lang="en-US"'), 'root privatumas.html lang="en-US"'));
-  tally(assert(privatumas && privatumas.includes('en/privatumas.html') && !privatumas.includes('<a href="lt/privatumas.html">'), 'privacy gateway: only EN link in body'));
-  tally(assert(privatumas && !privatumas.includes('hreflang="lt"'), 'root privatumas.html has no hreflang="lt"'));
+  const privacyGateway = readFile(PRIVACY_GATEWAY_PATH);
+  tally(assert(privacyGateway !== null && privacyGateway.length > 0, 'privacy.html gateway exists'));
+  tally(assert(privacyGateway && privacyGateway.includes('lang="en-US"'), 'root privacy.html lang="en-US"'));
+  tally(assert(privacyGateway && privacyGateway.includes('en/privacy.html') && !privacyGateway.includes('<a href="lt/'), 'privacy gateway: only EN link in body'));
+  tally(assert(privacyGateway && !privacyGateway.includes('hreflang="lt"'), 'root privacy.html has no hreflang="lt"'));
+  tally(assert(!fs.existsSync(path.join(ROOT, 'privatumas.html')), 'legacy privatumas.html removed after build'));
 
   // --- Built EN locale pages (npm run build) ---
   const enIndexPath = path.join(ROOT, 'en', 'index.html');
-  const enPrivacyPath = path.join(ROOT, 'en', 'privatumas.html');
+  const enPrivacyPath = path.join(ROOT, 'en', 'privacy.html');
 
   const enIndex = readFile(enIndexPath);
   tally(assert(enIndex !== null && enIndex.length > 0, 'en/index.html exists'));
-  tally(assert(readFile(enPrivacyPath) !== null, 'en/privatumas.html exists'));
+  tally(assert(readFile(enPrivacyPath) !== null, 'en/privacy.html exists'));
+  tally(assert(!fs.existsSync(path.join(ROOT, 'en', 'privatumas.html')), 'no en/privatumas.html (renamed to privacy.html)'));
 
   // No lt/ output
   tally(assert(!fs.existsSync(path.join(ROOT, 'lt', 'index.html')), 'no lt/index.html (EN-only output)'));
-  tally(assert(!fs.existsSync(path.join(ROOT, 'lt', 'privatumas.html')), 'no lt/privatumas.html (EN-only output)'));
+  tally(assert(!fs.existsSync(path.join(ROOT, 'lt', 'privacy.html')), 'no lt/privacy.html (EN-only output)'));
 
   if (enIndex) {
     tally(assert(enIndex.includes('lang="en-US"'), 'en/index.html lang="en-US"'));
@@ -150,16 +158,24 @@ function run() {
     tally(assert(enIndex.includes('State: [two-letter State, e.g., NY]') && enIndex.includes('Zip Code: [optional, e.g., 10001]'), 'en/index.html: two-letter State and Zip Code placeholders'));
     tally(assert(!/(€|\bEUR\b|Postcode|postcode|Colour|colour|organisation|optimise|centre|grey|Analyse|analyse|Spin-off Nr\.)/.test(enIndex), 'en/index.html: no obvious non-US locale fragments'));
     tally(assert(!/[ąčęėįšųūžĄČĘĖĮŠŲŪŽ]/.test(enIndex), 'en/index.html: no Lithuanian diacritics'));
+    tally(assert(enIndex.includes('terms.html'), 'en/index.html footer links to terms'));
+    tally(assert(enIndex.includes('info@promptanatomy.help'), 'en/index.html uses canonical support email'));
+    tally(assert(!enIndex.includes('mailto:info@promptanatomy.app'), 'en/index.html has no legacy .app support email'));
+    tally(assert(enIndex.includes('legal-disclaimer') || enIndex.includes('not legal or HR advice'), 'en/index.html HR advisory disclaimer'));
+    tally(assert(enIndex.includes('href="privacy.html"'), 'en/index.html privacy link uses privacy.html'));
   }
 
   const enPrivacy = readFile(enPrivacyPath);
   if (enPrivacy) {
     const canonicalHttps = /<link rel="canonical" href="https:/;
-    tally(assert(canonicalHttps.test(enPrivacy), 'en/privatumas.html canonical HTTPS'));
-    tally(assert(enPrivacy.includes('property="og:image"'), 'en/privatumas.html OG image'));
-    tally(assert(!enPrivacy.includes('hreflang="lt"'), 'en/privatumas.html has no hreflang="lt"'));
-    tally(assert(enPrivacy.includes('Stripe') && enPrivacy.includes('Resend'), 'en/privatumas.html discloses paid PDF sub-processors'));
-    tally(assert(!/[ąčęėįšųūžĄČĘĖĮŠŲŪŽ]/.test(enPrivacy), 'en/privatumas.html: no Lithuanian diacritics'));
+    tally(assert(canonicalHttps.test(enPrivacy), 'en/privacy.html canonical HTTPS'));
+    tally(assert(enPrivacy.includes('property="og:image"'), 'en/privacy.html OG image'));
+    tally(assert(!enPrivacy.includes('hreflang="lt"'), 'en/privacy.html has no hreflang="lt"'));
+    tally(assert(enPrivacy.includes('Stripe') && enPrivacy.includes('Resend'), 'en/privacy.html discloses paid PDF sub-processors'));
+    tally(assert(enPrivacy.includes('fonts.googleapis.com'), 'en/privacy.html discloses Google Fonts'));
+    tally(assert(enPrivacy.includes('California') || enPrivacy.includes('Your rights'), 'en/privacy.html includes privacy rights section'));
+    tally(assert(enPrivacy.includes('Effective:'), 'en/privacy.html includes effective date'));
+    tally(assert(!/[ąčęėįšųūžĄČĘĖĮŠŲŪŽ]/.test(enPrivacy), 'en/privacy.html: no Lithuanian diacritics'));
   }
 
   // --- robots.txt and sitemap.xml ---
@@ -171,6 +187,9 @@ function run() {
   tally(assert(sitemap !== null && sitemap.includes('<urlset') && sitemap.includes('<loc>https://'), 'sitemap.xml with absolute <loc>'));
   tally(assert(sitemap && !/\/lt\//.test(sitemap), 'sitemap.xml: no /lt/ entries'));
   tally(assert(sitemap && sitemap.includes('/en/'), 'sitemap.xml: includes /en/ entry'));
+  tally(assert(sitemap && sitemap.includes('/en/privacy.html'), 'sitemap.xml: includes /en/privacy.html'));
+  tally(assert(sitemap && sitemap.includes('/privacy.html'), 'sitemap.xml: includes /privacy.html gateway'));
+  tally(assert(sitemap && !sitemap.includes('privatumas.html'), 'sitemap.xml: no privatumas.html entries'));
 
   // --- Paid PDF API skeleton ---
   const apiDir = path.join(ROOT, 'api');
@@ -197,6 +216,10 @@ function run() {
   tally(assert(terms !== null, 'terms.html exists'));
   tally(assert(terms && terms.includes('paid-pdf-license'), 'terms.html has paid-pdf-license anchor'));
   tally(assert(terms && terms.includes('lang="en-US"'), 'terms.html lang="en-US"'));
+  tally(assert(terms && terms.includes('Not professional advice'), 'terms.html HR advisory section'));
+  tally(assert(terms && terms.includes('/en/privacy.html'), 'terms.html links to privacy policy'));
+
+  tally(assert(success && success.includes('terms.html#refunds'), 'success.html links to refunds'));
 
   // --- PDF source HTML ---
   const beginnerPdfHtml = readFile(path.join(ROOT, 'docs', 'pdf-source', 'beginner-personalas-hr.html'));
@@ -217,6 +240,8 @@ function run() {
   tally(assert(sot && sot.pdfGuides && sot.pdfGuides.beginner && Array.isArray(sot.pdfGuides.beginner.chapters) && sot.pdfGuides.beginner.chapters.length >= 8, 'sot.json beginner chapters'));
   tally(assert(sot && sot.pdfGuides && sot.pdfGuides.advanced && Array.isArray(sot.pdfGuides.advanced.chapters) && sot.pdfGuides.advanced.chapters.length >= 8, 'sot.json advanced chapters'));
   tally(assert(sot && Array.isArray(sot.buyerFaq) && sot.buyerFaq.length === 5, 'sot.json buyerFaq has 5 items'));
+  tally(assert(sot && sot.legal && sot.legal.metaDescription, 'sot.json legal.metaDescription'));
+  tally(assert(sot && sot.product && sot.product.contactEmail === 'info@promptanatomy.help', 'sot.json canonical contactEmail'));
 
   const beginnerCover = path.join(ROOT, 'assets', 'pdf-covers', 'beginner.png');
   tally(assert(fs.existsSync(beginnerCover), 'assets/pdf-covers/beginner.png exists'));

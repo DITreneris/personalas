@@ -22,7 +22,7 @@ function main() {
     console.log('patch-published-base: skip (same or empty PUBLISHED_SITE_BASE)');
     return;
   }
-  const files = ['index.html', 'privatumas.html', 'robots.txt', 'sitemap.xml'];
+  const files = ['index.html', 'privacy.html', 'robots.txt', 'sitemap.xml'];
   for (const rel of files) {
     const fp = path.join(ROOT, rel);
     if (!fs.existsSync(fp)) continue;

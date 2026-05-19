@@ -468,10 +468,32 @@
         });
     }
 
+    function linkifyContactEmail(text, email) {
+        if (!text) return '';
+        var safeText = escapeHtmlText(text);
+        if (!email) return safeText;
+        var safeEmail = escapeHtmlText(email);
+        var parts = safeText.split(safeEmail);
+        if (parts.length === 1) return safeText;
+        return parts.join('<a href="mailto:' + safeEmail + '">' + safeEmail + '</a>');
+    }
+
+    function initStripeLinks(config) {
+        if (!config || !config.pdfGuides) return;
+        ['beginner', 'advanced'].forEach(function(key) {
+            var def = config.pdfGuides[key];
+            if (!def || !def.stripePaymentLink || def.stripePaymentLink.indexOf('REPLACE_') !== -1) return;
+            document.querySelectorAll('a[data-product="' + def.id + '"]').forEach(function(anchor) {
+                anchor.setAttribute('href', def.stripePaymentLink);
+            });
+        });
+    }
+
     function initBuyerFaq(config) {
         if (!config || !Array.isArray(config.buyerFaq)) return;
         var list = document.querySelector('[data-buyer-faq-list]');
         if (!list) return;
+        var contactEmail = config.product && config.product.contactEmail;
         var html = '';
         for (var i = 0; i < config.buyerFaq.length; i += 1) {
             var item = config.buyerFaq[i];
@@ -479,7 +501,7 @@
             var detailsId = item.id ? ' id="' + escapeHtmlText(item.id) + '"' : '';
             html += '<details class="faq-details"' + detailsId + '>' +
                 '<summary class="faq-summary">' + escapeHtmlText(item.q) + '</summary>' +
-                '<div class="faq-panel">' + escapeHtmlText(item.a) + '</div>' +
+                '<div class="faq-panel">' + linkifyContactEmail(item.a, contactEmail) + '</div>' +
                 '</details>';
         }
         list.innerHTML = html;
@@ -589,6 +611,7 @@
         loadSotConfig().then(function(config) {
             initPdfPreviewDialog();
             initPdfGuideTocs(config);
+            initStripeLinks(config);
             initBuyerFaq(config);
         });
     }

@@ -4,7 +4,15 @@
     "series": "Prompt Anatomy Series No. 3",
     "siteUrl": "https://promptanatomy.help",
     "motherBrandUrl": "https://www.promptanatomy.app",
-    "contactEmail": "info@promptanatomy.help"
+    "contactEmail": "info@promptanatomy.help",
+    "operatorName": "Tomas Staniulis",
+    "effectiveDate": "May 2026"
+  },
+  "legal": {
+    "metaDescription": "Ten ready-to-use AI prompts for US hiring: diagnostics, role definition, job posts, sourcing, interviews, offers, and onboarding. Copy into ChatGPT or Claude—about 30 minutes of prompt prep time.",
+    "disclaimerShort": "Educational hiring prompts, not legal or HR advice. You are responsible for compliance, bias review, and hiring decisions. AI outputs require human review.",
+    "compareStripHtml": "<span>Typical live workshops often list at <strong>$100–$300+</strong></span><span>vs</span><span>Beginner guide <strong>$5.99</strong></span><span>Advanced guide <strong>$11.99</strong></span>",
+    "compareStripNote": "Illustrative comparison, not a specific third-party offer."
   },
   "colors": {
     "navy": "#103b5a",
@@ -28,7 +36,7 @@
       "pages": 12,
       "price": 5.99,
       "priceWas": 15.99,
-      "stripePlaceholder": "REPLACE_BEGINNER_PAYMENT_LINK",
+      "stripePaymentLink": "https://buy.stripe.com/REPLACE_BEGINNER_PAYMENT_LINK",
       "coverImage": "/assets/pdf-covers/beginner.png",
       "previewPrefix": "beginner",
       "chapters": [
@@ -53,7 +61,7 @@
       "pages": 24,
       "price": 11.99,
       "priceWas": 22.99,
-      "stripePlaceholder": "REPLACE_ADVANCED_PAYMENT_LINK",
+      "stripePaymentLink": "https://buy.stripe.com/REPLACE_ADVANCED_PAYMENT_LINK",
       "coverImage": "/assets/pdf-covers/advanced.png",
       "previewPrefix": "advanced",
       "chapters": [
