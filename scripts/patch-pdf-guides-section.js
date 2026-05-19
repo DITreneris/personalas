@@ -7,9 +7,20 @@ const templatePath = path.join(__dirname, '..', 'templates', 'index-lt.html');
 let html = fs.readFileSync(templatePath, 'utf8');
 
 const start = html.indexOf('<section class="pdf-guides" id="pdf-guides"');
-const end = html.indexOf('<section class="community" id="community"');
+const endMarkers = [
+  '<!-- KĄ ŠI SISTEMA PADEDA IŠSPRĘSTI -->',
+  '<section class="objectives"',
+];
+let end = -1;
+for (const marker of endMarkers) {
+  const pos = html.indexOf(marker, start + 1);
+  if (pos > start) {
+    end = pos;
+    break;
+  }
+}
 if (start < 0 || end < 0) {
-  console.error('Could not find pdf-guides or community section');
+  console.error('Could not find pdf-guides or section after pdf-guides');
   process.exit(1);
 }
 

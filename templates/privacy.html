@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy Policy – Personalas</title>
+    <title>Privacy Policy – Prompt Anatomy</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="stylesheet" href="assets/styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -36,6 +36,19 @@
             border: 1px solid rgba(16, 59, 90, 0.18);
             color: var(--text);
         }
+        .business-address {
+            font-style: normal;
+            display: block;
+            margin: 8px 0 14px;
+            padding: 12px 14px;
+            background: var(--bg);
+            border: 1px solid rgba(16, 59, 90, 0.18);
+            border-radius: var(--r-badge);
+            font-size: 0.95rem;
+            line-height: 1.55;
+            color: var(--text);
+        }
+        .business-address strong { display: block; margin-bottom: 2px; }
         @media (max-width: 520px) {
             body { padding: 20px 14px; }
             .privacy-card { padding: 24px 18px; border-radius: var(--r-card); }
@@ -45,11 +58,11 @@
 </head>
 <body>
     <div class="page-shell">
-        <a href="index.html" class="btn privacy-back">← Back to Personalas</a>
+        <a href="index.html" class="btn privacy-back">← Back to Prompt Anatomy</a>
         <main class="surface-card privacy-card">
             <h1>Privacy Policy</h1>
-            <p class="meta-line">Effective: May 2026 · Operator: Tomas Staniulis · Prompt Anatomy Series No. 3</p>
-            <p class="intro"><strong>Personalas</strong> – US hiring prompts for HR teams. English-only static site with optional paid PDF guides processed by Stripe.</p>
+            <p class="meta-line">Effective: May 2026 · Operator: Tomas Staniulis · Prompt Anatomy</p>
+            <p class="intro"><strong>Prompt Anatomy</strong> – US hiring prompts for HR teams. English-only static site with optional paid PDF guides processed by Stripe.</p>
 
             <h2>What data we process</h2>
             <p><strong>Free tool:</strong> We do not collect personal data on our servers — no account, no email signup, no analytics cookies.</p>
@@ -78,8 +91,10 @@
 
             <h2>Contact</h2>
             <p>Privacy and support: <a href="mailto:info@promptanatomy.help">info@promptanatomy.help</a></p>
+            <p>Mail can also be addressed to:</p>
+            {{SOT_BUSINESS_ADDRESS}}
 
-            <p class="notice"><a href="index.html">← Back to Personalas</a> · <a href="../terms.html">Terms</a></p>
+            <p class="notice"><a href="index.html">← Back to Prompt Anatomy</a> · <a href="../terms.html">Terms</a></p>
         </main>
     </div>
 </body>

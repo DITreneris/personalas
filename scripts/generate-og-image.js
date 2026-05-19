@@ -29,10 +29,10 @@ const svg = `<?xml version="1.0" encoding="UTF-8"?>
   </defs>
   <rect width="1200" height="630" fill="url(#g)"/>
   <rect x="60" y="60" width="6" height="510" fill="#cfa73a"/>
-  <text x="600" y="240" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Inter, system-ui, sans-serif" font-size="56" font-weight="700">HR hiring system</text>
-  <text x="600" y="320" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Inter, system-ui, sans-serif" font-size="56" font-weight="700">AI prompts for US teams</text>
-  <text x="600" y="410" text-anchor="middle" fill="#cfe1ee" font-family="Segoe UI, Inter, system-ui, sans-serif" font-size="28" font-weight="500">10 prompts · ChatGPT · Claude · Gemini</text>
-  <text x="600" y="490" text-anchor="middle" fill="#cfa73a" font-family="Segoe UI, Inter, system-ui, sans-serif" font-size="22" font-weight="600">Prompt Anatomy · Series No. 3</text>
+  <text x="600" y="250" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Inter, system-ui, sans-serif" font-size="52" font-weight="700">HR hiring PDF guides</text>
+  <text x="600" y="330" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Inter, system-ui, sans-serif" font-size="52" font-weight="700">from $5.99</text>
+  <text x="600" y="410" text-anchor="middle" fill="#cfe1ee" font-family="Segoe UI, Inter, system-ui, sans-serif" font-size="28" font-weight="500">Checklists · rubrics · US hiring prompts</text>
+  <text x="600" y="490" text-anchor="middle" fill="#cfa73a" font-family="Segoe UI, Inter, system-ui, sans-serif" font-size="22" font-weight="600">Prompt Anatomy</text>
 </svg>`;
 
 async function run() {

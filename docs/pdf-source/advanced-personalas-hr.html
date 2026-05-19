@@ -2,342 +2,1169 @@
 <html lang="en-US">
 <head>
   <meta charset="utf-8">
-  <title>Advanced HR Hiring Guide – Personalas – promptanatomy.help</title>
+  <title>Advanced HR Hiring Guide – Prompt Anatomy – promptanatomy.help</title>
   <link rel="stylesheet" href="pdf-print.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
+
+<!-- ============================================================
+     PAGE 1 — COVER v2.0 (repositioned)
+     ============================================================ -->
 <section class="page cover">
   <div>
-    <p class="cover-eyebrow">Personalas · Advanced Edition · Prompt Anatomy</p>
+    <p class="cover-eyebrow">Prompt Anatomy · Advanced Edition</p>
+    <p class="cover-subtitle">Scorecards, rubrics &amp; calibration for HR leads</p>
     <h1 class="cover-title">Advanced HR Hiring Guide</h1>
-    <p class="cover-subtitle">Scorecards, rubrics, calibration, and debrief protocols for HR leads scaling structured US hiring.</p>
+    <p class="cover-hook">11 prompts · 4 rubrics · debrief transcript · team rollout</p>
     <div class="cover-spinoff">
-      <strong>Free tool:</strong> 10 live prompts at <strong>promptanatomy.help/en/</strong><br>
-      <span class="tiny">Mother brand: www.promptanatomy.app · Pair with the 12-page Beginner guide</span>
+      <strong>What's inside:</strong> 11 copy-paste prompts with worked outputs,<br>
+      4 competency rubrics, a universal scorecard, a sample debrief<br>
+      transcript, 3 team-rollout email templates, and a 4-week pilot plan.<br>
+      <span class="tiny">Pair with the 16-page Beginner guide for first-hire setup.</span>
     </div>
-    <p class="cover-meta"><strong>Audience:</strong> HRBPs, lead recruiters, people managers<br><strong>Length:</strong> 24 pages · May 2026</p>
+    <p class="cover-meta">
+      <strong>Audience:</strong> HRBPs, lead recruiters, people managers<br>
+      <strong>Length:</strong> 32 pages · <strong>Version:</strong> 2.0 · May 2026<br>
+      <strong>Tools:</strong> ChatGPT, Claude, or Gemini
+    </p>
   </div>
   <div class="brand-footer">
-    <span class="brand-footer-left">Personalas · HR Hiring Guides</span>
+    <span class="brand-footer-left">Prompt Anatomy · HR Hiring Guides</span>
     <span class="brand-footer-url">www.promptanatomy.app</span>
     <span class="brand-footer-right">Page 1</span>
   </div>
 </section>
+
+<!-- ============================================================
+     PAGE 2 — Read this first + 32-row TOC
+     ============================================================ -->
 <section class="page">
-  <div class="page-eyebrow"><span>Method</span><span class="page-eyebrow-tag">Foundation</span></div>
-  <h2>Scorecards vs rubrics</h2>
-  <p class="lead">A scorecard lists what you measure. A rubric defines what each score level looks like with behavioral anchors.</p>
-  <table><tr><th>Tool</th><th>Answers</th></tr>
-  <tr><td>Scorecard</td><td>Which 7–10 competencies matter for this role family?</td></tr>
-  <tr><td>Rubric</td><td>What does a 3 vs 4 look like for each competency?</td></tr></table>
-  <div class="callout"><strong>Rule</strong>Assign each competency to one interviewer. When everyone owns everything, nothing is scored rigorously.</div>
+  <div class="page-eyebrow"><span>How to use</span><span class="page-eyebrow-tag">Start here</span></div>
+  <h2>Read this first</h2>
+  <p class="lead">This is the team-lead playbook — rubrics, calibration, debrief, and rollout. Beginner covers the first hire; Advanced systematizes the next ten.</p>
+  <div class="callout callout-warn"><strong>Privacy &amp; safety rule.</strong> No candidate PII in AI prompts (names, emails, résumés, individual comp). Use counts, role context, and anonymized patterns only. Every output is a draft — humans decide.</div>
+
+  <h3>Contents</h3>
+  <div class="toc">
+    <div class="toc-row"><span class="toc-num">01</span><span class="toc-label"><strong>Cover</strong></span><span class="toc-page">1</span></div>
+    <div class="toc-row"><span class="toc-num">02</span><span class="toc-label"><strong>Read this first</strong> · TOC, safety rule</span><span class="toc-page">2</span></div>
+    <div class="toc-row"><span class="toc-num">03</span><span class="toc-label"><strong>Scorecards vs rubrics</strong> · foundation</span><span class="toc-page">3</span></div>
+    <div class="toc-row"><span class="toc-num">04</span><span class="toc-label"><strong>Knockouts &amp; competency model</strong></span><span class="toc-page">4</span></div>
+    <div class="toc-row"><span class="toc-num">05</span><span class="toc-label"><strong>Prompt 1 — Funnel diagnostics</strong> + worked output</span><span class="toc-page">5</span></div>
+    <div class="toc-row"><span class="toc-num">06</span><span class="toc-label"><strong>Prompt 2 — Competency model</strong> + worked output</span><span class="toc-page">6</span></div>
+    <div class="toc-row"><span class="toc-num">07</span><span class="toc-label"><strong>Prompt 3 — Inclusive JD</strong> + before/after rewrite</span><span class="toc-page">7</span></div>
+    <div class="toc-row"><span class="toc-num">08</span><span class="toc-label"><strong>Prompt 4 — Sourcing strategy</strong> + filled table</span><span class="toc-page">8</span></div>
+    <div class="toc-row"><span class="toc-num">09</span><span class="toc-label"><strong>Sourcing quality bar</strong> + outreach playbook</span><span class="toc-page">9</span></div>
+    <div class="toc-row"><span class="toc-num">10</span><span class="toc-label"><strong>Prompt 5 — Full interview kit</strong> + filled sample</span><span class="toc-page">10</span></div>
+    <div class="toc-row"><span class="toc-num">11</span><span class="toc-label"><strong>STAR question bank</strong> · 5 competencies × 10 questions</span><span class="toc-page">11</span></div>
+    <div class="toc-row"><span class="toc-num">12</span><span class="toc-label"><strong>Work-sample prompts</strong> + rubric anchors</span><span class="toc-page">12</span></div>
+    <div class="toc-row"><span class="toc-num">13</span><span class="toc-label"><strong>Rubric: Communication</strong> (1–4 anchors)</span><span class="toc-page">13</span></div>
+    <div class="toc-row"><span class="toc-num">14</span><span class="toc-label"><strong>Rubric: Ownership + Collaboration</strong></span><span class="toc-page">14</span></div>
+    <div class="toc-row"><span class="toc-num">15</span><span class="toc-label"><strong>Universal scorecard</strong> + filled multi-candidate sample</span><span class="toc-page">15</span></div>
+    <div class="toc-row"><span class="toc-num">16</span><span class="toc-label"><strong>90-minute calibration drill</strong> · facilitator script</span><span class="toc-page">16</span></div>
+    <div class="toc-row"><span class="toc-num">17</span><span class="toc-label"><strong>Sample debrief transcript</strong> · protocol in action</span><span class="toc-page">17</span></div>
+    <div class="toc-row"><span class="toc-num">18</span><span class="toc-label"><strong>Debrief protocol</strong> · one page</span><span class="toc-page">18</span></div>
+    <div class="toc-row"><span class="toc-num">19</span><span class="toc-label"><strong>Prompts 6–7 — Decline &amp; offer</strong> + senior talk track</span><span class="toc-page">19</span></div>
+    <div class="toc-row"><span class="toc-num">20</span><span class="toc-label"><strong>Negotiation plays</strong> · 4 counter-offer scenarios</span><span class="toc-page">20</span></div>
+    <div class="toc-row"><span class="toc-num">21</span><span class="toc-label"><strong>Prompts 8–9 — Onboarding &amp; retention</strong> + 30-60-90 sample</span><span class="toc-page">21</span></div>
+    <div class="toc-row"><span class="toc-num">22</span><span class="toc-label"><strong>First-90-day checkpoints</strong> + early-warning signals</span><span class="toc-page">22</span></div>
+    <div class="toc-row"><span class="toc-num">23</span><span class="toc-label"><strong>Prompt 10 — Master chaining</strong> + integrated plan sample</span><span class="toc-page">23</span></div>
+    <div class="toc-row"><span class="toc-num">24</span><span class="toc-label"><strong>Bias guardrails</strong> + EEO statement template</span><span class="toc-page">24</span></div>
+    <div class="toc-row"><span class="toc-num">25</span><span class="toc-label"><strong>Comp &amp; pay-transparency worksheet</strong></span><span class="toc-page">25</span></div>
+    <div class="toc-row"><span class="toc-num">26</span><span class="toc-label"><strong>Retention &amp; exit-interview playbook</strong> · Prompt 11</span><span class="toc-page">26</span></div>
+    <div class="toc-row"><span class="toc-num">27</span><span class="toc-label"><strong>Team rollout email templates</strong> · 3 copy-paste</span><span class="toc-page">27</span></div>
+    <div class="toc-row"><span class="toc-num">28</span><span class="toc-label"><strong>Blank rubric worksheet</strong> (fillable)</span><span class="toc-page">28</span></div>
+    <div class="toc-row"><span class="toc-num">29</span><span class="toc-label"><strong>Blank multi-candidate scorecard grid</strong></span><span class="toc-page">29</span></div>
+    <div class="toc-row"><span class="toc-num">30</span><span class="toc-label"><strong>Team prompt library</strong> + sample rows</span><span class="toc-page">30</span></div>
+    <div class="toc-row"><span class="toc-num">31</span><span class="toc-label"><strong>4-week pilot rollout</strong> + KPIs</span><span class="toc-page">31</span></div>
+    <div class="toc-row"><span class="toc-num">32</span><span class="toc-label"><strong>Close</strong> · license, refund, sources, upsells</span><span class="toc-page">32</span></div>
+  </div>
+
   <div class="brand-footer">
-    <span class="brand-footer-left">Personalas · HR Hiring Guides</span>
+    <span class="brand-footer-left">Prompt Anatomy · HR Hiring Guides</span>
     <span class="brand-footer-url">www.promptanatomy.app</span>
     <span class="brand-footer-right">Page 2</span>
   </div>
 </section>
+
+<!-- ============================================================
+     PAGE 3 — Scorecards vs rubrics (foundation)
+     ============================================================ -->
 <section class="page">
-  <div class="page-eyebrow"><span>Ch 1</span><span class="page-eyebrow-tag">Prompts 1–2</span></div>
-  <h2>Diagnostics & competency model</h2>
-  <p>Advanced Prompt 1 adds trend context and stage labels to funnel numbers. Prompt 2 outputs competencies + knockouts.</p>
-  <pre class="prompt-block">Role: senior recruitment analyst.
-Task: Map funnel metrics to bottleneck stage; recommend 3 interventions with owners.
-Context: [role], [90-day applicant/interview/offer counts], target time-to-fill [days].
-Format: table Stage | Signal | Action | Owner.</pre>
-  <pre class="prompt-block">Role: workforce planning partner.
-Task: Define 7 competencies and up to 2 knockout criteria for [role].
-Format: competency | why it matters | how to assess | knockout Y/N.</pre>
+  <div class="page-eyebrow"><span>Foundation</span><span class="page-eyebrow-tag">Method</span></div>
+  <h2>Scorecards vs rubrics</h2>
+  <p class="lead">A scorecard lists <em>what</em> you measure. A rubric defines <em>what each score level looks like</em> with behavioral anchors. Most teams skip the rubric — that's where score drift starts.</p>
+  <table>
+    <tr><th>Tool</th><th>Question it answers</th><th>Owner</th></tr>
+    <tr><td><strong>Scorecard</strong></td><td>Which 5–7 competencies matter for this role family?</td><td>Hiring manager + HRBP</td></tr>
+    <tr><td><strong>Rubric</strong></td><td>What does a 3 vs 4 look like for each competency?</td><td>HRBP (with manager review)</td></tr>
+    <tr><td><strong>Interview kit</strong></td><td>Which question targets which competency?</td><td>HRBP</td></tr>
+    <tr><td><strong>Debrief protocol</strong></td><td>How do we combine scores into a decision?</td><td>Recruiter facilitates</td></tr>
+  </table>
+  <div class="callout"><strong>Rule</strong>Assign each competency to <em>one</em> interviewer. When everyone owns everything, nothing is scored rigorously and "culture fit" wins.</div>
+  <h3>What this guide assumes</h3>
+  <ul>
+    <li>You have a kickoff worksheet (Beginner p.12) for the role.</li>
+    <li>You can name the role family — IC sales, HR generalist, ops, engineering manager — before opening AI.</li>
+    <li>You have an ATS or a tracked spreadsheet for evidence storage.</li>
+  </ul>
   <div class="brand-footer">
-    <span class="brand-footer-left">Personalas · HR Hiring Guides</span>
+    <span class="brand-footer-left">Prompt Anatomy · HR Hiring Guides</span>
     <span class="brand-footer-url">www.promptanatomy.app</span>
     <span class="brand-footer-right">Page 3</span>
   </div>
 </section>
+
+<!-- ============================================================
+     PAGE 4 — Knockouts + competency model
+     ============================================================ -->
 <section class="page">
-  <div class="page-eyebrow"><span>Ch 1</span><span class="page-eyebrow-tag">Knockouts</span></div>
-  <h2>Minimum bar & role family</h2>
-  <p>Before interviews, document minimum total score and knockouts (e.g., must score 3+ on Communication).</p>
-  <ul><li>Individual contributor sales: discovery, objection handling, pipeline discipline</li>
-  <li>HR generalist: judgment, stakeholder communication, process orientation</li>
-  <li>Operations: systems thinking, prioritization, data accuracy</li></ul>
-  <div class="callout callout-warn"><strong>Legal note</strong>Document job-related criteria. Avoid undocumented "culture" vetoes.</div>
+  <div class="page-eyebrow"><span>Foundation</span><span class="page-eyebrow-tag">Knockouts</span></div>
+  <h2>Minimum bar &amp; role family</h2>
+  <p>Before interviews, document the <strong>minimum total score</strong> (e.g., 16/28) and <strong>knockouts</strong> (e.g., must score 3+ on Communication). Knockouts protect against weighted averages hiding a single fatal gap.</p>
+  <h3>Competency models by role family</h3>
+  <table>
+    <tr><th>Role family</th><th>Core competencies (5–7)</th><th>Common knockouts</th></tr>
+    <tr><td>IC sales</td><td>Discovery, objection handling, pipeline discipline, communication, coachability</td><td>Pipeline discipline &lt; 3</td></tr>
+    <tr><td>HR generalist</td><td>Judgment, stakeholder communication, process orientation, ownership, written clarity</td><td>Stakeholder comms &lt; 3</td></tr>
+    <tr><td>Operations</td><td>Systems thinking, prioritization, data accuracy, ownership, collaboration</td><td>Data accuracy &lt; 3</td></tr>
+    <tr><td>Engineering manager</td><td>Technical depth, people development, delivery, prioritization, communication</td><td>People development &lt; 3</td></tr>
+    <tr><td>Customer success</td><td>Account ownership, communication, problem decomposition, empathy, data fluency</td><td>Account ownership &lt; 3</td></tr>
+  </table>
+  <div class="callout callout-warn"><strong>Legal note</strong>Knockouts must be job-related and documented before interviews start. Avoid undocumented "culture" vetoes — they create disparate impact risk. Have counsel review knockouts annually per role family.</div>
   <div class="brand-footer">
-    <span class="brand-footer-left">Personalas · HR Hiring Guides</span>
+    <span class="brand-footer-left">Prompt Anatomy · HR Hiring Guides</span>
     <span class="brand-footer-url">www.promptanatomy.app</span>
     <span class="brand-footer-right">Page 4</span>
   </div>
 </section>
+
+<!-- ============================================================
+     PAGE 5 — Prompt 1: Funnel diagnostics + worked output
+     ============================================================ -->
 <section class="page">
-  <div class="page-eyebrow"><span>Ch 2</span><span class="page-eyebrow-tag">Prompts 3–4</span></div>
-  <h2>Inclusive JD & sourcing</h2>
-  <pre class="prompt-block">Role: inclusive job description editor.
-Task: Rewrite JD for [role]; flag biased language; add EEO statement placeholder for counsel review.
-Constraints: plain US English; pay transparency where required by state.</pre>
-  <pre class="prompt-block">Role: sourcing strategist.
-Task: Boolean search strings (LinkedIn), 3 outreach templates, employee referral ask for [role].
-Format: table Channel | Tactic | Sample copy (no PII).</pre>
+  <div class="page-eyebrow"><span>Chapter 1</span><span class="page-eyebrow-tag">Prompt 1</span></div>
+  <h2>Funnel diagnostics (advanced)</h2>
+  <p class="prompt-label-row"><span>Prompt 1 — Bottleneck mapping</span><span class="prompt-tag">~5–10 min</span></p>
+  <pre class="prompt-block">You are a senior recruitment analyst. Map funnel metrics to bottleneck stage and recommend 3 interventions with owners.
+
+Role: [job title]
+Role family: [IC sales / HR / ops / eng mgr / CS]
+Role location: [Remote – US, Hybrid – City, State, or On-site – City, State]
+State: [two-letter, e.g., CA]
+Target time-to-fill (days): [ ]
+
+90-day funnel:
+- Applicants: [ ]   Recruiter screens: [ ]   Hiring manager screens: [ ]
+- Onsite/panel: [ ]   Offers: [ ]   Accepts: [ ]
+
+Trend vs prior 90 days: [stable / declining / improving + 1 sentence]
+
+Output a table: Stage | Signal | Action | Owner. Then 1 sentence on the single biggest leak.</pre>
+  <div class="worked-output">
+    <span class="wo-label">Sample output — Account Executive, Remote – US</span>
+    <ul>
+      <li><strong>Stage:</strong> Recruiter screen → HM screen · <strong>Signal:</strong> 60% drop · <strong>Action:</strong> add 3-question discovery probe to recruiter screen · <strong>Owner:</strong> recruiter</li>
+      <li><strong>Stage:</strong> Onsite → Offer · <strong>Signal:</strong> only 2 offers from 14 onsites (14%) · <strong>Action:</strong> calibrate panel on discovery rubric · <strong>Owner:</strong> HRBP</li>
+      <li><strong>Stage:</strong> Offer → Accept · <strong>Signal:</strong> 50% acceptance · <strong>Action:</strong> open comp band conversation in screen, not at offer · <strong>Owner:</strong> recruiter</li>
+    </ul>
+    <span class="wo-note">Biggest leak: onsite-to-offer — panel calibration is the highest-ROI fix this quarter.</span>
+  </div>
   <div class="brand-footer">
-    <span class="brand-footer-left">Personalas · HR Hiring Guides</span>
+    <span class="brand-footer-left">Prompt Anatomy · HR Hiring Guides</span>
     <span class="brand-footer-url">www.promptanatomy.app</span>
     <span class="brand-footer-right">Page 5</span>
   </div>
 </section>
+
+<!-- ============================================================
+     PAGE 6 — Prompt 2: Competency model + worked output
+     ============================================================ -->
 <section class="page">
-  <div class="page-eyebrow"><span>Ch 2</span><span class="page-eyebrow-tag">Outreach</span></div>
-  <h2>Sourcing quality bar</h2>
-  <p>Verify AI-generated Boolean strings in your ATS/LinkedIn — they often over-filter or miss synonyms.</p>
-  <h3>Outreach checklist</h3>
-  <ul class="check-list"><li>Role and location specific</li><li>No demographic proxies</li><li>Clear CTA and timeline</li><li>Tracked in ATS</li></ul>
+  <div class="page-eyebrow"><span>Chapter 1</span><span class="page-eyebrow-tag">Prompt 2</span></div>
+  <h2>Competency definition</h2>
+  <p class="prompt-label-row"><span>Prompt 2 — Competencies + knockouts</span><span class="prompt-tag">~10–15 min</span></p>
+  <pre class="prompt-block">You are a workforce planning partner. Define competencies and knockout criteria for this role; flag any that need legal review.
+
+Role: [job title]
+Role family: [IC sales / HR / ops / eng mgr / CS]
+Role location: [Remote – US, Hybrid – City, State, or On-site – City, State]
+Level: [junior / mid / senior / lead]
+Best performer in this role today: [3-sentence anonymized profile]
+
+Output a table: Competency | Why it matters for this role | How to assess (behavioral / situational / work sample) | Knockout Y/N | Min score 1–4.
+
+Cap at 7 competencies. Flag any that look like demographic proxies for human review.</pre>
+  <div class="worked-output">
+    <span class="wo-label">Sample output — HR Generalist, Hybrid New York, NY</span>
+    <ul>
+      <li><strong>Judgment</strong> · core HR work · behavioral · Knockout: N · Min: 3</li>
+      <li><strong>Stakeholder communication</strong> · 40% of role · behavioral + work sample · Knockout: <strong>Y</strong> · Min: 3</li>
+      <li><strong>Process orientation</strong> · scales policy work · situational · Knockout: N · Min: 3</li>
+      <li><strong>Ownership</strong> · ambiguous problems · behavioral · Knockout: N · Min: 3</li>
+      <li><strong>Written clarity</strong> · policy + offer letters · work sample · Knockout: <strong>Y</strong> · Min: 3</li>
+      <li><strong>Coachability</strong> · early-career growth · behavioral · Knockout: N · Min: 2</li>
+      <li><strong>Data literacy</strong> · funnel reviews · situational · Knockout: N · Min: 2</li>
+    </ul>
+    <span class="wo-note">Flag: none of these are demographic proxies. "Polish" was suggested in a draft — rejected because it correlates with class/background.</span>
+  </div>
   <div class="brand-footer">
-    <span class="brand-footer-left">Personalas · HR Hiring Guides</span>
+    <span class="brand-footer-left">Prompt Anatomy · HR Hiring Guides</span>
     <span class="brand-footer-url">www.promptanatomy.app</span>
     <span class="brand-footer-right">Page 6</span>
   </div>
 </section>
+
+<!-- ============================================================
+     PAGE 7 — Prompt 3: Inclusive JD + before/after
+     ============================================================ -->
 <section class="page">
-  <div class="page-eyebrow"><span>Ch 3</span><span class="page-eyebrow-tag">Interview kit</span></div>
-  <h2>Prompt 5 — full kit</h2>
-  <pre class="prompt-block">Role: structured interview designer.
-Task: Build interview kit for [role] with assigned competencies per panel member.
-Output: opening script; 5 behavioral (STAR); 3 situational; work-sample prompt; debrief notes template.
-Format: tables with Question | Competency | Listen for | Probe.</pre>
+  <div class="page-eyebrow"><span>Chapter 2</span><span class="page-eyebrow-tag">Prompt 3</span></div>
+  <h2>Inclusive job description</h2>
+  <p class="prompt-label-row"><span>Prompt 3 — JD rewrite + bias flags</span><span class="prompt-tag">~5–10 min</span></p>
+  <pre class="prompt-block">You are an inclusive job description editor. Rewrite the JD for [role]; flag biased or exclusionary language; add an EEO statement placeholder for counsel review.
+
+Role: [job title]
+Role location: [Remote – US, Hybrid – City, State, or On-site – City, State]
+State: [two-letter]   Salary band: [e.g., $120,000–$160,000]
+Current JD: [paste]
+Pay transparency required in this state: [Y/N — verify current law]
+
+Output:
+1. Rewritten JD in plain US English.
+2. Table: Original phrase | Why flagged | Replacement.
+3. EEO statement placeholder for counsel review.</pre>
+  <div class="compare-ad">
+    <div class="ca-col ca-before">
+      <span class="ca-title">Before</span>
+      <p>We need a <em>rockstar</em> HR Generalist who can hit the ground running in our fast-paced, hard-charging culture. Must be willing to wear many hats.</p>
+    </div>
+    <div class="ca-col ca-after">
+      <span class="ca-title">After</span>
+      <p>Help our 60-person team in New York, NY hire 20 people this year. You'll partner with two hiring managers and own intake, panel calibration, and offer process. Base: <strong>$120,000–$160,000</strong>.</p>
+    </div>
+  </div>
+  <h3>Bias flag examples</h3>
+  <table>
+    <tr><th>Flagged phrase</th><th>Why</th><th>Replacement</th></tr>
+    <tr><td>"rockstar / ninja / guru"</td><td>Skews male, signals informal culture</td><td>"experienced [role]"</td></tr>
+    <tr><td>"hit the ground running"</td><td>Excludes career returners, parents</td><td>"ramp in your first 90 days"</td></tr>
+    <tr><td>"hard-charging"</td><td>Codes for burnout, ableist</td><td>name the actual workload</td></tr>
+    <tr><td>"digital native"</td><td>Age-proxy</td><td>"comfortable with [tools]"</td></tr>
+  </table>
   <div class="brand-footer">
-    <span class="brand-footer-left">Personalas · HR Hiring Guides</span>
+    <span class="brand-footer-left">Prompt Anatomy · HR Hiring Guides</span>
     <span class="brand-footer-url">www.promptanatomy.app</span>
     <span class="brand-footer-right">Page 7</span>
   </div>
 </section>
+
+<!-- ============================================================
+     PAGE 8 — Prompt 4: Sourcing strategy + worked output
+     ============================================================ -->
 <section class="page">
-  <div class="page-eyebrow"><span>Ch 3</span><span class="page-eyebrow-tag">STAR bank</span></div>
-  <h2>Behavioral question bank</h2>
+  <div class="page-eyebrow"><span>Chapter 2</span><span class="page-eyebrow-tag">Prompt 4</span></div>
+  <h2>Sourcing strategy</h2>
+  <p class="prompt-label-row"><span>Prompt 4 — 3-channel sourcing plan</span><span class="prompt-tag">~5–10 min</span></p>
+  <pre class="prompt-block">You are a sourcing strategist. Produce a 3-channel sourcing plan for this role; no candidate PII.
+
+Role: [job title]
+Role location: [Remote – US, Hybrid – City, State, or On-site – City, State]
+State: [two-letter]   Salary band: [e.g., $120,000–$160,000]
+ATS in use: [Greenhouse / Lever / Ashby / other]
+
+Output a table: Channel | Tactic | Sample copy (no PII) | Tracking field in ATS.
+
+Avoid demographic proxies. Open comp band in outreach where state law permits or requires.</pre>
+  <div class="worked-output">
+    <span class="wo-label">Sample output — Account Executive, Remote – US, $120k–$160k base</span>
   <table>
-  <tr><th>Competency</th><th>Question</th><th>Strong signal</th></tr>
-  <tr><td>Ownership</td><td>Tell me about a goal you missed. What did you do next?</td><td>Owns outcome; specific recovery steps</td></tr>
-  <tr><td>Communication</td><td>Explain a complex decision to a non-expert.</td><td>Clear structure; checks understanding</td></tr>
-  <tr><td>Collaboration</td><td>Describe conflict with a peer and resolution.</td><td>Focus on behavior, not blame</td></tr></table>
+      <tr><th>Channel</th><th>Tactic</th><th>Sample copy</th></tr>
+      <tr><td>LinkedIn post</td><td>3-sentence open call</td><td>"Hiring Remote – US AE, $120k–$160k base + uncapped commission. If you've sold mid-market HR tech, DM me. No résumé for the first call."</td></tr>
+      <tr><td>Employee referral</td><td>Specific ask, not "anyone good?"</td><td>"Who's the strongest mid-market AE you've worked with in the last 2 years not on your team? I'll share the band + process before any intros."</td></tr>
+      <tr><td>Passive outreach</td><td>Cite one specific public win</td><td>"Saw your case study on [X]. Hiring AE, $120k–$160k base. 10-minute call this week?"</td></tr>
+    </table>
+    <span class="wo-note">Tracking: tag every outreach in ATS as <code>source=referral / linkedin / passive</code> so monthly review shows which channel converts.</span>
+  </div>
   <div class="brand-footer">
-    <span class="brand-footer-left">Personalas · HR Hiring Guides</span>
+    <span class="brand-footer-left">Prompt Anatomy · HR Hiring Guides</span>
     <span class="brand-footer-url">www.promptanatomy.app</span>
     <span class="brand-footer-right">Page 8</span>
   </div>
 </section>
+
+<!-- ============================================================
+     PAGE 9 — Sourcing quality bar + outreach playbook
+     ============================================================ -->
 <section class="page">
-  <div class="page-eyebrow"><span>Ch 3</span><span class="page-eyebrow-tag">Work sample</span></div>
-  <h2>Work-sample prompts</h2>
-  <p>Use when role output is observable (writing sample, case exercise, portfolio review).</p>
-  <ul><li>Same exercise for every finalist</li><li>Rubric scored before seeing names</li><li>Time-boxed to reduce unpaid labor burden</li></ul>
-  <div class="callout"><strong>Fairness</strong>Accommodate disabilities; document alternatives in advance.</div>
+  <div class="page-eyebrow"><span>Chapter 2</span><span class="page-eyebrow-tag">Quality bar</span></div>
+  <h2>Sourcing quality bar</h2>
+  <p>AI-generated Boolean strings over-filter or miss synonyms. Verify in ATS and LinkedIn Recruiter before you run the campaign.</p>
+  <h3>Outreach checklist</h3>
+  <ul class="check-list">
+    <li>Role-specific (not "great opportunity") and location-specific (Remote – US / city)</li>
+    <li>No demographic proxies in screening criteria (see avoid-list below)</li>
+    <li>Comp band stated up front where state law permits or requires</li>
+    <li>Clear CTA and timeline (e.g., "10-min call this week")</li>
+    <li>Tracked in ATS with <code>source</code> and <code>outreach_template</code> tags</li>
+    <li>Response rate reviewed weekly; templates A/B tested monthly</li>
+  </ul>
+  <h3>Demographic proxies to avoid</h3>
+  <table>
+    <tr><th>Proxy</th><th>What it actually correlates with</th><th>Use instead</th></tr>
+    <tr><td>"digital native"</td><td>Age</td><td>"comfortable with [specific tools]"</td></tr>
+    <tr><td>"recent graduate"</td><td>Age</td><td>"0–3 years in the role"</td></tr>
+    <tr><td>"culture fit"</td><td>Social likeness</td><td>"values match: [specific behaviors]"</td></tr>
+    <tr><td>"polished" / "professional"</td><td>Class, race</td><td>"clear written communication"</td></tr>
+    <tr><td>school tier filters</td><td>Class, race</td><td>competency assessment</td></tr>
+  </table>
+  <div class="callout callout-warn"><strong>Audit reminder</strong>Run a quarterly sourcing audit: response rate, interview rate, offer rate by channel. Flag any channel where one demographic group falls below 80% of the top group's pass-through (4/5ths rule heuristic).</div>
   <div class="brand-footer">
-    <span class="brand-footer-left">Personalas · HR Hiring Guides</span>
+    <span class="brand-footer-left">Prompt Anatomy · HR Hiring Guides</span>
     <span class="brand-footer-url">www.promptanatomy.app</span>
     <span class="brand-footer-right">Page 9</span>
   </div>
 </section>
+
+<!-- ============================================================
+     PAGE 10 — Prompt 5: Full interview kit + filled sample [PREVIEW]
+     ============================================================ -->
 <section class="page">
-  <div class="page-eyebrow"><span>Ch 4</span><span class="page-eyebrow-tag">Rubric</span></div>
-  <h2>Rubric: Communication (1–4)</h2>
+  <div class="page-eyebrow"><span>Chapter 3</span><span class="page-eyebrow-tag">Prompt 5</span></div>
+  <h2>Full interview kit</h2>
+  <p class="prompt-label-row"><span>Prompt 5 — Interview kit + competency assignment</span><span class="prompt-tag">~10–15 min</span></p>
+  <pre class="prompt-block">You are a structured interview designer. Build an interview kit for [role] with one competency assigned per panel member.
+
+Role: [job title]   Role family: [ ]
+Role location: [Remote – US, Hybrid – City, State, or On-site – City, State]
+Panel: [3–4 interviewers + roles]
+Competencies (from Prompt 2): [list]
+
+Output:
+1. Opening script (90 seconds, recruiter).
+2. 5 behavioral questions (STAR) — table: Question | Competency | Listen for | Probe.
+3. 3 situational questions.
+4. 1 work-sample prompt with time box.
+5. Debrief notes template (per interviewer).</pre>
+  <div class="worked-output">
+    <span class="wo-label">Filled sample — Account Executive, Remote – US, 3-person panel</span>
+    <p><strong>Opening (recruiter, 90s):</strong> "Thanks for the time. Today is three 45-minute interviews and a 30-minute work sample. Each interviewer scores one competency with evidence. We share the decision within 48 hours."</p>
   <table>
-  <tr><th>4</th><td>Exceptional — proactive updates; frames trade-offs for stakeholders</td></tr>
-  <tr><th>3</th><td>Strong — clear updates; occasional reactive communication</td></tr>
-  <tr><th>2</th><td>Developing — vague updates; defends position without business framing</td></tr>
-  <tr><th>1</th><td>Does not meet bar — surprises stakeholders; poor documentation</td></tr></table>
-  <p class="muted">Build similar tables for each competency on your scorecard.</p>
+      <tr><th>Question</th><th>Competency / Owner</th><th>Listen for / Probe</th></tr>
+      <tr><td>Walk me through your last lost deal — what did you miss in discovery?</td><td>Discovery / HM</td><td>Owns the miss; cites the question they didn't ask. <em>Probe:</em> "What's now in your discovery checklist?"</td></tr>
+      <tr><td>Describe handling a "no budget this quarter" objection that converted.</td><td>Objection handling / Sales lead</td><td>Reframes; cites customer references. <em>Probe:</em> "What's the one phrase you reuse?"</td></tr>
+      <tr><td>Show me your last 5 deals by stage — what's stuck and why?</td><td>Pipeline discipline / Sales lead</td><td>Stage criteria, not feel. <em>Probe:</em> "What forecast accuracy did you hit last quarter?"</td></tr>
+      <tr><td>Tell me about a peer manager you disagreed with on deal strategy.</td><td>Collaboration / HRBP</td><td>Behavior, not blame. <em>Probe:</em> "What did you change?"</td></tr>
+      <tr><td>Goal you missed — what did you do next?</td><td>Ownership / HM</td><td>Specific recovery steps. <em>Probe:</em> "What stayed changed after?"</td></tr>
+    </table>
+    <p class="tiny"><strong>Work sample (30 min):</strong> mock discovery call with the sales lead playing a mid-market HR buyer. Scored on the work-sample rubric (p.12) <em>before</em> seeing the candidate's name.</p>
+  </div>
   <div class="brand-footer">
-    <span class="brand-footer-left">Personalas · HR Hiring Guides</span>
+    <span class="brand-footer-left">Prompt Anatomy · HR Hiring Guides</span>
     <span class="brand-footer-url">www.promptanatomy.app</span>
     <span class="brand-footer-right">Page 10</span>
   </div>
 </section>
+
+<!-- ============================================================
+     PAGE 11 — STAR question bank (densified)
+     ============================================================ -->
 <section class="page">
-  <div class="page-eyebrow"><span>Ch 4</span><span class="page-eyebrow-tag">Rubric</span></div>
-  <h2>Rubric: Ownership & blank scorecard</h2>
+  <div class="page-eyebrow"><span>Chapter 3</span><span class="page-eyebrow-tag">STAR bank</span></div>
+  <h2>Behavioral question bank</h2>
+  <p>Reusable questions across 5 competencies. Each question is paired with what a strong signal looks like — interviewers fill the rubric anchor (1–4) with cited evidence, not vibes.</p>
   <table>
-  <tr><th>4</th><td>Anticipates blockers; delivers without reminders</td></tr>
-  <tr><th>3</th><td>Delivers on commitments with light guidance</td></tr>
-  <tr><th>2</th><td>Needs frequent direction; partial delivery</td></tr>
-  <tr><th>1</th><td>Unreliable follow-through</td></tr></table>
-  <h3>Blank scorecard (copy)</h3>
-  <table><tr><th>Competency</th><th>Owner</th><th>1–4</th><th>Evidence</th></tr>
-  <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
-  <tr><td>&nbsp;</td><td></td><td></td><td></td></tr></table>
+    <tr><th>Competency</th><th>Question</th><th>Strong signal</th></tr>
+    <tr><td>Ownership</td><td>Tell me about a goal you missed. What did you do next?</td><td>Owns outcome; specific recovery steps; lasting change</td></tr>
+    <tr><td>Ownership</td><td>Describe a project where you saw a problem no one assigned to you.</td><td>Took action without permission; cleared scope after</td></tr>
+    <tr><td>Communication</td><td>Explain a complex decision to a non-expert.</td><td>Clear structure; checks understanding; one analogy</td></tr>
+    <tr><td>Communication</td><td>Walk me through a time you over-communicated and a time you under-communicated.</td><td>Self-aware; specific change after each</td></tr>
+    <tr><td>Collaboration</td><td>Describe conflict with a peer and resolution.</td><td>Behavior, not blame; named the issue, not the person</td></tr>
+    <tr><td>Collaboration</td><td>Tell me about working with someone you didn't like.</td><td>Stayed professional; found a working contract</td></tr>
+    <tr><td>Judgment</td><td>A decision you made with incomplete information.</td><td>Named the unknowns; reversible vs irreversible framing</td></tr>
+    <tr><td>Judgment</td><td>A time you said no to a stakeholder.</td><td>Cited data or principle; relationship survived</td></tr>
+    <tr><td>Execution</td><td>Walk me through a recent process you simplified.</td><td>Before/after metric; what broke after</td></tr>
+    <tr><td>Execution</td><td>You have 12 priorities and 1 week. How do you triage Monday?</td><td>Cut something explicitly; told stakeholders how</td></tr>
+  </table>
+  <p class="muted"><strong>Use rule:</strong> 1 question per competency per interview; same question across all candidates for the role. Rotate the bank every 6 months to reduce coaching leakage.</p>
   <div class="brand-footer">
-    <span class="brand-footer-left">Personalas · HR Hiring Guides</span>
+    <span class="brand-footer-left">Prompt Anatomy · HR Hiring Guides</span>
     <span class="brand-footer-url">www.promptanatomy.app</span>
     <span class="brand-footer-right">Page 11</span>
   </div>
 </section>
+
+<!-- ============================================================
+     PAGE 12 — Work-sample prompts + rubric anchors
+     ============================================================ -->
 <section class="page">
-  <div class="page-eyebrow"><span>Ch 4</span><span class="page-eyebrow-tag">Scorecard</span></div>
-  <h2>Universal scorecard template</h2>
-  <p>Candidate: ______ Role: ______ Interviewer: ______ Stage: ______</p>
-  <table><tr><th>Competency</th><th>Rating 1–4</th><th>Evidence (required)</th></tr>
-  <tr><td></td><td></td><td></td></tr></table>
-  <p>Overall: Strong hire / Hire / No hire / Strong no hire</p>
-  <p class="tiny">No evidence = invalid score in debrief.</p>
+  <div class="page-eyebrow"><span>Chapter 3</span><span class="page-eyebrow-tag">Work sample</span></div>
+  <h2>Work-sample prompts &amp; rubric</h2>
+  <p>Work samples test observable output. Use them when role output is visible (writing sample, case exercise, portfolio review, mock call).</p>
+  <h3>Design rules</h3>
+  <ul class="check-list">
+    <li>Same exercise for every finalist in the role</li>
+    <li>Rubric scored <em>before</em> seeing the candidate's name</li>
+    <li>Time-boxed (30–60 min) to reduce unpaid-labor burden</li>
+    <li>Pay if &gt; 90 min (e.g., $150 flat) — strengthens trust and inclusion</li>
+    <li>Document accommodations in advance (extra time, alternative format)</li>
+  </ul>
+  <h3>Work-sample rubric (4 anchors)</h3>
+  <table>
+    <tr><th>Rating</th><th>What it looks like</th></tr>
+    <tr><td>4 Exceptional</td><td>Reframes the problem, names trade-offs, ships a complete artifact with self-critique</td></tr>
+    <tr><td>3 Strong</td><td>Solves the problem as stated, complete artifact, minor self-critique</td></tr>
+    <tr><td>2 Developing</td><td>Partial solution; missing one critical dimension; needs prompting</td></tr>
+    <tr><td>1 Below bar</td><td>Misreads the prompt; incomplete artifact; no self-critique</td></tr>
+  </table>
+  <div class="callout"><strong>Fairness</strong>Accommodate disabilities; document alternatives in advance. A candidate requesting extra time is the same signal as one who doesn't — score the artifact, not the timing.</div>
   <div class="brand-footer">
-    <span class="brand-footer-left">Personalas · HR Hiring Guides</span>
+    <span class="brand-footer-left">Prompt Anatomy · HR Hiring Guides</span>
     <span class="brand-footer-url">www.promptanatomy.app</span>
     <span class="brand-footer-right">Page 12</span>
   </div>
 </section>
+
+<!-- ============================================================
+     PAGE 13 — Rubric: Communication
+     ============================================================ -->
 <section class="page">
-  <div class="page-eyebrow"><span>Ch 5</span><span class="page-eyebrow-tag">Calibration</span></div>
-  <h2>90-minute calibration training</h2>
-  <p><strong>Part 1 (20 min):</strong> Why these competencies for this role family.</p>
-  <p><strong>Part 2 (40 min):</strong> Watch a sample interview clip; score independently; compare to rubric anchors.</p>
-  <p><strong>Part 3 (30 min):</strong> Debrief protocol walkthrough with fictional candidate.</p>
+  <div class="page-eyebrow"><span>Chapter 4</span><span class="page-eyebrow-tag">Rubric</span></div>
+  <h2>Rubric: Communication (1–4)</h2>
+  <p>One competency, four behaviorally anchored levels. Print this page; interviewers score with cited evidence, not "felt like a 3".</p>
+  <table>
+    <tr><th>4 Exceptional</th><td>Proactive updates without prompting; frames trade-offs for stakeholders; checks understanding with non-experts; comfortable in writing and live.</td></tr>
+    <tr><th>3 Strong</th><td>Clear updates when asked; occasional reactive communication; readable written work; structured live answers.</td></tr>
+    <tr><th>2 Developing</th><td>Vague status updates; defends position without business framing; written work needs editing; meanders in live answers.</td></tr>
+    <tr><th>1 Below bar</th><td>Surprises stakeholders; poor written documentation; misreads room in live setting.</td></tr>
+  </table>
+  <h3>Probes if scoring is ambiguous</h3>
+  <ul>
+    <li>"What did you write down before that meeting?"</li>
+    <li>"Who didn't know, and when did they find out?"</li>
+    <li>"Walk me through the slide you'd send to the CEO on this."</li>
+  </ul>
+  <p class="muted">Build similar tables for each competency on your scorecard. Reuse anchors across role families where the competency is shared.</p>
   <div class="brand-footer">
-    <span class="brand-footer-left">Personalas · HR Hiring Guides</span>
+    <span class="brand-footer-left">Prompt Anatomy · HR Hiring Guides</span>
     <span class="brand-footer-url">www.promptanatomy.app</span>
     <span class="brand-footer-right">Page 13</span>
   </div>
 </section>
+
+<!-- ============================================================
+     PAGE 14 — Rubric: Ownership + Collaboration
+     ============================================================ -->
 <section class="page">
-  <div class="page-eyebrow"><span>Ch 5</span><span class="page-eyebrow-tag">Debrief</span></div>
-  <h2>Debrief protocol</h2>
-  <ol>
-  <li>Scores submitted before the meeting — no exceptions</li>
-  <li>Review competency-by-competency, not "overall gut feel" first</li>
-  <li>Discuss 2 vs 4 splits with cited evidence</li>
-  <li>Hiring manager states decision tied to competency scores</li></ol>
-  <div class="callout callout-danger"><strong>Anti-anchoring</strong>Do not lead with "I loved them" before evidence review.</div>
+  <div class="page-eyebrow"><span>Chapter 4</span><span class="page-eyebrow-tag">Rubrics</span></div>
+  <h2>Rubric: Ownership &amp; Collaboration</h2>
+  <h3>Ownership (1–4)</h3>
+  <table>
+    <tr><th>4 Exceptional</th><td>Anticipates blockers; delivers without reminders; pulls scope toward the goal, not headcount.</td></tr>
+    <tr><th>3 Strong</th><td>Delivers on commitments with light guidance; raises risks before they bite.</td></tr>
+    <tr><th>2 Developing</th><td>Needs frequent direction; partial delivery; raises risks after they bite.</td></tr>
+    <tr><th>1 Below bar</th><td>Unreliable follow-through; outcomes attributed to circumstances.</td></tr>
+  </table>
+  <h3>Collaboration (1–4)</h3>
+  <table>
+    <tr><th>4 Exceptional</th><td>Builds working contracts with peers; navigates disagreement without damaging relationships; lifts the team's output, not just theirs.</td></tr>
+    <tr><th>3 Strong</th><td>Reliable peer; handles disagreement professionally; shares credit when due.</td></tr>
+    <tr><th>2 Developing</th><td>Avoids conflict; gives partial credit; needs reminders to loop peers in.</td></tr>
+    <tr><th>1 Below bar</th><td>Friction with peers; assigns blame; works around the team.</td></tr>
+  </table>
+  <p class="muted"><strong>Pair check:</strong> a "4 Ownership / 1 Collaboration" pattern is a senior-IC profile, not a manager candidate. Document the role-fit interpretation before debrief.</p>
   <div class="brand-footer">
-    <span class="brand-footer-left">Personalas · HR Hiring Guides</span>
+    <span class="brand-footer-left">Prompt Anatomy · HR Hiring Guides</span>
     <span class="brand-footer-url">www.promptanatomy.app</span>
     <span class="brand-footer-right">Page 14</span>
   </div>
 </section>
+
+<!-- ============================================================
+     PAGE 15 — Universal scorecard + filled sample [PREVIEW]
+     ============================================================ -->
 <section class="page">
-  <div class="page-eyebrow"><span>Ch 6</span><span class="page-eyebrow-tag">Prompts 6–7</span></div>
-  <h2>Decline & offer scenarios</h2>
-  <pre class="prompt-block">Task: Analyze decline patterns for [role] band; separate comp vs role vs process issues.
-Output: 3 root causes | talk track | process fix | timeline.</pre>
-  <pre class="prompt-block">Task: Draft offer call script + email; include benefits headline; handle counter-offer scenario.
-Tone: confident, transparent, US comp format.</pre>
+  <div class="page-eyebrow"><span>Chapter 4</span><span class="page-eyebrow-tag">Scorecard</span></div>
+  <h2>Universal scorecard + filled sample</h2>
+  <p class="muted">Three finalists, four competencies, one decision. Evidence cell is <strong>required</strong> — a score without evidence is invalid in debrief.</p>
+  <table class="compare-grid">
+    <thead>
+      <tr><th class="cg-competency">Competency</th><th>Candidate A</th><th>Candidate B</th><th>Candidate C</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th class="cg-competency">Discovery</th>
+        <td><span class="cg-evidence"><strong>3</strong> · Asked 4 of 5 expected probes; missed budget timing.</span></td>
+        <td><span class="cg-evidence"><strong>4</strong> · Reframed the prospect's question; cited the deal-killer trap.</span></td>
+        <td><span class="cg-evidence"><strong>2</strong> · Listed features; no probe on budget or process.</span></td>
+      </tr>
+      <tr>
+        <th class="cg-competency">Objection handling</th>
+        <td><span class="cg-evidence"><strong>4</strong> · Reframed two stalls with customer references.</span></td>
+        <td><span class="cg-evidence"><strong>3</strong> · One reframe; conceded on the second.</span></td>
+        <td><span class="cg-evidence"><strong>3</strong> · Solid pattern, less depth on competitive.</span></td>
+      </tr>
+      <tr>
+        <th class="cg-competency">Pipeline discipline</th>
+        <td><span class="cg-evidence"><strong>2</strong> · Talked through deals by feel, not stage criteria.</span></td>
+        <td><span class="cg-evidence"><strong>3</strong> · Stage definitions clear; forecast within 10%.</span></td>
+        <td><span class="cg-evidence"><strong>3</strong> · Used MEDDIC consistently in last 2 quarters.</span></td>
+      </tr>
+      <tr>
+        <th class="cg-competency">Communication</th>
+        <td><span class="cg-evidence"><strong>3</strong> · Clear structure; one 8-minute over-long answer.</span></td>
+        <td><span class="cg-evidence"><strong>4</strong> · Tight, checked understanding twice.</span></td>
+        <td><span class="cg-evidence"><strong>3</strong> · Clear; missed one stakeholder framing.</span></td>
+      </tr>
+      <tr class="cg-decision-row">
+        <td>Decision</td>
+        <td>Hire — knockout met; coach pipeline</td>
+        <td>Strong hire — fast-track</td>
+        <td class="cg-decline">No hire — discovery below bar</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="tiny"><strong>Knockouts:</strong> Discovery and Objection handling must score 3+ for IC sales. Candidate C fails Discovery; do not proceed regardless of other strengths.</p>
   <div class="brand-footer">
-    <span class="brand-footer-left">Personalas · HR Hiring Guides</span>
+    <span class="brand-footer-left">Prompt Anatomy · HR Hiring Guides</span>
     <span class="brand-footer-url">www.promptanatomy.app</span>
     <span class="brand-footer-right">Page 15</span>
   </div>
 </section>
+
+<!-- ============================================================
+     PAGE 16 — Calibration training (REWRITTEN)
+     ============================================================ -->
 <section class="page">
-  <div class="page-eyebrow"><span>Ch 6</span><span class="page-eyebrow-tag">Negotiation</span></div>
-  <h2>Offer negotiation plays</h2>
-  <ul><li>Pre-approved bands before the call</li><li>Separate level vs start date vs bonus</li><li>Document every verbal promise in writing</li></ul>
+  <div class="page-eyebrow"><span>Chapter 5</span><span class="page-eyebrow-tag">Calibration</span></div>
+  <h2>90-minute calibration drill</h2>
+  <p>Run before every new role family. Goal: every interviewer scores the <strong>same answer</strong> the same way using the rubric anchors on pp. 13–14.</p>
+  <h3>Setup (10 min)</h3>
+  <ul>
+    <li><strong>Facilitator:</strong> HRBP. <strong>Participants:</strong> the full interview panel (3–5 people).</li>
+    <li>Each interviewer prints the rubric for their assigned competency.</li>
+    <li>Pick <strong>two volunteers</strong> from the panel: one plays the candidate, one plays the interviewer. The rest score independently.</li>
+  </ul>
+  <h3>Part 1 — Why these competencies (20 min)</h3>
+  <p>Facilitator walks the panel through the competency model (Prompt 2 output) and the role family's known patterns. Each interviewer states <em>their</em> competency in one sentence and what a 4 looks like.</p>
+  <h3>Part 2 — Internal mock interview (40 min)</h3>
+  <p>The volunteer interviewer asks two STAR questions from the bank (p. 11). The volunteer candidate answers with a <strong>pre-agreed mix</strong>: one strong, one weak. Every other panel member scores independently on paper, no talking.</p>
+  <div class="callout"><strong>Facilitator script</strong>"You'll see a strong and a weak answer. Score each independently. If you can't score with evidence, write the probe you'd ask. We compare scores at the end — splits are the point of this exercise."</div>
+  <h3>Part 3 — Compare &amp; commit (30 min)</h3>
+  <p>Reveal scores. Walk through every split of 2+ points. For each split: the higher scorer cites evidence, the lower scorer cites evidence, the panel agrees on the rubric anchor that fits. Update the rubric only if the panel agrees the anchor is wrong, not the scoring.</p>
+  <p class="muted"><strong>Output of the drill:</strong> a shared understanding of anchors; documented examples for the prompt library; a calibrated panel ready to interview real candidates the next day.</p>
   <div class="brand-footer">
-    <span class="brand-footer-left">Personalas · HR Hiring Guides</span>
+    <span class="brand-footer-left">Prompt Anatomy · HR Hiring Guides</span>
     <span class="brand-footer-url">www.promptanatomy.app</span>
     <span class="brand-footer-right">Page 16</span>
   </div>
 </section>
+
+<!-- ============================================================
+     PAGE 17 — Sample debrief transcript [PREVIEW — differentiator]
+     ============================================================ -->
 <section class="page">
-  <div class="page-eyebrow"><span>Ch 7</span><span class="page-eyebrow-tag">Prompts 8–9</span></div>
-  <h2>Onboarding & retention</h2>
-  <pre class="prompt-block">Task: 30-60-90 plan for [role] with manager checkpoints and success metrics.</pre>
-  <pre class="prompt-block">Task: Analyze early attrition themes; separate expectation gap vs manager vs role design.</pre>
+  <div class="page-eyebrow"><span>Chapter 5</span><span class="page-eyebrow-tag">Transcript</span></div>
+  <h2>Sample debrief transcript</h2>
+  <p class="muted">Account Executive role · Candidate "C" · 3-person panel. Annotations on the right show what the protocol (p.18) is doing in each move. Lightly edited from a real debrief; names anonymized.</p>
+  <div class="transcript">
+    <div class="transcript-row">
+      <div class="transcript-speaker">Recruiter</div>
+      <div class="transcript-line">"Scores are in. Lowest-scoring competency is Pipeline discipline at 2 average. We start there. No 'overall' until every competency is reviewed."
+        <div class="transcript-annotation"><strong>Move:</strong> opens with the lowest score — protocol step 2. No "I loved them" anchoring.</div>
+      </div>
+    </div>
+    <div class="transcript-row">
+      <div class="transcript-speaker">Sales lead</div>
+      <div class="transcript-line">"I gave a 2. Evidence: when I asked about their last 5 deals by stage, they described them by feel — 'this one's hot, this one's lukewarm.' No stage criteria, no forecast accuracy named."</div>
+    </div>
+    <div class="transcript-row">
+      <div class="transcript-speaker">HM</div>
+      <div class="transcript-line">"I had a 3. My evidence: they named MEDDIC by name in the work sample and walked the stages cleanly. So we're a 2 vs 3 split."
+        <div class="transcript-annotation"><strong>Move:</strong> 2 vs 3 split surfaced with cited evidence — protocol step 3.</div>
+      </div>
+    </div>
+    <div class="transcript-row">
+      <div class="transcript-speaker">Recruiter</div>
+      <div class="transcript-line">"Two questions for the split. One: which moment carries more weight for the role — the live answer or the work sample? Two: what's the knockout we set on this?"</div>
+    </div>
+    <div class="transcript-row">
+      <div class="transcript-speaker">HRBP</div>
+      <div class="transcript-line">"Knockout was Pipeline 3+. So if the panel calls it a 2, we don't proceed — regardless of other strengths."
+        <div class="transcript-annotation"><strong>Move:</strong> knockout invoked before the panel can argue around it (p.4).</div>
+      </div>
+    </div>
+    <div class="transcript-row">
+      <div class="transcript-speaker">Sales lead</div>
+      <div class="transcript-line">"The live answer carries more weight. Work sample was tight because the prompt told them the stages. Live, they had to produce them and they didn't."</div>
+    </div>
+    <div class="transcript-row">
+      <div class="transcript-speaker">HM</div>
+      <div class="transcript-line">"Hearing that, I'd revise to a 2. We have the evidence problem, not a rubric problem."</div>
+    </div>
+    <div class="transcript-row">
+      <div class="transcript-speaker">Recruiter</div>
+      <div class="transcript-line">"Decision call. HM, your call — tied to the competency scores."</div>
+    </div>
+    <div class="transcript-row">
+      <div class="transcript-speaker">HM</div>
+      <div class="transcript-line">"No hire. Strong elsewhere, but knockout fails. We'll send the decline today, ask the recruiter to test the pipeline probe earlier in screen."
+        <div class="transcript-annotation"><strong>Move:</strong> decision tied to scores; process learning captured for next loop — protocol step 4.</div>
+      </div>
+    </div>
+  </div>
   <div class="brand-footer">
-    <span class="brand-footer-left">Personalas · HR Hiring Guides</span>
+    <span class="brand-footer-left">Prompt Anatomy · HR Hiring Guides</span>
     <span class="brand-footer-url">www.promptanatomy.app</span>
     <span class="brand-footer-right">Page 17</span>
   </div>
 </section>
+
+<!-- ============================================================
+     PAGE 18 — Debrief protocol (one page)
+     ============================================================ -->
 <section class="page">
-  <div class="page-eyebrow"><span>Ch 7</span><span class="page-eyebrow-tag">Retention</span></div>
-  <h2>First-90-day checkpoints</h2>
-  <table><tr><th>When</th><th>Focus</th></tr>
-  <tr><td>Week 1</td><td>Tools, team, role clarity</td></tr>
-  <tr><td>Day 30</td><td>Delivery vs expectations</td></tr>
-  <tr><td>Day 90</td><td>Performance conversation; development plan</td></tr></table>
+  <div class="page-eyebrow"><span>Chapter 5</span><span class="page-eyebrow-tag">Protocol</span></div>
+  <h2>Debrief protocol</h2>
+  <p class="lead">One page. Print it. The transcript on p.17 is this protocol in action.</p>
+  <ol>
+    <li><strong>Scores submitted before the meeting</strong> — no exceptions. Late scores are not part of the debrief.</li>
+    <li><strong>Review competency-by-competency, not "overall gut feel" first.</strong> Start with the lowest-average competency.</li>
+    <li><strong>Discuss splits of 2+ points with cited evidence.</strong> Higher scorer first, then lower scorer, then rubric anchor agreement.</li>
+    <li><strong>Hiring manager states the decision tied to the competency scores.</strong> Recruiter writes the one-line rationale into the ATS.</li>
+  </ol>
+  <div class="callout callout-danger"><strong>Anti-anchoring rules</strong>No "I loved them" before evidence review. No "I just had a feeling" without a probe. No reopening a knockout failure by averaging.</div>
+  <h3>Closing the loop</h3>
+  <ul>
+    <li>If no-hire: send the decline within 48 hours; capture one process learning.</li>
+    <li>If hire: open the offer talk track (p.19) within 24 hours.</li>
+    <li>Quarterly: review score distributions by interviewer; flag any &gt;1.5 point divergence from panel mean.</li>
+  </ul>
   <div class="brand-footer">
-    <span class="brand-footer-left">Personalas · HR Hiring Guides</span>
+    <span class="brand-footer-left">Prompt Anatomy · HR Hiring Guides</span>
     <span class="brand-footer-url">www.promptanatomy.app</span>
     <span class="brand-footer-right">Page 18</span>
   </div>
 </section>
+
+<!-- ============================================================
+     PAGE 19 — Prompts 6-7: Decline & offer + senior talk track
+     ============================================================ -->
 <section class="page">
-  <div class="page-eyebrow"><span>Ch 8</span><span class="page-eyebrow-tag">Master</span></div>
-  <h2>Prompt 10 — chained workflow</h2>
-  <pre class="prompt-block">Role: HR recruitment strategist.
-Task: Using outputs from prior steps [paste summaries], produce integrated plan:
-1. Bottleneck 2. This week 3. JD fixes 4. Interview improvements 5. Offer acceptance 6. 90-day retention
-Constraints: concrete actions only; flag gaps needing human data.</pre>
+  <div class="page-eyebrow"><span>Chapter 6</span><span class="page-eyebrow-tag">Prompts 6–7</span></div>
+  <h2>Declines &amp; offers (senior comp)</h2>
+  <p class="prompt-label-row"><span>Prompt 6 — Decline pattern analysis</span><span class="prompt-tag">~5 min</span></p>
+  <pre class="prompt-block">You are a decline-pattern analyst. Separate comp vs role vs process issues across the last 90 days of declines for this role band.
+
+Role: [job title]   Band: [$150,000–$200,000]
+Role location: [Remote – US, Hybrid – City, State, or On-site – City, State]
+Decline reasons heard (anonymized counts): comp [ ], role scope [ ], process speed [ ], competing offer [ ], other [ ].
+
+Output a table: Root cause | Talk track for next candidate | Process fix | Owner | Timeline.</pre>
+  <p class="prompt-label-row"><span>Prompt 7 — Offer call script</span><span class="prompt-tag">~5 min</span></p>
+  <pre class="prompt-block">You are an offer-call specialist. Draft an offer call script + follow-up email; lead with the benefit headline; handle counter-offer in 1 paragraph.
+
+Role: [job title]   Band: [$150,000–$200,000]
+Start date target: [MM/DD/YYYY]
+Why we picked this candidate (from scorecard): [1 sentence]
+Competing offer rumored: [Y/N]
+
+Tone: confident, transparent, US comp format.</pre>
+  <div class="worked-output">
+    <span class="wo-label">Sample talk track — AE, Remote – US, $185k base / $310k OTE</span>
+    <p>"I'm calling with the offer. Base <strong>$185,000</strong>, OTE <strong>$310,000</strong>, accelerated commission past 100%, full medical, 4 weeks PTO. Start <strong>06/02/2026</strong>. Why you: in panel debrief, your discovery rubric scored the strongest we've had this quarter. What questions can I answer before you talk to your family — including if a competing offer is in play?"</p>
+    <span class="wo-note">Why this works: opens with the number, names the rubric-cited reason, invites the counter conversation rather than waiting for it.</span>
+  </div>
   <div class="brand-footer">
-    <span class="brand-footer-left">Personalas · HR Hiring Guides</span>
+    <span class="brand-footer-left">Prompt Anatomy · HR Hiring Guides</span>
     <span class="brand-footer-url">www.promptanatomy.app</span>
     <span class="brand-footer-right">Page 19</span>
   </div>
 </section>
+
+<!-- ============================================================
+     PAGE 20 — Negotiation plays (4 counter-offer scenarios)
+     ============================================================ -->
 <section class="page">
-  <div class="page-eyebrow"><span>Compliance</span><span class="page-eyebrow-tag">Bias</span></div>
-  <h2>Bias & documentation guardrails</h2>
+  <div class="page-eyebrow"><span>Chapter 6</span><span class="page-eyebrow-tag">Negotiation</span></div>
+  <h2>Offer negotiation plays</h2>
+  <h3>Standing rules</h3>
   <ul class="check-list">
-  <li>Same questions per role and stage</li>
-  <li>Evidence-based scorecard notes only</li>
-  <li>Quarterly score distribution review by interviewer</li>
-  <li>Culture assessed as values behaviors, not social likeness</li></ul>
+    <li>Pre-approved bands before the call — recruiter can move within band without re-asking</li>
+    <li>Separate level / comp / start date / equity — negotiate one at a time</li>
+    <li>Document every verbal promise in writing within 24 hours</li>
+    <li>One internal approver per role; no surprises from a second exec</li>
+  </ul>
+  <h3>4 counter-offer scenarios</h3>
+  <table>
+    <tr><th>Scenario</th><th>Play</th><th>What not to say</th></tr>
+    <tr><td>Competing offer at higher base</td><td>Confirm the competing offer is real and written; match up to band ceiling; never exceed band without re-approval. If band ceiling is below the competing offer, decline cleanly and capture the band-vs-market data.</td><td>"We can probably do that."</td></tr>
+    <tr><td>Level bump ask</td><td>Anchor on the scorecard. A level bump = the candidate scored at that level in panel. If not, decline and offer a 6-month review path.</td><td>"We'll bump the title."</td></tr>
+    <tr><td>Start-date push (3+ weeks)</td><td>Confirm hiring manager's coverage plan; offer to backfill the first week with contract; close with a written start date.</td><td>"Whenever works."</td></tr>
+    <tr><td>Equity ask</td><td>Refresh on the band; offer trade-off (base vs equity) within band ceiling; never improvise — escalate if the ask is above band.</td><td>"Sure, I'll get it approved."</td></tr>
+  </table>
+  <div class="callout callout-warn"><strong>Not legal advice.</strong> Have offers, equity grants, and accelerated comp reviewed by counsel per your state. AI drafts are starting points only.</div>
   <div class="brand-footer">
-    <span class="brand-footer-left">Personalas · HR Hiring Guides</span>
+    <span class="brand-footer-left">Prompt Anatomy · HR Hiring Guides</span>
     <span class="brand-footer-url">www.promptanatomy.app</span>
     <span class="brand-footer-right">Page 20</span>
   </div>
 </section>
+
+<!-- ============================================================
+     PAGE 21 — Prompts 8-9 + 30-60-90 sample
+     ============================================================ -->
 <section class="page">
-  <div class="page-eyebrow"><span>Worksheets</span><span class="page-eyebrow-tag">Tools</span></div>
-  <h2>Blank rubric worksheet</h2>
-  <p>Competency: _________________</p>
-  <table><tr><th>4 Exceptional</th><td></td></tr><tr><th>3 Strong</th><td></td></tr>
-  <tr><th>2 Developing</th><td></td></tr><tr><th>1 Below bar</th><td></td></tr></table>
+  <div class="page-eyebrow"><span>Chapter 7</span><span class="page-eyebrow-tag">Prompts 8–9</span></div>
+  <h2>Onboarding &amp; retention</h2>
+  <p class="prompt-label-row"><span>Prompt 8 — 30-60-90 plan</span><span class="prompt-tag">~5 min</span></p>
+  <pre class="prompt-block">You are an onboarding designer. Draft a 30-60-90 plan with manager checkpoints and 2 success metrics per phase.
+
+Role: [job title]   Level: [ ]
+Role family: [ ]
+Top 3 outcomes the role must produce in year 1: [ ]
+Manager's coaching cadence: [weekly / biweekly]</pre>
+  <p class="prompt-label-row"><span>Prompt 9 — Early-attrition theme analysis</span><span class="prompt-tag">~5 min</span></p>
+  <pre class="prompt-block">You are an attrition analyst. Separate expectation gap vs manager vs role design across the last 90 days of voluntary departures &lt; 12 months tenure.
+
+Role family: [ ]
+Departures (count, no names): [ ]
+Notes from exit conversations (themes, no PII): [ ]</pre>
+  <div class="worked-output">
+    <span class="wo-label">Sample 30-60-90 — AE, Remote – US</span>
+    <p><strong>Day 1–30:</strong> tools + ICP + 5 ride-along calls. Metric: pass internal product cert (week 3); deliver 30-day pipeline plan (week 4).</p>
+    <p><strong>Day 31–60:</strong> 10 self-sourced meetings; 3 active opportunities. Metric: pipeline coverage 2.5× quota; first qualified deal in stage 2+.</p>
+    <p><strong>Day 61–90:</strong> first closed-won expected; weekly forecast with manager. Metric: forecast within 15% of actual; one written deal retro.</p>
+    <p class="tiny"><strong>Manager cadence:</strong> weekly 1:1 (30 min), monthly pipeline review with sales lead, day-30 / day-60 / day-90 written check-in.</p>
+  </div>
   <div class="brand-footer">
-    <span class="brand-footer-left">Personalas · HR Hiring Guides</span>
+    <span class="brand-footer-left">Prompt Anatomy · HR Hiring Guides</span>
     <span class="brand-footer-url">www.promptanatomy.app</span>
     <span class="brand-footer-right">Page 21</span>
   </div>
 </section>
+
+<!-- ============================================================
+     PAGE 22 — First-90-day checkpoints + early warning
+     ============================================================ -->
 <section class="page">
-  <div class="page-eyebrow"><span>Worksheets</span><span class="page-eyebrow-tag">Library</span></div>
-  <h2>Team prompt library template</h2>
-  <p>Store approved prompts in shared drive: Name | Role family | Owner | Last verified | Link to rubric</p>
-  <p>Review quarterly when comp bands or role definitions change.</p>
+  <div class="page-eyebrow"><span>Chapter 7</span><span class="page-eyebrow-tag">Retention</span></div>
+  <h2>First-90-day checkpoints</h2>
+  <table>
+    <tr><th>When</th><th>Focus</th><th>Manager output</th></tr>
+    <tr><td>Day 7</td><td>Tools, team, role clarity</td><td>Written role-clarity confirmation</td></tr>
+    <tr><td>Day 30</td><td>Delivery vs expectations</td><td>Written feedback (1 page)</td></tr>
+    <tr><td>Day 60</td><td>Trajectory vs plan</td><td>Mid-point check-in; adjust if needed</td></tr>
+    <tr><td>Day 90</td><td>Performance conversation; development plan</td><td>Written development plan</td></tr>
+  </table>
+  <h3>Early-warning signals (escalate by day 45)</h3>
+  <table>
+    <tr><th>Signal</th><th>What good looks like</th><th>At-risk pattern</th></tr>
+    <tr><td>Weekly 1:1s</td><td>Both prepared; agenda exists</td><td>Cancelled twice; one-sided</td></tr>
+    <tr><td>30-day plan</td><td>Hit, with one written retro</td><td>No plan; or plan never reviewed</td></tr>
+    <tr><td>Peer feedback</td><td>Two unprompted positive notes</td><td>Silence; or one negative from a peer</td></tr>
+    <tr><td>Self-report</td><td>Names 1 thing they want to learn</td><td>"Everything's fine" without specifics</td></tr>
+  </table>
+  <p class="muted"><strong>HRBP role:</strong> 1 conversation with the new hire at day 30, separate from the manager. Listen for expectation gaps before they harden.</p>
   <div class="brand-footer">
-    <span class="brand-footer-left">Personalas · HR Hiring Guides</span>
+    <span class="brand-footer-left">Prompt Anatomy · HR Hiring Guides</span>
     <span class="brand-footer-url">www.promptanatomy.app</span>
     <span class="brand-footer-right">Page 22</span>
   </div>
 </section>
+
+<!-- ============================================================
+     PAGE 23 — Prompt 10: Master chaining + integrated plan sample
+     ============================================================ -->
 <section class="page">
-  <div class="page-eyebrow"><span>Rollout</span><span class="page-eyebrow-tag">Team</span></div>
-  <h2>HR team rollout (one page)</h2>
-  <ol>
-  <li>Pick one role family pilot</li>
-  <li>Publish scorecard + rubrics</li>
-  <li>Train panel (90 min calibration)</li>
-  <li>Run 3 hires; retro debrief quality</li>
-  <li>Expand to next family</li></ol>
+  <div class="page-eyebrow"><span>Chapter 8</span><span class="page-eyebrow-tag">Prompt 10</span></div>
+  <h2>Master prompt chaining</h2>
+  <p class="prompt-label-row"><span>Prompt 10 — Integrated hiring plan</span><span class="prompt-tag">~10 min</span></p>
+  <pre class="prompt-block">You are an HR recruitment strategist. Using the outputs from Prompts 1–9 (paste summaries below), produce one integrated plan with concrete actions only. Flag any data gaps that need human input.
+
+Inputs:
+- Funnel diagnosis (Prompt 1): [ ]
+- Competency model (Prompt 2): [ ]
+- JD rewrite (Prompt 3): [ ]
+- Sourcing plan (Prompt 4): [ ]
+- Interview kit (Prompt 5): [ ]
+- Decline pattern (Prompt 6): [ ]
+- 30-60-90 (Prompt 8): [ ]
+
+Output 6 sections: 1) Bottleneck this quarter 2) This week's action 3) JD fixes 4) Interview improvements 5) Offer acceptance plays 6) 90-day retention plan. End with the top 3 gaps needing human data.</pre>
+  <div class="worked-output">
+    <span class="wo-label">Sample integrated plan — AE role family, Q2 2026</span>
+    <ul>
+      <li><strong>Bottleneck:</strong> onsite → offer (14% conversion). Owner: HRBP.</li>
+      <li><strong>This week:</strong> calibrate the panel on Discovery + Pipeline rubrics (drill on p.16).</li>
+      <li><strong>JD fixes:</strong> remove "hard-charging"; state $150k–$200k base in the post; add work-sample description.</li>
+      <li><strong>Interview improvements:</strong> add the work-sample mock call; assign one competency per interviewer; print rubrics.</li>
+      <li><strong>Offer acceptance:</strong> open the comp band in the recruiter screen, not at offer; pre-approve band ceiling.</li>
+      <li><strong>90-day retention:</strong> manager weekly 1:1 + day-30 HRBP check-in; written 30-60-90 from Prompt 8.</li>
+    </ul>
+    <span class="wo-note">Top gaps: (1) we don't track decline reason consistently in ATS; (2) no quarterly score-distribution review yet; (3) two interviewers have not done calibration since last role family changed.</span>
+  </div>
   <div class="brand-footer">
-    <span class="brand-footer-left">Personalas · HR Hiring Guides</span>
+    <span class="brand-footer-left">Prompt Anatomy · HR Hiring Guides</span>
     <span class="brand-footer-url">www.promptanatomy.app</span>
     <span class="brand-footer-right">Page 23</span>
   </div>
 </section>
+
+<!-- ============================================================
+     PAGE 24 — Bias guardrails + EEO statement template
+     ============================================================ -->
 <section class="page">
-  <div class="page-eyebrow"><span>Close</span><span>Next steps</span></div>
-  <h2>Thank you — back to Personalas</h2>
-  <div class="close-block">
-    <h3>Free 10-prompt builder</h3>
-    <p><strong>promptanatomy.help/en/</strong> — copy prompts in your browser; no account.</p>
-    <h3>Beginner guide</h3>
-    <p>12-page companion for first structured hiring loops.</p>
-    <p><strong>License:</strong> Personal license — your HR team only. promptanatomy.help/terms.html#paid-pdf-license</p>
-    <p><strong>Refund:</strong> 14 days · <strong>Help:</strong> info@promptanatomy.help</p>
-    <p class="tiny">© 2026 Prompt Anatomy · www.promptanatomy.app</p>
-  </div>
+  <div class="page-eyebrow"><span>Compliance</span><span class="page-eyebrow-tag">Bias</span></div>
+  <h2>Bias guardrails &amp; EEO statement</h2>
+  <h3>Documentation rules</h3>
+  <ul class="check-list">
+    <li>Same questions per role family and stage; rotate the bank every 6 months</li>
+    <li>Evidence-based scorecard notes only — no "felt off"</li>
+    <li>Quarterly score-distribution review by interviewer; flag &gt;1.5 point divergence</li>
+    <li>Culture assessed as values <em>behaviors</em>, not social likeness</li>
+    <li>Adverse-impact review at the role-family level annually with counsel</li>
+  </ul>
+  <h3>EEO statement template (counsel review required)</h3>
+  <div class="callout callout-warn"><strong>Draft only</strong>The text below is a starting point. Your counsel and your state law determine the final wording. Pay-transparency obligations vary by state; see the worksheet on p.25.</div>
+  <pre class="prompt-block prompt-block-light">[Company] is an Equal Opportunity Employer. We do not discriminate on the basis of race, color, religion, sex, national origin, age, disability, veteran status, sexual orientation, gender identity, or any other protected status under applicable federal, state, or local law. We provide reasonable accommodations for candidates with disabilities; contact [recruiting@company.com] to request an accommodation. Compensation: [$band], pay transparency posting per [state] law as of [MM/DD/YYYY].</pre>
+  <p class="tiny">Last counsel review: [MM/DD/YYYY] · Next review: [MM/DD/YYYY] · Owner: [General Counsel / Head of HR]</p>
   <div class="brand-footer">
-    <span class="brand-footer-left">Personalas · HR Hiring Guides</span>
+    <span class="brand-footer-left">Prompt Anatomy · HR Hiring Guides</span>
     <span class="brand-footer-url">www.promptanatomy.app</span>
     <span class="brand-footer-right">Page 24</span>
   </div>
 </section>
+
+<!-- ============================================================
+     PAGE 25 — Comp + pay-transparency worksheet (NEW)
+     ============================================================ -->
+<section class="page">
+  <div class="page-eyebrow"><span>NEW</span><span class="page-eyebrow-tag">Comp worksheet</span></div>
+  <h2>Comp &amp; pay-transparency worksheet</h2>
+  <div class="callout callout-warn"><strong>Not legal advice.</strong> Pay-transparency law changes by state and year. Verify current rules for every state you hire in before posting. The list below is illustrative as of May 2026 and not a substitute for counsel review.</div>
+  <h3>States with broad pay-range posting laws (illustrative)</h3>
+  <ul class="tiny">
+    <li>California, Colorado, Connecticut, District of Columbia, Hawaii, Illinois, Maryland, Minnesota, Nevada, New York, New York City, Rhode Island, Vermont, Washington — most require posting a salary range on job postings open to residents of that state. Effective dates and scope vary. Always verify the current statute.</li>
+  </ul>
+  <h3>Comp band research worksheet</h3>
+  <div class="fill-field"><span class="ff-label">Role:</span><span class="ff-line"></span></div>
+  <div class="fill-field"><span class="ff-label">Level:</span><span class="ff-line"></span></div>
+  <div class="fill-field"><span class="ff-label">Location(s):</span><span class="ff-line"></span></div>
+  <h3>Market data</h3>
+  <table>
+    <tr><th>Source</th><th>P25</th><th>P50</th><th>P75</th><th>Date</th></tr>
+    <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+    <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+    <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+  </table>
+  <h3>Internal equity check + decision</h3>
+  <div class="fill-field"><span class="ff-label">Internal peers (band):</span><span class="ff-line"></span></div>
+  <div class="fill-field"><span class="ff-label">Proposed band:</span><span class="ff-line"></span></div>
+  <div class="fill-field"><span class="ff-label">Posting language:</span><span class="ff-line"></span></div>
+  <div class="fill-field"><span class="ff-label">Counsel review date:</span><span class="ff-line"></span></div>
+  <p class="tiny">Last counsel review: [MM/DD/YYYY] · Next review (annual): [MM/DD/YYYY] · Owner: [General Counsel / Head of HR]</p>
+  <div class="brand-footer">
+    <span class="brand-footer-left">Prompt Anatomy · HR Hiring Guides</span>
+    <span class="brand-footer-url">www.promptanatomy.app</span>
+    <span class="brand-footer-right">Page 25</span>
+  </div>
+</section>
+
+<!-- ============================================================
+     PAGE 26 — Retention + exit-interview playbook (Prompt 11)
+     ============================================================ -->
+<section class="page">
+  <div class="page-eyebrow"><span>NEW</span><span class="page-eyebrow-tag">Prompt 11</span></div>
+  <h2>Retention &amp; exit-interview playbook</h2>
+  <p class="muted">PDF-only. Run the exit interview live or async; theme analysis happens after the candidate is gone, with anonymized notes.</p>
+  <h3>5-question exit-interview script</h3>
+  <ol>
+    <li>"What was the actual reason you started looking — not the polite answer?"</li>
+    <li>"Which of: comp / role / manager / growth / process — best describes the trigger? Why?"</li>
+    <li>"Tell me about a specific moment you decided this wasn't right."</li>
+    <li>"What would have kept you 12 more months — be specific?"</li>
+    <li>"What should we change for the next person in this seat?"</li>
+  </ol>
+  <p class="prompt-label-row"><span>Prompt 11 — Theme analysis</span><span class="prompt-tag">~5–10 min</span></p>
+  <pre class="prompt-block">You are an attrition analyst. Group themes from these anonymized exit-interview notes into 5 buckets: comp, role design, manager, growth, process. Output a table and a one-sentence headline of the dominant theme.
+
+Role family: [ ]
+Exit count (no names): [ ]
+Notes (anonymized, no PII): [paste]
+
+Output: Bucket | Count | Representative quote (anonymized) | Suggested fix | Owner.</pre>
+  <div class="worked-output">
+    <span class="wo-label">Sample themed output — AE role family, 6 exits, last 2 quarters</span>
+    <ul>
+      <li><strong>Manager (3 of 6):</strong> "1:1s kept getting cancelled" · Fix: weekly 1:1 on calendar with no-cancel rule · Owner: sales lead.</li>
+      <li><strong>Comp (2 of 6):</strong> "competing offer 15% higher base" · Fix: refresh band P75 every 6 months · Owner: HRBP.</li>
+      <li><strong>Role design (1 of 6):</strong> "no clear scope after onboarding" · Fix: tie 30-60-90 to a written charter · Owner: sales lead.</li>
+    </ul>
+    <span class="wo-note">Headline: manager cadence is the dominant attrition driver, not comp.</span>
+  </div>
+  <div class="brand-footer">
+    <span class="brand-footer-left">Prompt Anatomy · HR Hiring Guides</span>
+    <span class="brand-footer-url">www.promptanatomy.app</span>
+    <span class="brand-footer-right">Page 26</span>
+  </div>
+</section>
+
+<!-- ============================================================
+     PAGE 27 — Team rollout email templates (NEW)
+     ============================================================ -->
+<section class="page">
+  <div class="page-eyebrow"><span>NEW</span><span class="page-eyebrow-tag">Templates</span></div>
+  <h2>Team rollout email templates</h2>
+  <p class="muted">Three copy-paste emails for the 4-week pilot on p.31. Adapt to your tone.</p>
+
+  <div class="email-template">
+    <div class="et-subject"><span class="et-subject-label">Subject 1</span>Structured hiring rolling out for [role family] — what changes Monday</div>
+    <div class="et-body">
+      <p>Team, starting Monday we're piloting a structured hiring loop for [role family]. Three things change:</p>
+      <p>1. Each interviewer owns one competency, scored 1–4 with cited evidence. Rubrics attached.<br>
+      2. Scores submitted in writing <em>before</em> the debrief — no exceptions.<br>
+      3. The debrief opens with the lowest-scoring competency, not "overall thoughts".</p>
+      <p>Why: our last 5 loops averaged 14% onsite-to-offer. We have a calibration problem, not a candidate problem.</p>
+      <div class="et-cta">Action: read the attached rubrics (10 min) before Friday's calibration drill (90 min, on calendar).</div>
+    </div>
+  </div>
+
+  <div class="email-template">
+    <div class="et-subject"><span class="et-subject-label">Subject 2</span>Calibration drill Friday — what to bring</div>
+    <div class="et-body">
+      <p>Friday 10:00–11:30. Bring your printed rubric and one example from a past interview where you'd score differently if you had this rubric.</p>
+      <p>Format: 10 min setup, 20 min why-these-competencies, 40 min internal mock interview (volunteer pair), 30 min compare-and-commit.</p>
+      <div class="et-cta">Pre-reads: rubrics (pp.13–14), calibration drill (p.16), debrief transcript (p.17).</div>
+    </div>
+  </div>
+
+  <div class="email-template">
+    <div class="et-subject"><span class="et-subject-label">Subject 3</span>Hire #1 retro — 15 minutes on Tuesday</div>
+    <div class="et-body">
+      <p>We closed our first hire under the new protocol. Quick retro Tuesday at 30 min:</p>
+      <p>What worked (1 thing per panelist) · What was clunky (1 thing per panelist) · What we change for hire #2.</p>
+      <div class="et-cta">Outcome we'll capture: 1 process learning written into the team prompt library (p.30).</div>
+    </div>
+  </div>
+
+  <div class="brand-footer">
+    <span class="brand-footer-left">Prompt Anatomy · HR Hiring Guides</span>
+    <span class="brand-footer-url">www.promptanatomy.app</span>
+    <span class="brand-footer-right">Page 27</span>
+  </div>
+</section>
+
+<!-- ============================================================
+     PAGE 28 — Blank rubric worksheet (fillable)
+     ============================================================ -->
+<section class="page">
+  <div class="page-eyebrow"><span>Worksheet</span><span class="page-eyebrow-tag">Fillable</span></div>
+  <h2>Blank rubric worksheet</h2>
+  <p>Print this page. One competency per worksheet. Anchor every level with an observable behavior.</p>
+  <div class="fill-field"><span class="ff-label">Competency:</span><span class="ff-line"></span></div>
+  <div class="fill-field"><span class="ff-label">Role family:</span><span class="ff-line"></span></div>
+  <div class="fill-field"><span class="ff-label">Owner (interviewer):</span><span class="ff-line"></span></div>
+  <h3>Anchors</h3>
+  <table>
+    <tr><th>4 Exceptional</th><td>&nbsp;</td></tr>
+    <tr><th>3 Strong</th><td>&nbsp;</td></tr>
+    <tr><th>2 Developing</th><td>&nbsp;</td></tr>
+    <tr><th>1 Below bar</th><td>&nbsp;</td></tr>
+  </table>
+  <h3>Probes if scoring is ambiguous</h3>
+  <div class="fill-field"><span class="ff-label">Probe 1:</span><span class="ff-line"></span></div>
+  <div class="fill-field"><span class="ff-label">Probe 2:</span><span class="ff-line"></span></div>
+  <div class="fill-field"><span class="ff-label">Probe 3:</span><span class="ff-line"></span></div>
+  <h3>Calibration history</h3>
+  <div class="fill-grid">
+    <div class="fill-field"><span class="ff-label">Last drill date:</span><span class="ff-line"></span></div>
+    <div class="fill-field"><span class="ff-label">Facilitator:</span><span class="ff-line"></span></div>
+    <div class="fill-field"><span class="ff-label">Next review:</span><span class="ff-line"></span></div>
+    <div class="fill-field"><span class="ff-label">Version:</span><span class="ff-line"></span></div>
+  </div>
+  <div class="brand-footer">
+    <span class="brand-footer-left">Prompt Anatomy · HR Hiring Guides</span>
+    <span class="brand-footer-url">www.promptanatomy.app</span>
+    <span class="brand-footer-right">Page 28</span>
+  </div>
+</section>
+
+<!-- ============================================================
+     PAGE 29 — Blank multi-candidate scorecard grid
+     ============================================================ -->
+<section class="page">
+  <div class="page-eyebrow"><span>Worksheet</span><span class="page-eyebrow-tag">Compare</span></div>
+  <h2>Multi-candidate scorecard grid</h2>
+  <p>Print. Three finalists max per page. Evidence cell required for every score.</p>
+  <div class="fill-grid">
+    <div class="fill-field"><span class="ff-label">Role:</span><span class="ff-line"></span></div>
+    <div class="fill-field"><span class="ff-label">Loop date:</span><span class="ff-line"></span></div>
+    <div class="fill-field"><span class="ff-label">Recruiter:</span><span class="ff-line"></span></div>
+    <div class="fill-field"><span class="ff-label">Hiring manager:</span><span class="ff-line"></span></div>
+  </div>
+  <table class="compare-grid">
+    <thead>
+      <tr><th class="cg-competency">Competency / Score</th><th>Candidate A</th><th>Candidate B</th><th>Candidate C</th></tr>
+    </thead>
+    <tbody>
+      <tr><th class="cg-competency">&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+      <tr><th class="cg-competency">&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+      <tr><th class="cg-competency">&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+      <tr><th class="cg-competency">&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+      <tr><th class="cg-competency">&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+      <tr class="cg-decision-row">
+        <td>Decision</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="tiny"><strong>Reminder:</strong> a score without cited evidence is invalid in debrief. Knockout failure overrides total score.</p>
+  <div class="brand-footer">
+    <span class="brand-footer-left">Prompt Anatomy · HR Hiring Guides</span>
+    <span class="brand-footer-url">www.promptanatomy.app</span>
+    <span class="brand-footer-right">Page 29</span>
+  </div>
+</section>
+
+<!-- ============================================================
+     PAGE 30 — Team prompt library template + sample rows
+     ============================================================ -->
+<section class="page">
+  <div class="page-eyebrow"><span>Worksheet</span><span class="page-eyebrow-tag">Library</span></div>
+  <h2>Team prompt library template</h2>
+  <p>Store approved prompts in one shared drive. Three sample rows show what "ready to reuse" looks like. Review quarterly when comp bands or role definitions change.</p>
+  <table>
+    <tr><th>Name</th><th>Role family</th><th>Owner</th><th>Last verified</th><th>Rubric link</th></tr>
+    <tr><td>Funnel diagnostics</td><td>All</td><td>HRBP</td><td>05/01/2026</td><td>/rubrics/funnel.md</td></tr>
+    <tr><td>AE interview kit</td><td>IC sales</td><td>Sales lead</td><td>05/10/2026</td><td>/rubrics/ae.md</td></tr>
+    <tr><td>HRG interview kit</td><td>HR generalist</td><td>HRBP</td><td>04/22/2026</td><td>/rubrics/hrg.md</td></tr>
+    <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+    <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+    <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+  </table>
+  <h3>Library hygiene rules</h3>
+  <ul class="check-list">
+    <li>Every prompt has a single named owner — no orphaned prompts</li>
+    <li>"Last verified" date refreshed after each role family change</li>
+    <li>Deprecated prompts moved to <code>/archive/</code>, not deleted (audit trail)</li>
+    <li>Quarterly review owns: bands, knockouts, rubric anchors, EEO statement</li>
+  </ul>
+  <div class="brand-footer">
+    <span class="brand-footer-left">Prompt Anatomy · HR Hiring Guides</span>
+    <span class="brand-footer-url">www.promptanatomy.app</span>
+    <span class="brand-footer-right">Page 30</span>
+  </div>
+</section>
+
+<!-- ============================================================
+     PAGE 31 — 4-week pilot rollout + KPIs
+     ============================================================ -->
+<section class="page">
+  <div class="page-eyebrow"><span>Rollout</span><span class="page-eyebrow-tag">4-week pilot</span></div>
+  <h2>HR team rollout — 4-week pilot</h2>
+  <p>Pick one role family. Do not roll out to the whole team on day one. Measure adoption before you expand.</p>
+  <div class="pilot-timeline">
+    <div class="pt-card">
+      <span class="pt-week">Week 1</span>
+      <p class="pt-title">Publish &amp; align</p>
+      <ul>
+        <li>Pick the role family pilot (one role, two open seats max)</li>
+        <li>Publish scorecard + rubrics (pp.13–15)</li>
+        <li>Send Email 1 (p.27) to the panel</li>
+        <li>Schedule the calibration drill</li>
+      </ul>
+      <span class="pt-kpi">KPI: 100% of panel has the rubric printed by Friday.</span>
+    </div>
+    <div class="pt-card">
+      <span class="pt-week">Week 2</span>
+      <p class="pt-title">Calibrate the panel</p>
+      <ul>
+        <li>90-min calibration drill (p.16)</li>
+        <li>Document anchor disagreements in the prompt library</li>
+        <li>Send Email 2 (p.27)</li>
+      </ul>
+      <span class="pt-kpi">KPI: no splits &gt;2 points after the drill on the practice candidate.</span>
+    </div>
+    <div class="pt-card">
+      <span class="pt-week">Week 3</span>
+      <p class="pt-title">Run 1–3 hires</p>
+      <ul>
+        <li>Live interviews; scores submitted in writing before debrief</li>
+        <li>Debrief protocol enforced (transcript pattern on p.17)</li>
+        <li>Decline within 48h; offer within 24h</li>
+      </ul>
+      <span class="pt-kpi">KPI: 100% of debriefs open with the lowest competency, not "overall".</span>
+    </div>
+    <div class="pt-card">
+      <span class="pt-week">Week 4</span>
+      <p class="pt-title">Retro &amp; expand</p>
+      <ul>
+        <li>15-min hire-#1 retro (Email 3 on p.27)</li>
+        <li>One process learning written into prompt library (p.30)</li>
+        <li>Decide: expand to next role family or iterate this one</li>
+      </ul>
+      <span class="pt-kpi">KPI: 1 documented learning + a go/iterate decision in writing.</span>
+    </div>
+  </div>
+  <div class="brand-footer">
+    <span class="brand-footer-left">Prompt Anatomy · HR Hiring Guides</span>
+    <span class="brand-footer-url">www.promptanatomy.app</span>
+    <span class="brand-footer-right">Page 31</span>
+  </div>
+</section>
+
+<!-- ============================================================
+     PAGE 32 — Close: license, refund, sources, upsells
+     ============================================================ -->
+<section class="page">
+  <div class="page-eyebrow"><span>Close</span><span class="page-eyebrow-tag">Next steps</span></div>
+  <h2>License, refund, sources, and what to read next</h2>
+  <div class="close-block">
+    <p><strong>License:</strong> Personal license for your HR and hiring team. Do not redistribute the PDF publicly or resell it. Department-wide redistribution outside your company requires permission — email info@promptanatomy.help. <span class="tiny">Full terms: promptanatomy.help/terms.html#paid-pdf-license</span></p>
+    <p><strong>Refund:</strong> 14-day no-questions refund — reply to your Stripe receipt. We revoke the download link after approval.</p>
+    <p><strong>Help:</strong> info@promptanatomy.help (lost email, license questions, team-wide use questions).</p>
+    <p><strong>Free 10-prompt builder:</strong> promptanatomy.help/en/ — same workflow, in your browser, no account.</p>
+  </div>
+
+  <h3>Sources</h3>
+  <ul class="tiny">
+    <li>Google re:Work — <em>Guide: Structured interviewing</em> (rework.withgoogle.com).</li>
+    <li>SHRM — <em>Structured Interviews and Talent Acquisition resources</em> (shrm.org).</li>
+    <li>U.S. EEOC — <em>Uniform Guidelines on Employee Selection Procedures (UGESP)</em>, 29 CFR Part 1607.</li>
+    <li>U.S. DOL OFCCP — <em>Practical guidance on structured selection</em> (dol.gov/agencies/ofccp).</li>
+  </ul>
+
+  <div class="upsell-card">
+    <span class="up-eyebrow">Bundle — for HR teams</span>
+    <h3 class="up-title">Both guides — Beginner + Advanced ($15.99)</h3>
+    <ul class="up-bullets">
+      <li>All 16 + 32 pages — full hiring system</li>
+      <li>Beginner for new HR generalists onboarding; Advanced for leads</li>
+      <li>One checkout, two PDFs by email</li>
+    </ul>
+    <a class="up-cta" href="https://promptanatomy.help/en/#pdf-guides">Get the bundle — $15.99</a>
+  </div>
+
+  <div class="upsell-card">
+    <span class="up-eyebrow">Cross-sell — onboard new HR hires</span>
+    <h3 class="up-title">Beginner HR Hiring Guide (16 pages, $5.99)</h3>
+    <ul class="up-bullets">
+      <li>HR Prompt Formula + 9 prompts with worked outputs</li>
+      <li>Fillable 15-minute hiring kickoff worksheet</li>
+      <li>7-point AI safety verify + decision log</li>
+    </ul>
+    <a class="up-cta" href="https://promptanatomy.help/en/#pdf-guides">Get Beginner — $5.99</a>
+  </div>
+
+  <p class="tiny">&copy; 2026 Prompt Anatomy · www.promptanatomy.app · Thank you for buying. If this guide saves your team one bad hire, share it inside your org — that is the license.</p>
+  <div class="brand-footer">
+    <span class="brand-footer-left">Prompt Anatomy · HR Hiring Guides</span>
+    <span class="brand-footer-url">www.promptanatomy.app</span>
+    <span class="brand-footer-right">Page 32</span>
+  </div>
+</section>
+
 </body>
 </html>

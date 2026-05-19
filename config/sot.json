@@ -6,11 +6,57 @@
     "motherBrandUrl": "https://www.promptanatomy.app",
     "contactEmail": "info@promptanatomy.help",
     "operatorName": "Tomas Staniulis",
-    "effectiveDate": "May 2026"
+    "effectiveDate": "May 2026",
+    "businessAddress": {
+      "name": "Prompt Anatomy",
+      "street": "1311 Park St",
+      "unit": "Unit #654",
+      "city": "Alameda",
+      "region": "CA",
+      "postalCode": "94501",
+      "country": "US",
+      "countryName": "United States"
+    }
+  },
+  "brand": {
+    "publicName": "Prompt Anatomy",
+    "motherBrandUrl": "https://www.promptanatomy.app",
+    "productSiteUrl": "https://promptanatomy.help/en/"
+  },
+  "positioning": {
+    "primaryKpi": "pdf",
+    "funnelNote": "Free on-page prompts engage; paid PDFs convert."
+  },
+  "marketing": {
+    "seo": {
+      "title": "US HR hiring PDF guides + free AI prompts",
+      "metaDescription": "Print-ready HR hiring playbooks from $5.99—scorecards, rubrics, and copy-paste prompts for US teams. Try 10 free prompts on the page. Instant PDF download via Stripe.",
+      "ogTitle": "HR hiring PDF guides for US teams"
+    },
+    "hero": {
+      "headline": "Structured US hiring playbooks—<br>AI-assisted, human-reviewed.",
+      "subhead": "Download print-ready PDF guides from $5.99. Try 10 free copy-paste prompts on this page first—no signup, not an ATS.",
+      "priceTeaser": "Beginner $5.99 · Advanced $11.99 · Instant download",
+      "primaryCtaLabel": "Get PDF guides — from $5.99",
+      "primaryCtaHref": "#pdf-guides",
+      "secondaryCtaLabel": "Try free prompts",
+      "secondaryCtaHref": "#block1",
+      "tertiaryCtaLabel": "How the 6-phase workflow works",
+      "tertiaryCtaHref": "#workflow-overview"
+    },
+    "workflowOverview": {
+      "title": "How the 6-phase workflow works",
+      "lede": "Free on this page—open any phase when you're ready."
+    },
+    "pdfSection": {
+      "title": "HR hiring PDF guides",
+      "lede": "Offline playbooks with checklists, rubrics, and expanded prompts—the same system as the free builder, ready to print and share with your team.",
+      "freeBridge": "Not ready to buy? Scroll to free prompts below—or start with Prompt 1."
+    }
   },
   "legal": {
-    "metaDescription": "Ten ready-to-use AI prompts for US hiring: diagnostics, role definition, job posts, sourcing, interviews, offers, and onboarding. Copy into ChatGPT or Claude—about 30 minutes of prompt prep time.",
-    "disclaimerShort": "Educational hiring prompts, not legal or HR advice. You are responsible for compliance, bias review, and hiring decisions. AI outputs require human review.",
+    "metaDescription": "Print-ready HR hiring playbooks from $5.99—scorecards, rubrics, and copy-paste prompts for US teams. Try 10 free prompts on the page. Instant PDF download via Stripe.",
+    "disclaimerShort": "Educational workflow. Not legal or HR advice. Human review required.",
     "compareStripHtml": "<span>Typical live workshops often list at <strong>$100–$300+</strong></span><span>vs</span><span>Beginner guide <strong>$5.99</strong></span><span>Advanced guide <strong>$11.99</strong></span>",
     "compareStripNote": "Illustrative comparison, not a specific third-party offer."
   },
@@ -33,61 +79,101 @@
       "id": "beginner-pdf",
       "title": "Beginner HR Hiring Guide",
       "subtitle": "First structured US hiring loop",
-      "pages": 12,
+      "pages": 16,
       "price": 5.99,
       "priceWas": 15.99,
-      "stripePaymentLink": "https://buy.stripe.com/REPLACE_BEGINNER_PAYMENT_LINK",
+      "stripePaymentLink": "https://buy.stripe.com/28E9ATfGAebzcO011ufjG06",
       "coverImage": "/assets/pdf-covers/beginner.png",
       "previewPrefix": "beginner",
+      "previewPages": [6, 8, 9],
+      "highlights": [
+        "9 prompts with worked sample outputs",
+        "Fillable 15-minute hiring kickoff worksheet",
+        "7-point AI safety verify + decision log"
+      ],
+      "samplePdfUrl": "/assets/samples/prompt-anatomy-hiring-kickoff-sample.pdf",
       "chapters": [
-        "How to use this guide",
+        "Read this first + TOC",
         "HR Prompt Formula",
-        "Prompts 1–2: Diagnose & profile",
-        "Prompts 3–4: Job ad & sourcing",
-        "Prompt 5: Interview plan",
-        "Prompts 6–7: Decline & offer",
-        "Hiring kickoff checklist",
-        "AI safety for HR",
-        "Glossary & mistakes",
-        "Use this tomorrow",
-        "Sources & Advanced path",
-        "Close & promptanatomy.help"
+        "Prompt 1: Diagnose the funnel + worked output",
+        "Prompt 2: Ideal profile + sample profile",
+        "Prompt 3: Job ad rewrite + before/after",
+        "Prompt 4: Sourcing + 3-channel plan",
+        "Prompt 5: Interview plan + filled kit",
+        "Prompts 6–7: Decline & offer + talk track",
+        "Prompt 8 (PDF-only): Candidate experience audit",
+        "Prompt 9 (PDF-only): Hiring manager debrief",
+        "Fillable 15-minute kickoff worksheet",
+        "7-point AI safety + decision log",
+        "Glossary, mistakes & sources",
+        "Routine & 5 takeaways",
+        "Close: license, refund & Advanced upsell"
       ]
     },
     "advanced": {
       "id": "advanced-pdf",
       "title": "Advanced HR Hiring Guide",
       "subtitle": "Scorecards, rubrics & calibration",
-      "pages": 24,
+      "pages": 32,
       "price": 11.99,
       "priceWas": 22.99,
-      "stripePaymentLink": "https://buy.stripe.com/REPLACE_ADVANCED_PAYMENT_LINK",
+      "stripePaymentLink": "https://buy.stripe.com/14A14n660d7vcO0aC4fjG07",
       "coverImage": "/assets/pdf-covers/advanced.png",
       "previewPrefix": "advanced",
+      "previewPages": [10, 15, 17],
+      "highlights": [
+        "11 prompts with worked outputs + 4 competency rubrics",
+        "Filled multi-candidate scorecard + sample debrief transcript",
+        "4-week team pilot + 3 rollout email templates"
+      ],
+      "samplePdfUrl": "/assets/samples/prompt-anatomy-advanced-scorecard-sample.pdf",
       "chapters": [
-        "Scorecards vs rubrics",
-        "Advanced prompts 1–2",
-        "Knockouts & role families",
-        "Inclusive JD & sourcing",
-        "Sourcing quality bar",
-        "Full interview kit",
-        "STAR question bank",
-        "Work-sample prompts",
-        "Rubric: Communication",
-        "Rubric: Ownership & scorecard",
-        "Universal scorecard template",
-        "Calibration training",
-        "Debrief protocol",
-        "Decline & offer scenarios",
-        "Negotiation plays",
-        "Onboarding & retention",
-        "90-day checkpoints",
-        "Master prompt chaining",
-        "Bias guardrails",
-        "Blank rubric worksheet",
-        "Prompt library template",
-        "Team rollout",
-        "Close & promptanatomy.help"
+        "Cover",
+        "Read this first + 32-row TOC",
+        "Scorecards vs rubrics (foundation)",
+        "Knockouts & competency model",
+        "Prompt 1: Funnel diagnostics + worked output",
+        "Prompt 2: Competency model + worked output",
+        "Prompt 3: Inclusive JD + before/after",
+        "Prompt 4: Sourcing strategy + filled table",
+        "Sourcing quality bar + outreach playbook",
+        "Prompt 5: Full interview kit + filled sample",
+        "STAR question bank (5 competencies × 10)",
+        "Work-sample prompts + rubric anchors",
+        "Rubric: Communication (1–4 anchors)",
+        "Rubric: Ownership + Collaboration",
+        "Universal scorecard + filled multi-candidate sample",
+        "90-minute calibration drill + facilitator script",
+        "Sample debrief transcript (protocol in action)",
+        "Debrief protocol (one page)",
+        "Prompts 6–7: Decline & offer + senior talk track",
+        "Negotiation plays (4 counter-offer scenarios)",
+        "Prompts 8–9: Onboarding + 30-60-90 sample",
+        "First-90-day checkpoints + early-warning signals",
+        "Prompt 10: Master chaining + integrated plan",
+        "Bias guardrails + EEO statement template",
+        "Comp & pay-transparency worksheet",
+        "Retention & exit-interview playbook (Prompt 11)",
+        "Team rollout email templates (3 copy-paste)",
+        "Blank rubric worksheet (fillable)",
+        "Blank multi-candidate scorecard grid",
+        "Team prompt library + sample rows",
+        "4-week pilot rollout + KPIs",
+        "Close: license, refund, sources, upsells"
+      ]
+    },
+    "bundle": {
+      "id": "bundle-pdf",
+      "title": "Both HR Hiring Guides",
+      "subtitle": "Beginner + Advanced — save vs buying separately",
+      "price": 15.99,
+      "priceWas": 17.98,
+      "stripePaymentLink": "https://buy.stripe.com/5kQ6oH660ebz29m39CfjG08",
+      "delivers": ["beginner", "advanced"],
+      "highlights": [
+        "All 16 + 32 pages — full hiring system",
+        "Checklists through calibration & debrief",
+        "One checkout, two PDFs by email"
       ]
     }
   },
@@ -98,9 +184,14 @@
       "a": "Yes, within your organization. The Personal license covers your HR and hiring team. Do not post the PDF publicly or resell it. Department-wide redistribution outside your company requires permission — email info@promptanatomy.help."
     },
     {
-      "id": "faq-multiple-roles",
-      "q": "Can I use it for more than one job opening?",
-      "a": "Yes. Reuse prompts and scorecards for every role you hire. Update competencies and rubrics per role family."
+      "id": "faq-team-rollout",
+      "q": "Can I send the Advanced team rollout emails to my panel?",
+      "a": "Yes — that's exactly what they're for. The 3 rollout email templates and the 4-week pilot timeline are written to be copied into your inbox or wiki for internal use under the Personal license. Don't forward the PDF itself publicly or repost it on the open web."
+    },
+    {
+      "id": "faq-advanced-transcript",
+      "q": "Is the sample debrief transcript in the Advanced guide a real case?",
+      "a": "It's an anonymized composite drawn from real HR debriefs we have facilitated. Names, companies, and identifying details are removed; the protocol moves, score splits, and knockout enforcement reflect actual debrief patterns — that's why we ship it as the page-17 differentiator."
     },
     {
       "id": "faq-lost-email",
@@ -111,11 +202,6 @@
       "id": "faq-refund",
       "q": "What if I am not satisfied?",
       "a": "Reply to your Stripe receipt within 14 days for a no-questions refund. We revoke the download link after approval."
-    },
-    {
-      "id": "faq-free-tool",
-      "q": "How does this relate to the free Personalas site?",
-      "a": "The free 10-prompt builder at promptanatomy.help/en/ stays free forever. These PDFs add offline depth: checklists, rubrics, and expanded copy-paste prompts."
     }
   ]
 }

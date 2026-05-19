@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex,nofollow">
     <link rel="canonical" href="https://promptanatomy.help/success.html">
-    <meta name="description" content="Thank you for your Personalas PDF purchase. Your secure download link is being prepared.">
-    <title>Thank you — Personalas</title>
+    <meta name="description" content="Thank you for your Prompt Anatomy PDF purchase. Your secure download link is being prepared.">
+    <title>Thank you — Prompt Anatomy</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <style>
         :root {
@@ -38,6 +38,7 @@
             box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
         }
         h1 { font-size: 1.75rem; margin: 0 0 12px; letter-spacing: -0.02em; }
+        h2 { font-size: 1.1rem; margin: 24px 0 8px; }
         p { margin: 0 0 14px; color: var(--text-light); }
         .status { font-weight: 600; color: var(--text); margin-bottom: 6px; }
         .btn {
@@ -51,10 +52,10 @@
             border: none;
             cursor: pointer;
             font-size: 1rem;
-            margin-top: 8px;
+            margin: 8px 8px 0 0;
         }
         .btn:focus-visible { outline: 3px solid var(--accent-hover); outline-offset: 2px; }
-        .btn[disabled] { opacity: 0.6; cursor: not-allowed; }
+        .btn-secondary { background: transparent; color: var(--accent); border: 1px solid var(--border); }
         .spinner {
             display: inline-block;
             width: 14px;
@@ -69,8 +70,24 @@
         @keyframes spin { to { transform: rotate(360deg); } }
         .meta { font-size: 0.9rem; color: var(--text-light); margin-top: 18px; }
         .error { color: var(--error); }
+        .upsell { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); }
+        #download-list { margin: 0; padding: 0; list-style: none; }
+        #download-list li { margin-bottom: 8px; }
         a { color: var(--accent); font-weight: 600; }
         a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+        .business-address {
+            font-style: normal;
+            display: block;
+            margin: 20px 0 6px;
+            padding: 12px 14px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-size: 0.9rem;
+            line-height: 1.55;
+            color: var(--text);
+        }
+        .business-address strong { display: block; margin-bottom: 2px; }
     </style>
 </head>
 <body>
@@ -81,15 +98,26 @@
                 <span class="spinner" aria-hidden="true"></span>Preparing your secure download link…
             </p>
             <p id="email-line" hidden></p>
-            <p>
-                <a id="download" class="btn" href="#" hidden>Download PDF</a>
+            <ul id="download-list" hidden></ul>
+            <p id="single-download-wrap" hidden>
+                <a id="download" class="btn" href="#">Download PDF</a>
             </p>
             <p id="error" class="error" hidden></p>
+            <div id="upsell" class="upsell" hidden>
+                <h2 id="upsell-title">Complete your hiring toolkit</h2>
+                <p id="upsell-text"></p>
+                <p><a id="upsell-cta" class="btn btn-secondary" href="#" rel="noopener">Add Advanced guide</a></p>
+            </div>
             <p class="meta">
-                We also sent a long-lived download link to your billing email. Check your inbox and spam folder.
+                We also sent download link(s) to your billing email. Check your inbox and spam folder.
                 Need help? Email <a href="mailto:info@promptanatomy.help">info@promptanatomy.help</a>.
             </p>
-            <p class="meta"><a href="/en/">Back to Personalas</a> · <a href="/terms.html#refunds">Refunds</a> · <a href="/en/privacy.html">Privacy</a> · <a href="/terms.html#paid-pdf-license">License terms</a></p>
+            <p class="meta"><a href="/en/">Back to Prompt Anatomy</a> · <a href="/terms.html#refunds">Refunds</a> · <a href="/en/privacy.html">Privacy</a> · <a href="/terms.html#paid-pdf-license">License terms</a></p>
+            <address class="business-address" aria-label="Business postal address">
+                <strong>Prompt Anatomy</strong>
+                1311 Park St, Unit #654<br>
+                Alameda, CA 94501, United States
+            </address>
         </article>
     </main>
     <script>
@@ -97,7 +125,12 @@
         var statusEl = document.getElementById('status');
         var emailEl = document.getElementById('email-line');
         var downloadEl = document.getElementById('download');
+        var singleWrap = document.getElementById('single-download-wrap');
+        var listEl = document.getElementById('download-list');
         var errorEl = document.getElementById('error');
+        var upsellEl = document.getElementById('upsell');
+        var upsellText = document.getElementById('upsell-text');
+        var upsellCta = document.getElementById('upsell-cta');
         var params = new URLSearchParams(window.location.search);
         var sessionId = params.get('session_id') || '';
         var attempts = 0;
@@ -108,18 +141,66 @@
             if (text != null) el.textContent = text;
             el.hidden = false;
         }
-        function hide(el) { el.hidden = true; }
 
         function showError(msg) {
             statusEl.innerHTML = '';
             statusEl.textContent = 'We hit a snag preparing your download.';
-            show(errorEl, msg);
+            errorEl.textContent = msg;
+            errorEl.hidden = false;
+        }
+
+        function showUpsell(productId, config) {
+            if (!config || !config.pdfGuides || productId === 'bundle') return;
+            var advanced = config.pdfGuides.advanced;
+            var beginner = config.pdfGuides.beginner;
+            if (productId === 'beginner' && advanced && advanced.stripePaymentLink && advanced.stripePaymentLink.indexOf('REPLACE_') === -1) {
+                upsellText.textContent = 'Add the 32-page Advanced guide with scorecards and debrief protocols.';
+                upsellCta.textContent = 'Buy Advanced — $' + Number(advanced.price).toFixed(2);
+                upsellCta.href = advanced.stripePaymentLink;
+                upsellEl.hidden = false;
+            } else if (productId === 'advanced' && beginner) {
+                upsellText.textContent = 'Share the free 10-prompt builder with a colleague:';
+                upsellCta.textContent = 'Open free prompts';
+                upsellCta.href = '/en/#block1';
+                upsellCta.classList.remove('btn-secondary');
+                upsellEl.hidden = false;
+            }
+        }
+
+        function renderReady(data, config) {
+            statusEl.innerHTML = '';
+            statusEl.textContent = 'Your ' + (data.productName || 'PDF') + ' is ready.';
+            if (data.maskedEmail) {
+                emailEl.textContent = 'A copy was emailed to ' + data.maskedEmail + '.';
+                emailEl.hidden = false;
+            }
+            if (data.downloads && data.downloads.length) {
+                listEl.innerHTML = '';
+                data.downloads.forEach(function (item) {
+                    var li = document.createElement('li');
+                    var a = document.createElement('a');
+                    a.className = 'btn';
+                    a.href = item.downloadUrl;
+                    a.textContent = 'Download ' + (item.productName || 'PDF');
+                    li.appendChild(a);
+                    listEl.appendChild(li);
+                });
+                listEl.hidden = false;
+            } else if (data.downloadUrl) {
+                downloadEl.href = data.downloadUrl;
+                singleWrap.hidden = false;
+            }
+            showUpsell(data.productId, config);
         }
 
         if (!sessionId) {
-            showError('Missing checkout session id. If you just paid, please check the email for your download link.');
+            showError('Missing checkout session id. If you just paid, check your email for the download link.');
             return;
         }
+
+        var sotPromise = fetch('/config/sot.json', { cache: 'no-store' })
+            .then(function (r) { return r.ok ? r.json() : null; })
+            .catch(function () { return null; });
 
         async function poll() {
             attempts += 1;
@@ -137,22 +218,16 @@
                 }
                 if (!res.ok) {
                     var body = await res.json().catch(function () { return {}; });
-                    showError(body.error || 'We could not find that checkout session. Please check your email for the download link.');
+                    showError(body.error || 'We could not find that checkout session. Check your email for the download link.');
                     return;
                 }
                 var data = await res.json();
-                if (data.status === 'ready' && data.downloadUrl) {
-                    statusEl.innerHTML = '';
-                    statusEl.textContent = 'Your ' + (data.productName || 'PDF') + ' is ready.';
-                    if (data.maskedEmail) {
-                        emailEl.textContent = 'A copy of this link was emailed to ' + data.maskedEmail + '.';
-                        show(emailEl);
-                    }
-                    downloadEl.setAttribute('href', data.downloadUrl);
-                    show(downloadEl);
+                var config = await sotPromise;
+                if (data.status === 'ready' && (data.downloadUrl || (data.downloads && data.downloads.length))) {
+                    renderReady(data, config);
                     return;
                 }
-                showError('Unexpected response from the server. Please check your email for the download link.');
+                showError('Unexpected response. Check your email for the download link.');
             } catch (_err) {
                 if (attempts >= maxAttempts) {
                     showError('Network error. Your download link will arrive by email.');

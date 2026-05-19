@@ -71,13 +71,59 @@ function loadSot() {
   } catch (e) {
     throw new Error('config/sot.json is invalid JSON: ' + e.message);
   }
-  if (!sot.legal || !sot.legal.metaDescription) {
-    throw new Error('config/sot.json: legal.metaDescription is required');
-  }
+  validateSot(sot);
+  return sot;
+}
+
+function validateSot(sot) {
   if (!sot.product || !sot.product.contactEmail) {
     throw new Error('config/sot.json: product.contactEmail is required');
   }
-  return sot;
+  const addr = sot.product && sot.product.businessAddress;
+  const addrRequired = ['name', 'street', 'city', 'region', 'postalCode', 'country'];
+  if (!addr) {
+    throw new Error('config/sot.json: product.businessAddress is required (CAN-SPAM compliance)');
+  }
+  for (const key of addrRequired) {
+    if (!addr[key] || typeof addr[key] !== 'string') {
+      throw new Error('config/sot.json: product.businessAddress.' + key + ' is required');
+    }
+  }
+  if (!sot.legal || !sot.legal.metaDescription) {
+    throw new Error('config/sot.json: legal.metaDescription is required');
+  }
+  if (!sot.positioning || sot.positioning.primaryKpi !== 'pdf') {
+    throw new Error('config/sot.json: positioning.primaryKpi must be "pdf"');
+  }
+  if (!sot.brand || !sot.brand.publicName) {
+    throw new Error('config/sot.json: brand.publicName is required');
+  }
+  const m = sot.marketing;
+  if (!m || !m.seo || !m.seo.title || !m.seo.metaDescription || !m.seo.ogTitle) {
+    throw new Error('config/sot.json: marketing.seo.title, metaDescription, ogTitle are required');
+  }
+  const h = m.hero;
+  if (!h || !h.headline || !h.subhead || !h.primaryCtaLabel || !h.primaryCtaHref) {
+    throw new Error('config/sot.json: marketing.hero headline, subhead, primaryCtaLabel, primaryCtaHref are required');
+  }
+  if (!m.pdfSection || !m.pdfSection.title || !m.pdfSection.lede) {
+    throw new Error('config/sot.json: marketing.pdfSection.title and lede are required');
+  }
+  if (!m.workflowOverview || !m.workflowOverview.title) {
+    throw new Error('config/sot.json: marketing.workflowOverview.title is required');
+  }
+}
+
+function getSeoMetaDescription(sot) {
+  return (sot.marketing && sot.marketing.seo && sot.marketing.seo.metaDescription) || sot.legal.metaDescription;
+}
+
+function getSeoTitle(sot) {
+  return (sot.marketing && sot.marketing.seo && sot.marketing.seo.title) || 'US HR hiring PDF guides + free AI prompts';
+}
+
+function getSeoOgTitle(sot) {
+  return (sot.marketing && sot.marketing.seo && sot.marketing.seo.ogTitle) || getSeoTitle(sot);
 }
 
 function isStripeLinkPlaceholder(url) {
@@ -102,6 +148,49 @@ function assertNoStripePlaceholders(sot) {
   console.warn('WARN: ' + msg);
 }
 
+function escapeHtmlText(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+/** Compose the canonical street line ("1311 Park St, Unit #654" or just street when no unit). */
+function composeStreetLine(addr) {
+  return addr.unit ? addr.street + ', ' + addr.unit : addr.street;
+}
+
+/** Compose the canonical city/region/postal/country line ("Alameda, CA 94501, United States"). */
+function composeLocalityLine(addr) {
+  const left = addr.city + ', ' + addr.region + ' ' + addr.postalCode;
+  return addr.countryName ? left + ', ' + addr.countryName : left;
+}
+
+/** Semantic <address> block injected into footer + privacy via {{SOT_BUSINESS_ADDRESS}}. */
+function renderAddressBlock(sot) {
+  const addr = sot.product.businessAddress;
+  return [
+    '<address class="business-address" aria-label="Business postal address">',
+    '<strong>' + escapeHtmlText(addr.name) + '</strong><br>',
+    escapeHtmlText(composeStreetLine(addr)) + '<br>',
+    escapeHtmlText(composeLocalityLine(addr)),
+    '</address>',
+  ].join('');
+}
+
+/** Schema.org PostalAddress object for Organization JSON-LD. */
+function buildPostalAddressJsonLd(sot) {
+  const addr = sot.product.businessAddress;
+  return {
+    '@type': 'PostalAddress',
+    streetAddress: composeStreetLine(addr),
+    addressLocality: addr.city,
+    addressRegion: addr.region,
+    postalCode: addr.postalCode,
+    addressCountry: addr.country,
+  };
+}
+
 function buildJsonLdWebsiteGraph(sot) {
   const base = absoluteBaseSlash().replace(/\/+$/, '');
   const contactEmail = sot && sot.product ? sot.product.contactEmail : '';
@@ -112,10 +201,13 @@ function buildJsonLdWebsiteGraph(sot) {
     sameAs: ['https://t.me/prompt_anatomy'],
   };
   if (contactEmail) org.email = contactEmail;
+  if (sot && sot.product && sot.product.businessAddress) {
+    org.address = buildPostalAddressJsonLd(sot);
+  }
   const graph = [
     {
       '@type': 'WebSite',
-      name: 'Personalas – US hiring prompts',
+      name: 'Prompt Anatomy – US hiring prompts',
       url: base + '/',
       inLanguage: ['en-US'],
     },
@@ -155,11 +247,12 @@ function injectHead(html, basePath, sot) {
   const linkDefault = '<link rel="alternate" hreflang="x-default" href="' + escapeHtmlAttr(canonicalUrl) + '">';
   const title = extractTitle(html);
   const description = extractMetaDescription(html);
+  const ogTitle = sot ? getSeoOgTitle(sot) : title;
   const ogImage = abs + 'images/og-default.png';
 
   const socialBlock = [
     '<meta property="og:type" content="website">',
-    '<meta property="og:title" content="' + escapeHtmlAttr(title) + '">',
+    '<meta property="og:title" content="' + escapeHtmlAttr(ogTitle) + '">',
     '<meta property="og:description" content="' + escapeHtmlAttr(description) + '">',
     '<meta property="og:url" content="' + escapeHtmlAttr(canonicalUrl) + '">',
     '<meta property="og:locale" content="en_US">',
@@ -168,7 +261,7 @@ function injectHead(html, basePath, sot) {
     '<meta property="og:image:height" content="630">',
     '<meta property="og:image:type" content="image/png">',
     '<meta name="twitter:card" content="summary_large_image">',
-    '<meta name="twitter:title" content="' + escapeHtmlAttr(title) + '">',
+    '<meta name="twitter:title" content="' + escapeHtmlAttr(ogTitle) + '">',
     '<meta name="twitter:description" content="' + escapeHtmlAttr(description) + '">',
     '<meta name="twitter:image" content="' + escapeHtmlAttr(ogImage) + '">',
   ].join('\n    ');
@@ -185,7 +278,20 @@ function injectHead(html, basePath, sot) {
     : '';
   html = html.replace('href="assets/styles.css"', 'href="../assets/styles.css"');
   html = html.replace(/<script src="generator\.js"><\/script>/, basePathScript + '<script src="../generator.js"></script>');
+  html = injectPlausible(html);
   return html;
+}
+
+function injectPlausible(html) {
+  const domain = process.env.PUBLIC_ANALYTICS_DOMAIN;
+  if (!domain || typeof domain !== 'string') return html;
+  const trimmed = domain.trim();
+  if (!trimmed) return html;
+  const script =
+    '<script defer data-domain="' +
+    escapeHtmlAttr(trimmed) +
+    '" src="https://plausible.io/js/script.js"></script>';
+  return html.replace('</head>', script + '\n</head>');
 }
 
 function injectPrivacyHead(html, pathSuffix, title, description) {
@@ -246,7 +352,8 @@ function buildRootSeoFragment(sot) {
   const base = absoluteBaseSlash().replace(/\/+$/, '');
   const img = base + '/images/og-default.png';
   const enLanding = base + '/en/';
-  const desc = sot.legal.metaDescription;
+  const desc = getSeoMetaDescription(sot);
+  const ogTitle = getSeoOgTitle(sot);
   const contactEmail = sot.product.contactEmail;
   const org = {
     '@type': 'Organization',
@@ -255,13 +362,16 @@ function buildRootSeoFragment(sot) {
     sameAs: ['https://t.me/prompt_anatomy'],
     email: contactEmail,
   };
+  if (sot.product.businessAddress) {
+    org.address = buildPostalAddressJsonLd(sot);
+  }
   const lines = [
     '<meta http-equiv="refresh" content="0; url=en/">',
     '<link rel="canonical" href="' + escapeHtmlAttr(enLanding) + '">',
     '<link rel="alternate" hreflang="en-US" href="' + escapeHtmlAttr(enLanding) + '">',
     '<link rel="alternate" hreflang="x-default" href="' + escapeHtmlAttr(enLanding) + '">',
     '<meta property="og:type" content="website">',
-    '<meta property="og:title" content="HR hiring system – AI prompts for US teams">',
+    '<meta property="og:title" content="' + escapeHtmlAttr(ogTitle) + '">',
     '<meta property="og:description" content="' + escapeHtmlAttr(desc) + '">',
     '<meta property="og:url" content="' + escapeHtmlAttr(enLanding) + '">',
     '<meta property="og:locale" content="en_US">',
@@ -270,7 +380,7 @@ function buildRootSeoFragment(sot) {
     '<meta property="og:image:height" content="630">',
     '<meta property="og:image:type" content="image/png">',
     '<meta name="twitter:card" content="summary_large_image">',
-    '<meta name="twitter:title" content="HR hiring system – AI prompts for US teams">',
+    '<meta name="twitter:title" content="' + escapeHtmlAttr(ogTitle) + '">',
     '<meta name="twitter:description" content="' + escapeHtmlAttr(desc) + '">',
     '<meta name="twitter:image" content="' + img + '">',
     '<script type="application/ld+json">' +
@@ -279,7 +389,7 @@ function buildRootSeoFragment(sot) {
         '@graph': [
           {
             '@type': 'WebSite',
-            name: 'Personalas – US hiring prompts',
+            name: 'Prompt Anatomy – US hiring prompts',
             url: enLanding,
             inLanguage: ['en-US'],
           },
@@ -319,7 +429,7 @@ function buildRootPrivacyFragment() {
   const enPrivacyUrl = base + '/en/privacy.html';
   const enSite = base + '/en/';
   const desc =
-    'Personalas – static site with US hiring prompts for HR teams. Stripe processes paid PDF purchases; Resend delivers download links.';
+    'Prompt Anatomy – static site with US hiring prompts for HR teams. Stripe processes paid PDF purchases; Resend delivers download links.';
   const lines = [
     '<meta http-equiv="refresh" content="0; url=en/privacy.html">',
     '<link rel="canonical" href="' + escapeHtmlAttr(enPrivacyUrl) + '">',
@@ -327,7 +437,7 @@ function buildRootPrivacyFragment() {
     '<link rel="alternate" hreflang="x-default" href="' + escapeHtmlAttr(enPrivacyUrl) + '">',
     '<meta name="description" content="' + escapeHtmlAttr(desc) + '">',
     '<meta property="og:type" content="website">',
-    '<meta property="og:title" content="Privacy Policy – Personalas">',
+    '<meta property="og:title" content="Privacy Policy – Prompt Anatomy">',
     '<meta property="og:description" content="' + escapeHtmlAttr(desc) + '">',
     '<meta property="og:url" content="' + escapeHtmlAttr(enPrivacyUrl) + '">',
     '<meta property="og:locale" content="en_US">',
@@ -336,7 +446,7 @@ function buildRootPrivacyFragment() {
     '<meta property="og:image:height" content="630">',
     '<meta property="og:image:type" content="image/png">',
     '<meta name="twitter:card" content="summary_large_image">',
-    '<meta name="twitter:title" content="Privacy Policy – Personalas">',
+    '<meta name="twitter:title" content="Privacy Policy – Prompt Anatomy">',
     '<meta name="twitter:description" content="' + escapeHtmlAttr(desc) + '">',
     '<meta name="twitter:image" content="' + img + '">',
     '<script type="application/ld+json">' +
@@ -345,7 +455,7 @@ function buildRootPrivacyFragment() {
         '@graph': [
           {
             '@type': 'WebPage',
-            name: 'Privacy Policy – Personalas',
+            name: 'Privacy Policy – Prompt Anatomy',
             description: desc,
             url: enPrivacyUrl,
             inLanguage: 'en-US',
@@ -369,11 +479,11 @@ function finalizeRootPrivacyHtml() {
 // ---- EN replacement pairs (order: more specific first) ----
 const EN_REPLACEMENTS = [
   ['<html lang="lt">', '<html lang="en-US">'],
-  ['<title>HR kasdienė atrankos sistema – DI promptai</title>', '<title>HR hiring system – AI prompts for US teams</title>'],
+  ['<title>{{SOT_SEO_TITLE}}</title>', '<title>{{SOT_SEO_TITLE}}</title>'],
   ['Pereiti prie turinio', 'Skip to content'],
   ['Pilna Promptų anatomija – interaktyvus mokymas (atidaroma naujame lange)', 'Full Prompt Anatomy – interactive training (opens in a new tab)'],
-  ['HR kasdienė atrankos sistema, Spin-off Nr. 3', 'HR hiring system for US teams, Series No. 3'],
-  ['DI atrankos sistema<br>Personalo vadovui', 'AI hiring system<br>For US HR teams'],
+  ['{{SOT_HERO_HEADLINE}}', '{{SOT_HERO_HEADLINE}}'],
+  ['{{SOT_HERO_SUBHEAD}}', '{{SOT_HERO_SUBHEAD}}'],
   ['6 sistemos fazės', '6 system phases'],
   ['1. Diagnostika', '1. Diagnose'],
   ['2. Profilis', '2. Define the Role'],
@@ -381,14 +491,30 @@ const EN_REPLACEMENTS = [
   ['4. Atranka', '4. Screen & Interview'],
   ['5. Pasiūlymas', '5. Close the Offer'],
   ['6. Išlaikymas', '6. Onboard & Retain'],
-  ['Peržiūrėti sistemą – progresas ir fazės', 'View system – progress and phases'],
-  ['Peržiūrėti sistemą', 'View system'],
+  ['{{SOT_HERO_PRIMARY_CTA_LABEL}}', '{{SOT_HERO_PRIMARY_CTA_LABEL}}'],
+  ['{{SOT_HERO_SECONDARY_CTA_LABEL}}', '{{SOT_HERO_SECONDARY_CTA_LABEL}}'],
+  ['{{SOT_HERO_TERTIARY_CTA_LABEL}}', '{{SOT_HERO_TERTIARY_CTA_LABEL}}'],
   ['Ką ši sistema padeda išspręsti', 'What this hiring system helps solve'],
-  ['Ji skirta tam, kad nustotumėte švaistyti laiką „tuščioms“ paieškoms!', 'Help structure sourcing and screening when pipeline quality is unclear.'],
   [
-    'Pagalbinė versija iš Promptų anatomijos ekosistemos — veikianti atrankos struktūra per ~30 min.',
-    'A Prompt Anatomy ecosystem helper—a practical hiring workflow in about 30 minutes of prompt prep time.',
+    'Ji skirta tam, kad nustotumėte švaistyti laiką „tuščioms“ paieškoms! Įtraukta nemokamai šiame puslapyje.',
+    'Help structure sourcing and screening when pipeline quality is unclear. Included free on this page.',
   ],
+  [
+    'Ji skirta tam, kad nustotumėte švaistyti laiką „tuščioms“ paieškoms!',
+    'Stop wasting time on empty searches—structure hiring with clear prompts.',
+  ],
+  ['Kaip naudoti US atrankos promptų sistemą', 'How to use the US hiring prompt system'],
+  ['Tai Spin-off Nr. 3 iš „Promptų anatomijos“.', 'Part of the Prompt Anatomy ecosystem.'],
+  ['Kaip naudoti nemokamą promptų generatorių', 'How to use the free prompt builder'],
+  [
+    'Nemokami promptai — kopijuokite į ChatGPT, Claude arba Gemini.',
+    'Free prompts — copy into ChatGPT, Claude, or Gemini.',
+  ],
+  ['{{SOT_WORKFLOW_TITLE}}', '{{SOT_WORKFLOW_TITLE}}'],
+  ['{{SOT_WORKFLOW_LEDE}}', '{{SOT_WORKFLOW_LEDE}}'],
+  ['{{SOT_PDF_SECTION_TITLE}}', '{{SOT_PDF_SECTION_TITLE}}'],
+  ['{{SOT_PDF_SECTION_LEDE}}', '{{SOT_PDF_SECTION_LEDE}}'],
+  ['{{SOT_PDF_SECTION_FREE_BRIDGE}}', '{{SOT_PDF_SECTION_FREE_BRIDGE}}'],
   ['Nulinis srautas?', 'Zero pipeline?'],
   ['Sugeneruokite pritraukiančius skelbimus ir paieškos žinutes.', 'Generate clear job posts and outreach messages.'],
   ['Netinkami žmonės?', 'Wrong people?'],
@@ -397,7 +523,6 @@ const EN_REPLACEMENTS = [
   ['Identifikuokite „butelio kakliuką“ per 5 minutes.', 'Identify the bottleneck in 5 minutes.'],
   ['Prarandami talentai?', 'Losing talent?'],
   ['Pateikite pasiūlymą, kurio neįmanoma atsisakyti.', 'Present a clear offer candidates can evaluate quickly.'],
-  ['Kaip naudoti US atrankos promptų sistemą', 'How to use the US hiring prompt system'],
   ['aria-label="4 žingsniai, apie 3–5 min vienam žingsniui"', 'aria-label="4 steps, about 3–5 minutes per step"'],
   ['4 žingsniai · 3–5 min / žingsnis', '4 steps · 3–5 min / step'],
   ['Pasirinkite fazę, atidarykite ją, tada pasirinkite konkretų promptą.', 'Choose a phase, open it, then pick a specific prompt.'],
@@ -458,7 +583,7 @@ const EN_REPLACEMENTS = [
   ['Prompt anatomy:', 'Prompt Anatomy:'],
   ['Sėkmės atrankoje', 'Good luck with hiring'],
   ['Nepamiršk pakeisti <strong>[įmonė]</strong>, <strong>[pozicija]</strong>, <strong>[atlygis]</strong>, <strong>[kandidatų skaičius]</strong> ir kitus laukus savo duomenimis.', 'Remember to replace <strong>[company]</strong>, <strong>[role]</strong>, <strong>[location]</strong>, <strong>[salary range]</strong>, <strong>[candidate count]</strong>, and other placeholders with your data. Use US examples such as <strong>123 Market St, San Francisco, CA 94105</strong>, <strong>Remote – US</strong>, <strong>+1 (415) 555-0198</strong>, and <strong>$1,250.50</strong> where applicable.'],
-  ['Tai Spin-off Nr. 3 iš „Promptų anatomijos“.', 'This is Series No. 3 from “Prompt Anatomy”.'],
+  ['Prompt Anatomy — HR hiring prompts and PDF guides.', 'Prompt Anatomy — HR hiring prompts and PDF guides.'],
   ['Promptų anatomija:', 'Prompt anatomy:'],
   ['El. paštas:', 'Email:'],
   ['HR atranka', 'US hiring'],
@@ -740,8 +865,6 @@ function applyEnReplacements(html) {
   html = html.replace(/Atranka/g, 'Screen & Interview');
   html = html.replace(/Pasiūlymas/g, 'Close the Offer');
   html = html.replace(/Išlaikymas/g, 'Onboard & Retain');
-  html = html.replace(/Spin-off Nr\. 3/g, 'Series No. 3');
-  html = html.replace(/Spin-off No\. 3/g, 'Series No. 3');
   html = html.replace(/analyse/g, 'analyze');
   html = html.replace(/Analyse/g, 'Analyze');
   html = html.replace(/\/\*[\s\S]*?\*\//g, '');
@@ -792,12 +915,16 @@ function applyEnPromptUi(html) {
   return html;
 }
 
-const PRIVACY_PAGE_TITLE = 'Privacy Policy – Personalas';
+const PRIVACY_PAGE_TITLE = 'Privacy Policy – Prompt Anatomy';
 
-function buildPrivacyEn(html) {
-  return html
+function buildPrivacyEn(html, sot) {
+  let out = html
     .replace('href="favicon.svg"', 'href="../favicon.svg"')
     .replace('href="assets/styles.css"', 'href="../assets/styles.css"');
+  if (sot && sot.product && sot.product.businessAddress) {
+    out = replaceAllGlobal(out, '{{SOT_BUSINESS_ADDRESS}}', renderAddressBlock(sot));
+  }
+  return out;
 }
 
 function applySotMetaDescription(html, desc) {
@@ -807,21 +934,60 @@ function applySotMetaDescription(html, desc) {
   );
 }
 
-function applySotToEnIndex(html, sot) {
+function replaceAllGlobal(html, token, value) {
+  if (!html.includes(token)) return html;
+  return html.split(token).join(value);
+}
+
+function applySot(html, sot) {
   const email = sot.product.contactEmail;
-  html = applySotMetaDescription(html, sot.legal.metaDescription);
+  const m = sot.marketing;
+  const h = m.hero;
+  const w = m.workflowOverview;
+  const p = m.pdfSection;
+
+  html = applySotMetaDescription(html, getSeoMetaDescription(sot));
+  html = html.replace(/<title>[^<]*<\/title>/i, '<title>' + escapeHtmlAttr(getSeoTitle(sot)) + '</title>');
   html = html.replace(/https:\/\/buy\.stripe\.com\/REPLACE_BEGINNER_PAYMENT_LINK/g, sot.pdfGuides.beginner.stripePaymentLink);
   html = html.replace(/https:\/\/buy\.stripe\.com\/REPLACE_ADVANCED_PAYMENT_LINK/g, sot.pdfGuides.advanced.stripePaymentLink);
+  if (sot.pdfGuides.bundle && sot.pdfGuides.bundle.stripePaymentLink) {
+    html = html.replace(
+      /https:\/\/buy\.stripe\.com\/REPLACE_BUNDLE_PAYMENT_LINK/g,
+      sot.pdfGuides.bundle.stripePaymentLink
+    );
+  }
   html = html.replace(/info@promptanatomy\.app/g, email);
-  if (sot.legal.disclaimerShort) {
-    html = html.replace('{{SOT_DISCLAIMER}}', sot.legal.disclaimerShort);
-  }
-  if (sot.legal.compareStripHtml) {
-    html = html.replace('{{SOT_COMPARE_STRIP}}', sot.legal.compareStripHtml);
-  }
-  if (sot.legal.compareStripNote) {
-    html = html.replace('{{SOT_COMPARE_NOTE}}', sot.legal.compareStripNote);
-  }
+
+  const replacements = {
+    '{{SOT_SEO_TITLE}}': getSeoTitle(sot),
+    '{{SOT_META_DESCRIPTION}}': getSeoMetaDescription(sot),
+    '{{SOT_HERO_HEADLINE}}': h.headline,
+    '{{SOT_HERO_SUBHEAD}}': h.subhead,
+    '{{SOT_HERO_PRICE_TEASER}}': h.priceTeaser || '',
+    '{{SOT_HERO_PRIMARY_CTA_LABEL}}': h.primaryCtaLabel,
+    '{{SOT_HERO_PRIMARY_CTA_HREF}}': h.primaryCtaHref,
+    '{{SOT_HERO_SECONDARY_CTA_LABEL}}': h.secondaryCtaLabel,
+    '{{SOT_HERO_SECONDARY_CTA_HREF}}': h.secondaryCtaHref,
+    '{{SOT_HERO_TERTIARY_CTA_LABEL}}': h.tertiaryCtaLabel,
+    '{{SOT_HERO_TERTIARY_CTA_HREF}}': h.tertiaryCtaHref,
+    '{{SOT_WORKFLOW_TITLE}}': w.title,
+    '{{SOT_WORKFLOW_LEDE}}': w.lede,
+    '{{SOT_PDF_SECTION_TITLE}}': p.title,
+    '{{SOT_PDF_SECTION_LEDE}}': p.lede,
+    '{{SOT_PDF_SECTION_FREE_BRIDGE}}': p.freeBridge || '',
+    '{{SOT_DISCLAIMER}}': sot.legal.disclaimerShort,
+    '{{SOT_COMPARE_STRIP}}': sot.legal.compareStripHtml,
+    '{{SOT_COMPARE_NOTE}}': sot.legal.compareStripNote,
+    '{{SOT_BUSINESS_ADDRESS}}': renderAddressBlock(sot),
+  };
+
+  Object.keys(replacements).forEach(function (token) {
+    const val = replacements[token];
+    if (val != null && val !== '') {
+      html = replaceAllGlobal(html, token, val);
+    }
+  });
+
   return html;
 }
 
@@ -864,16 +1030,16 @@ function main() {
   let privacyHtml = stripPrivacyForLocaleBuild(read('templates/privacy.html'));
 
   const privacyEnDesc =
-    'Personalas – static site with US hiring prompts for HR teams. Stripe processes paid PDF purchases; Resend delivers download links.';
+    'Prompt Anatomy – static site with US hiring prompts for HR teams. Stripe processes paid PDF purchases; Resend delivers download links.';
 
   let enIndex = applyEnReplacements(indexHtml);
   enIndex = applyEnPromptUi(enIndex);
-  enIndex = applySotToEnIndex(enIndex, sot);
+  enIndex = applySot(enIndex, sot);
   enIndex = stripLanguageSwitcher(enIndex);
   enIndex = injectHead(enIndex, BASE_PATH, sot);
   write('en/index.html', enIndex);
 
-  let enPrivacy = buildPrivacyEn(privacyHtml);
+  let enPrivacy = buildPrivacyEn(privacyHtml, sot);
   enPrivacy = injectPrivacyHead(enPrivacy, 'en/privacy.html', PRIVACY_PAGE_TITLE, privacyEnDesc);
   write('en/privacy.html', enPrivacy);
 

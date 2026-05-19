@@ -89,6 +89,10 @@ Statinių puslapių projektas **Personalas** – DI promptų rinkinys HR atranka
 
 ## ✨ KOKYBĖ (Quality)
 
+### Viešas brand ir locale
+- ✅ **Viešame UI** tik **Prompt Anatomy** (EN-only: `/en/`, gateways, terms, privacy, success, PDF, el. laiškai) — ne „Personalas“, ne „Series No. 3“, ne LT diakritikos; žr. [docs/language-guidelines-en-lt.md](docs/language-guidelines-en-lt.md) (*Viešas prekės ženklas ir locale*).
+- ✅ Po turinio pakeitimų: `npm run build` ir `npm test`.
+
 ### Kodas Standartai
 - ✅ **Kodas turi būti skaitomas ir suprantamas** - naudokite aiškius kintamųjų vardus
 - ✅ Funkcijos turi turėti vieną atsakomybę (Single Responsibility Principle)
@@ -353,4 +357,4 @@ Jei kyla klausimų dėl šių taisyklių:
 
 **Paskutinis atnaujinimas:** 2026-05-16  
 **Projekto kalba:** viešas produktas – **anglų (`/en/`)**; agentų dokumentacija ir LT šablonai – LT; SOT – [docs/language-guidelines-en-lt.md](docs/language-guidelines-en-lt.md).  
-**Projekto tipas:** statinė HTML svetainė (build generuoja `lt/` ir `en/`)
+**Projekto tipas:** statinė HTML svetainė (build generuoja **`en/index.html`**, **`en/privacy.html`** — EN-only viešam produktui)

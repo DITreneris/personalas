@@ -11,6 +11,7 @@ const { chromium } = require('@playwright/test');
 
 const ROOT = path.resolve(__dirname, '..');
 const OUT_DIR = path.join(ROOT, 'api', '_private', 'pdfs');
+const SAMPLES_DIR = path.join(ROOT, 'assets', 'samples');
 
 const SOURCES = [
   {
@@ -20,11 +21,20 @@ const SOURCES = [
   {
     html: path.join(ROOT, 'docs', 'pdf-source', 'advanced-personalas-hr.html'),
     pdf: path.join(OUT_DIR, 'advanced-guide.pdf')
+  },
+  {
+    html: path.join(ROOT, 'docs', 'pdf-source', 'sample-kickoff-excerpt.html'),
+    pdf: path.join(SAMPLES_DIR, 'prompt-anatomy-hiring-kickoff-sample.pdf')
+  },
+  {
+    html: path.join(ROOT, 'docs', 'pdf-source', 'sample-advanced-scorecard-excerpt.html'),
+    pdf: path.join(SAMPLES_DIR, 'prompt-anatomy-advanced-scorecard-sample.pdf')
   }
 ];
 
 (async () => {
   if (!fs.existsSync(OUT_DIR)) fs.mkdirSync(OUT_DIR, { recursive: true });
+  if (!fs.existsSync(SAMPLES_DIR)) fs.mkdirSync(SAMPLES_DIR, { recursive: true });
 
   const browser = await chromium.launch();
   const page = await browser.newPage();
@@ -36,6 +46,14 @@ const SOURCES = [
     }
     const fileUrl = 'file:///' + item.html.replace(/\\/g, '/');
     await page.goto(fileUrl, { waitUntil: 'networkidle' });
+    // Block until web fonts (Inter, JetBrains Mono) have loaded — otherwise
+    // the PDF can be exported mid-swap from system fallback fonts, breaking
+    // the typography contract documented in docs/pdf-source/README.md.
+    await page.evaluate(async () => {
+      if (document.fonts && typeof document.fonts.ready === 'object') {
+        await document.fonts.ready;
+      }
+    });
     await page.pdf({
       path: item.pdf,
       format: 'Letter',

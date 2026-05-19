@@ -268,10 +268,6 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.3);
         }
 
-        .badge-spinoff {
-            border: 1px solid rgba(255, 255, 255, 0.5);
-        }
-
         .header-badges a.badge {
             position: relative;
             z-index: 2;
@@ -1866,6 +1862,19 @@
         .pdf-preview-pages figure { margin: 0; }
         .pdf-preview-pages img { width: 100%; height: auto; border: 1px solid var(--border-subtle); border-radius: 4px; }
         .pdf-preview-pages figcaption { font-size: 0.8rem; color: var(--text-light); margin-top: 4px; }
+        .pdf-guide-highlights { margin: 0; padding-left: 1.2rem; font-size: 0.9rem; color: var(--text); }
+        .pdf-guide-highlights li { margin: 0.2em 0; }
+        .pdf-guide-trust-line { font-size: 0.85rem; color: var(--text-light); margin: 0; font-weight: 500; }
+        .pdf-guide-sample { font-size: 0.85rem; margin: 0; }
+        .pdf-guide-sample a { font-weight: 600; }
+        .pdf-guide-toc-details { font-size: 0.85rem; color: var(--text-light); }
+        .pdf-guide-toc-summary { cursor: pointer; font-weight: 600; color: var(--text); }
+        .pdf-bundle-offer { margin: var(--space-24) 0; padding: var(--space-20); border: 2px solid var(--brand-prompt-anatomy-accent); border-radius: var(--r-card); background: var(--surface); text-align: center; }
+        .pdf-bundle-offer h3 { margin: 0 0 8px; }
+        .pdf-bundle-lede { margin: 0 0 12px; color: var(--text-light); }
+        .pdf-sticky-cta { position: fixed; bottom: 0; left: 0; right: 0; z-index: 40; padding: 10px 16px 14px; background: rgba(247, 248, 250, 0.96); border-top: 1px solid var(--border-subtle); box-shadow: 0 -4px 16px rgba(15, 23, 42, 0.08); text-align: center; }
+        .pdf-sticky-cta-btn { display: inline-block; width: min(100%, 22rem); padding: 12px 20px; background: var(--cta-primary-bg); color: #fff; font-weight: 700; text-decoration: none; border-radius: var(--r-btn); min-height: 44px; line-height: 1.3; }
+        .free-tier-label { font-size: 0.95rem; color: var(--text-light); margin: var(--space-24) 0 var(--space-16); font-weight: 600; }
 
         /* ===== BENDRUOMENĖ (puslapio pabaiga) ===== */
         .community {
@@ -1990,6 +1999,25 @@
             color: var(--brand-prompt-anatomy-dark);
             outline: 2px solid var(--brand-prompt-anatomy-accent);
             outline-offset: 2px;
+        }
+
+        .business-address {
+            font-style: normal;
+            font-size: 14px;
+            line-height: 1.55;
+            color: var(--text-light);
+            margin: 0 auto 24px;
+            padding: 12px 16px;
+            max-width: 320px;
+            border: var(--border-width) solid var(--border-subtle);
+            border-radius: var(--r-badge);
+            background: var(--bg);
+        }
+        .business-address strong {
+            display: block;
+            color: var(--text);
+            font-weight: 700;
+            margin-bottom: 2px;
         }
 
         .tags {
@@ -2351,12 +2379,25 @@
         <header class="header">
             <div class="header-badges">
                 <a href="https://www.promptanatomy.app/" class="badge" target="_blank" rel="noopener noreferrer" aria-label="Pilna Promptų anatomija – interaktyvus mokymas (atidaroma naujame lange)">Promptų anatomija</a>
-                <span class="badge badge-spinoff" role="status" aria-label="HR kasdienė atrankos sistema, Spin-off Nr. 3">Spin-off Nr. 3</span>
             </div>
-            <h1>DI atrankos sistema<br>Personalo vadovui</h1>
-            <p>Pagalbinė versija iš Promptų anatomijos ekosistemos — veikianti atrankos struktūra per ~30 min.</p>
+            <h1>{{SOT_HERO_HEADLINE}}</h1>
+            <p>{{SOT_HERO_SUBHEAD}}</p>
+            <p class="hero-price-teaser">{{SOT_HERO_PRICE_TEASER}}</p>
             <p class="legal-disclaimer" data-sot-disclaimer role="note">{{SOT_DISCLAIMER}}</p>
-            <ul class="header-phases" aria-label="6 sistemos fazės">
+            <div class="header-cta">
+                <a href="{{SOT_HERO_PRIMARY_CTA_HREF}}" class="cta-button" aria-label="Get PDF guides">{{SOT_HERO_PRIMARY_CTA_LABEL}}</a>
+                <a href="{{SOT_HERO_SECONDARY_CTA_HREF}}" class="cta-button-outline">{{SOT_HERO_SECONDARY_CTA_LABEL}}</a>
+                <a href="{{SOT_HERO_TERTIARY_CTA_HREF}}" class="cta-button-outline header-tertiary-cta">{{SOT_HERO_TERTIARY_CTA_LABEL}}</a>
+                <div class="lt-only-qa-nav" role="navigation" aria-label="Vieša JAV versija (EN)">
+                    <a href="en/" class="cta-button-outline header-us-product-link">JAV svetainė (EN)</a>
+                </div>
+            </div>
+        </header>
+
+        <section class="workflow-overview" id="workflow-overview" aria-labelledby="workflow-overview-title">
+            <h2 id="workflow-overview-title">{{SOT_WORKFLOW_TITLE}}</h2>
+            <p class="workflow-overview-lede">{{SOT_WORKFLOW_LEDE}}</p>
+            <ul class="header-phases workflow-phase-chips" aria-label="6 sistemos fazės">
                 <li><button type="button" class="header-phase-link is-active" data-phase="1">1. Diagnostika</button></li>
                 <li><button type="button" class="header-phase-link" data-phase="2">2. Profilis</button></li>
                 <li><button type="button" class="header-phase-link" data-phase="3">3. Pritraukimas</button></li>
@@ -2364,17 +2405,196 @@
                 <li><button type="button" class="header-phase-link" data-phase="5">5. Pasiūlymas</button></li>
                 <li><button type="button" class="header-phase-link" data-phase="6">6. Išlaikymas</button></li>
             </ul>
-            <div class="header-cta">
-                <a href="#progressIndicator" class="cta-button" aria-label="Peržiūrėti sistemą – progresas ir fazės">Peržiūrėti sistemą</a>
-                <a href="#block1" class="cta-button-outline">Start with Prompt 1</a>
-                <a href="#pdf-guides" class="cta-button-outline">PDF guides</a>
-                <div class="lt-only-qa-nav" role="navigation" aria-label="Vieša JAV versija (EN)">
-                    <a href="en/" class="cta-button-outline header-us-product-link">JAV svetainė (EN)</a>
-                </div>
-            </div>
-        </header>
+        </section>
 
-        <!-- KĄ ŠI SISTEMA PADEDA IŠSPRĘSTI -->
+<section class="pdf-guides" id="pdf-guides" aria-labelledby="pdf-guides-title">
+
+            <h2 id="pdf-guides-title">{{SOT_PDF_SECTION_TITLE}}</h2>
+
+            <p class="pdf-guides-lede">{{SOT_PDF_SECTION_LEDE}}</p>
+
+            <p class="pdf-guides-intro">Shaped for US HR teams running structured hiring with ChatGPT, Claude, or Gemini.</p>
+
+<div class="pdf-compare-strip" data-sot-compare-strip>{{SOT_COMPARE_STRIP}}</div>
+
+            <p class="pdf-compare-note" data-sot-compare-note>{{SOT_COMPARE_NOTE}}</p>
+
+            <div class="pdf-testimonials" aria-label="Pilot feedback">
+
+                <blockquote class="pdf-testimonial">“Cut our time-to-first-interview plan from ad hoc notes to one rubric the whole panel uses.”<cite>Pilot HR generalist · Midwest US</cite></blockquote>
+
+                <blockquote class="pdf-testimonial">“The kickoff checklist stopped us from skipping the ideal-candidate profile step.”<cite>Pilot recruiter · Northeast US</cite></blockquote>
+
+                <blockquote class="pdf-testimonial">“Used the Advanced debrief protocol in hiring manager training.”<cite>Pilot HRBP · West Coast US</cite></blockquote>
+
+            </div>
+
+            <p class="pdf-compare-note">Quotes paraphrased from pilot feedback; identifiers redacted.</p>
+
+            <div class="pdf-guides-grid">
+
+                <article class="pdf-guide-card">
+
+<div class="pdf-guide-card-inner">
+
+                        <figure class="pdf-guide-card-cover">
+
+                            <img src="/assets/pdf-covers/beginner.png" width="734" height="950" alt="Cover of Beginner HR Hiring Guide PDF" loading="eager" decoding="async">
+
+                        </figure>
+
+                        <h3>Beginner HR Hiring Guide</h3>
+
+                        <ul class="pdf-guide-specs"><li>16 pages</li><li>PDF</li><li>English</li><li>Updated May 2026</li></ul>
+
+                        <p class="pdf-guide-desc">Step-by-step walkthrough for HR generalists running their first structured US hiring loop.</p>
+
+                        <ul class="pdf-guide-highlights" data-guide-highlights="beginner" aria-label="Key contents"></ul>
+
+                        <p class="pdf-guide-trust-line">Share within your HR team · prompts avoid candidate PII</p>
+
+                        <p class="pdf-guide-sample"><a href="/assets/samples/prompt-anatomy-hiring-kickoff-sample.pdf" data-sample-link="beginner" target="_blank" rel="noopener">Download 1-page sample (PDF)</a></p>
+
+                        <details class="pdf-guide-toc-details">
+
+                            <summary class="pdf-guide-toc-summary"><strong>What’s inside</strong> <span data-toc-count="beginner">11 sections</span></summary>
+
+                            <ul data-toc-list="beginner"></ul>
+
+                        </details>
+
+                        <p class="pdf-guide-price-row"><span class="pdf-guide-price-old" aria-label="Was">$15.99</span><span class="pdf-guide-price-new">$5.99</span></p>
+
+                        <button type="button" class="pdf-guide-preview-btn" data-preview-trigger="beginner" data-analytics="pdf_preview_open">Preview sample pages</button>
+
+                        <p class="pdf-guide-license">Personal license. Use within your HR team. Do not redistribute. <a href="/terms.html#paid-pdf-license">Full license</a>.</p>
+
+                        <a class="pdf-guide-cta" href="https://buy.stripe.com/REPLACE_BEGINNER_PAYMENT_LINK" rel="noopener" data-product="beginner-pdf" data-analytics="pdf_cta_click" aria-label="Buy Beginner PDF Guide for $5.99">Download PDF for $5.99</a>
+
+                        <p class="pdf-guide-trust">Stripe checkout · Visa · Mastercard · Amex · Apple Pay · 256-bit SSL</p>
+
+                        <p class="pdf-guide-refund">14-day no-questions refund. Reply to your receipt email.</p>
+
+                        <p class="pdf-guide-promise">Instant delivery. Email link + success page download. Valid 7 days — we resend on request.</p>
+
+                    </div>
+
+                </article>
+
+                <article class="pdf-guide-card pdf-guide-card--featured">
+
+                    <div class="pdf-guide-card-inner">
+
+                        <figure class="pdf-guide-card-cover">
+
+                            <img src="/assets/pdf-covers/advanced.png" width="734" height="950" alt="Cover of Advanced HR Hiring Guide PDF" loading="lazy" decoding="async">
+
+                        </figure>
+
+                        <h3>Advanced HR Hiring Guide</h3>
+
+                        <ul class="pdf-guide-specs"><li>32 pages</li><li>PDF</li><li>English</li><li>Updated May 2026</li></ul>
+
+                        <p class="pdf-guide-desc">Senior-IC playbook with scorecards, calibration scripts, structured interview rubrics, and offer scenarios.</p>
+
+                        <ul class="pdf-guide-highlights" data-guide-highlights="advanced" aria-label="Key contents"></ul>
+
+                        <p class="pdf-guide-trust-line">Share within your HR team · prompts avoid candidate PII</p>
+
+                        <p class="pdf-guide-sample"><a href="/assets/samples/prompt-anatomy-advanced-scorecard-sample.pdf" data-sample-link="advanced" target="_blank" rel="noopener">Download 1-page sample (PDF)</a></p>
+
+                        <details class="pdf-guide-toc-details">
+
+                            <summary class="pdf-guide-toc-summary"><strong>What’s inside</strong> <span data-toc-count="advanced">23 sections</span></summary>
+
+                            <ul data-toc-list="advanced"></ul>
+
+                        </details>
+
+                        <p class="pdf-guide-price-row"><span class="pdf-guide-price-old" aria-label="Was">$22.99</span><span class="pdf-guide-price-new">$11.99</span></p>
+
+                        <button type="button" class="pdf-guide-preview-btn" data-preview-trigger="advanced" data-analytics="pdf_preview_open">Preview sample pages</button>
+
+                        <p class="pdf-guide-license">Personal license. Use within your HR team. Do not redistribute. <a href="/terms.html#paid-pdf-license">Full license</a>.</p>
+
+                        <a class="pdf-guide-cta" href="https://buy.stripe.com/REPLACE_ADVANCED_PAYMENT_LINK" rel="noopener" data-product="advanced-pdf" data-analytics="pdf_cta_click" aria-label="Buy Advanced PDF Guide for $11.99">Download PDF for $11.99</a>
+
+                        <p class="pdf-guide-trust">Stripe checkout · Visa · Mastercard · Amex · Apple Pay · 256-bit SSL</p>
+
+                        <p class="pdf-guide-refund">14-day no-questions refund. Reply to your receipt email.</p>
+
+                        <p class="pdf-guide-promise">Instant delivery. Email link + success page download. Valid 7 days — we resend on request.</p>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+            <article class="pdf-bundle-offer" id="pdf-bundle-offer" data-bundle-offer hidden>
+
+                <h3>Both guides — save vs separate checkout</h3>
+
+                <p class="pdf-bundle-lede">Get the 16-page Beginner and 32-page Advanced playbooks in one purchase.</p>
+
+                <ul class="pdf-guide-highlights" data-guide-highlights="bundle" aria-label="Bundle includes"></ul>
+
+                <p class="pdf-guide-price-row"><span class="pdf-guide-price-old" aria-label="Was">$17.98</span><span class="pdf-guide-price-new" data-bundle-price>$15.99</span></p>
+
+                <a class="pdf-guide-cta pdf-bundle-cta" href="https://buy.stripe.com/5kQ6oH660ebz29m39CfjG08" rel="noopener" data-product="bundle-pdf" data-analytics="pdf_cta_click">Get both PDFs</a>
+
+            </article>
+
+            <p class="pdf-guides-free-bridge">{{SOT_PDF_SECTION_FREE_BRIDGE}}</p>
+
+            <section class="pdf-guides-faq" id="pdf-guides-faq" aria-labelledby="pdf-guides-faq-title">
+
+                <h3 id="pdf-guides-faq-title">Buyer FAQ</h3>
+
+                <div data-buyer-faq-list></div>
+
+            </section>
+
+            <div class="pdf-author-panel">
+
+                <p><strong>Published by Prompt Anatomy</strong> — HR hiring guides and free prompts at promptanatomy.help.</p>
+
+                <p><a href="https://www.promptanatomy.app/" target="_blank" rel="noopener noreferrer">promptanatomy.app</a> · Free tool: <a href="https://promptanatomy.help/en/">promptanatomy.help</a></p>
+
+            </div>
+
+            <p class="pdf-guides-meta">Secure download links delivered to your billing email. <a href="/terms.html#paid-pdf-license">License terms</a>.</p>
+
+        </section>
+
+
+
+        <dialog id="pdfPreviewDialog" aria-labelledby="pdfPreviewTitle">
+
+            <div class="pdf-preview-inner">
+
+                <h2 id="pdfPreviewTitle">Preview pages</h2>
+
+                <p>Sample checklist and rubric pages from the paid guide. Watermarked. Full PDF delivered after purchase.</p>
+
+                <div id="pdfPreviewPages" class="pdf-preview-pages"></div>
+
+                <p><button type="button" id="pdfPreviewClose">Close</button> · <a href="#pdf-guides" id="pdfPreviewBack">Back to guides</a></p>
+
+            </div>
+
+        </dialog>
+
+
+
+        <div class="pdf-sticky-cta" id="pdfStickyCta" role="region" aria-label="Quick link to PDF guides" hidden>
+
+            <a href="#pdf-guides" class="pdf-sticky-cta-btn" data-analytics="pdf_sticky_cta_click">Get PDF guides — from $5.99</a>
+
+        </div>
+
+
+<!-- KĄ ŠI SISTEMA PADEDA IŠSPRĘSTI -->
         <section class="objectives" aria-labelledby="objectives-title">
             <h2 id="objectives-title"><span class="icon-wrap" aria-hidden="true"><i data-lucide="target" class="icon icon--md"></i></span> Ką ši sistema padeda išspręsti</h2>
             <p class="objectives-intro">Ji skirta tam, kad nustotumėte švaistyti laiką „tuščioms“ paieškoms!</p>
@@ -3131,76 +3351,6 @@ Be sudėtingų terminų.</pre>
             </div>
         </article>
 
-        <section class="pdf-guides" id="pdf-guides" aria-labelledby="pdf-guides-title">
-            <h2 id="pdf-guides-title">Go deeper with paid PDF guides</h2>
-            <p class="pdf-guides-lede">Two optional companion PDFs distill the same hiring system into print-ready playbooks. One-time purchase, instant download after Stripe checkout.</p>
-            <p class="pdf-guides-intro">Shaped for US HR teams running structured hiring with ChatGPT, Claude, or Gemini.</p>
-            <div class="pdf-compare-strip" data-sot-compare-strip>{{SOT_COMPARE_STRIP}}</div>
-            <p class="pdf-compare-note" data-sot-compare-note>{{SOT_COMPARE_NOTE}}</p>
-            <div class="pdf-testimonials" aria-label="Pilot feedback">
-                <blockquote class="pdf-testimonial">“Cut our time-to-first-interview plan from ad hoc notes to one rubric the whole panel uses.”<cite>Pilot HR generalist · Midwest US</cite></blockquote>
-                <blockquote class="pdf-testimonial">“The kickoff checklist stopped us from skipping the ideal-candidate profile step.”<cite>Pilot recruiter · Northeast US</cite></blockquote>
-                <blockquote class="pdf-testimonial">“Used the Advanced debrief protocol in hiring manager training.”<cite>Pilot HRBP · West Coast US</cite></blockquote>
-            </div>
-            <p class="pdf-compare-note">Quotes paraphrased from pilot feedback; identifiers redacted.</p>
-            <div class="pdf-guides-grid">
-                <article class="pdf-guide-card">
-                    <div class="pdf-guide-card-inner">
-                        <figure class="pdf-guide-card-cover">
-                            <img src="/assets/pdf-covers/beginner.png" width="734" height="950" alt="Cover of Beginner HR Hiring Guide PDF" loading="lazy">
-                        </figure>
-                        <h3>Beginner HR Hiring Guide</h3>
-                        <ul class="pdf-guide-specs"><li>12 pages</li><li>PDF</li><li>English</li><li>Updated May 2026</li></ul>
-                        <p class="pdf-guide-desc">Step-by-step walkthrough for HR generalists running their first structured US hiring loop.</p>
-                        <div class="pdf-guide-toc"><strong>What’s inside</strong> <span data-toc-count="beginner">11 sections</span><ul data-toc-list="beginner"></ul></div>
-                        <p class="pdf-guide-price-row"><span class="pdf-guide-price-old" aria-label="Was">$15.99</span><span class="pdf-guide-price-new">$5.99</span></p>
-                        <button type="button" class="pdf-guide-preview-btn" data-preview-trigger="beginner">Preview 3 pages</button>
-                        <p class="pdf-guide-license">Personal license. Use within your HR team. Do not redistribute. <a href="/terms.html#paid-pdf-license">Full license</a>.</p>
-                        <a class="pdf-guide-cta" href="https://buy.stripe.com/REPLACE_BEGINNER_PAYMENT_LINK" rel="noopener" data-product="beginner-pdf" aria-label="Buy Beginner PDF Guide for $5.99">Download PDF for $5.99</a>
-                        <p class="pdf-guide-trust">Stripe checkout · Visa · Mastercard · Amex · Apple Pay · 256-bit SSL</p>
-                        <p class="pdf-guide-refund">14-day no-questions refund. Reply to your receipt email.</p>
-                        <p class="pdf-guide-promise">Instant delivery. Email link + success page download. Valid 7 days — we resend on request.</p>
-                    </div>
-                </article>
-                <article class="pdf-guide-card pdf-guide-card--featured">
-                    <div class="pdf-guide-card-inner">
-                        <figure class="pdf-guide-card-cover">
-                            <img src="/assets/pdf-covers/advanced.png" width="734" height="950" alt="Cover of Advanced HR Hiring Guide PDF" loading="lazy">
-                        </figure>
-                        <h3>Advanced HR Hiring Guide</h3>
-                        <ul class="pdf-guide-specs"><li>24 pages</li><li>PDF</li><li>English</li><li>Updated May 2026</li></ul>
-                        <p class="pdf-guide-desc">Senior-IC playbook with scorecards, calibration scripts, structured interview rubrics, and offer scenarios.</p>
-                        <div class="pdf-guide-toc"><strong>What’s inside</strong> <span data-toc-count="advanced">23 sections</span><ul data-toc-list="advanced"></ul></div>
-                        <p class="pdf-guide-price-row"><span class="pdf-guide-price-old" aria-label="Was">$22.99</span><span class="pdf-guide-price-new">$11.99</span></p>
-                        <button type="button" class="pdf-guide-preview-btn" data-preview-trigger="advanced">Preview 3 pages</button>
-                        <p class="pdf-guide-license">Personal license. Use within your HR team. Do not redistribute. <a href="/terms.html#paid-pdf-license">Full license</a>.</p>
-                        <a class="pdf-guide-cta" href="https://buy.stripe.com/REPLACE_ADVANCED_PAYMENT_LINK" rel="noopener" data-product="advanced-pdf" aria-label="Buy Advanced PDF Guide for $11.99">Download PDF for $11.99</a>
-                        <p class="pdf-guide-trust">Stripe checkout · Visa · Mastercard · Amex · Apple Pay · 256-bit SSL</p>
-                        <p class="pdf-guide-refund">14-day no-questions refund. Reply to your receipt email.</p>
-                        <p class="pdf-guide-promise">Instant delivery. Email link + success page download. Valid 7 days — we resend on request.</p>
-                    </div>
-                </article>
-            </div>
-            <section class="pdf-guides-faq" id="pdf-guides-faq" aria-labelledby="pdf-guides-faq-title">
-                <h3 id="pdf-guides-faq-title">Buyer FAQ</h3>
-                <div data-buyer-faq-list></div>
-            </section>
-            <div class="pdf-author-panel">
-                <p><strong>Published by Prompt Anatomy</strong> — the team behind Personalas (Series No. 3).</p>
-                <p><a href="https://www.promptanatomy.app/" target="_blank" rel="noopener noreferrer">promptanatomy.app</a> · Free tool: <a href="https://promptanatomy.help/en/">promptanatomy.help</a></p>
-            </div>
-            <p class="pdf-guides-meta">Secure download links delivered to your billing email. <a href="/terms.html#paid-pdf-license">License terms</a>.</p>
-        </section>
-
-        <dialog id="pdfPreviewDialog" aria-labelledby="pdfPreviewTitle">
-            <div class="pdf-preview-inner">
-                <h2 id="pdfPreviewTitle">Preview pages</h2>
-                <p>Sample pages from the paid guide. Watermarked. Full PDF delivered after purchase.</p>
-                <div id="pdfPreviewPages" class="pdf-preview-pages"></div>
-                <p><button type="button" id="pdfPreviewClose">Close</button> · <a href="#pdf-guides" id="pdfPreviewBack">Back to guides</a></p>
-            </div>
-        </dialog>
-
         <section class="community" id="community" aria-labelledby="community-title">
             <h2 id="community-title">Sistema sukurta.<br>Nori daugiau?</h2>
             <a href="https://t.me/prompt_anatomy" class="community-cta-primary" target="_blank" rel="noopener noreferrer" aria-label="Atidaryti „Promptų anatomijos“ Telegram kanalą naujame lange">Sekite Telegram kanale</a>
@@ -3212,6 +3362,7 @@ Be sudėtingų terminų.</pre>
             <p>Nepamiršk pakeisti <strong>[įmonė]</strong>, <strong>[pozicija]</strong>, <strong>[atlygis]</strong>, <strong>[kandidatų skaičius]</strong> ir kitus laukus savo duomenimis.</p>
             <p class="footer-product-link">Tai Spin-off Nr. 3 iš „Promptų anatomijos“.</p>
             <p class="footer-contact">Promptų anatomija: <a href="https://www.promptanatomy.app/" target="_blank" rel="noopener noreferrer">promptanatomy.app</a> | El. paštas: <a href="mailto:info@promptanatomy.app">info@promptanatomy.app</a></p>
+            {{SOT_BUSINESS_ADDRESS}}
             <div class="tags" role="list">
                 <span class="tag" role="listitem"><span class="icon-wrap" aria-hidden="true"><i data-lucide="users" class="icon icon--sm"></i></span> HR atranka</span>
                 <span class="tag" role="listitem"><span class="icon-wrap" aria-hidden="true"><i data-lucide="book-marked" class="icon icon--sm"></i></span> 10 promptų</span>

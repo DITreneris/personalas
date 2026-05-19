@@ -21,10 +21,13 @@
     "pdf:export": "node scripts/export-pdf-from-html.js",
     "pdf:covers": "node scripts/verify-pdf-cover.js",
     "pdf:covers:preview": "node scripts/verify-pdf-cover.js --preview",
-    "pdf:placeholders": "node scripts/generate-pdf-cover-placeholders.js"
+    "pdf:placeholders": "node scripts/generate-pdf-cover-placeholders.js",
+    "pdf:fonts": "node scripts/fetch-pdf-fonts.js",
+    "pdf:upload:blob": "node scripts/upload-pdfs-to-vercel-blob.js"
   },
   "dependencies": {
     "@upstash/redis": "^1.34.3",
+    "@vercel/blob": "^2.4.0",
     "resend": "^4.0.1",
     "stripe": "^17.5.0"
   },

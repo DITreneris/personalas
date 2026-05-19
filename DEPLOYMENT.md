@@ -26,24 +26,34 @@ Vercel Project → Settings → Environment Variables. **Niekada necommitinti sl
 | `STRIPE_WEBHOOK_SECRET` | Taip | Tikrina `https://promptanatomy.help/api/stripe-webhook` įvykius. |
 | `STRIPE_PRICE_BEGINNER_PDF` | Taip | Stripe Price ID Beginner PDF guide ($5.99). |
 | `STRIPE_PRICE_ADVANCED_PDF` | Taip | Stripe Price ID Advanced PDF guide ($11.99). |
+| `STRIPE_PRICE_BUNDLE_PDF` | Taip | Stripe Price ID Bundle (Both guides, $15.99). |
 | `DOWNLOAD_TOKEN_SECRET` | Taip | HMAC raktas pasirašytoms download nuorodoms. Ilgas atsitiktinis (>= 32 baitai). |
 | `RESEND_API_KEY` | Taip | Siunčia transakcinius PDF pristatymo el. laiškus. |
 | `FULFILLMENT_FROM_EMAIL` | Taip | Patvirtintas siuntėjas, pvz. `Personalas <hello@promptanatomy.help>`. |
 | `UPSTASH_REDIS_REST_URL` | Taip | Upstash Redis REST URL fulfillment būsenai ir token jti. |
 | `UPSTASH_REDIS_REST_TOKEN` | Taip | Upstash Redis REST token (palaikomi ir `KV_REST_API_*`, `VERCEL_KV_REST_API_*` vardai). |
+| `REDIS_KEY_PREFIX` | Pasirinkt. | Prefiksas bendram Upstash DB (pvz. `personalas:` → raktai `personalas:fulfillment:cs_...`). |
 | `SITE_URL` | Rekomenduojama | Kanoninis URL emailed download nuorodoms. Pvz. `https://promptanatomy.help`. |
-| `PDF_BEGINNER_SOURCE_URL` | Production | Privatus storage URL (R2/S3/Railway), iš kurio Vercel funkcija ima Beginner PDF baitus. |
-| `PDF_ADVANCED_SOURCE_URL` | Production | Privatus storage URL Advanced PDF. |
-| `PDF_SOURCE_AUTH_TOKEN` | Pagal poreikį | Bearer token privačiam šaltiniui (siunčiamas kaip `Authorization: Bearer ...`). |
+| `BLOB_READ_WRITE_TOKEN` | Taip (Blob) | Auto, kai Vercel projekte sukurtas **Private** Blob store. Naudojamas fulfillment `fetch` į `*.private.blob.vercel-storage.com` (žr. [api/_lib/fulfillment.js](api/_lib/fulfillment.js)). |
+| `PDF_BEGINNER_SOURCE_URL` | Production | Private Blob URL Beginner PDF (žr. žemiau `npm run pdf:upload:blob`). |
+| `PDF_ADVANCED_SOURCE_URL` | Production | Private Blob URL Advanced PDF. |
+| `PDF_SOURCE_AUTH_TOKEN` | Pagal poreikį | Tik jei šaltinis **ne** Vercel Blob; kitaip pakanka `BLOB_READ_WRITE_TOKEN`. |
 | `PDF_SOURCE_AUTH_HEADER` | Pagal poreikį | Custom header formatu `Header-Name: value`. |
 | `DOWNLOAD_TOKEN_TTL_SECONDS` | Pasirinkt. | Numatytai 7 d. (ilgalaikė email nuoroda). |
 | `IN_PAGE_DOWNLOAD_TOKEN_TTL_SECONDS` | Pasirinkt. | Numatytai 15 min (`success.html` poll). |
 | `FULFILLMENT_STATE_TTL_SECONDS` | Pasirinkt. | Numatytai 90 d. fulfillment įrašams. |
 
+### Verslo pašto adresas (CAN-SPAM + Stripe trust)
+
+1. Repo SOT: [config/sot.json](config/sot.json) → `product.businessAddress`. Po pakeitimo `npm run build` perrašo `en/index.html` (footer + JSON-LD `PostalAddress`), `en/privacy.html` (Contact sekciją) ir root gateway JSON-LD. Hand-edit jei keičiate: [terms.html](terms.html), [success.html](success.html).
+2. **Fulfillment laiškai (Resend per Vercel):** `api/_lib/fulfillment.js` užkrauna adresą iš SOT. Jei norite rotuoti adresą be redeploy, nustatykite Vercel env `BUSINESS_ADDRESS_OVERRIDE` su JSON tame pačiame formate (`{"name":"…","street":"…","unit":"…","city":"…","region":"…","postalCode":"…","country":"US","countryName":"United States"}`).
+3. **Manual one-time:** Stripe Dashboard → Settings → Business → **Public details** → įrašykite tą patį adresą. Stripe rendered receipts (kurie keliauja po „separate cover") tą adresą deda automatiškai – jo iš mūsų kodo negalime kontroliuoti.
+4. **Po deploy:** užsisakykite testinį PDF (`stripe trigger checkout.session.completed` arba live test pirkimą) ir patvirtinkite, kad Resend laiškas pabaigoje turi 4 eilučių pašto bloką.
+
 ### Stripe konfigūracija
 
-1. Sukurkite du Products / du Prices: **Beginner PDF Guide** ($5.99) ir **Advanced PDF Guide** ($11.99). Į Vercel env įrašykite atitinkamus Price ID.
-2. Sukurkite po vieną Payment Link kiekvienam produktui ir įklijuokite URL’us į `templates/index-lt.html` PDF mygtukus (`REPLACE_BEGINNER_PAYMENT_LINK`, `REPLACE_ADVANCED_PAYMENT_LINK`), tada `npm run build`.
+1. Sukurkite Products / Prices: **Beginner** ($5.99), **Advanced** ($11.99), **Bundle** ($15.99). Į Vercel env įrašykite `STRIPE_PRICE_BEGINNER_PDF`, `STRIPE_PRICE_ADVANCED_PDF`, `STRIPE_PRICE_BUNDLE_PDF`.
+2. Sukurkite po vieną Payment Link kiekvienam produktui (ir pasirinktinai bundle) ir įklijuokite URL’us į [config/sot.json](config/sot.json) → `pdfGuides.beginner.stripePaymentLink`, `pdfGuides.advanced.stripePaymentLink`, `pdfGuides.bundle.stripePaymentLink`, tada `npm run build`.
 3. **Success URL** (Stripe Dashboard → Payment Link → After payment → Don’t show confirmation page → Redirect to your website):
    ```
    https://promptanatomy.help/success.html?session_id={CHECKOUT_SESSION_ID}
@@ -57,8 +67,14 @@ Vercel Project → Settings → Environment Variables. **Niekada necommitinti sl
 
 - **Šaltinis (repo):** [docs/pdf-source/](docs/pdf-source/README.md) — HTML + `pdf-print.css`; eksportas per Chrome „Save as PDF“ arba `npm run pdf:export` (Playwright).
 - **Prekės ženklas:** kiekviename puslapyje footer `www.promptanatomy.app`; viršuje ir pabaigoje — `promptanatomy.help`.
-- **Lokalūs failai:** `api/_private/pdfs/beginner-guide.pdf`, `advanced-guide.pdf` (gitignore).
-- **Production:** privatūs URL → `PDF_BEGINNER_SOURCE_URL`, `PDF_ADVANCED_SOURCE_URL`. Viešas site root **negali** hostinti mokamų PDF.
+- **Lokalūs failai:** `api/_private/pdfs/beginner-guide.pdf`, `advanced-guide.pdf` (gitignore). Generuoti: `npm run pdf:export`. Lokaliai galite palikti `PDF_*_SOURCE_URL` tuščius — fulfillment skaito iš `_private/pdfs/`.
+- **Production (Vercel Blob, private):**
+  1. Vercel → **Storage** → **Blob** → Create store (**Private**).
+  2. Lokaliai: `BLOB_READ_WRITE_TOKEN` į `.env` (arba `vercel env pull`).
+  3. `npm run pdf:export` → `npm run pdf:upload:blob` — skriptas [scripts/upload-pdfs-to-vercel-blob.js](scripts/upload-pdfs-to-vercel-blob.js) spausdina `PDF_BEGINNER_SOURCE_URL` ir `PDF_ADVANCED_SOURCE_URL`.
+  4. Įklijuokite abu URL + patikrinkite `BLOB_READ_WRITE_TOKEN` į **Vercel env** (Production + Preview) → **Redeploy**.
+  5. Po PDF turinio pakeitimo: vėl `pdf:export` + `pdf:upload:blob` (`allowOverwrite: true`).
+- Viešas site root **negali** hostinti mokamų PDF.
 - **Cover / preview PNG:** `assets/pdf-covers/` — `npm run pdf:covers:preview` po eksporto.
 
 ### GitHub Pages (pasirinktinai)
