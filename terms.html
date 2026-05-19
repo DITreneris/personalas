@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="canonical" href="https://promptanatomy.help/terms.html">
+    <meta name="description" content="Terms of service for Personalas: paid PDF license, refunds, and support.">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Terms — Personalas">
+    <meta property="og:description" content="Terms of service for Personalas: paid PDF license, refunds, and support.">
+    <meta property="og:url" content="https://promptanatomy.help/terms.html">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:image" content="https://promptanatomy.help/images/og-default.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:type" content="image/png">
+    <title>Terms — Personalas</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <style>
+        :root {
+            --bg: #F7F8FA;
+            --text: #1A202C;
+            --text-light: #4A5568;
+            --accent: #2B6CB0;
+            --card-bg: #FFFFFF;
+            --border: #E2E8F0;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.65;
+            padding: 32px 20px;
+        }
+        .container { max-width: 44rem; margin: 0 auto; }
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 36px;
+            box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+        }
+        h1 { font-size: clamp(1.75rem, 4vw, 2.25rem); margin: 0 0 16px; letter-spacing: -0.02em; }
+        h2 { font-size: 1.15rem; margin-top: 1.75rem; margin-bottom: 8px; }
+        p, li { color: var(--text-light); }
+        ul { padding-left: 1.25rem; }
+        a { color: var(--accent); font-weight: 600; }
+        a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+        .back {
+            display: inline-block;
+            margin-bottom: 16px;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .meta { font-size: 0.9rem; color: var(--text-light); margin-top: 1.5rem; }
+        @media (max-width: 520px) {
+            body { padding: 20px 14px; }
+            .card { padding: 24px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <main class="container">
+        <a class="back" href="/en/">&larr; Back to Personalas</a>
+        <article class="card">
+            <h1>Terms</h1>
+            <p>These terms govern your use of <strong>Personalas</strong> (US hiring prompts) and the optional paid PDF guides sold via Stripe. By purchasing or using the site you agree to these terms.</p>
+
+            <h2 id="paid-pdf-license">Paid PDF license</h2>
+            <p>The Beginner and Advanced PDF guides are licensed for personal use within your own HR team:</p>
+            <ul>
+                <li>You may reference and apply the guides to your own hiring work.</li>
+                <li>You may share the guides within your immediate team.</li>
+                <li>You may not redistribute the guides as-is, resell them, or repackage them as your own product.</li>
+                <li>You may not post the PDFs publicly or upload them to public training datasets.</li>
+            </ul>
+
+            <h2 id="refunds">Refunds</h2>
+            <p>14-day no-questions refund. Reply to your fulfillment email or to your Stripe receipt and we will approve the refund and revoke the download link.</p>
+
+            <h2 id="delivery">Delivery and download links</h2>
+            <p>After payment, Stripe redirects you to <a href="/success.html">/success.html</a>, which fetches a short-lived (15 minute) in-page download link. We also email a long-lived (7 day) signed link to the billing email you provide to Stripe.</p>
+
+            <h2 id="sub-processors">Sub-processors</h2>
+            <p>Payments are processed by <a href="https://stripe.com" rel="noopener">Stripe</a>. Email delivery uses <a href="https://resend.com" rel="noopener">Resend</a>. Fulfillment state is stored in <a href="https://upstash.com" rel="noopener">Upstash Redis</a> for up to 90 days. PDF binaries are served from a private origin behind a server-side fetch.</p>
+
+            <h2 id="liability">Liability</h2>
+            <p>The free prompt builder and paid guides are provided "as is" without warranty. We are not liable for hiring outcomes — these are tools that help you structure work; the decisions remain yours.</p>
+
+            <h2 id="contact">Contact</h2>
+            <p>Support and refunds: <a href="mailto:info@promptanatomy.help">info@promptanatomy.help</a>.</p>
+
+            <p class="meta">See also: <a href="/en/privatumas.html">Privacy Policy</a>.</p>
+        </article>
+    </main>
+</body>
+</html>

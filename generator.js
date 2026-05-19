@@ -1,6 +1,6 @@
 /**
  * Personalas – shared LT/en-US behavior
- * Locale is detected from <html lang> (build sets lt/en-US). /lt/ shows EN+LT switcher; /en/ has no public LT switcher (LT via direct /lt/ URL).
+ * Locale is detected from <html lang> (build sets lt/en-US). /lt/ is QA/LT authoring (direct URL); /en/ is the US public product.
  */
 (function() {
     'use strict';
@@ -8,7 +8,6 @@
     // ===== LOCALE =====
     var rawLocale = (document.documentElement && document.documentElement.getAttribute('lang')) || 'lt';
     var locale = rawLocale.toLowerCase().indexOf('en') === 0 ? 'en-US' : 'lt';
-    var LANG_KEY = 'di_prompt_lib_lang';
 
     function uiText(lt, en) {
         return locale === 'lt' ? lt : en;
@@ -430,41 +429,141 @@
         openFromHash();
     }
 
-    // ===== KALBOS PERJUNGIKLIS =====
-    function setupLanguageSwitcher() {
-        var basePath = (typeof window.BASE_PATH !== 'undefined' && window.BASE_PATH) ? window.BASE_PATH : '';
-        if (basePath && basePath.indexOf('/') !== basePath.length - 1) basePath += '/';
+    // ===== PAID PDF GUIDES (config/sot.json) =====
+    var PDF_PREVIEW_DEFS = {
+        beginner: {
+            title: 'Preview — Beginner HR Hiring Guide',
+            altPrefix: 'Beginner guide',
+            pages: [2, 3, 4]
+        },
+        advanced: {
+            title: 'Preview — Advanced HR Hiring Guide',
+            altPrefix: 'Advanced guide',
+            pages: [2, 3, 4]
+        }
+    };
 
-        var langLt = document.getElementById('langLtBtn');
-        var langEn = document.getElementById('langEnBtn');
-        if (langLt) {
-            if (locale === 'lt') {
-                langLt.classList.add('is-active');
-                langLt.disabled = true;
-                langLt.setAttribute('aria-current', 'true');
-                langLt.setAttribute('aria-label', uiText('Lietuvių kalba (dabartinė)', 'Lithuanian (current)'));
-            } else {
-                langLt.setAttribute('aria-label', uiText('Perjungti į lietuvių kalbą', 'Switch to Lithuanian'));
-                langLt.addEventListener('click', function() {
-                    try { localStorage.setItem(LANG_KEY, 'lt'); } catch (_) { /* ignore */ }
-                    window.location.href = basePath + 'lt/' + (window.location.hash || '');
-                });
+    function escapeHtmlText(text) {
+        return String(text == null ? '' : text)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
+    function initPdfGuideTocs(config) {
+        if (!config || !config.pdfGuides || typeof config.pdfGuides !== 'object') return;
+        Object.keys(config.pdfGuides).forEach(function(key) {
+            var def = config.pdfGuides[key];
+            if (!def || !Array.isArray(def.chapters)) return;
+            var list = document.querySelector('[data-toc-list="' + key + '"]');
+            var countEl = document.querySelector('[data-toc-count="' + key + '"]');
+            if (countEl) countEl.textContent = def.chapters.length + ' sections';
+            if (!list) return;
+            var html = '';
+            for (var i = 0; i < def.chapters.length; i += 1) {
+                html += '<li>' + escapeHtmlText(def.chapters[i]) + '</li>';
             }
+            list.innerHTML = html;
+        });
+    }
+
+    function initBuyerFaq(config) {
+        if (!config || !Array.isArray(config.buyerFaq)) return;
+        var list = document.querySelector('[data-buyer-faq-list]');
+        if (!list) return;
+        var html = '';
+        for (var i = 0; i < config.buyerFaq.length; i += 1) {
+            var item = config.buyerFaq[i];
+            if (!item || !item.q || !item.a) continue;
+            var detailsId = item.id ? ' id="' + escapeHtmlText(item.id) + '"' : '';
+            html += '<details class="faq-details"' + detailsId + '>' +
+                '<summary class="faq-summary">' + escapeHtmlText(item.q) + '</summary>' +
+                '<div class="faq-panel">' + escapeHtmlText(item.a) + '</div>' +
+                '</details>';
         }
-        if (langEn) {
-            if (locale === 'en-US') {
-                langEn.classList.add('is-active');
-                langEn.disabled = true;
-                langEn.setAttribute('aria-current', 'true');
-                langEn.setAttribute('aria-label', uiText('Anglų kalba (dabartinė)', 'English (current)'));
-            } else {
-                langEn.setAttribute('aria-label', uiText('Perjungti į anglų kalbą', 'Switch to English'));
-                langEn.addEventListener('click', function() {
-                    try { localStorage.setItem(LANG_KEY, 'en-US'); } catch (_) { /* ignore */ }
-                    window.location.href = basePath + 'en/' + (window.location.hash || '');
-                });
+        list.innerHTML = html;
+        if (window.lucide && typeof window.lucide.createIcons === 'function') {
+            window.lucide.createIcons();
+        }
+    }
+
+    function initPdfPreviewDialog() {
+        var dialog = document.getElementById('pdfPreviewDialog');
+        if (!dialog || typeof dialog.showModal !== 'function') return;
+        var titleEl = document.getElementById('pdfPreviewTitle');
+        var pagesEl = document.getElementById('pdfPreviewPages');
+        var closeBtn = document.getElementById('pdfPreviewClose');
+        var backLink = document.getElementById('pdfPreviewBack');
+        if (!titleEl || !pagesEl || !closeBtn) return;
+
+        var triggers = document.querySelectorAll('[data-preview-trigger]');
+        if (!triggers.length) return;
+
+        var lastTrigger = null;
+
+        function renderPages(productKey) {
+            var def = PDF_PREVIEW_DEFS[productKey];
+            if (!def) return;
+            titleEl.textContent = def.title;
+            var html = '';
+            for (var i = 0; i < def.pages.length; i += 1) {
+                var pageNum = def.pages[i];
+                html += '<figure><img src="/assets/pdf-covers/' + productKey + '-p' + pageNum + '.png" width="734" height="950" alt="' +
+                    escapeHtmlText(def.altPrefix + ' sample page ' + pageNum) + '"><figcaption>Page ' + pageNum + '</figcaption></figure>';
             }
+            pagesEl.innerHTML = html;
         }
+
+        function openFor(triggerEl) {
+            var productKey = triggerEl.getAttribute('data-preview-trigger');
+            if (!PDF_PREVIEW_DEFS[productKey]) return;
+            renderPages(productKey);
+            lastTrigger = triggerEl;
+            dialog.showModal();
+            window.requestAnimationFrame(function() {
+                if (typeof closeBtn.focus === 'function') closeBtn.focus();
+            });
+        }
+
+        function closeDialog() {
+            if (dialog.open) dialog.close();
+        }
+
+        for (var t = 0; t < triggers.length; t += 1) {
+            (function(el) {
+                el.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    openFor(el);
+                });
+            })(triggers[t]);
+        }
+
+        closeBtn.addEventListener('click', closeDialog);
+        if (backLink) backLink.addEventListener('click', closeDialog);
+        dialog.addEventListener('click', function(event) {
+            var rect = dialog.getBoundingClientRect();
+            if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) {
+                closeDialog();
+            }
+        });
+        dialog.addEventListener('close', function() {
+            if (lastTrigger && typeof lastTrigger.focus === 'function') lastTrigger.focus();
+            lastTrigger = null;
+            pagesEl.innerHTML = '';
+        });
+    }
+
+    function loadSotConfig() {
+        if (!document.getElementById('pdf-guides')) {
+            return Promise.resolve(null);
+        }
+        return fetch('config/sot.json', { cache: 'no-store' })
+            .then(function(res) {
+                if (!res.ok) throw new Error('sot.json');
+                return res.json();
+            })
+            .catch(function() { return null; });
     }
 
     // ===== INICIALIZACIJA =====
@@ -486,7 +585,12 @@
             });
         });
         updateProgressIndicator();
-        setupLanguageSwitcher();
+
+        loadSotConfig().then(function(config) {
+            initPdfPreviewDialog();
+            initPdfGuideTocs(config);
+            initBuyerFaq(config);
+        });
     }
 
     if (document.readyState === 'loading') {

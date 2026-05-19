@@ -1,8 +1,8 @@
 # Agentų Sistemos Modelis – Apžvalga
 
-**Projektas:** Personalas  
-**Versija:** 1.0  
-**Kalba:** LT
+**Projektas:** Personalas 
+**Versija:** 1.0 
+**Šio dokumento kalba:** LT (agentų aprašymas). **Viešas produktas:** **EN-only** (`en-US`, `/en/`); LT puslapiai nebegeneruojami, `/lt/*` URL nukreipiami į `/en/*`. Žr. [docs/language-guidelines-en-lt.md](docs/language-guidelines-en-lt.md).
 
 ---
 
@@ -27,6 +27,7 @@ ORCHESTRATOR AGENT (koordinacija)
 - **Tikslas:** Kuria ir prižiūri teksto turinį (promptus, aprašymus)
 - **Įvestis:** Specifikacija, grįžtamasis ryšys, Curriculum rekomendacijos
 - **Išvestis:** Turinio redagavimai, nauji promptai
+- **Kalba:** viešas kanonas – **anglų** (`/en/`); LT šablonuose redaguojamas šaltinis – žr. [docs/language-guidelines-en-lt.md](docs/language-guidelines-en-lt.md) (*SOT*). Po pakeitimų – `npm run build`.
 
 ### Curriculum Agent
 - **Tikslas:** Nustato turinio struktūrą ir mokymosi logiką
@@ -103,6 +104,7 @@ Prieš PR įsitikinti, kad `npm test` praeina. A11y tikrinimas – per CI arba l
 
 ## Agentų peržiūra prieš merge
 
+- **Kalbos SOT (viešas produktas = anglų):** žr. [docs/language-guidelines-en-lt.md](docs/language-guidelines-en-lt.md) sekciją *Source of truth (SOT)*. Santrauka: viešas UI ir kanonas – **`/en/`**; šaknies vartai – EN; post-deploy tikrinimas – pirmiausia **`/en/`**; SEO meta ir bendras **`og-default.png`** – anglų; LT šablonai generuoja ir `lt/`, ir `en/`, bet numatytoji patirtis visada EN.
 - **Produktas:** kanonas – **Personalas**. Dokumentacijoje nenaudoti atsarginio repo pavadinimo **„marketingas“**. LT tekste vengti žodžio **„biblioteka“** kaip produkto etiketės; EN – vengti **„prompt library“** kaip prekės ženklo (vietoje to – „hiring prompts“, „promptų rinkinys“ ir pan.). Žr. [docs/language-guidelines-en-lt.md](docs/language-guidelines-en-lt.md).
 - **Techninė:** `npm test` privalo praeiti; deploy ir a11y URL – [DEPLOYMENT.md](DEPLOYMENT.md).
 - **Greita paieška** (repo šaknyje, išskyrus `node_modules`): `rg -i "biblioteka|marketingas|prompt.?library|di-promptu-biblioteka"` – PR turi būti aiškiai paaiškinti likučiai arba jų nebūti.
@@ -153,4 +155,4 @@ Keičiant **turinį** – atsakingas Content Agent; keičiant **struktūrą arba
 
 ---
 
-**Paskutinis atnaujinimas:** 2026-05-14
+**Paskutinis atnaujinimas:** 2026-05-16

@@ -54,5 +54,9 @@ npm-debug.log*
 *.pem
 .vercel/
 
+# ─── Local-only PDF assets for paid fulfillment dev ───
+api/_private/pdfs/*.pdf
+scripts/pdf-cover-*.png
+
 # ─── Optional: jei nori laikyti repo dar minimalesnį ───
 # google-apps-script.js

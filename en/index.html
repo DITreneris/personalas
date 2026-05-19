@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     
     <link rel="canonical" href="https://promptanatomy.help/en/">
-    <link rel="alternate" hreflang="lt" href="https://promptanatomy.help/lt/">
     <link rel="alternate" hreflang="en-US" href="https://promptanatomy.help/en/">
     <link rel="alternate" hreflang="x-default" href="https://promptanatomy.help/en/">
     <meta property="og:type" content="website">
@@ -13,7 +12,6 @@
     <meta property="og:description" content="Ten ready-to-use AI prompts for US hiring: diagnostics, role definition, job posts, sourcing, interviews, offers, and onboarding. Copy into ChatGPT or Claude—about 30 minutes end-to-end.">
     <meta property="og:url" content="https://promptanatomy.help/en/">
     <meta property="og:locale" content="en_US">
-    <meta property="og:locale:alternate" content="lt_LT">
     <meta property="og:image" content="https://promptanatomy.help/images/og-default.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -79,28 +77,28 @@
             --leading-relaxed: 1.6;
 
             
-            --accent-primary: #0E7A33;
-            --accent-primary-hover: #0B6B2D;
-            --accent-gold: #0E7A33;
-            --accent-gold-dark: #0B6B2D;
+            --accent-primary: #103b5a;
+            --accent-primary-hover: #0b1320;
+            --accent-gold: #cfa73a;
+            --accent-gold-dark: #b8922f;
 
             
             --accent-dark: #3C485A;
             --accent-dark-hover: #2D3848;
 
             
-            --hero-gradient-start: #1e6b42;
-            --hero-gradient-mid: #2a7a52;
-            --hero-gradient-end: #4a9572;
-            --cta-bg: #0E7A33;
+            --hero-gradient-start: #0b1320;
+            --hero-gradient-mid: #103b5a;
+            --hero-gradient-end: #1f5e88;
+            --cta-bg: var(--accent-primary);
             --cta-text: #FFFFFF;
             --cta-hover: var(--accent-primary-hover);
 
             
             --cta-hero-bg: #FFFFFF;
-            --cta-hero-text: #0B6B2D;
-            --cta-hero-hover-bg: #F0FDF4;
-            --cta-hero-hover-text: #0B6B2D;
+            --cta-hero-text: #103b5a;
+            --cta-hero-hover-bg: #EEF2F7;
+            --cta-hero-hover-text: #0b1320;
 
             
             --brand-prompt-anatomy-dark: #0b1320;
@@ -117,16 +115,16 @@
             
             --blue: #3C485A;
             --blue-light: #E8ECF0;
-            --orange: #0E7A33;
-            --orange-light: #ECFDF5;
+            --orange: var(--accent-primary);
+            --orange-light: #EEF2F7;
             --green: #38A169;
             --green-dark: #2F855A;
             --error: #E53E3E;
             --bg-subtle: #F7FAFC;
 
             
-            --community-cta-green: #0E7A33;
-            --community-cta-green-hover: #0B6B2D;
+            --community-cta-green: var(--accent-primary);
+            --community-cta-green-hover: var(--accent-primary-hover);
 
             
             --icon-size-sm: 16px;
@@ -367,14 +365,14 @@
         }
 
         .header-phase-link.is-active {
-            background: rgba(236, 253, 245, 0.96);
-            color: var(--accent-dark);
-            border-color: rgba(236, 253, 245, 0.96);
+            background: rgba(255, 255, 255, 0.96);
+            color: var(--accent-primary);
+            border-color: rgba(255, 255, 255, 0.96);
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.8);
         }
 
         .header-phase-link.is-active::before {
-            background: var(--accent-primary);
+            background: var(--accent-gold);
             opacity: 1;
         }
 
@@ -461,47 +459,9 @@
             outline-offset: 2px;
         }
 
-        .lang-switcher {
+        .header .header-cta .lt-only-qa-nav {
             display: inline-flex;
             align-items: center;
-            gap: 0;
-            vertical-align: middle;
-        }
-        .lang-btn {
-            padding: 8px 14px;
-            min-height: 44px;
-            min-width: 44px;
-            font-size: 14px;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.85);
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            border-radius: var(--r-btn);
-            cursor: pointer;
-            transition: background 0.2s, color 0.2s, border-color 0.2s;
-        }
-        .lang-btn:hover,
-        .lang-btn:focus-visible {
-            color: var(--white);
-            background: rgba(255, 255, 255, 0.15);
-            border-color: rgba(255, 255, 255, 0.4);
-            outline: 3px solid var(--white);
-            outline-offset: 2px;
-        }
-        .lang-btn.is-active {
-            color: var(--cta-hero-text);
-            background: var(--cta-hero-bg);
-            border-color: rgba(255, 255, 255, 0.5);
-        }
-        .lang-btn:disabled {
-            cursor: default;
-        }
-        .lang-btn:disabled:hover,
-        .lang-btn:disabled:focus-visible {
-            color: var(--cta-hero-text);
-            background: var(--cta-hero-bg);
-            border-color: rgba(255, 255, 255, 0.5);
-            outline: none;
         }
 
         .cta-button:hover {
@@ -831,8 +791,8 @@
 
         
         .instructions {
-            background: linear-gradient(180deg, var(--orange-light) 0%, #E8F5EE 100%);
-            border: 1px solid rgba(14, 122, 51, 0.25);
+            background: linear-gradient(180deg, var(--orange-light) 0%, var(--blue-light) 100%);
+            border: 1px solid rgba(16, 59, 90, 0.25);
             border-radius: var(--r-card);
             padding: var(--space-28) var(--space-32);
             margin-bottom: var(--space-24);
@@ -895,7 +855,7 @@
 
         .instructions-subcard {
             background: rgba(255, 255, 255, 0.72);
-            border: 1px solid rgba(14, 122, 51, 0.14);
+            border: 1px solid rgba(16, 59, 90, 0.14);
             border-radius: var(--r-btn);
             padding: var(--space-16) var(--space-20);
             box-shadow: none;
@@ -1082,7 +1042,7 @@
             color: var(--accent-primary);
             text-decoration: none;
             border-radius: var(--r-btn);
-            border: 1px solid rgba(14, 122, 51, 0.35);
+            border: 1px solid rgba(16, 59, 90, 0.35);
             background: var(--white);
             transition: background var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out);
         }
@@ -1210,7 +1170,7 @@
             font-weight: 600;
             color: var(--text-light);
             background: rgba(255, 255, 255, 0.55);
-            border: 1px solid rgba(14, 122, 51, 0.12);
+            border: 1px solid rgba(16, 59, 90, 0.12);
             border-radius: 8px;
             box-shadow: none;
         }
@@ -1249,7 +1209,7 @@
             min-width: 40px;
             min-height: 40px;
             padding: 10px 14px;
-            background: var(--accent-gold);
+            background: var(--accent-primary);
             color: var(--white);
             border-radius: var(--r-badge);
             display: inline-flex;
@@ -1310,7 +1270,7 @@
 
         
         .code-block {
-            background: linear-gradient(to right, rgba(14, 122, 51, 0.04) 0%, var(--bg-subtle) 12px);
+            background: linear-gradient(to right, rgba(16, 59, 90, 0.04) 0%, var(--bg-subtle) 12px);
             border: 1px solid var(--border-subtle-dark);
             border-left: 2px solid var(--accent-primary);
             border-radius: var(--r-btn);
@@ -1361,7 +1321,7 @@
 
         .code-block:hover {
             background: var(--orange-light);
-            border-color: rgba(14, 122, 51, 0.25);
+            border-color: rgba(16, 59, 90, 0.25);
             box-shadow: var(--shadow-card-hover);
         }
 
@@ -1475,7 +1435,7 @@
             cursor: pointer;
             transition: box-shadow var(--duration-normal) var(--ease-out), transform var(--duration-fast) var(--ease-out), background var(--duration-normal) var(--ease-out);
             font-family: 'Inter', sans-serif;
-            box-shadow: 0 4px 14px rgba(14, 122, 51, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            box-shadow: 0 4px 14px rgba(16, 59, 90, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.15);
             outline: none;
         }
 
@@ -1485,14 +1445,14 @@
         }
 
         .btn:hover {
-            background: linear-gradient(180deg, #0f8a3a 0%, var(--cta-hover) 100%);
+            background: linear-gradient(180deg, #1a4d6e 0%, var(--cta-hover) 100%);
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(14, 122, 51, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            box-shadow: 0 6px 20px rgba(16, 59, 90, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
         }
 
         .btn:active {
             transform: translateY(0) scale(0.98);
-            box-shadow: 0 2px 8px rgba(14, 122, 51, 0.2);
+            box-shadow: 0 2px 8px rgba(16, 59, 90, 0.2);
         }
 
         .btn.success {
@@ -1540,7 +1500,7 @@
         
         .progress-wrap {
             background: var(--orange-light);
-            border: var(--border-width) solid rgba(14, 122, 51, 0.2);
+            border: var(--border-width) solid rgba(16, 59, 90, 0.2);
             border-radius: var(--r-btn);
             padding: var(--space-16) var(--space-24);
             margin-bottom: var(--space-24);
@@ -1612,7 +1572,7 @@
             min-height: 40px;
             padding: 10px 14px;
             border-radius: var(--r-badge);
-            background: var(--accent-gold);
+            background: var(--accent-primary);
             color: var(--white);
             font-size: 12px;
             font-weight: 800;
@@ -1785,6 +1745,116 @@
         .toast-icon .icon {
             color: white;
         }
+
+        
+        .pdf-guides {
+            margin-top: var(--space-32);
+            padding: var(--space-24) var(--space-32);
+            background: var(--white, #fff);
+            border: var(--border-width) solid var(--border-subtle);
+            border-radius: var(--r-card);
+            box-shadow: var(--shadow-card);
+        }
+        .pdf-guides h2 {
+            margin: 0 0 8px;
+        }
+        .pdf-guides-lede {
+            margin: 0 0 var(--space-20);
+            color: var(--text-light, #4A5568);
+        }
+        .pdf-guides-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: var(--space-16, 16px);
+        }
+        .pdf-guide-card {
+            border: var(--border-width) solid var(--border-subtle);
+            border-radius: var(--r-card);
+            padding: var(--space-20, 20px);
+            background: var(--surface, #fff);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .pdf-guide-card--featured {
+            border-color: var(--brand-prompt-anatomy, #2B6CB0);
+            box-shadow: 0 4px 12px rgba(43, 108, 176, 0.08);
+        }
+        .pdf-guide-card h3 {
+            margin: 0;
+            font-size: 1.15rem;
+        }
+        .pdf-guide-desc {
+            margin: 0;
+            color: var(--text-light, #4A5568);
+            font-size: 0.95rem;
+        }
+        .pdf-guide-price {
+            margin: 8px 0 4px;
+            font-size: 1.05rem;
+        }
+        .pdf-guide-price-old {
+            text-decoration: line-through;
+            color: var(--text-light, #718096);
+            margin-right: 8px;
+            font-weight: 500;
+        }
+        .pdf-guide-price-new {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--text, #1A202C);
+        }
+        .pdf-guide-cta {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: auto;
+            padding: 12px 18px;
+            background: var(--community-cta-green, #2B6CB0);
+            color: var(--white, #fff);
+            text-decoration: none;
+            border-radius: var(--r-btn, 10px);
+            font-weight: 600;
+            min-height: 44px;
+        }
+        .pdf-guide-cta:focus-visible {
+            outline: 3px solid var(--brand-prompt-anatomy, #2B6CB0);
+            outline-offset: 2px;
+        }
+        .pdf-guides-meta {
+            margin-top: var(--space-16, 16px);
+            font-size: 0.9rem;
+            color: var(--text-light, #4A5568);
+        }
+        .pdf-guides-meta a { font-weight: 600; }
+        .pdf-guides-intro { margin: 0 0 var(--space-16); color: var(--text-light); font-size: 0.95rem; }
+        .pdf-guides-grid { align-items: stretch; }
+        .pdf-guide-card-inner { display: flex; flex-direction: column; gap: 10px; height: 100%; }
+        .pdf-guide-card-cover { margin: 0; border-radius: 8px; overflow: hidden; border: 1px solid var(--border-subtle); }
+        .pdf-guide-card-cover img { display: block; width: 100%; height: auto; }
+        .pdf-guide-specs { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 0.85rem; color: var(--text-light); margin: 0; padding: 0; list-style: none; }
+        .pdf-guide-specs li { margin: 0; }
+        .pdf-guide-toc { font-size: 0.85rem; color: var(--text-light); }
+        .pdf-guide-toc ul { margin: 4px 0 0; padding-left: 1.2rem; max-height: 6em; overflow: hidden; }
+        .pdf-guide-preview-btn { background: transparent; border: 1px solid var(--border-subtle); color: var(--brand-prompt-anatomy); padding: 8px 14px; border-radius: var(--r-btn); font-weight: 600; cursor: pointer; min-height: 44px; }
+        .pdf-guide-preview-btn:focus-visible { outline: 3px solid var(--brand-prompt-anatomy-accent); outline-offset: 2px; }
+        .pdf-guide-license, .pdf-guide-refund, .pdf-guide-promise { font-size: 0.85rem; color: var(--text-light); margin: 0; }
+        .pdf-guide-trust { display: flex; flex-wrap: wrap; gap: 8px; font-size: 0.8rem; color: var(--text-light); margin: 0; }
+        .pdf-guide-price-row { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+        .pdf-compare-strip { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px; margin-bottom: var(--space-20); padding: 12px; background: var(--surface); border-radius: var(--r-card); font-size: 0.9rem; }
+        .pdf-testimonials { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: var(--space-20); }
+        .pdf-testimonial { margin: 0; padding: 12px; border: 1px solid var(--border-subtle); border-radius: 8px; font-size: 0.85rem; color: var(--text-light); }
+        .pdf-testimonial cite { display: block; margin-top: 8px; font-style: normal; font-size: 0.8rem; }
+        .pdf-author-panel { margin-top: var(--space-20); padding: 16px; border-top: 1px solid var(--border-subtle); font-size: 0.9rem; color: var(--text-light); }
+        .pdf-guides-faq { margin-top: var(--space-24); }
+        .pdf-guides-faq h3 { margin: 0 0 12px; font-size: 1.1rem; }
+        #pdfPreviewDialog { border: none; border-radius: 12px; padding: 0; max-width: min(96vw, 920px); width: 100%; }
+        #pdfPreviewDialog::backdrop { background: rgba(11, 19, 32, 0.55); }
+        .pdf-preview-inner { padding: 20px; }
+        .pdf-preview-pages { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 16px 0; }
+        .pdf-preview-pages figure { margin: 0; }
+        .pdf-preview-pages img { width: 100%; height: auto; border: 1px solid var(--border-subtle); border-radius: 4px; }
+        .pdf-preview-pages figcaption { font-size: 0.8rem; color: var(--text-light); margin-top: 4px; }
 
         
         .community {
@@ -3094,6 +3164,78 @@ Give:
                 </label>
             </div>
         </article>
+
+        <section class="pdf-guides" id="pdf-guides" aria-labelledby="pdf-guides-title">
+            <h2 id="pdf-guides-title">Go deeper with paid PDF guides</h2>
+            <p class="pdf-guides-lede">Two optional companion PDFs distill the same hiring system into print-ready playbooks. One-time purchase, instant download after Stripe checkout.</p>
+            <p class="pdf-guides-intro">Shaped for US HR teams running structured hiring with ChatGPT, Claude, or Gemini.</p>
+            <div class="pdf-compare-strip">
+                <span>External workshop <strong>~ $149</strong></span><span>vs</span>
+                <span>Beginner guide <strong>$5.99</strong></span><span>Advanced guide <strong>$11.99</strong></span>
+            </div>
+            <div class="pdf-testimonials" aria-label="Pilot feedback">
+                <blockquote class="pdf-testimonial">“Cut our time-to-first-interview plan from ad hoc notes to one rubric the whole panel uses.”<cite>Pilot HR generalist · Midwest US</cite></blockquote>
+                <blockquote class="pdf-testimonial">“The kickoff checklist stopped us from skipping the ideal-candidate profile step.”<cite>Pilot recruiter · Northeast US</cite></blockquote>
+                <blockquote class="pdf-testimonial">“Used the Advanced debrief protocol in hiring manager training.”<cite>Pilot HRBP · West Coast US</cite></blockquote>
+            </div>
+            <p style="font-size:0.8rem;color:#718096;margin:0 0 1rem;">Quotes paraphrased from pilot feedback; identifiers redacted.</p>
+            <div class="pdf-guides-grid">
+                <article class="pdf-guide-card">
+                    <div class="pdf-guide-card-inner">
+                        <figure class="pdf-guide-card-cover">
+                            <img src="/assets/pdf-covers/beginner.png" width="734" height="950" alt="Cover of Beginner HR Hiring Guide PDF" loading="lazy">
+                        </figure>
+                        <h3>Beginner HR Hiring Guide</h3>
+                        <ul class="pdf-guide-specs"><li>12 pages</li><li>PDF</li><li>English</li><li>Updated May 2026</li></ul>
+                        <p class="pdf-guide-desc">Step-by-step walkthrough for HR generalists running their first structured US hiring loop.</p>
+                        <div class="pdf-guide-toc"><strong>What’s inside</strong> <span data-toc-count="beginner">11 sections</span><ul data-toc-list="beginner"></ul></div>
+                        <p class="pdf-guide-price-row"><span class="pdf-guide-price-old" aria-label="Was">$15.99</span><span class="pdf-guide-price-new">$5.99</span></p>
+                        <button type="button" class="pdf-guide-preview-btn" data-preview-trigger="beginner">Preview 3 pages</button>
+                        <p class="pdf-guide-license">Personal license. Use within your HR team. Do not redistribute. <a href="/terms.html#paid-pdf-license">Full license</a>.</p>
+                        <a class="pdf-guide-cta" href="https://buy.stripe.com/REPLACE_BEGINNER_PAYMENT_LINK" rel="noopener" data-product="beginner-pdf" aria-label="Buy Beginner PDF Guide for $5.99">Download PDF for $5.99</a>
+                        <p class="pdf-guide-trust">Stripe checkout · Visa · Mastercard · Amex · Apple Pay · 256-bit SSL</p>
+                        <p class="pdf-guide-refund">14-day no-questions refund. Reply to your receipt email.</p>
+                        <p class="pdf-guide-promise">Instant delivery. Email link + success page download. Valid 7 days — we resend on request.</p>
+                    </div>
+                </article>
+                <article class="pdf-guide-card pdf-guide-card--featured">
+                    <div class="pdf-guide-card-inner">
+                        <figure class="pdf-guide-card-cover">
+                            <img src="/assets/pdf-covers/advanced.png" width="734" height="950" alt="Cover of Advanced HR Hiring Guide PDF" loading="lazy">
+                        </figure>
+                        <h3>Advanced HR Hiring Guide</h3>
+                        <ul class="pdf-guide-specs"><li>24 pages</li><li>PDF</li><li>English</li><li>Updated May 2026</li></ul>
+                        <p class="pdf-guide-desc">Senior-IC playbook with scorecards, calibration scripts, structured interview rubrics, and offer scenarios.</p>
+                        <div class="pdf-guide-toc"><strong>What’s inside</strong> <span data-toc-count="advanced">23 sections</span><ul data-toc-list="advanced"></ul></div>
+                        <p class="pdf-guide-price-row"><span class="pdf-guide-price-old" aria-label="Was">$22.99</span><span class="pdf-guide-price-new">$11.99</span></p>
+                        <button type="button" class="pdf-guide-preview-btn" data-preview-trigger="advanced">Preview 3 pages</button>
+                        <p class="pdf-guide-license">Personal license. Use within your HR team. Do not redistribute. <a href="/terms.html#paid-pdf-license">Full license</a>.</p>
+                        <a class="pdf-guide-cta" href="https://buy.stripe.com/REPLACE_ADVANCED_PAYMENT_LINK" rel="noopener" data-product="advanced-pdf" aria-label="Buy Advanced PDF Guide for $11.99">Download PDF for $11.99</a>
+                        <p class="pdf-guide-trust">Stripe checkout · Visa · Mastercard · Amex · Apple Pay · 256-bit SSL</p>
+                        <p class="pdf-guide-refund">14-day no-questions refund. Reply to your receipt email.</p>
+                        <p class="pdf-guide-promise">Instant delivery. Email link + success page download. Valid 7 days — we resend on request.</p>
+                    </div>
+                </article>
+            </div>
+            <section class="pdf-guides-faq" id="pdf-guides-faq" aria-labelledby="pdf-guides-faq-title">
+                <h3 id="pdf-guides-faq-title">Buyer FAQ</h3>
+                <div data-buyer-faq-list></div>
+            </section>
+            <div class="pdf-author-panel">
+                <p><strong>Published by Prompt Anatomy</strong> — the team behind Personalas (Series No. 3).</p>
+                <p><a href="https://www.promptanatomy.app/" target="_blank" rel="noopener noreferrer">promptanatomy.app</a> · Free tool: <a href="https://promptanatomy.help/en/">promptanatomy.help</a></p>
+            </div>
+            <p class="pdf-guides-meta">Secure download links delivered to your billing email. <a href="/terms.html#paid-pdf-license">License terms</a>.</p>
+        </section>
+
+        <dialog id="pdfPreviewDialog" aria-labelledby="pdfPreviewTitle">
+            <div class="pdf-preview-inner">
+                <h2 id="pdfPreviewTitle">Preview pages</h2>
+                <p>Sample pages from the paid guide. Watermarked. Full PDF delivered after purchase.</p>
+                <div id="pdfPreviewPages" class="pdf-preview-pages"></div>
+                <p><button type="button" id="pdfPreviewClose">Close</button> · <a href="#pdf-guides" id="pdfPreviewBack">Back to guides</a></p>
+            </div>
+        </dialog>
 
         <section class="community" id="community" aria-labelledby="community-title">
             <h2 id="community-title">System created.<br>Want more?</h2>

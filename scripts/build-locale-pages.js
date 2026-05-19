@@ -1,10 +1,12 @@
 /**
- * Build LT/en-US locale pages from templates (LT source) and root gateway HTML.
+ * Build en-US locale pages from templates and root gateway HTML.
+ * The site is English-only; templates/*-lt.html files are kept as the build pipeline
+ * source from which English output is generated via translation replacements.
  * Usage (GitHub Pages subpath): BASE_PATH=/personalas/ SITE_ORIGIN=https://ditreneris.github.io node scripts/build-locale-pages.js
  * Usage (Vercel / custom domain root): SITE_ORIGIN=https://promptanatomy.help node scripts/build-locale-pages.js
  * Optional override: SITE_PUBLIC_BASE=https://preview.vercel.app (full public origin, no trailing slash)
- * LT source: templates/index-lt.html, templates/privatumas-lt.html
- * Output: lt/index.html, lt/privatumas.html, en/index.html, en/privatumas.html, robots.txt, sitemap.xml
+ * Source: templates/index-lt.html, templates/privatumas-lt.html
+ * Output: en/index.html, en/privatumas.html, robots.txt, sitemap.xml
  */
 'use strict';
 
@@ -61,19 +63,18 @@ function extractMetaDescription(html) {
   return m ? m[1].trim() : '';
 }
 
-function buildJsonLdWebsiteGraph(locale) {
+function buildJsonLdWebsiteGraph() {
   const base = absoluteBaseSlash().replace(/\/+$/, '');
-  const inLang = locale === 'lt' ? 'lt' : 'en-US';
   const graph = [
     {
       '@type': 'WebSite',
-      name: locale === 'lt' ? 'Personalas – HR DI promptų rinkinys' : 'Personalas – US hiring prompts',
+      name: 'Personalas – US hiring prompts',
       url: base + '/',
-      inLanguage: [inLang],
+      inLanguage: ['en-US'],
     },
     {
       '@type': 'Organization',
-      name: locale === 'lt' ? 'Promptų anatomija' : 'Prompt Anatomy',
+      name: 'Prompt Anatomy',
       url: base + '/',
       sameAs: ['https://t.me/prompt_anatomy'],
     },
@@ -85,14 +86,14 @@ function buildJsonLdWebsiteGraph(locale) {
   );
 }
 
-function buildJsonLdWebPage(locale, pageUrl, name, description) {
+function buildJsonLdWebPage(pageUrl, name, description) {
   const graph = [
     {
       '@type': 'WebPage',
       name: name,
       description: description,
       url: pageUrl,
-      inLanguage: locale === 'lt' ? 'lt' : 'en-US',
+      inLanguage: 'en-US',
       isPartOf: { '@type': 'WebSite', url: absoluteBaseSlash().replace(/\/+$/, '') + '/' },
     },
   ];
@@ -104,26 +105,22 @@ function buildJsonLdWebPage(locale, pageUrl, name, description) {
 }
 
 // ---- Inject SEO and script path ----
-function injectHead(html, locale, basePath) {
+function injectHead(html, basePath) {
   const abs = absoluteBaseSlash();
-  const canonicalUrl = abs + locale + '/';
+  const canonicalUrl = abs + 'en/';
   const linkCanonical = '<link rel="canonical" href="' + escapeHtmlAttr(canonicalUrl) + '">';
-  const linkLt = '<link rel="alternate" hreflang="lt" href="' + escapeHtmlAttr(abs + 'lt/') + '">';
-  const linkEn = '<link rel="alternate" hreflang="en-US" href="' + escapeHtmlAttr(abs + 'en/') + '">';
-  const linkDefault = '<link rel="alternate" hreflang="x-default" href="' + escapeHtmlAttr(abs + 'en/') + '">';
+  const linkEn = '<link rel="alternate" hreflang="en-US" href="' + escapeHtmlAttr(canonicalUrl) + '">';
+  const linkDefault = '<link rel="alternate" hreflang="x-default" href="' + escapeHtmlAttr(canonicalUrl) + '">';
   const title = extractTitle(html);
   const description = extractMetaDescription(html);
   const ogImage = abs + 'images/og-default.png';
-  const ogLocale = locale === 'lt' ? 'lt_LT' : 'en_US';
-  const ogLocaleAlt = locale === 'lt' ? 'en_US' : 'lt_LT';
 
   const socialBlock = [
     '<meta property="og:type" content="website">',
     '<meta property="og:title" content="' + escapeHtmlAttr(title) + '">',
     '<meta property="og:description" content="' + escapeHtmlAttr(description) + '">',
     '<meta property="og:url" content="' + escapeHtmlAttr(canonicalUrl) + '">',
-    '<meta property="og:locale" content="' + ogLocale + '">',
-    '<meta property="og:locale:alternate" content="' + ogLocaleAlt + '">',
+    '<meta property="og:locale" content="en_US">',
     '<meta property="og:image" content="' + escapeHtmlAttr(ogImage) + '">',
     '<meta property="og:image:width" content="1200">',
     '<meta property="og:image:height" content="630">',
@@ -134,10 +131,10 @@ function injectHead(html, locale, basePath) {
     '<meta name="twitter:image" content="' + escapeHtmlAttr(ogImage) + '">',
   ].join('\n    ');
 
-  const jsonLd = buildJsonLdWebsiteGraph(locale);
+  const jsonLd = buildJsonLdWebsiteGraph();
   const seoBlock =
     '\n    ' +
-    [linkCanonical, linkLt, linkEn, linkDefault, socialBlock, jsonLd].join('\n    ') +
+    [linkCanonical, linkEn, linkDefault, socialBlock, jsonLd].join('\n    ') +
     '\n';
   html = html.replace(/(<meta name="viewport"[^>]*>\s*)(<meta name="description")/i, '$1' + seoBlock + '$2');
 
@@ -149,15 +146,12 @@ function injectHead(html, locale, basePath) {
   return html;
 }
 
-function injectPrivacyHead(html, locale, pathSuffix, title, description) {
+function injectPrivacyHead(html, pathSuffix, title, description) {
   const abs = absoluteBaseSlash();
   const canonicalUrl = abs + pathSuffix;
   const ogImage = abs + 'images/og-default.png';
-  const ogLocale = locale === 'lt' ? 'lt_LT' : 'en_US';
-  const ogLocaleAlt = locale === 'lt' ? 'en_US' : 'lt_LT';
   const block = [
     '<link rel="canonical" href="' + escapeHtmlAttr(canonicalUrl) + '">',
-    '<link rel="alternate" hreflang="lt" href="' + escapeHtmlAttr(abs + 'lt/privatumas.html') + '">',
     '<link rel="alternate" hreflang="en-US" href="' + escapeHtmlAttr(abs + 'en/privatumas.html') + '">',
     '<link rel="alternate" hreflang="x-default" href="' + escapeHtmlAttr(abs + 'en/privatumas.html') + '">',
     '<meta name="description" content="' + escapeHtmlAttr(description) + '">',
@@ -165,8 +159,7 @@ function injectPrivacyHead(html, locale, pathSuffix, title, description) {
     '<meta property="og:title" content="' + escapeHtmlAttr(title) + '">',
     '<meta property="og:description" content="' + escapeHtmlAttr(description) + '">',
     '<meta property="og:url" content="' + escapeHtmlAttr(canonicalUrl) + '">',
-    '<meta property="og:locale" content="' + ogLocale + '">',
-    '<meta property="og:locale:alternate" content="' + ogLocaleAlt + '">',
+    '<meta property="og:locale" content="en_US">',
     '<meta property="og:image" content="' + escapeHtmlAttr(ogImage) + '">',
     '<meta property="og:image:width" content="1200">',
     '<meta property="og:image:height" content="630">',
@@ -175,7 +168,7 @@ function injectPrivacyHead(html, locale, pathSuffix, title, description) {
     '<meta name="twitter:title" content="' + escapeHtmlAttr(title) + '">',
     '<meta name="twitter:description" content="' + escapeHtmlAttr(description) + '">',
     '<meta name="twitter:image" content="' + escapeHtmlAttr(ogImage) + '">',
-    buildJsonLdWebPage(locale, canonicalUrl, title, description),
+    buildJsonLdWebPage(canonicalUrl, title, description),
   ].join('\n    ');
   return html.replace(/(<meta name="viewport"[^>]*>\s*)(<title)/i, '$1' + block + '\n    $2');
 }
@@ -188,11 +181,11 @@ function writeRobotsAndSitemap() {
 
   const urls = [
     abs + '/en/',
-    abs + '/lt/',
     abs + '/',
     abs + '/privatumas.html',
-    abs + '/lt/privatumas.html',
     abs + '/en/privatumas.html',
+    abs + '/terms.html',
+    abs + '/success.html',
   ];
   const locs = urls
     .map(function (u) {
@@ -216,7 +209,6 @@ function buildRootSeoFragment() {
   const lines = [
     '<meta http-equiv="refresh" content="0; url=' + escapeHtmlAttr(enLanding) + '">',
     '<link rel="canonical" href="' + escapeHtmlAttr(enLanding) + '">',
-    '<link rel="alternate" hreflang="lt" href="' + escapeHtmlAttr(base + '/lt/') + '">',
     '<link rel="alternate" hreflang="en-US" href="' + escapeHtmlAttr(enLanding) + '">',
     '<link rel="alternate" hreflang="x-default" href="' + escapeHtmlAttr(enLanding) + '">',
     '<meta property="og:type" content="website">',
@@ -224,7 +216,6 @@ function buildRootSeoFragment() {
     '<meta property="og:description" content="' + escapeHtmlAttr(desc) + '">',
     '<meta property="og:url" content="' + escapeHtmlAttr(enLanding) + '">',
     '<meta property="og:locale" content="en_US">',
-    '<meta property="og:locale:alternate" content="lt_LT">',
     '<meta property="og:image" content="' + img + '">',
     '<meta property="og:image:width" content="1200">',
     '<meta property="og:image:height" content="630">',
@@ -241,7 +232,7 @@ function buildRootSeoFragment() {
             '@type': 'WebSite',
             name: 'Personalas – US hiring prompts',
             url: enLanding,
-            inLanguage: ['en-US', 'lt'],
+            inLanguage: ['en-US'],
           },
           {
             '@type': 'Organization',
@@ -283,11 +274,10 @@ function buildRootPrivacyFragment() {
   const enPrivacyUrl = base + '/en/privatumas.html';
   const enSite = base + '/en/';
   const desc =
-    'Personalas – static site with US hiring prompts for HR teams. We do not collect personal data; progress uses browser localStorage only.';
+    'Personalas – static site with US hiring prompts for HR teams. Stripe processes paid PDF purchases; Resend delivers download links.';
   const lines = [
     '<meta http-equiv="refresh" content="0; url=' + escapeHtmlAttr(enPrivacyUrl) + '">',
     '<link rel="canonical" href="' + escapeHtmlAttr(enPrivacyUrl) + '">',
-    '<link rel="alternate" hreflang="lt" href="' + escapeHtmlAttr(base + '/lt/privatumas.html') + '">',
     '<link rel="alternate" hreflang="en-US" href="' + escapeHtmlAttr(enPrivacyUrl) + '">',
     '<link rel="alternate" hreflang="x-default" href="' + escapeHtmlAttr(enPrivacyUrl) + '">',
     '<meta name="description" content="' + escapeHtmlAttr(desc) + '">',
@@ -296,7 +286,6 @@ function buildRootPrivacyFragment() {
     '<meta property="og:description" content="' + escapeHtmlAttr(desc) + '">',
     '<meta property="og:url" content="' + escapeHtmlAttr(enPrivacyUrl) + '">',
     '<meta property="og:locale" content="en_US">',
-    '<meta property="og:locale:alternate" content="lt_LT">',
     '<meta property="og:image" content="' + img + '">',
     '<meta property="og:image:width" content="1200">',
     '<meta property="og:image:height" content="630">',
@@ -341,9 +330,6 @@ const EN_REPLACEMENTS = [
     '<meta name="description" content="Ten ready-to-use AI prompts for US hiring: diagnostics, role definition, job posts, sourcing, interviews, offers, and onboarding. Copy into ChatGPT or Claude—about 30 minutes end-to-end.">',
   ],
   ['Pereiti prie turinio', 'Skip to content'],
-  ['Kalbos pasirinkimas', 'Language selection'],
-  ['Perjungti į lietuvių kalbą', 'Switch to Lithuanian'],
-  ['Perjungti į anglų kalbą', 'Switch to English'],
   ['Pilna Promptų anatomija – interaktyvus mokymas (atidaroma naujame lange)', 'Full Prompt Anatomy – interactive training (opens in a new tab)'],
   ['HR kasdienė atrankos sistema, Spin-off Nr. 3', 'HR hiring system for US teams, Series No. 3'],
   ['DI atrankos sistema<br>Personalo vadovui', 'AI hiring system<br>For US HR teams'],
@@ -765,13 +751,13 @@ const PRIVACY_EN = {
   back: '← Back to Personalas',
   backLink: '← Back to Personalas',
   intro:
-    '<strong>Personalas</strong> – US hiring prompts for HR teams (Series No. 3 from Prompt Anatomy). Minimal static app; English UI is <code>en-US</code>. Briefly about your data.',
+    '<strong>Personalas</strong> – US hiring prompts for HR teams (Series No. 3 from Prompt Anatomy). Static English-only app with optional paid PDF guides processed by Stripe.',
   q1: 'Do we collect your data?',
-  a1: '<strong>No.</strong> We do not collect any personal data at this time. No forms, email collection or server submission.',
+  a1: '<strong>Free tool: no.</strong> The free prompt builder does not collect personal data – no forms, no email collection. <strong>Paid PDFs:</strong> Stripe processes your payment and provides your billing email to us so Resend can deliver the secure download link.',
   q2: 'What happens on your device?',
-  a2: 'Only the browser <strong>localStorage</strong> (browser local storage): we save which prompts you marked as “Marked as done”. Data stays only on your device.',
-  q3: 'If we add a form later',
-  a3: 'If we enable a contact form or similar, this policy will be updated – we will clearly state what we collect and how we use it.'
+  a2: 'Only the browser <strong>localStorage</strong>: we save which prompts you marked as “Marked as done”. Progress data stays only on your device.',
+  q3: 'Sub-processors for paid PDFs',
+  a3: '<strong>Stripe</strong> (payment processor, billing email + payment metadata), <strong>Resend</strong> (transactional email delivery), and <strong>Upstash Redis</strong> (fulfillment state and short-lived download tokens). We retain fulfillment records for up to 90 days. See <a href="../terms.html">Terms</a> for license and refunds.'
 };
 
 function buildPrivacyEn(html) {
@@ -808,9 +794,11 @@ function stripPrivacyForLocaleBuild(html) {
   return html.replace(/(<meta name="viewport"[^>]*>\s*)(?:[\s\S]*?)(<title)/i, '$1$2');
 }
 
-/** Remove language switcher from generated EN index (US product; LT via direct /lt/ URL only). */
+/** Remove LT-only QA link block and legacy lang switcher from generated EN index (US product; /lt/ via direct URL). */
 function stripLanguageSwitcher(html) {
-  return html.replace(/\s*<nav class="lang-switcher"[\s\S]*?<\/nav>\s*/i, '\n');
+  return html
+    .replace(/\s*<div class="lt-only-qa-nav"[\s\S]*?<\/div>\s*/gi, '\n')
+    .replace(/\s*<nav class="lang-switcher"[\s\S]*?<\/nav>\s*/gi, '\n');
 }
 
 // ---- Main ----
@@ -818,36 +806,17 @@ function main() {
   let indexHtml = stripIndexForLocaleBuild(read('templates/index-lt.html'));
   let privacyHtml = stripPrivacyForLocaleBuild(read('templates/privatumas-lt.html'));
 
-  const privacyLtDesc =
-    'Personalas – statinė svetainė su HR DI promptų rinkiniu. Asmens duomenų nerinkame; pažymėti žingsniai saugomi tik naršyklės localStorage.';
   const privacyEnDesc =
-    'Personalas – static site with US hiring prompts for HR teams. We do not collect personal data; progress uses browser localStorage only.';
+    'Personalas – static site with US hiring prompts for HR teams. Stripe processes paid PDF purchases; Resend delivers download links.';
 
-  // LT
-  let ltIndex = injectHead(indexHtml, 'lt', BASE_PATH);
-  write('lt/index.html', ltIndex);
-  let ltPrivacy = privacyHtml
-    .replace('href="favicon.svg"', 'href="../favicon.svg"')
-    .replace('href="assets/styles.css"', 'href="../assets/styles.css"');
-  ltPrivacy = injectPrivacyHead(
-    ltPrivacy,
-    'lt',
-    'lt/privatumas.html',
-    'Privatumo politika – Personalas',
-    privacyLtDesc
-  );
-  write('lt/privatumas.html', ltPrivacy);
-
-  // EN
   let enIndex = applyEnReplacements(indexHtml);
   enIndex = applyEnPromptUi(enIndex);
   enIndex = stripLanguageSwitcher(enIndex);
-  enIndex = injectHead(enIndex, 'en', BASE_PATH);
+  enIndex = injectHead(enIndex, BASE_PATH);
   write('en/index.html', enIndex);
 
   let enPrivacy = buildPrivacyEn(privacyHtml);
-  enPrivacy = enPrivacy.replace('href="../favicon.svg"', 'href="../favicon.svg"');
-  enPrivacy = injectPrivacyHead(enPrivacy, 'en', 'en/privatumas.html', PRIVACY_EN.title, privacyEnDesc);
+  enPrivacy = injectPrivacyHead(enPrivacy, 'en/privatumas.html', PRIVACY_EN.title, privacyEnDesc);
   write('en/privatumas.html', enPrivacy);
 
   writeRobotsAndSitemap();
@@ -856,7 +825,7 @@ function main() {
 
   finalizeRootPrivacyHtml();
 
-  console.log('Build done: lt/index.html, lt/privatumas.html, en/index.html, en/privatumas.html, robots.txt, sitemap.xml');
+  console.log('Build done: en/index.html, en/privatumas.html, robots.txt, sitemap.xml');
   console.log('BASE_PATH:', BASE_PATH || '(root – no subpath)');
   console.log('SITE_ORIGIN:', SITE_ORIGIN);
   console.log('SITE_PUBLIC_BASE:', SITE_PUBLIC_BASE || '(not set)');
