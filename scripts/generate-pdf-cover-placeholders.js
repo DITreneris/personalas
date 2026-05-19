@@ -13,8 +13,8 @@ const ROOT = path.resolve(__dirname, '..');
 const OUT = path.join(ROOT, 'assets', 'pdf-covers');
 
 const COVERS = [
-  { name: 'beginner.png', title: 'Beginner', sub: 'HR Hiring Guide · 12 pages' },
-  { name: 'advanced.png', title: 'Advanced', sub: 'HR Hiring Guide · 24 pages' }
+  { name: 'beginner.png', title: 'Beginner', sub: 'HR Hiring Guide · 16 pages' },
+  { name: 'advanced.png', title: 'Advanced', sub: 'HR Hiring Guide · 32 pages' }
 ];
 
 const W = 734;
@@ -24,7 +24,7 @@ async function makeCover(spec) {
   const svg = `<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">
   <rect width="100%" height="100%" fill="#103b5a"/>
   <rect x="0" y="0" width="8" height="100%" fill="#cfa73a"/>
-  <text x="48" y="120" fill="#cfa73a" font-family="Arial,sans-serif" font-size="14" font-weight="700">PERSONALAS</text>
+  <text x="48" y="120" fill="#cfa73a" font-family="Arial,sans-serif" font-size="14" font-weight="700">PROMPT ANATOMY</text>
   <text x="48" y="220" fill="#fff" font-family="Arial,sans-serif" font-size="42" font-weight="800">${spec.title}</text>
   <text x="48" y="280" fill="#E2E8F0" font-family="Arial,sans-serif" font-size="22">${spec.sub}</text>
   <text x="48" y="${H - 80}" fill="#cfa73a" font-family="Arial,sans-serif" font-size="16">promptanatomy.help</text>

@@ -32,6 +32,19 @@ function assert(condition, message) {
   return true;
 }
 
+const LT_DIACRITICS = /[ąčęėįšųūžĄČĘĖĮŠŲŪŽ]/;
+
+function assertPublicEnSurface(label, content) {
+  if (!content) {
+    return assert(false, label + ' file readable');
+  }
+  let ok = true;
+  ok = assert(!LT_DIACRITICS.test(content), label + ': no Lithuanian diacritics') && ok;
+  ok = assert(!/\bPersonalas\b/.test(content), label + ': no Personalas brand') && ok;
+  ok = assert(!/Series No\. 3/i.test(content), label + ': no Series No. 3') && ok;
+  return ok;
+}
+
 function run() {
   let passed = 0;
   let failed = 0;
@@ -69,6 +82,7 @@ function run() {
   tally(assert(html.includes('privacy.html'), 'gateway: link to privacy.html'));
   tally(assert(!html.includes('hreflang="lt"'), 'root index.html has no hreflang="lt"'));
   tally(assert(!html.includes('og:locale:alternate'), 'root index.html has no og:locale:alternate'));
+  tally(assertPublicEnSurface('index.html gateway', html));
 
   // --- 10 prompts (template) ---
   for (let i = 1; i <= 10; i++) {
@@ -163,6 +177,24 @@ function run() {
     tally(assert(!enIndex.includes('mailto:info@promptanatomy.app'), 'en/index.html has no legacy .app support email'));
     tally(assert(enIndex.includes('legal-disclaimer') || enIndex.includes('not legal or HR advice'), 'en/index.html HR advisory disclaimer'));
     tally(assert(enIndex.includes('href="privacy.html"'), 'en/index.html privacy link uses privacy.html'));
+    const heroBlock = enIndex.match(/<header class="header"[\s\S]*?<\/header>/);
+    tally(assert(heroBlock && heroBlock[0].includes('Get PDF guides'), 'hero primary PDF CTA label'));
+    tally(
+      assert(
+        heroBlock &&
+          heroBlock[0].includes('href="#pdf-guides"') &&
+          heroBlock[0].includes('class="cta-button"'),
+        'hero primary CTA href is pdf-guides'
+      )
+    );
+    tally(assert(heroBlock && !heroBlock[0].includes('header-phases'), 'phase chips not inside hero'));
+    tally(assert(enIndex.includes('id="workflow-overview"'), 'en/index.html workflow-overview section'));
+    const pdfPos = enIndex.indexOf('id="pdf-guides"');
+    const block1Pos = enIndex.indexOf('id="block1"');
+    tally(assert(pdfPos !== -1 && block1Pos !== -1 && pdfPos < block1Pos, 'pdf-guides appears before first free prompt'));
+    tally(assert(enIndex.includes('free-tier-label'), 'en/index.html free-tier label before prompts'));
+    tally(assertPublicEnSurface('en/index.html', enIndex));
+    tally(assert(!enIndex.includes('badge-spinoff'), 'en/index.html: no Series badge'));
   }
 
   const enPrivacy = readFile(enPrivacyPath);
@@ -201,6 +233,8 @@ function run() {
   const fulfillment = readFile(fulfillmentPath);
   tally(assert(fulfillment && fulfillment.includes("id: 'beginner'") && fulfillment.includes("id: 'advanced'"), 'fulfillment.js declares beginner and advanced products'));
   tally(assert(fulfillment && fulfillment.includes('STRIPE_PRICE_BEGINNER_PDF') && fulfillment.includes('STRIPE_PRICE_ADVANCED_PDF'), 'fulfillment.js references both Stripe price env vars'));
+  tally(assert(fulfillment && fulfillment.includes('STRIPE_PRICE_BUNDLE_PDF'), 'fulfillment.js references bundle Stripe price env'));
+  tally(assert(fulfillment && fulfillment.includes('REDIS_KEY_PREFIX') && fulfillment.includes('function redisKey'), 'fulfillment.js supports REDIS_KEY_PREFIX'));
 
   // --- Success page ---
   const successPath = path.join(ROOT, 'success.html');
@@ -221,13 +255,35 @@ function run() {
 
   tally(assert(success && success.includes('terms.html#refunds'), 'success.html links to refunds'));
 
+  tally(assertPublicEnSurface('en/privacy.html', enPrivacy));
+  tally(assertPublicEnSurface('privacy.html gateway', privacyGateway));
+  tally(assertPublicEnSurface('terms.html', terms));
+  tally(assertPublicEnSurface('success.html', success));
+  tally(assert(fulfillment && !/\bPersonalas\b/.test(fulfillment), 'fulfillment.js: no customer-facing Personalas in fulfillment emails'));
+
   // --- PDF source HTML ---
   const beginnerPdfHtml = readFile(path.join(ROOT, 'docs', 'pdf-source', 'beginner-personalas-hr.html'));
   const advancedPdfHtml = readFile(path.join(ROOT, 'docs', 'pdf-source', 'advanced-personalas-hr.html'));
-  tally(assert(beginnerPdfHtml && (beginnerPdfHtml.match(/<section class="page/g) || []).length === 12, 'beginner PDF HTML has 12 pages'));
-  tally(assert(advancedPdfHtml && (advancedPdfHtml.match(/<section class="page/g) || []).length === 24, 'advanced PDF HTML has 24 pages'));
+  tally(assert(beginnerPdfHtml && (beginnerPdfHtml.match(/<section class="page/g) || []).length === 16, 'beginner PDF HTML has 16 pages'));
+  tally(assert(advancedPdfHtml && (advancedPdfHtml.match(/<section class="page/g) || []).length === 32, 'advanced PDF HTML has 32 pages'));
+  tally(assert(advancedPdfHtml && advancedPdfHtml.includes('Sample debrief transcript'), 'advanced PDF includes debrief transcript page'));
+  tally(assert(advancedPdfHtml && advancedPdfHtml.includes('Comp &amp; pay-transparency worksheet'), 'advanced PDF includes comp worksheet'));
+  tally(assert(advancedPdfHtml && advancedPdfHtml.includes('class="compare-grid"'), 'advanced PDF includes filled scorecard component'));
+  tally(assert(advancedPdfHtml && advancedPdfHtml.includes('class="pilot-timeline"'), 'advanced PDF includes 4-week pilot timeline'));
+  tally(assert(advancedPdfHtml && /Prompt 11/.test(advancedPdfHtml), 'advanced PDF declares Prompt 11'));
   tally(assert(beginnerPdfHtml && beginnerPdfHtml.includes('www.promptanatomy.app') && beginnerPdfHtml.includes('promptanatomy.help'), 'beginner PDF branding'));
   tally(assert(advancedPdfHtml && advancedPdfHtml.includes('www.promptanatomy.app') && advancedPdfHtml.includes('promptanatomy.help'), 'advanced PDF branding'));
+  tally(assert(beginnerPdfHtml && beginnerPdfHtml.includes('cover-eyebrow">Prompt Anatomy</p>'), 'beginner PDF cover eyebrow Prompt Anatomy'));
+  tally(
+    assert(
+      advancedPdfHtml &&
+        advancedPdfHtml.includes('cover-eyebrow">Prompt Anatomy') &&
+        advancedPdfHtml.includes('Advanced Edition</p>'),
+      'advanced PDF cover eyebrow'
+    )
+  );
+  tally(assert(beginnerPdfHtml && !/\bPersonalas\b/.test(beginnerPdfHtml), 'beginner PDF: no Personalas'));
+  tally(assert(advancedPdfHtml && !/\bPersonalas\b/.test(advancedPdfHtml), 'advanced PDF: no Personalas'));
 
   const sotPath = path.join(ROOT, 'config', 'sot.json');
   const sotRaw = readFile(sotPath);
@@ -239,20 +295,78 @@ function run() {
   }
   tally(assert(sot && sot.pdfGuides && sot.pdfGuides.beginner && Array.isArray(sot.pdfGuides.beginner.chapters) && sot.pdfGuides.beginner.chapters.length >= 8, 'sot.json beginner chapters'));
   tally(assert(sot && sot.pdfGuides && sot.pdfGuides.advanced && Array.isArray(sot.pdfGuides.advanced.chapters) && sot.pdfGuides.advanced.chapters.length >= 8, 'sot.json advanced chapters'));
+  tally(assert(sot && sot.pdfGuides.advanced.chapters.length === sot.pdfGuides.advanced.pages, 'sot advanced chapters length === pages (32)'));
   tally(assert(sot && Array.isArray(sot.buyerFaq) && sot.buyerFaq.length === 5, 'sot.json buyerFaq has 5 items'));
   tally(assert(sot && sot.legal && sot.legal.metaDescription, 'sot.json legal.metaDescription'));
+  tally(assert(sot && sot.positioning && sot.positioning.primaryKpi === 'pdf', 'sot.json positioning.primaryKpi is pdf'));
+  tally(assert(sot && sot.marketing && sot.marketing.hero && sot.marketing.hero.primaryCtaHref === '#pdf-guides', 'sot.json hero primary CTA targets pdf-guides'));
   tally(assert(sot && sot.product && sot.product.contactEmail === 'info@promptanatomy.help', 'sot.json canonical contactEmail'));
+  tally(assert(sot && sot.brand && sot.brand.publicName === 'Prompt Anatomy', 'sot.json brand.publicName'));
+
+  // --- Business postal address (CAN-SPAM + Stripe trust + footer/privacy/terms) ---
+  const businessAddress = sot && sot.product && sot.product.businessAddress;
+  tally(assert(businessAddress && typeof businessAddress === 'object', 'sot.json: product.businessAddress object exists'));
+  const requiredAddressKeys = ['name', 'street', 'city', 'region', 'postalCode', 'country'];
+  for (const key of requiredAddressKeys) {
+    tally(assert(businessAddress && typeof businessAddress[key] === 'string' && businessAddress[key].length > 0,
+      'sot.json: businessAddress.' + key));
+  }
+  const addrStreet = businessAddress ? businessAddress.street : '';
+  const addrLocality = businessAddress
+    ? businessAddress.city + ', ' + businessAddress.region + ' ' + businessAddress.postalCode
+    : '';
+  if (enIndex) {
+    tally(assert(enIndex.includes(addrStreet), 'en/index.html footer includes business street: ' + addrStreet));
+    tally(assert(enIndex.includes(addrLocality), 'en/index.html footer includes business locality: ' + addrLocality));
+    tally(assert(enIndex.includes('class="business-address"'), 'en/index.html footer has semantic <address class="business-address">'));
+    tally(assert(enIndex.includes('"@type":"PostalAddress"') || enIndex.includes('"@type": "PostalAddress"'),
+      'en/index.html JSON-LD includes PostalAddress'));
+    tally(assert(enIndex.includes('"postalCode":"' + (businessAddress ? businessAddress.postalCode : '') + '"')
+      || enIndex.includes('"postalCode": "' + (businessAddress ? businessAddress.postalCode : '') + '"'),
+      'en/index.html JSON-LD postalCode matches SOT'));
+    tally(assert(!enIndex.includes('{{SOT_BUSINESS_ADDRESS}}'),
+      'en/index.html: business address token fully substituted'));
+  }
+  if (enPrivacy) {
+    tally(assert(enPrivacy.includes(addrStreet), 'en/privacy.html includes business street'));
+    tally(assert(enPrivacy.includes(addrLocality), 'en/privacy.html includes business locality'));
+    tally(assert(!enPrivacy.includes('{{SOT_BUSINESS_ADDRESS}}'),
+      'en/privacy.html: business address token fully substituted'));
+  }
+  tally(assert(terms && terms.includes(addrStreet), 'terms.html includes business street'));
+  tally(assert(terms && terms.includes(addrLocality), 'terms.html includes business locality'));
+  tally(assert(success && success.includes(addrStreet), 'success.html includes business street'));
+  tally(assert(success && success.includes(addrLocality), 'success.html includes business locality'));
+  tally(assert(fulfillment && fulfillment.includes('businessAddressTextLines'),
+    'fulfillment.js exposes businessAddressTextLines helper'));
+  tally(assert(fulfillment && fulfillment.includes('BUSINESS_ADDRESS') && fulfillment.includes('CAN-SPAM'),
+    'fulfillment.js loads BUSINESS_ADDRESS with CAN-SPAM note'));
+  tally(assert(fulfillment && fulfillment.includes('buildBusinessAddressHtml'),
+    'fulfillment.js HTML emails include buildBusinessAddressHtml'));
 
   const beginnerCover = path.join(ROOT, 'assets', 'pdf-covers', 'beginner.png');
   tally(assert(fs.existsSync(beginnerCover), 'assets/pdf-covers/beginner.png exists'));
   const advancedCover = path.join(ROOT, 'assets', 'pdf-covers', 'advanced.png');
   tally(assert(fs.existsSync(advancedCover), 'assets/pdf-covers/advanced.png exists'));
-  ['beginner', 'advanced'].forEach(function (prefix) {
-    [2, 3, 4].forEach(function (n) {
+  const previewPagesByGuide = {
+    beginner: (sot && sot.pdfGuides && sot.pdfGuides.beginner && sot.pdfGuides.beginner.previewPages) || [2, 3, 4],
+    advanced: (sot && sot.pdfGuides && sot.pdfGuides.advanced && sot.pdfGuides.advanced.previewPages) || [2, 3, 4]
+  };
+  Object.keys(previewPagesByGuide).forEach(function (prefix) {
+    previewPagesByGuide[prefix].forEach(function (n) {
       const sample = path.join(ROOT, 'assets', 'pdf-covers', prefix + '-p' + n + '.png');
       tally(assert(fs.existsSync(sample), 'assets/pdf-covers/' + prefix + '-p' + n + '.png exists'));
     });
   });
+  if (enIndex) {
+    tally(assert(enIndex.includes('loading="eager"') && enIndex.includes('beginner.png'), 'en/index.html beginner cover eager load'));
+    tally(assert(enIndex.includes('pdf-guide-highlights'), 'en/index.html PDF highlights'));
+    tally(assert(enIndex.includes('pdf-sticky-cta'), 'en/index.html sticky PDF CTA'));
+    tally(assert(enIndex.includes('28E9ATfGAebzcO011ufjG06'), 'en/index.html live beginner Stripe link'));
+    tally(assert(enIndex.includes('14A14n660d7vcO0aC4fjG07'), 'en/index.html live advanced Stripe link'));
+    tally(assert(enIndex.includes('5kQ6oH660ebz29m39CfjG08'), 'en/index.html live bundle Stripe link'));
+    tally(assert(!enIndex.includes('REPLACE_BUNDLE_PAYMENT_LINK'), 'en/index.html no bundle placeholder'));
+  }
 
   // --- PDF CTAs on EN index ---
   if (enIndex) {
@@ -260,7 +374,9 @@ function run() {
     tally(assert(enIndex.includes('$5.99') && enIndex.includes('$11.99'), 'en/index.html shows $5.99 and $11.99 prices'));
     tally(assert(enIndex.includes('id="pdf-guides"'), 'en/index.html pdf-guides section'));
     tally(assert(enIndex.includes('data-product="beginner-pdf"') && enIndex.includes('data-product="advanced-pdf"'), 'PDF Stripe product markers'));
-    tally(assert(enIndex.includes('class="pdf-guide-specs"') && enIndex.includes('12 pages') && enIndex.includes('24 pages'), 'PDF specs row'));
+    tally(assert(enIndex.includes('class="pdf-guide-specs"') && enIndex.includes('16 pages') && enIndex.includes('32 pages'), 'PDF specs row'));
+    tally(assert(enIndex.includes('data-sample-link="beginner"') && enIndex.includes('data-sample-link="advanced"'), 'PDF sample links: both beginner + advanced'));
+    tally(assert(enIndex.includes('prompt-anatomy-advanced-scorecard-sample.pdf'), 'en/index.html links advanced sample PDF'));
     tally(assert(enIndex.includes('Personal license') && enIndex.includes('terms.html#paid-pdf-license'), 'PDF personal license line'));
     tally(assert(enIndex.includes('class="pdf-guide-trust"') && enIndex.includes('Stripe checkout'), 'PDF trust row'));
     tally(assert(enIndex.includes('id="pdfPreviewDialog"') && enIndex.includes('data-preview-trigger="beginner"'), 'PDF preview dialog'));

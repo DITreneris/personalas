@@ -1,6 +1,51 @@
-/* Personalas – PDF print stylesheet.
+/* Prompt Anatomy – PDF print stylesheet.
    Beginner + Advanced HR guides. Browser Save-as-PDF (Letter, margins None, background ON).
    Brand: footer www.promptanatomy.app every page; promptanatomy.help on cover + closing. */
+
+/* Self-hosted fonts (drop matching .woff2 into ./fonts/ — see fonts/README.md).
+   Falls back to Google Fonts <link> in HTML and then system fonts if missing. */
+@font-face {
+  font-family: 'Inter';
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: local('Inter Regular'), local('Inter-Regular'), url('./fonts/Inter-Regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  src: local('Inter SemiBold'), local('Inter-SemiBold'), url('./fonts/Inter-SemiBold.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: local('Inter Bold'), local('Inter-Bold'), url('./fonts/Inter-Bold.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+  src: local('Inter ExtraBold'), local('Inter-ExtraBold'), url('./fonts/Inter-ExtraBold.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: local('JetBrains Mono Regular'), local('JetBrainsMono-Regular'), url('./fonts/JetBrainsMono-Regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  src: local('JetBrains Mono SemiBold'), local('JetBrainsMono-SemiBold'), url('./fonts/JetBrainsMono-SemiBold.woff2') format('woff2');
+}
 
 @page {
   size: Letter;
@@ -31,7 +76,6 @@ body {
   position: relative;
   break-after: page;
   page-break-after: always;
-  overflow: hidden;
 }
 
 .page:last-of-type {
@@ -143,18 +187,27 @@ hr {
 }
 
 .cover-title {
-  font-size: 30pt;
+  font-size: 28pt;
   font-weight: 800;
   line-height: 1.1;
-  margin-top: 10mm;
+  margin-top: 6mm;
 }
 
 .cover-subtitle {
   color: #FFFFFF;
-  font-size: 13pt;
-  font-weight: 500;
-  margin-top: 6mm;
-  line-height: 1.4;
+  font-size: 14pt;
+  font-weight: 600;
+  margin-top: 5mm;
+  line-height: 1.35;
+}
+
+.cover-hook {
+  color: #cfa73a;
+  font-size: 10pt;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-top: 8mm;
 }
 
 .cover-meta {
@@ -382,6 +435,537 @@ tr:nth-child(even) td { background: #F7FAFC; }
   background: #F7FAFC;
   border: 1px solid #E2E8F0;
   border-radius: 1.5mm;
+}
+
+/* --- Pass 1 additions: TOC, worked-output, fill-field, decision-log, kickoff worksheet, upsell card --- */
+
+.toc {
+  margin: 0 0 4mm 0;
+  font-size: 9.5pt;
+}
+
+.toc-row {
+  display: flex;
+  align-items: baseline;
+  gap: 2mm;
+  padding: 1.1mm 0;
+  border-bottom: 1px dotted #CBD5E0;
+}
+
+.toc-row:last-child {
+  border-bottom: none;
+}
+
+.toc-num {
+  flex: 0 0 8mm;
+  color: #cfa73a;
+  font-weight: 700;
+  font-size: 8.5pt;
+}
+
+.toc-label {
+  flex: 1;
+  color: #1A202C;
+}
+
+.toc-label strong {
+  color: #103b5a;
+}
+
+.toc-page {
+  flex: 0 0 10mm;
+  text-align: right;
+  color: #2B6CB0;
+  font-weight: 600;
+  font-size: 9pt;
+}
+
+.worked-output {
+  background: #F0FFF4;
+  border: 1px solid #9AE6B4;
+  border-left: 3px solid #276749;
+  padding: 3mm 4mm;
+  border-radius: 1.5mm;
+  margin: 0 0 3mm 0;
+  font-size: 8.5pt;
+  line-height: 1.4;
+}
+
+.worked-output .wo-label {
+  display: block;
+  font-size: 7.5pt;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #276749;
+  margin-bottom: 1.2mm;
+}
+
+.worked-output p {
+  margin: 0 0 1.5mm 0;
+}
+
+.worked-output ul,
+.worked-output ol {
+  margin: 0 0 1.5mm 0;
+  padding-left: 4mm;
+}
+
+.worked-output li {
+  margin-bottom: 0.4mm;
+}
+
+.worked-output .wo-note {
+  display: block;
+  margin-top: 1.5mm;
+  font-size: 7.5pt;
+  font-style: italic;
+  color: #2F855A;
+}
+
+.fill-field {
+  display: flex;
+  align-items: center;
+  gap: 2mm;
+  margin: 0 0 1.6mm 0;
+  font-size: 8.5pt;
+}
+
+.fill-field .ff-label {
+  flex: 0 0 38mm;
+  color: #103b5a;
+  font-weight: 600;
+}
+
+.fill-field .ff-line {
+  flex: 1;
+  border-bottom: 1px solid #103b5a;
+  height: 4mm;
+}
+
+.fill-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5mm 4mm;
+  margin: 0 0 3mm 0;
+}
+
+.compare-ad {
+  display: flex;
+  gap: 3mm;
+  margin: 0 0 3mm 0;
+}
+
+.compare-ad .ca-col {
+  flex: 1;
+  padding: 3mm 3.5mm;
+  border-radius: 1.5mm;
+  font-size: 8.5pt;
+  line-height: 1.4;
+}
+
+.compare-ad .ca-before {
+  background: #FFF5F5;
+  border: 1px solid #FEB2B2;
+}
+
+.compare-ad .ca-after {
+  background: #F0FFF4;
+  border: 1px solid #9AE6B4;
+}
+
+.compare-ad .ca-title {
+  display: block;
+  font-size: 7.5pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 1.2mm;
+}
+
+.compare-ad .ca-before .ca-title { color: #C53030; }
+.compare-ad .ca-after .ca-title { color: #276749; }
+
+.compare-ad p {
+  margin: 0 0 1.2mm 0;
+}
+
+.decision-log {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 3mm 0;
+  font-size: 8pt;
+}
+
+.decision-log th,
+.decision-log td {
+  border: 1px solid #E2E8F0;
+  padding: 1.6mm 2mm;
+  vertical-align: top;
+}
+
+.decision-log th {
+  background: #103b5a;
+  color: #FFFFFF;
+  font-size: 7.5pt;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.decision-log td {
+  height: 7mm;
+  color: #4A5568;
+}
+
+.kickoff-worksheet {
+  margin: 0 0 3mm 0;
+}
+
+.kickoff-worksheet .kw-row {
+  display: grid;
+  grid-template-columns: 6mm 1fr 56mm;
+  gap: 2mm;
+  align-items: start;
+  padding: 1.6mm 0;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.kickoff-worksheet .kw-row:last-child {
+  border-bottom: none;
+}
+
+.kickoff-worksheet .kw-check {
+  width: 3.5mm;
+  height: 3.5mm;
+  margin-top: 0.6mm;
+  border: 1.2px solid #2B6CB0;
+  border-radius: 0.6mm;
+}
+
+.kickoff-worksheet .kw-label {
+  font-size: 8.5pt;
+  color: #1A202C;
+}
+
+.kickoff-worksheet .kw-label strong {
+  color: #103b5a;
+}
+
+.kickoff-worksheet .kw-line {
+  border-bottom: 1px solid #103b5a;
+  height: 5mm;
+  align-self: end;
+}
+
+.upsell-card {
+  margin-top: 4mm;
+  padding: 4mm 4.5mm;
+  background: linear-gradient(135deg, #103b5a 0%, #1f5e88 100%);
+  border-radius: 1.5mm;
+  color: #FFFFFF;
+}
+
+.upsell-card .up-eyebrow {
+  display: block;
+  font-size: 8pt;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #cfa73a;
+  margin-bottom: 1.2mm;
+}
+
+.upsell-card .up-title {
+  font-size: 12pt;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin: 0 0 1.5mm 0;
+}
+
+.upsell-card .up-bullets {
+  list-style: none;
+  padding-left: 0;
+  margin: 0 0 2mm 0;
+  font-size: 8.5pt;
+  line-height: 1.5;
+}
+
+.upsell-card .up-bullets li {
+  padding-left: 4.5mm;
+  position: relative;
+  color: #E2E8F0;
+}
+
+.upsell-card .up-bullets li::before {
+  content: '\2192';
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #cfa73a;
+  font-weight: 700;
+}
+
+.upsell-card .up-cta {
+  display: inline-block;
+  margin-top: 1mm;
+  padding: 1.5mm 3mm;
+  background: #cfa73a;
+  color: #103b5a;
+  font-weight: 700;
+  font-size: 9pt;
+  border-radius: 1mm;
+  text-decoration: none;
+}
+
+.scorecard-sample {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 2.5mm 0;
+  font-size: 8.5pt;
+}
+
+.scorecard-sample th,
+.scorecard-sample td {
+  border: 1px solid #E2E8F0;
+  padding: 1.8mm 2mm;
+  vertical-align: top;
+}
+
+.scorecard-sample th {
+  background: #103b5a;
+  color: #FFFFFF;
+  font-weight: 600;
+  font-size: 8pt;
+}
+
+.scorecard-sample td.sc-rating {
+  width: 12mm;
+  font-weight: 700;
+  color: #cfa73a;
+  text-align: center;
+}
+
+/* --- Pass 2 additions (Advanced v2.0): transcript, compare-grid, pilot-timeline, email-template --- */
+
+.transcript {
+  margin: 0 0 3mm 0;
+  border: 1px solid #E2E8F0;
+  border-radius: 1.5mm;
+  background: #FFFFFF;
+  overflow: hidden;
+}
+
+.transcript-row {
+  display: grid;
+  grid-template-columns: 22mm 1fr;
+  gap: 2.5mm;
+  padding: 2mm 3mm;
+  border-bottom: 1px solid #EDF2F7;
+  font-size: 8.5pt;
+  line-height: 1.4;
+}
+
+.transcript-row:last-child {
+  border-bottom: none;
+}
+
+.transcript-speaker {
+  font-size: 7.5pt;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #103b5a;
+  align-self: start;
+}
+
+.transcript-line {
+  color: #1A202C;
+}
+
+.transcript-line em {
+  color: #4A5568;
+  font-style: italic;
+}
+
+.transcript-annotation {
+  margin: 1mm 0 0 0;
+  padding: 1.5mm 2.5mm;
+  background: #FFFAF0;
+  border-left: 2px solid #cfa73a;
+  color: #744210;
+  font-size: 7.5pt;
+  font-style: italic;
+  line-height: 1.35;
+}
+
+.transcript-annotation strong {
+  font-style: normal;
+  color: #744210;
+}
+
+.compare-grid {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 3mm 0;
+  font-size: 8pt;
+  table-layout: fixed;
+}
+
+.compare-grid th,
+.compare-grid td {
+  border: 1px solid #E2E8F0;
+  padding: 1.8mm 2mm;
+  vertical-align: top;
+}
+
+.compare-grid thead th {
+  background: #103b5a;
+  color: #FFFFFF;
+  font-weight: 600;
+  font-size: 7.5pt;
+  text-align: left;
+}
+
+.compare-grid th.cg-competency {
+  width: 38mm;
+  background: #F7FAFC;
+  color: #103b5a;
+  font-weight: 700;
+}
+
+.compare-grid td.cg-score {
+  font-weight: 700;
+  color: #cfa73a;
+  font-size: 9pt;
+  text-align: center;
+  width: 8mm;
+}
+
+.compare-grid td.cg-evidence {
+  font-size: 7.5pt;
+  color: #4A5568;
+  line-height: 1.3;
+}
+
+.compare-grid .cg-decision-row td {
+  background: #F0FFF4;
+  border-top: 2px solid #276749;
+  font-weight: 700;
+  color: #276749;
+}
+
+.compare-grid .cg-decision-row td.cg-decline {
+  background: #FFF5F5;
+  border-top-color: #C53030;
+  color: #C53030;
+}
+
+.pilot-timeline {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3mm;
+  margin: 0 0 3mm 0;
+}
+
+.pilot-timeline .pt-card {
+  background: #F7FAFC;
+  border: 1px solid #E2E8F0;
+  border-top: 3px solid #2B6CB0;
+  border-radius: 1.5mm;
+  padding: 3mm 3.5mm;
+  font-size: 8pt;
+  line-height: 1.4;
+}
+
+.pilot-timeline .pt-week {
+  display: inline-block;
+  background: #103b5a;
+  color: #cfa73a;
+  font-size: 7.5pt;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.5mm 2mm;
+  border-radius: 1mm;
+  margin-bottom: 1.5mm;
+}
+
+.pilot-timeline .pt-title {
+  font-size: 9.5pt;
+  font-weight: 700;
+  color: #103b5a;
+  margin: 0 0 1.2mm 0;
+}
+
+.pilot-timeline ul {
+  padding-left: 4mm;
+  margin: 0;
+}
+
+.pilot-timeline li {
+  margin-bottom: 0.6mm;
+  font-size: 8pt;
+  color: #1A202C;
+}
+
+.pilot-timeline .pt-kpi {
+  display: block;
+  margin-top: 1.5mm;
+  padding-top: 1.5mm;
+  border-top: 1px dotted #CBD5E0;
+  font-size: 7.5pt;
+  color: #4A5568;
+  font-style: italic;
+}
+
+.email-template {
+  margin: 0 0 3mm 0;
+  border: 1px solid #E2E8F0;
+  border-radius: 1.5mm;
+  overflow: hidden;
+  background: #FFFFFF;
+}
+
+.email-template .et-subject {
+  display: block;
+  background: #103b5a;
+  color: #FFFFFF;
+  padding: 1.8mm 3mm;
+  font-size: 8.5pt;
+  font-weight: 600;
+}
+
+.email-template .et-subject .et-subject-label {
+  color: #cfa73a;
+  font-size: 7pt;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-right: 2mm;
+}
+
+.email-template .et-body {
+  padding: 2.5mm 3mm;
+  font-size: 8.5pt;
+  line-height: 1.45;
+  color: #1A202C;
+}
+
+.email-template .et-body p {
+  margin: 0 0 1.5mm 0;
+}
+
+.email-template .et-body p:last-child {
+  margin-bottom: 0;
+}
+
+.email-template .et-cta {
+  margin: 1.5mm 0 0 0;
+  padding: 1.5mm 0 0 0;
+  border-top: 1px dotted #CBD5E0;
+  font-size: 8pt;
+  color: #2B6CB0;
+  font-weight: 600;
 }
 
 @media screen {

@@ -10,8 +10,8 @@ const path = require('path');
 
 const ROOT = path.join(__dirname, '..');
 const SOURCES = [
-  { file: 'docs/pdf-source/beginner-personalas-hr.html', pages: 12 },
-  { file: 'docs/pdf-source/advanced-personalas-hr.html', pages: 24 }
+  { file: 'docs/pdf-source/beginner-personalas-hr.html', pages: 16 },
+  { file: 'docs/pdf-source/advanced-personalas-hr.html', pages: 32 }
 ];
 
 let failed = 0;

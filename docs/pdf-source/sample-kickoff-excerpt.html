@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <title>Sample — HR Prompt Formula + Prompt 1 — Prompt Anatomy</title>
+  <link rel="stylesheet" href="pdf-print.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    .sample-banner {
+      position: absolute;
+      top: 14mm;
+      right: 16mm;
+      background: #103b5a;
+      color: #cfa73a;
+      font-size: 9pt;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      padding: 3mm 5mm;
+      border-radius: 2mm;
+      text-transform: uppercase;
+    }
+    .sample-page::after {
+      content: 'SAMPLE';
+      position: absolute;
+      top: 45%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-24deg);
+      font-size: 72pt;
+      font-weight: 800;
+      color: rgba(16, 59, 90, 0.08);
+      pointer-events: none;
+    }
+    .full-guide-promo {
+      margin-top: 5mm;
+      padding: 4mm 4.5mm;
+      background: #F7FAFC;
+      border: 1px solid #E2E8F0;
+      border-left: 3px solid #cfa73a;
+      border-radius: 1.5mm;
+      font-size: 9pt;
+      line-height: 1.5;
+    }
+    .full-guide-promo strong { color: #103b5a; }
+  </style>
+</head>
+<body>
+
+<section class="page sample-page">
+  <p class="sample-banner">Free sample · Beginner guide</p>
+  <div class="page-eyebrow"><span>Excerpt</span><span class="page-eyebrow-tag">Formula + Prompt 1</span></div>
+  <h2>The HR Prompt Formula</h2>
+  <p>Strong prompts give the model a role, one task, hiring context, output shape, and guardrails.</p>
+  <table>
+    <tr><th>Field</th><th>What to include</th></tr>
+    <tr><td><strong>Role</strong></td><td>Who the AI acts as (e.g., recruitment analyst, interview specialist)</td></tr>
+    <tr><td><strong>Task</strong></td><td>One deliverable (diagnose funnel, draft interview plan, phrase offer)</td></tr>
+    <tr><td><strong>Context</strong></td><td>Role, location (US), stage, company size — no candidate PII</td></tr>
+    <tr><td><strong>Format</strong></td><td>Bullets, table, max length, tone</td></tr>
+    <tr><td><strong>Constraints</strong></td><td>EEO-aware, US formats ($, MM/DD/YYYY), what to avoid</td></tr>
+  </table>
+
+  <p class="prompt-label-row"><span>Prompt 1 — Diagnose the funnel</span><span class="prompt-tag">~5–10 min</span></p>
+  <pre class="prompt-block">You are a recruitment analyst. Identify where recruitment is stuck and what to change, using the numbers.
+
+Company/location: [company, e.g., New York, NY]
+Role location: [e.g., Remote – US, Hybrid – New York, NY, or On-site – Austin, TX]
+Role: [job title]   State: [two-letter, e.g., NY]   Zip Code: [optional]
+
+We have:
+- Candidates: [ ]   Interviews: [ ]   Offers: [ ]   Accepted: [ ]
+
+Explain: 1) Where are we most stuck? 2) Why? 3) What can we change this week?</pre>
+  <div class="worked-output">
+    <span class="wo-label">Sample AI output — AE role, Austin, TX</span>
+    <p><strong>Most stuck:</strong> interview-to-offer (2 offers from 14 interviews = 14%).</p>
+    <p><strong>Why:</strong> screening passes candidates who miss the discovery competency you score in panel.</p>
+    <p><strong>This week:</strong> tighten the screen with a 3-question discovery probe; calibrate panel on one shared rubric anchor.</p>
+  </div>
+
+  <div class="full-guide-promo">
+    <strong>This is 2 of 16 pages.</strong> The full Beginner guide includes 9 prompts with worked outputs, a fillable 15-minute kickoff worksheet, a 7-point AI safety verify + decision log, and an Advanced upsell — see <strong>promptanatomy.help/en/#pdf-guides</strong>.
+  </div>
+
+  <div class="brand-footer">
+    <span class="brand-footer-left">Prompt Anatomy · HR Hiring Guides</span>
+    <span class="brand-footer-url">www.promptanatomy.app</span>
+    <span class="brand-footer-right">Sample</span>
+  </div>
+</section>
+
+</body>
+</html>

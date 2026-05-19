@@ -105,10 +105,11 @@ Prieš PR įsitikinti, kad `npm test` praeina. A11y tikrinimas – per CI arba l
 ## Agentų peržiūra prieš merge
 
 - **Kalbos SOT (viešas produktas = anglų):** žr. [docs/language-guidelines-en-lt.md](docs/language-guidelines-en-lt.md) sekciją *Source of truth (SOT)*. Santrauka: viešas UI ir kanonas – **`/en/`**; šaknies vartai – EN; post-deploy tikrinimas – pirmiausia **`/en/`**; SEO meta ir bendras **`og-default.png`** – anglų; LT šablonai generuoja ir `lt/`, ir `en/`, bet numatytoji patirtis visada EN.
-- **Produktas:** kanonas – **Personalas**. Dokumentacijoje nenaudoti atsarginio repo pavadinimo **„marketingas“**. LT tekste vengti žodžio **„biblioteka“** kaip produkto etiketės; EN – vengti **„prompt library“** kaip prekės ženklo (vietoje to – „hiring prompts“, „promptų rinkinys“ ir pan.). Žr. [docs/language-guidelines-en-lt.md](docs/language-guidelines-en-lt.md).
+- **Viešas brand + locale:** viešai tik **Prompt Anatomy**, **EN-only** išsiunčiamuose HTML; jokio „Personalas“ / „Series No. 3“ / LT diakritikų — žr. [docs/language-guidelines-en-lt.md](docs/language-guidelines-en-lt.md) (*Viešas prekės ženklas ir locale*).
+- **Repo (vidinis):** Personalas. Dokumentacijoje nenaudoti **„marketingas“**. LT šablone vengti **„biblioteka“**; EN – vengti **„prompt library“** kaip prekės ženklo.
 - **Techninė:** `npm test` privalo praeiti; deploy ir a11y URL – [DEPLOYMENT.md](DEPLOYMENT.md).
-- **Greita paieška** (repo šaknyje, išskyrus `node_modules`): `rg -i "biblioteka|marketingas|prompt.?library|di-promptu-biblioteka"` – PR turi būti aiškiai paaiškinti likučiai arba jų nebūti.
-- **LT turinio šaltinis:** [templates/index-lt.html](templates/index-lt.html), [templates/privatumas-lt.html](templates/privatumas-lt.html) (ne šaknies `index.html` / `privatumas.html` – tai EN vartai po `npm run build`). Numatytoji lankytojo kalba – EN (`/en/`); viešame `/en/` **nėra** LT kalbos perjungiklio; `/lt/` – QA / testuotojams (tiesioginė nuoroda). Žr. [docs/language-guidelines-en-lt.md](docs/language-guidelines-en-lt.md).
+- **Greita paieška** (repo šaknyje, išskyrus `node_modules`): `rg -i "personalas|series no|spin-off|promptų|biblioteka|marketingas|prompt.?library"` – viešame UI likučiai turi būti paaiškinti arba pašalinti.
+- **Turinio šaltinis:** [templates/index-lt.html](templates/index-lt.html) (authoring → `npm run build` → `en/`), [templates/privacy.html](templates/privacy.html). Ne `privatumas-lt.html` (deprecated). Šaknies `index.html` / `privacy.html` – EN vartai po build.
 
 ---
 

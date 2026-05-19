@@ -431,17 +431,27 @@
 
     // ===== PAID PDF GUIDES (config/sot.json) =====
     var PDF_PREVIEW_DEFS = {
-        beginner: {
-            title: 'Preview — Beginner HR Hiring Guide',
-            altPrefix: 'Beginner guide',
-            pages: [2, 3, 4]
-        },
-        advanced: {
-            title: 'Preview — Advanced HR Hiring Guide',
-            altPrefix: 'Advanced guide',
-            pages: [2, 3, 4]
-        }
+        beginner: { title: 'Preview — Beginner HR Hiring Guide', altPrefix: 'Beginner guide', pages: [2, 3, 4] },
+        advanced: { title: 'Preview — Advanced HR Hiring Guide', altPrefix: 'Advanced guide', pages: [2, 3, 4] }
     };
+
+    function trackEvent(name, props) {
+        if (typeof window.plausible !== 'function') return;
+        try {
+            window.plausible(name, { props: props || {} });
+        } catch (_e) { /* ignore */ }
+    }
+
+    function bindAnalyticsClickables(root) {
+        if (!root) return;
+        root.querySelectorAll('[data-analytics]').forEach(function(el) {
+            el.addEventListener('click', function() {
+                trackEvent(el.getAttribute('data-analytics'), {
+                    product: el.getAttribute('data-product') || el.getAttribute('data-preview-trigger') || ''
+                });
+            });
+        });
+    }
 
     function escapeHtmlText(text) {
         return String(text == null ? '' : text)
@@ -480,13 +490,71 @@
 
     function initStripeLinks(config) {
         if (!config || !config.pdfGuides) return;
-        ['beginner', 'advanced'].forEach(function(key) {
+        ['beginner', 'advanced', 'bundle'].forEach(function(key) {
             var def = config.pdfGuides[key];
             if (!def || !def.stripePaymentLink || def.stripePaymentLink.indexOf('REPLACE_') !== -1) return;
             document.querySelectorAll('a[data-product="' + def.id + '"]').forEach(function(anchor) {
                 anchor.setAttribute('href', def.stripePaymentLink);
             });
         });
+        var bundleOffer = document.querySelector('[data-bundle-offer]');
+        var bundleDef = config.pdfGuides.bundle;
+        if (bundleOffer && bundleDef && bundleDef.stripePaymentLink && bundleDef.stripePaymentLink.indexOf('REPLACE_') === -1) {
+            bundleOffer.hidden = false;
+            var priceEl = bundleOffer.querySelector('[data-bundle-price]');
+            if (priceEl && bundleDef.price != null) priceEl.textContent = '$' + Number(bundleDef.price).toFixed(2);
+        }
+    }
+
+    function initPdfGuideHighlights(config) {
+        if (!config || !config.pdfGuides) return;
+        document.querySelectorAll('[data-guide-highlights]').forEach(function(list) {
+            var key = list.getAttribute('data-guide-highlights');
+            var def = config.pdfGuides[key];
+            if (!def || !Array.isArray(def.highlights)) return;
+            var html = '';
+            for (var i = 0; i < def.highlights.length; i += 1) {
+                html += '<li>' + escapeHtmlText(def.highlights[i]) + '</li>';
+            }
+            list.innerHTML = html;
+        });
+    }
+
+    function initSamplePdfLinks(config) {
+        if (!config || !config.pdfGuides) return;
+        document.querySelectorAll('[data-sample-link]').forEach(function(anchor) {
+            var key = anchor.getAttribute('data-sample-link');
+            var def = config.pdfGuides[key];
+            if (def && def.samplePdfUrl) anchor.setAttribute('href', def.samplePdfUrl);
+        });
+    }
+
+    function applyPreviewPagesFromConfig(config) {
+        if (!config || !config.pdfGuides) return;
+        ['beginner', 'advanced'].forEach(function(key) {
+            var def = config.pdfGuides[key];
+            if (def && Array.isArray(def.previewPages) && def.previewPages.length) {
+                PDF_PREVIEW_DEFS[key].pages = def.previewPages.slice();
+            }
+        });
+    }
+
+    function initPdfStickyCta() {
+        var bar = document.getElementById('pdfStickyCta');
+        var pdfSection = document.getElementById('pdf-guides');
+        var hero = document.querySelector('.header');
+        if (!bar || !pdfSection) return;
+
+        function updateBar() {
+            var heroBottom = hero ? hero.getBoundingClientRect().bottom : 0;
+            var pdfTop = pdfSection.getBoundingClientRect().top;
+            var show = heroBottom < 0 && pdfTop > window.innerHeight * 0.35;
+            bar.hidden = !show;
+        }
+
+        updateBar();
+        window.addEventListener('scroll', updateBar, { passive: true });
+        window.addEventListener('resize', updateBar, { passive: true });
     }
 
     function initBuyerFaq(config) {
@@ -609,10 +677,23 @@
         updateProgressIndicator();
 
         loadSotConfig().then(function(config) {
+            applyPreviewPagesFromConfig(config);
             initPdfPreviewDialog();
             initPdfGuideTocs(config);
+            initPdfGuideHighlights(config);
+            initSamplePdfLinks(config);
             initStripeLinks(config);
             initBuyerFaq(config);
+            initPdfStickyCta();
+            var pdfRoot = document.getElementById('pdf-guides');
+            bindAnalyticsClickables(pdfRoot);
+            bindAnalyticsClickables(document.getElementById('pdfStickyCta'));
+            var heroPdf = document.querySelector('.header a[href="#pdf-guides"]');
+            if (heroPdf) {
+                heroPdf.addEventListener('click', function() {
+                    trackEvent('hero_pdf_cta', {});
+                });
+            }
         });
     }
 
