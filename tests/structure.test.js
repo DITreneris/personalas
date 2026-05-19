@@ -297,6 +297,36 @@ function run() {
   tally(assert(sot && sot.pdfGuides && sot.pdfGuides.advanced && Array.isArray(sot.pdfGuides.advanced.chapters) && sot.pdfGuides.advanced.chapters.length >= 8, 'sot.json advanced chapters'));
   tally(assert(sot && sot.pdfGuides.advanced.chapters.length === sot.pdfGuides.advanced.pages, 'sot advanced chapters length === pages (32)'));
   tally(assert(sot && Array.isArray(sot.buyerFaq) && sot.buyerFaq.length === 5, 'sot.json buyerFaq has 5 items'));
+  tally(
+    assert(
+      sot &&
+        sot.pdfGuides &&
+        sot.pdfGuides.beginner &&
+        sot.pdfGuides.beginner.stripePaymentLink &&
+        !sot.pdfGuides.beginner.stripePaymentLink.includes('REPLACE_'),
+      'sot.json beginner stripePaymentLink is configured'
+    )
+  );
+  tally(
+    assert(
+      sot &&
+        sot.pdfGuides &&
+        sot.pdfGuides.advanced &&
+        sot.pdfGuides.advanced.stripePaymentLink &&
+        !sot.pdfGuides.advanced.stripePaymentLink.includes('REPLACE_'),
+      'sot.json advanced stripePaymentLink is configured'
+    )
+  );
+  tally(
+    assert(
+      sot &&
+        sot.pdfGuides &&
+        sot.pdfGuides.bundle &&
+        sot.pdfGuides.bundle.stripePaymentLink &&
+        !sot.pdfGuides.bundle.stripePaymentLink.includes('REPLACE_'),
+      'sot.json bundle stripePaymentLink is configured'
+    )
+  );
   tally(assert(sot && sot.legal && sot.legal.metaDescription, 'sot.json legal.metaDescription'));
   tally(assert(sot && sot.positioning && sot.positioning.primaryKpi === 'pdf', 'sot.json positioning.primaryKpi is pdf'));
   tally(assert(sot && sot.marketing && sot.marketing.hero && sot.marketing.hero.primaryCtaHref === '#pdf-guides', 'sot.json hero primary CTA targets pdf-guides'));
@@ -366,6 +396,8 @@ function run() {
     tally(assert(enIndex.includes('14A14n660d7vcO0aC4fjG07'), 'en/index.html live advanced Stripe link'));
     tally(assert(enIndex.includes('5kQ6oH660ebz29m39CfjG08'), 'en/index.html live bundle Stripe link'));
     tally(assert(!enIndex.includes('REPLACE_BUNDLE_PAYMENT_LINK'), 'en/index.html no bundle placeholder'));
+    tally(assert(!enIndex.includes('REPLACE_BEGINNER_PAYMENT_LINK'), 'en/index.html no beginner Stripe placeholder'));
+    tally(assert(!enIndex.includes('REPLACE_ADVANCED_PAYMENT_LINK'), 'en/index.html no advanced Stripe placeholder'));
   }
 
   // --- PDF CTAs on EN index ---
