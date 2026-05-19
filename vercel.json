@@ -8,9 +8,11 @@
     { "source": "/lt/privatumas.html", "destination": "/en/privacy.html", "permanent": true },
     { "source": "/privatumas.html", "destination": "/en/privacy.html", "permanent": true },
     { "source": "/en/privatumas.html", "destination": "/en/privacy.html", "permanent": true },
-    { "source": "/privacy.html", "destination": "/en/privacy.html", "permanent": true }
+    { "source": "/privacy.html", "destination": "/en/privacy.html", "permanent": true },
+    { "source": "/templates/:path*", "destination": "/en/", "permanent": false },
+    { "source": "/docs/pdf-source/:path*", "destination": "/en/", "permanent": false }
   ],
-  "buildCommand": "npm test",
+  "buildCommand": "REQUIRE_STRIPE_LINKS=1 npm test",
   "installCommand": "npm install",
   "outputDirectory": ".",
   "framework": null,

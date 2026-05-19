@@ -137,6 +137,8 @@ function assertNoStripePlaceholders(sot) {
   const bad = [];
   if (isStripeLinkPlaceholder(beginner)) bad.push('pdfGuides.beginner.stripePaymentLink');
   if (isStripeLinkPlaceholder(advanced)) bad.push('pdfGuides.advanced.stripePaymentLink');
+  const bundle = sot.pdfGuides && sot.pdfGuides.bundle && sot.pdfGuides.bundle.stripePaymentLink;
+  if (isStripeLinkPlaceholder(bundle)) bad.push('pdfGuides.bundle.stripePaymentLink');
   if (!bad.length) return;
   const msg =
     'Stripe payment links still use placeholders in config/sot.json: ' +
