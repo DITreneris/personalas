@@ -1,25 +1,17 @@
-# Cursor Rules – Personalas (statinė HTML svetainė)
+# Cursor Rules – Personalas
 
 ## Projekto apžvalga
-Statinių puslapių projektas **Personalas** – DI promptų rinkinys HR atrankai (US lokalizacija viešame faile). Saugumas: be slaptų raktų repo, be asmens duomenų rinkimo šiuo metu. Agentų rolės – [AGENTS.md](AGENTS.md).
+**Personalas** (repo) – Prompt Anatomy viešai: EN-only HR hiring prompts + mokami PDF (Stripe per Vercel `api/`). Saugumas: jokių secretų repo.
 
-**Agentams:** Rolės ir workflow – [AGENTS.md](AGENTS.md). Dokumentų valdymas ir atsakomybės – [docs/DOCUMENTATION.md](docs/DOCUMENTATION.md). Pakeitimų istorija – [CHANGELOG.md](CHANGELOG.md). **Kalbos SOT (viešas produktas = anglų):** [docs/language-guidelines-en-lt.md](docs/language-guidelines-en-lt.md).
+**Agentams — privaloma:** [docs/AGENT_SOT.md](docs/AGENT_SOT.md) (keliai, build, deploy, brand). Rolės – [AGENTS.md](AGENTS.md). Kalba – [docs/language-guidelines-en-lt.md](docs/language-guidelines-en-lt.md). Doc valdymas – [docs/DOCUMENTATION.md](docs/DOCUMENTATION.md).
 
 ---
 
 ## Kalba – SOT (trumpai)
 
-- **Viešas produktas:** `en-US`, kanonas **`/en/`**; šaknies `/` – EN vartai; SEO ir bendras OG paveikslėlis – **anglų** (žr. kalbos gaires, *Source of truth*).
-- **LT:** turinio šaltiniai `templates/*-lt.html` ir viešas **`/lt/`** (authoring, QA) – ne numatytoji lankytojo kalba.
-- **Šios taisyklės ir agentų dokumentacija** rašomos LT, nebent aiškiai kitaip.
-
----
-
-## Q&A – tonas vartotojui matomam tekstui
-
-- **`/lt/` puslapiuose:** kreipinys **tu** (ne jūs), paprasta lietuvių kalba, **lakoniškai** – trumpi sakiniai.
-- **`/en/` puslapiuose:** anglų kalba, US kontekstas (žr. build ir kalbos gaires); tonas profesionalus, aiškus.
-- Prieš commit: atitinkama kalba atitinka puslapio `lang` ir locale kelią.
+- **Viešas produktas:** `en-US`, kanonas **`/en/`**; šaknies `/` ir `/privacy.html` – EN vartai.
+- **LT authoring:** `templates/index-lt.html` → `npm run build` → **`en/` only**; produkcijoje `/lt/*` redirect į `/en/*`.
+- **Agentų dokumentacija** – LT, nebent aiškiai kitaip.
 
 ---
 
@@ -28,9 +20,7 @@ Statinių puslapių projektas **Personalas** – DI promptų rinkinys HR atranka
 ### API Keys ir Konfidencialūs Duomenys
 - ❌ **NIEKADA** nekomituokite API keys, slaptažodžių ar jautrių duomenų į Git
 - ✅ Naudokite `.env` failus arba konfigūracijos failus, kurie yra `.gitignore`
-- ✅ Google Apps Script URL turi būti konfigūruojamas per kintamuosius, ne hardcoded
-- ✅ Jei reikia, naudokite environment variables arba konfigūracijos failus
-- ⚠️ **Google Script URL** faile `index.html` turi būti placeholder, ne tikras URL
+- ✅ Jei reikia, naudokite environment variables arba konfigūracijos failus (Stripe, Resend – žr. DEPLOYMENT.md)
 
 ### Input Validacija
 - ✅ **VISADA** validuokite visus vartotojo įvestus duomenis (email, tekstas)
@@ -39,36 +29,18 @@ Statinių puslapių projektas **Personalas** – DI promptų rinkinys HR atranka
 - ✅ Apsaugokite nuo XSS atakų - naudokite `textContent` vietoj `innerHTML` kai įmanoma
 - ✅ Validuokite email formatą su regex: `/^[^\s@]+@[^\s@]+\.[^\s@]+$/`
 
-### Google Apps Script Saugumas
-- ✅ Apps Script turi validuoti gautus duomenis
-- ✅ Naudokite try-catch blokus visose kritinėse vietose
-- ✅ Nerodykite detalių klaidų pranešimų vartotojams (saugumo rizika)
-- ✅ Loginkite klaidas serverio pusėje, bet neeksportuokite jautrių duomenų
-
-### CORS ir Cross-Origin Saugumas
-- ✅ Google Apps Script naudoja `no-cors` režimą - supraskite ribojimus
-- ✅ Jei keičiate į `cors`, įsitikinkite, kad tikrinamas `Origin` header
-- ⚠️ **NIEKADA** neleiskite bet kokiam domenui siųsti užklausų be validacijos
-
-### CAPTCHA ir Spam Apsauga
-- ⚠️ **Rekomenduojama** pridėti Google reCAPTCHA kontaktų formai
-- ✅ Implementuokite rate limiting (ribokite užklausų skaičių per laiką)
-- ✅ Validuokite, kad forma nėra tuščia arba su tik spam duomenimis
-
-### Duomenų Saugumas
-- ✅ Jautrų duomenų (email, vardai) saugojimas Google Sheets turi atitikti GDPR
-- ✅ Įsitikinkite, kad Google Sheets dokumentas turi tinkamas prieigos teises
-- ✅ Svarstykite duomenų šifravimą, jei saugomi labai jautrūs duomenys
+### Stripe / API (mokami PDF)
+- ✅ Webhook ir fulfillment secrets tik per Vercel env / `.env` (gitignore)
+- ✅ Niekada neloginkite `DOWNLOAD_TOKEN_SECRET`, Stripe keys
+- ✅ Fulfillment klaidos vartotojui – bendros (žr. `api/_lib/fulfillment.js`)
 
 ---
 
 ## 🔐 KONFIDENCIALUMAS (Confidentiality)
 
 ### GDPR ir Duomenų Apsauga
-- ✅ Kontaktų formoje **PRIVALOMA** informuoti apie duomenų rinkimą
-- ✅ Pridėkite privatumo politikos nuorodą
-- ✅ Suteikite galimybę atšaukti sutikimą
-- ✅ Duomenys turi būti saugomi tik tiek, kiek reikia
+- ✅ Mokami PDF: el. paštas Stripe checkout; politika – [templates/privacy.html](templates/privacy.html)
+- ✅ Kontaktų forma **neįjungta** — žr. [INTEGRACIJA.md](INTEGRACIJA.md); jei įjungiate vėliau, atnaujinkite privatumą
 
 ### Jautrių Duomenų Valdymas
 - ❌ **NIEKADA** neloginkite jautrių duomenų į browser console production aplinkoje
@@ -81,9 +53,8 @@ Statinių puslapių projektas **Personalas** – DI promptų rinkinys HR atranka
 - ✅ Jei dalijatės kodu, patikrinkite, kad nėra hardcoded verslo duomenų
 
 ### Trečiųjų Šalių Integracijos
-- ✅ Google Sheets integracija - patikrinkite Google privatumo politiką
-- ✅ Jei naudojate EmailJS ar kitas paslaugas, perskaitykite jų duomenų apsaugos politikas
-- ✅ Informuokite vartotojus apie trečiųjų šalių paslaugas
+- ✅ Stripe, Resend, Upstash, Vercel Blob — aprašyta privatumo politikoje
+- ✅ Informuokite vartotojus apie trečiųjų šalių paslaugas, kai keičiate duomenų srautą
 
 ---
 
@@ -212,13 +183,12 @@ Statinių puslapių projektas **Personalas** – DI promptų rinkinys HR atranka
 - **Orchestrator** – koordinacija, prioritetai, užduočių valdymas
 
 ### Workflow
-- Prieš pakeitimus: žr. AGENTS.md workflow seką
-- Prieš PR: naudokite .github/PULL_REQUEST_TEMPLATE.md
-- CI: lint, test, a11y per .github/workflows/ci.yml
+- Prieš pakeitimus: [docs/AGENT_SOT.md](docs/AGENT_SOT.md) + AGENTS.md workflow
+- Prieš PR: `npm test`; CI – `.github/workflows/ci.yml`
 
 ### Feedback Store
-- Grįžtamasis ryšys ir metrikos: žr. feedback-schema.md
-- Šaltiniai: Google Sheets, analytics, QA rezultatai
+- Grįžtamasis ryšys ir metrikos: žr. feedback-schema.md (rezervuota būsimai)
+- Šaltiniai: analytics, QA rezultatai
 
 ---
 
@@ -265,18 +235,13 @@ Statinių puslapių projektas **Personalas** – DI promptų rinkinys HR atranka
 
 ## 🚨 KONKRETŪS PROJEKTO REIKALAVIMAI
 
-### Google Apps Script Integracija
-- ✅ **PRIVALOMA** patikrinti, ar `GOOGLE_SCRIPT_URL` nėra hardcoded production kode
-- ✅ Naudokite placeholder: `'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE'`
-- ✅ Dokumentuokite, kaip nustatyti URL INTEGRACIJA.md faile
-- ✅ Testuokite integraciją su mock duomenimis
+### Mokami PDF / Stripe
+- ✅ Payment Links ir viešos kainos – [config/sot.json](config/sot.json); po pakeitimo `npm run build`
+- ✅ Price ID – env (žr. [DEPLOYMENT.md](DEPLOYMENT.md), [.env.example](.env.example))
+- ✅ Gyvas testas prieš release – [MUST_TODO.md](MUST_TODO.md) QA
 
-### Kontaktų Forma
-- ✅ **PRIVALOMA** email validacija (HTML5 + JavaScript)
-- ✅ Rodykite loading state siunčiant formą
-- ✅ Rodykite success/error pranešimus vartotojui
-- ✅ Reset formą po sėkmingo submit
-- ✅ Accessibility - visi laukai turi labels ir ARIA atributus
+### Kontaktų forma (rezervuota)
+- ⚠️ **Neįjungta** — žr. [INTEGRACIJA.md](INTEGRACIJA.md). Būsimam GAS – placeholder URL, privatumo atnaujinimas.
 
 ### Promptų Funkcionalumas
 - ✅ Kopijavimo funkcija turi veikti visose naršyklėse (fallback)
@@ -355,6 +320,6 @@ Jei kyla klausimų dėl šių taisyklių:
 
 ---
 
-**Paskutinis atnaujinimas:** 2026-05-16  
-**Projekto kalba:** viešas produktas – **anglų (`/en/`)**; agentų dokumentacija ir LT šablonai – LT; SOT – [docs/language-guidelines-en-lt.md](docs/language-guidelines-en-lt.md).  
-**Projekto tipas:** statinė HTML svetainė (build generuoja **`en/index.html`**, **`en/privacy.html`** — EN-only viešam produktui)
+**Paskutinis atnaujinimas:** 2026-05-19  
+**Agentų SOT:** [docs/AGENT_SOT.md](docs/AGENT_SOT.md)  
+**Projekto tipas:** statinė HTML + Vercel `api/` (Stripe PDF fulfillment); build → **`en/`** EN-only

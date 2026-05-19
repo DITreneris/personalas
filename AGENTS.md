@@ -2,7 +2,9 @@
 
 **Projektas:** Personalas 
 **Versija:** 1.0 
-**Šio dokumento kalba:** LT (agentų aprašymas). **Viešas produktas:** **EN-only** (`en-US`, `/en/`); LT puslapiai nebegeneruojami, `/lt/*` URL nukreipiami į `/en/*`. Žr. [docs/language-guidelines-en-lt.md](docs/language-guidelines-en-lt.md).
+**Šio dokumento kalba:** LT (agentų aprašymas). **Viešas produktas:** **EN-only** (`en-US`, `/en/`); LT puslapiai nebegeneruojami, `/lt/*` URL nukreipiami į `/en/*`.
+
+**Agentų operacinis SOT (keliai, build, deploy, brand):** [docs/AGENT_SOT.md](docs/AGENT_SOT.md) — skaityti prieš pakeitimus. Kalbos detalės: [docs/language-guidelines-en-lt.md](docs/language-guidelines-en-lt.md).
 
 ---
 
@@ -88,23 +90,24 @@ ORCHESTRATOR AGENT (koordinacija)
 
 ---
 
-## 6. Komandos (vykdomos prieš merge / lokaliai)
+## 6. Komandos (vykdomas prieš merge / lokaliai)
 
 | Komanda | Paskirtis |
 |---------|-----------|
 | `npm install` | Įdiegti priklausomybes |
-| `npm test` | Struktūros testai + lint (HTML, JS) |
+| `npm run build` | `scripts/build-locale-pages.js` → `en/*`, vartai, sitemap |
+| `npm test` | build + `pdf:validate` + structure + HTML/JS lint (pilna seka – [docs/AGENT_SOT.md](docs/AGENT_SOT.md) §3) |
 | `npm run lint:html` | HTML validacija (šaknies `index.html` – vartai) |
 | `npm run lint:js` | ESLint visiems .js failams |
-| CI (GitHub Actions) | Lint, test, pa11y a11y – automatiškai push/PR |
+| CI (GitHub Actions) | Tas pats `npm test` + pa11y (žr. AGENT_SOT §6) |
 
-Prieš PR įsitikinti, kad `npm test` praeina. A11y tikrinimas – per CI arba lokaliai kaip [DEPLOYMENT.md](DEPLOYMENT.md) (`npx serve -s . -l 3000` ir `pa11y` su `.pa11yrc.json`).
+Prieš PR įsitikinti, kad `npm test` praeina. PDF: `pdf:validate`, `pdf:export`, `pdf:covers` — [docs/AGENT_SOT.md](docs/AGENT_SOT.md).
 
 ---
 
 ## Agentų peržiūra prieš merge
 
-- **Kalbos SOT (viešas produktas = anglų):** žr. [docs/language-guidelines-en-lt.md](docs/language-guidelines-en-lt.md) sekciją *Source of truth (SOT)*. Santrauka: viešas UI ir kanonas – **`/en/`**; šaknies vartai – EN; post-deploy tikrinimas – pirmiausia **`/en/`**; SEO meta ir bendras **`og-default.png`** – anglų; LT šablonai generuoja ir `lt/`, ir `en/`, bet numatytoji patirtis visada EN.
+- **Kalbos SOT (viešas produktas = anglų):** žr. [docs/language-guidelines-en-lt.md](docs/language-guidelines-en-lt.md) ir [docs/AGENT_SOT.md](docs/AGENT_SOT.md). Santrauka: viešas UI – **`/en/`**; build generuoja tik **`en/`**; produkcijoje `/lt/*` → redirect į `/en/*`; LT turinys tik `templates/index-lt.html` (authoring).
 - **Viešas brand + locale:** viešai tik **Prompt Anatomy**, **EN-only** išsiunčiamuose HTML; jokio „Personalas“ / „Series No. 3“ / LT diakritikų — žr. [docs/language-guidelines-en-lt.md](docs/language-guidelines-en-lt.md) (*Viešas prekės ženklas ir locale*).
 - **Repo (vidinis):** Personalas. Dokumentacijoje nenaudoti **„marketingas“**. LT šablone vengti **„biblioteka“**; EN – vengti **„prompt library“** kaip prekės ženklo.
 - **Techninė:** `npm test` privalo praeiti; deploy ir a11y URL – [DEPLOYMENT.md](DEPLOYMENT.md).
@@ -125,6 +128,7 @@ Prieš PR įsitikinti, kad `npm test` praeina. A11y tikrinimas – per CI arba l
 
 ## 8. Susiję dokumentai
 
+- [docs/AGENT_SOT.md](docs/AGENT_SOT.md) – **agentų operacinis SOT** (keliai, build, deploy, brand)
 - [docs/INDEX.md](docs/INDEX.md) – **dokumentacijos indeksas** (vienas įėjimo taškas į visus doc)
 - [.cursorrules](.cursorrules) – projekto taisyklės (saugumas, kokybė, dokumentacija)
 - [docs/DOCUMENTATION.md](docs/DOCUMENTATION.md) – dokumentų valdymas, atsakomybės, archyvavimas
@@ -156,4 +160,4 @@ Keičiant **turinį** – atsakingas Content Agent; keičiant **struktūrą arba
 
 ---
 
-**Paskutinis atnaujinimas:** 2026-05-16
+**Paskutinis atnaujinimas:** 2026-05-19
