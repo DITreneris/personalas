@@ -87,17 +87,24 @@ html {
 
     /* Semantiniai – suderinti su navy + auksu */
     --blue: #3C485A;
-    --blue-light: #E8ECF0;
-    --orange: var(--accent-primary);
-    --orange-light: #EEF2F7;
+    --blue-light: #E8ECF0;                         /* DEPRECATED: use --surface-2 in new code */
+    --orange: var(--accent-primary);               /* DEPRECATED: use --accent-primary in new code */
+    --orange-light: #EEF2F7;                       /* DEPRECATED: use --surface-3 in new code */
     --green: #38A169;
     --green-dark: #2F855A;
     --error: #E53E3E;
     --bg-subtle: #F7FAFC;
 
     /* Community CTA – navy, suderinta su ekosistema */
-    --community-cta-green: var(--accent-primary);
+    --community-cta-green: var(--accent-primary);  /* DEPRECATED: use --cta-primary-bg in new code */
     --community-cta-green-hover: var(--accent-primary-hover);
+
+    /*
+     * Tertiarinė – PA ecosystem accent. SCOPED: info/educational asides only
+     * (.info-box, .info-icon, .faq-panel border-left). Do NOT use for primary
+     * actions or "next steps" — those should be --accent-primary.
+     */
+    /* (--tertiary* tokens defined above stay; this comment documents scope) */
 
     /* Lucide ikonų dydžiai – premium SaaS */
     --icon-size-sm: 16px;
@@ -109,6 +116,60 @@ html {
     --accent: var(--accent-primary);
     --accent-hover: var(--accent-primary-hover);
     --shadow-privacy: var(--shadow-elevated);
+
+    /*
+     * v1 additions — semantic surfaces, focus, missing tokens, type scale.
+     * Newly-authored CSS should consume these (not the deprecated aliases above).
+     */
+
+    /* Semantic surfaces */
+    --surface: var(--white);
+    --surface-0: var(--bg);          /* page background */
+    --surface-1: var(--white);       /* card background */
+    --surface-2: var(--bg-subtle);   /* subtle tint */
+    --surface-3: #EEF2F7;            /* accented tint (gradient stop) */
+
+    /* Text colors */
+    --text-on-accent: #FFFFFF;
+    --text-muted: #6B7280;
+
+    /* Focus + CTA tokens (previously undefined → silent sticky-CTA bug) */
+    --cta-primary-bg: var(--accent-primary);
+    --cta-primary-bg-hover: var(--accent-primary-hover);
+    --ring-focus: 3px solid var(--accent-gold);
+
+    /* Radius aliases (existing values kept; new names map to them) */
+    --r-pill: 999px;
+    --r-sm: 8px;
+    --r-md: var(--r-btn);
+    --r-lg: var(--r-card);
+    --r-xl: 20px;
+    --r-2xl: var(--r-hero);
+
+    /* Spacing extensions */
+    --space-4: 4px;
+    --space-40: 40px;
+    --space-48: 48px;
+    --space-64: 64px;
+
+    /* Reusable gradients + CTA shadow (retire one-off literals) */
+    --gradient-soft: linear-gradient(180deg, var(--white) 0%, var(--bg-subtle) 100%);
+    --gradient-cta-hover: linear-gradient(180deg, #1a4d6e 0%, var(--accent-primary-hover) 100%);
+    --shadow-cta: 0 8px 20px rgba(0, 0, 0, 0.16), 0 2px 6px rgba(0, 0, 0, 0.08);
+
+    /*
+     * Type scale tokens. Declared in v1; existing 60+ raw font-size rules
+     * will migrate in a future sweep PR. New code should reference --fs-*.
+     */
+    --fs-xs: 12px;
+    --fs-sm: 14px;
+    --fs-md: 16px;
+    --fs-lg: 18px;
+    --fs-xl: 20px;
+    --fs-2xl: 24px;
+    --fs-3xl: 28px;
+    --fs-4xl: 36px;
+    --fs-display: 48px;
 }
 
 

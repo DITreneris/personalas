@@ -18,7 +18,7 @@ HTML + CSS source for the two paid Prompt Anatomy HR PDF guides. Output PDFs are
 
 Canonical marketing names (rename when ready): `Beginner_Personalas_HR.pdf`, `Advanced_Personalas_HR.pdf`.
 
-Customer download names (set in [api/_lib/fulfillment.js](../../api/_lib/fulfillment.js)): `personalas-beginner-guide.pdf`, `personalas-advanced-guide.pdf`.
+Customer download names (set in [api/_lib/fulfillment.js](../../api/_lib/fulfillment.js)): `Beginner_HR_Hiring_Guide.pdf`, `Advanced_HR_Hiring_Guide.pdf`.
 
 Production: upload to private storage → `PDF_BEGINNER_SOURCE_URL`, `PDF_ADVANCED_SOURCE_URL` (see [DEPLOYMENT.md](../../DEPLOYMENT.md)).
 

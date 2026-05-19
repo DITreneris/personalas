@@ -43,7 +43,8 @@ module.exports = async function stripeWebhook(req, res) {
   let event;
   try {
     event = stripe.webhooks.constructEvent(rawBody, signature, process.env.STRIPE_WEBHOOK_SECRET);
-  } catch (_error) {
+  } catch (error) {
+    console.error('[stripe-webhook] signature verification failed:', error && error.message ? error.message : error);
     sendJson(res, 400, { error: 'Invalid Stripe signature' });
     return;
   }
@@ -56,7 +57,10 @@ module.exports = async function stripeWebhook(req, res) {
   try {
     const result = await fulfillCheckoutSession(stripe, event.data.object.id, getOrigin(req));
     sendJson(res, 200, { received: true, fulfillment: result.status });
-  } catch (_error) {
-    sendJson(res, 500, { error: 'Fulfillment failed' });
+  } catch (error) {
+    const message = error && error.message ? error.message : String(error);
+    console.error('[stripe-webhook] fulfillment failed for', event.data.object.id, '-', message);
+    if (error && error.stack) console.error(error.stack);
+    sendJson(res, 500, { error: 'Fulfillment failed', detail: message });
   }
 };

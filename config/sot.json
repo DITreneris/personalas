@@ -30,32 +30,44 @@
   "marketing": {
     "seo": {
       "title": "US HR hiring PDF guides + free AI prompts",
-      "metaDescription": "Print-ready HR hiring playbooks from $5.99—scorecards, rubrics, and copy-paste prompts for US teams. Try 10 free prompts on the page. Instant PDF download via Stripe.",
+      "metaDescription": "US HR hiring playbooks from $5.99—checklists, rubrics, and 10 free copy-paste prompts on the page. Instant PDF download.",
       "ogTitle": "HR hiring PDF guides for US teams"
     },
     "hero": {
-      "headline": "Structured US hiring playbooks—<br>AI-assisted, human-reviewed.",
-      "subhead": "Download print-ready PDF guides from $5.99. Try 10 free copy-paste prompts on this page first—no signup, not an ATS.",
+      "headline": "Run a repeatable hiring loop in 6 phases.",
+      "subhead": "Use 10 free prompts on this page. Or buy the PDF playbook from $5.99.",
       "priceTeaser": "Beginner $5.99 · Advanced $11.99 · Instant download",
-      "primaryCtaLabel": "Get PDF guides — from $5.99",
+      "primaryCtaLabel": "See the PDF guides",
       "primaryCtaHref": "#pdf-guides",
-      "secondaryCtaLabel": "Try free prompts",
+      "secondaryCtaLabel": "Try a free prompt",
       "secondaryCtaHref": "#block1",
-      "tertiaryCtaLabel": "How the 6-phase workflow works",
-      "tertiaryCtaHref": "#workflow-overview"
+      "stickyCtaLabel": "PDF guides"
+    },
+    "freeTier": {
+      "label": "Free prompts — copy, paste, replace.",
+      "hint": "10 prompts across the hiring cycle, free on this page."
     },
     "workflowOverview": {
       "title": "How the 6-phase workflow works",
-      "lede": "Free on this page—open any phase when you're ready."
+      "lede": "Open any phase to see the prompts inside."
     },
     "pdfSection": {
       "title": "HR hiring PDF guides",
-      "lede": "Offline playbooks with checklists, rubrics, and expanded prompts—the same system as the free builder, ready to print and share with your team.",
-      "freeBridge": "Not ready to buy? Scroll to free prompts below—or start with Prompt 1."
+      "lede": "Print-ready checklists and rubrics for US HR teams—ready to print and share internally.",
+      "audienceLine": "Built for US HR teams using ChatGPT, Claude, or Gemini.",
+      "freeBridge": "Not ready to buy? <a href=\"#free-prompts-label\">Jump to free prompts</a>—or start with Prompt 1.",
+      "sectionTrustHtml": "Stripe checkout · 14-day refund · Instant email delivery · Personal license — <a href=\"/terms.html#paid-pdf-license\">terms</a>",
+      "beginnerCtaLabel": "Buy Beginner — $5.99",
+      "advancedCtaLabel": "Buy Advanced — $11.99"
+    },
+    "community": {
+      "title": "Want the full Prompt Anatomy training?",
+      "telegramCta": "Join the Telegram community",
+      "appCta": "Open Prompt Anatomy course →"
     }
   },
   "legal": {
-    "metaDescription": "Print-ready HR hiring playbooks from $5.99—scorecards, rubrics, and copy-paste prompts for US teams. Try 10 free prompts on the page. Instant PDF download via Stripe.",
+    "metaDescription": "US HR hiring playbooks from $5.99—checklists, rubrics, and 10 free copy-paste prompts on the page. Instant PDF download.",
     "disclaimerShort": "Educational workflow. Not legal or HR advice. Human review required.",
     "compareStripHtml": "<span>Typical live workshops often list at <strong>$100–$300+</strong></span><span>vs</span><span>Beginner guide <strong>$5.99</strong></span><span>Advanced guide <strong>$11.99</strong></span>",
     "compareStripNote": "Illustrative comparison, not a specific third-party offer."
@@ -71,7 +83,7 @@
     "light": {
       "accent": "#103b5a",
       "accentGold": "#cfa73a",
-      "cta": "#2B6CB0"
+      "cta": "#103b5a"
     }
   },
   "pdfGuides": {
@@ -165,7 +177,7 @@
     "bundle": {
       "id": "bundle-pdf",
       "title": "Both HR Hiring Guides",
-      "subtitle": "Beginner + Advanced — save vs buying separately",
+      "subtitle": "Beginner + Advanced — save when you buy both",
       "price": 15.99,
       "priceWas": 17.98,
       "stripePaymentLink": "https://buy.stripe.com/5kQ6oH660ebz29m39CfjG08",
@@ -191,7 +203,7 @@
     {
       "id": "faq-advanced-transcript",
       "q": "Is the sample debrief transcript in the Advanced guide a real case?",
-      "a": "It's an anonymized composite drawn from real HR debriefs we have facilitated. Names, companies, and identifying details are removed; the protocol moves, score splits, and knockout enforcement reflect actual debrief patterns — that's why we ship it as the page-17 differentiator."
+      "a": "It's an anonymized composite from real HR debrief patterns—names and companies removed. Use it to train hiring managers on structured debriefs and score alignment."
     },
     {
       "id": "faq-lost-email",

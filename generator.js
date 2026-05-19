@@ -256,13 +256,13 @@
         if (textEl) {
             textEl.textContent = phaseCount === 6
                 ? uiText('Puiku – atlikai visas 6 fazes.', 'Great – you\'ve completed all 6 phases.')
-                : uiText('Sistema: ' + phaseCount + ' iš 6 fazių', 'System: ' + phaseCount + ' of 6 phases');
+                : uiText('Sistema: ' + phaseCount + ' iš 6 fazių', 'Progress: ' + phaseCount + ' of 6');
         }
         if (fillEl) fillEl.style.width = (phaseCount / 6 * 100) + '%';
         if (barEl) {
             barEl.setAttribute('aria-valuenow', phaseCount);
             barEl.setAttribute('aria-valuemax', 6);
-            barEl.setAttribute('aria-label', uiText('Progresas: ' + phaseCount + ' iš 6 fazių', 'Progress: ' + phaseCount + ' of 6 phases'));
+            barEl.setAttribute('aria-label', uiText('Progresas: ' + phaseCount + ' iš 6 fazių', 'Progress: ' + phaseCount + ' of 6'));
         }
     }
 
@@ -436,10 +436,13 @@
     };
 
     function trackEvent(name, props) {
-        if (typeof window.plausible !== 'function') return;
-        try {
-            window.plausible(name, { props: props || {} });
-        } catch (_e) { /* ignore */ }
+        var safeProps = props || {};
+        if (typeof window.plausible === 'function') {
+            try { window.plausible(name, { props: safeProps }); } catch (_e) { /* ignore */ }
+        }
+        if (typeof window.va === 'function') {
+            try { window.va('event', Object.assign({ name: name }, safeProps)); } catch (_e) { /* ignore */ }
+        }
     }
 
     function bindAnalyticsClickables(root) {
@@ -545,16 +548,44 @@
         var hero = document.querySelector('.header');
         if (!bar || !pdfSection) return;
 
+        var heroVisible = true;
+        var pdfSectionVisible = false;
+
         function updateBar() {
+            bar.hidden = heroVisible || pdfSectionVisible;
+        }
+
+        if (typeof window.IntersectionObserver === 'function') {
+            var heroObserver = new IntersectionObserver(function(entries) {
+                for (var i = 0; i < entries.length; i += 1) {
+                    heroVisible = entries[i].isIntersecting;
+                }
+                updateBar();
+            }, { threshold: 0 });
+            if (hero) heroObserver.observe(hero);
+
+            var pdfObserver = new IntersectionObserver(function(entries) {
+                for (var i = 0; i < entries.length; i += 1) {
+                    pdfSectionVisible = entries[i].intersectionRatio >= 0.5;
+                }
+                updateBar();
+            }, { threshold: [0, 0.5, 1] });
+            pdfObserver.observe(pdfSection);
+
+            updateBar();
+            return;
+        }
+
+        function updateBarFallback() {
             var heroBottom = hero ? hero.getBoundingClientRect().bottom : 0;
             var pdfTop = pdfSection.getBoundingClientRect().top;
             var show = heroBottom < 0 && pdfTop > window.innerHeight * 0.35;
             bar.hidden = !show;
         }
 
-        updateBar();
-        window.addEventListener('scroll', updateBar, { passive: true });
-        window.addEventListener('resize', updateBar, { passive: true });
+        updateBarFallback();
+        window.addEventListener('scroll', updateBarFallback, { passive: true });
+        window.addEventListener('resize', updateBarFallback, { passive: true });
     }
 
     function initBuyerFaq(config) {

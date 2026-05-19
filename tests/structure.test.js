@@ -42,6 +42,8 @@ function assertPublicEnSurface(label, content) {
   ok = assert(!LT_DIACRITICS.test(content), label + ': no Lithuanian diacritics') && ok;
   ok = assert(!/\bPersonalas\b/.test(content), label + ': no Personalas brand') && ok;
   ok = assert(!/Series No\. 3/i.test(content), label + ': no Series No. 3') && ok;
+  ok = assert(content.includes('/_vercel/insights/script.js'), label + ': Vercel Web Analytics script') && ok;
+  ok = assert(content.includes('/_vercel/speed-insights/script.js'), label + ': Vercel Speed Insights script') && ok;
   return ok;
 }
 
@@ -160,7 +162,14 @@ function run() {
     const roleLocationCount = (enIndex.match(/Role location:/g) || []).length;
     tally(assert(roleLocationCount >= 10, 'en/index.html: role-location placeholders for all prompts'));
     tally(assert(enIndex.includes('Remote – US') && enIndex.includes('Hybrid – New York, NY') && enIndex.includes('On-site – Austin, TX'), 'en/index.html: remote, hybrid, on-site US examples'));
-    tally(assert(enIndex.includes('City, State, optional Zip Code') && enIndex.includes('San Francisco, CA 94105') && enIndex.includes('Seattle, WA 98101'), 'en/index.html: US location format with optional Zip Code'));
+    tally(
+      assert(
+        enIndex.includes('optional <code>Zip Code</code>') &&
+          enIndex.includes('San Francisco, CA 94105') &&
+          enIndex.includes('Seattle, WA 98101'),
+        'en/index.html: US location format with optional Zip Code'
+      )
+    );
     tally(assert(/\$\d{1,3}(,\d{3})*(\.\d{2})?/.test(enIndex), 'en/index.html includes US dollar formatting'));
     tally(assert(enIndex.includes('MM/DD/YYYY'), 'en/index.html includes US date format guidance'));
     tally(assert(enIndex.includes('+1 (415) 555-0198'), 'en/index.html includes US phone format guidance'));
@@ -178,7 +187,7 @@ function run() {
     tally(assert(enIndex.includes('legal-disclaimer') || enIndex.includes('not legal or HR advice'), 'en/index.html HR advisory disclaimer'));
     tally(assert(enIndex.includes('href="privacy.html"'), 'en/index.html privacy link uses privacy.html'));
     const heroBlock = enIndex.match(/<header class="header"[\s\S]*?<\/header>/);
-    tally(assert(heroBlock && heroBlock[0].includes('Get PDF guides'), 'hero primary PDF CTA label'));
+    tally(assert(heroBlock && heroBlock[0].includes('See the PDF guides'), 'hero primary PDF CTA label'));
     tally(
       assert(
         heroBlock &&
@@ -192,7 +201,22 @@ function run() {
     const pdfPos = enIndex.indexOf('id="pdf-guides"');
     const block1Pos = enIndex.indexOf('id="block1"');
     tally(assert(pdfPos !== -1 && block1Pos !== -1 && pdfPos < block1Pos, 'pdf-guides appears before first free prompt'));
-    tally(assert(enIndex.includes('free-tier-label'), 'en/index.html free-tier label before prompts'));
+    const freeLabelPos = enIndex.indexOf('id="free-prompts-label"');
+    tally(assert(freeLabelPos !== -1, 'en/index.html free-prompts-label element'));
+    tally(
+      assert(
+        pdfPos !== -1 && block1Pos !== -1 && freeLabelPos !== -1 && pdfPos < freeLabelPos && freeLabelPos < block1Pos,
+        'free-prompts-label between pdf-guides and first prompt'
+      )
+    );
+    tally(assert(!enIndex.includes('header-tertiary-cta'), 'en/index.html: no hero tertiary CTA'));
+    const objectivesPos = enIndex.indexOf('class="objectives"');
+    tally(
+      assert(
+        objectivesPos !== -1 && pdfPos !== -1 && objectivesPos < pdfPos,
+        'objectives section appears before pdf-guides'
+      )
+    );
     tally(assertPublicEnSurface('en/index.html', enIndex));
     tally(assert(!enIndex.includes('badge-spinoff'), 'en/index.html: no Series badge'));
   }
@@ -260,6 +284,9 @@ function run() {
   tally(assertPublicEnSurface('terms.html', terms));
   tally(assertPublicEnSurface('success.html', success));
   tally(assert(fulfillment && !/\bPersonalas\b/.test(fulfillment), 'fulfillment.js: no customer-facing Personalas in fulfillment emails'));
+  tally(assert(fulfillment && fulfillment.includes("'Beginner_HR_Hiring_Guide.pdf'"), 'fulfillment.js: beginner download filename uses HR brand'));
+  tally(assert(fulfillment && fulfillment.includes("'Advanced_HR_Hiring_Guide.pdf'"), 'fulfillment.js: advanced download filename uses HR brand'));
+  tally(assert(fulfillment && !/personalas-(beginner|advanced)-guide\.pdf/.test(fulfillment), 'fulfillment.js: no LT-prefixed download filenames'));
 
   // --- PDF source HTML ---
   const beginnerPdfHtml = readFile(path.join(ROOT, 'docs', 'pdf-source', 'beginner-personalas-hr.html'));
@@ -410,7 +437,12 @@ function run() {
     tally(assert(enIndex.includes('data-sample-link="beginner"') && enIndex.includes('data-sample-link="advanced"'), 'PDF sample links: both beginner + advanced'));
     tally(assert(enIndex.includes('prompt-anatomy-advanced-scorecard-sample.pdf'), 'en/index.html links advanced sample PDF'));
     tally(assert(enIndex.includes('Personal license') && enIndex.includes('terms.html#paid-pdf-license'), 'PDF personal license line'));
-    tally(assert(enIndex.includes('class="pdf-guide-trust"') && enIndex.includes('Stripe checkout'), 'PDF trust row'));
+    tally(
+      assert(
+        enIndex.includes('id="pdf-section-trust"') && enIndex.includes('Stripe checkout') && enIndex.includes('14-day refund'),
+        'PDF section trust row'
+      )
+    );
     tally(assert(enIndex.includes('id="pdfPreviewDialog"') && enIndex.includes('data-preview-trigger="beginner"'), 'PDF preview dialog'));
     tally(assert(enIndex.includes('id="pdf-guides-faq"') && enIndex.includes('data-buyer-faq-list'), 'Buyer FAQ hook'));
     tally(assert(enIndex.includes('class="pdf-author-panel"') && enIndex.includes('promptanatomy.app'), 'Author panel'));

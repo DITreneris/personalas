@@ -36,102 +36,11 @@
             box-sizing: border-box;
         }
 
-        :root {
-            /* Spin-off Nr. 3 – HR atranka, žalia CTA paletė */
-            --bg: #F7F8FA;
-            --white: #FFFFFF;
-            --text: #1A202C;
-            --text-light: #4A5568;
-            --border: #CBD5E0;
-
-            /* Design tokens – premium SaaS (C-level) */
-            --r-card: 16px;
-            --r-btn: 12px;
-            --r-badge: 10px;
-            --r-hero: 24px;
-            --border-width: 1px;
-            --border-subtle: rgba(203, 213, 224, 0.6);
-            --border-subtle-dark: rgba(60, 72, 90, 0.15);
-            --shadow-soft: 0 2px 8px rgba(60, 72, 90, 0.06), 0 1px 2px rgba(60, 72, 90, 0.04);
-            --shadow-medium: 0 4px 16px rgba(60, 72, 90, 0.08), 0 2px 4px rgba(60, 72, 90, 0.04);
-            --shadow-elevated: 0 10px 30px rgba(0, 0, 0, 0.06), 0 4px 12px rgba(0, 0, 0, 0.03);
-            --shadow-card: var(--shadow-soft);
-            --shadow-card-hover: var(--shadow-medium);
-            --space-8: 8px;
-            --space-12: 12px;
-            --space-16: 16px;
-            --space-20: 20px;
-            --space-24: 24px;
-            --space-28: 28px;
-            --space-32: 32px;
-
-            /* Motion – C-level (nuoseklus ritmas) */
-            --duration-fast: 150ms;
-            --duration-normal: 250ms;
-            --duration-slow: 400ms;
-            --ease-out: cubic-bezier(0.33, 1, 0.68, 1);
-            --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
-
-            /* Tipografija – leading */
-            --leading-tight: 1.25;
-            --leading-normal: 1.5;
-            --leading-relaxed: 1.6;
-
-            /* Pagrindinis akcentas – PA navy; WCAG2AA 11.5:1 ant balto */
-            --accent-primary: #103b5a;
-            --accent-primary-hover: #0b1320;
-            --accent-gold: #cfa73a;
-            --accent-gold-dark: #b8922f;
-
-            /* Antrinis akcentas (tamsiai pilka) – outline mygtukai, body antraštės */
-            --accent-dark: #3C485A;
-            --accent-dark-hover: #2D3848;
-
-            /* Hero: navy gradientas – PA ekosistemos kalba, autoritetingas SaaS */
-            --hero-gradient-start: #0b1320;
-            --hero-gradient-mid: #103b5a;
-            --hero-gradient-end: #1f5e88;
-            --cta-bg: var(--accent-primary);
-            --cta-text: #FFFFFF;
-            --cta-hover: var(--accent-primary-hover);
-
-            /* Hero pagrindinis CTA – baltas mygtukas, navy tekstas */
-            --cta-hero-bg: #FFFFFF;
-            --cta-hero-text: #103b5a;
-            --cta-hero-hover-bg: #EEF2F7;
-            --cta-hero-hover-text: #0b1320;
-
-            /* Prompt Anatomy (motina) – frontend/src/index.css @theme + favicon gradient */
-            --brand-prompt-anatomy-dark: #0b1320;
-            --brand-prompt-anatomy: #103b5a;
-            --brand-prompt-anatomy-accent: #cfa73a;
-            --brand-prompt-anatomy-accent-hover: #e8b93c;
-
-            /* Tertiarinė – PA ekosistemos akcentas (--color-ecosystem-1), ne HR žalia */
-            --tertiary: #2e9e7e;
-            --tertiary-dark: #1f6d5c;
-            --tertiary-hover: #27856d;
-            --tertiary-light: #e8f5f1;
-
-            /* Semantiniai – suderinti su navy + auksu */
-            --blue: #3C485A;
-            --blue-light: #E8ECF0;
-            --orange: var(--accent-primary);
-            --orange-light: #EEF2F7;
-            --green: #38A169;
-            --green-dark: #2F855A;
-            --error: #E53E3E;
-            --bg-subtle: #F7FAFC;
-
-            /* Community CTA – navy, suderinta su ekosistema */
-            --community-cta-green: var(--accent-primary);
-            --community-cta-green-hover: var(--accent-primary-hover);
-
-            /* Lucide ikonų dydžiai – premium SaaS */
-            --icon-size-sm: 16px;
-            --icon-size-md: 20px;
-            --icon-size-lg: 24px;
-        }
+        /*
+         * Tokens consumed from assets/styles.css (linked above).
+         * Do NOT redeclare :root here — keep this file as page-specific
+         * component rules only. v1 cleanup, see docs/AGENT_SOT.md.
+         */
 
         /* Lucide ikonos – nuoseklus stilius */
         .icon {
@@ -430,7 +339,7 @@
         .header .header-cta .cta-button {
             background: var(--cta-hero-bg);
             color: var(--cta-hero-text);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16), 0 2px 6px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+            box-shadow: var(--shadow-cta), inset 0 1px 0 rgba(255, 255, 255, 0.95);
             border: 1px solid rgba(0, 0, 0, 0.08);
             min-height: 56px;
             padding: 28px 48px;
@@ -442,12 +351,12 @@
         .header .header-cta .cta-button:hover {
             background: var(--cta-hero-hover-bg);
             color: var(--cta-hero-hover-text);
-            transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14), 0 4px 10px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 1);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-cta), inset 0 1px 0 rgba(255, 255, 255, 1);
         }
 
         .header .header-cta .cta-button:active {
-            transform: translateY(0) scale(0.98);
+            transform: translateY(0);
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
 
@@ -501,8 +410,8 @@
             align-items: center;
             justify-content: center;
             gap: var(--space-12);
-            background: transparent;
-            color: var(--white);
+            background: rgba(255, 255, 255, 0.06);
+            color: rgba(255, 255, 255, 0.95);
             padding: 20px var(--space-32);
             min-height: 44px;
             min-width: 44px;
@@ -511,23 +420,21 @@
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: background var(--duration-normal) var(--ease-out), border-color var(--duration-normal) var(--ease-out), color var(--duration-normal) var(--ease-out), transform var(--duration-fast) var(--ease-out);
             text-decoration: none;
             outline: none;
-            opacity: 0.7;
         }
 
         .header .header-cta .cta-button-outline:hover,
         .header .header-cta .cta-button-outline:focus-visible {
             background: rgba(255, 255, 255, 0.14);
-            border-color: rgba(255, 255, 255, 0.55);
+            border-color: rgba(255, 255, 255, 0.7);
             color: var(--white);
         }
 
         .cta-button-outline:hover,
         .cta-button-outline:focus-visible {
-            opacity: 1;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.14);
             border-color: var(--white);
             color: var(--white);
         }
@@ -1013,6 +920,58 @@
             margin-bottom: var(--space-12);
         }
 
+        .jump-nav-summary {
+            list-style: none;
+            cursor: pointer;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            gap: var(--space-8) var(--space-12);
+            padding: 0;
+            margin-bottom: var(--space-16);
+            min-height: 44px;
+            user-select: none;
+            position: relative;
+        }
+
+        .jump-nav-summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .jump-nav-summary::after {
+            content: '';
+            margin-left: auto;
+            width: 10px;
+            height: 10px;
+            border-right: 2px solid var(--accent-dark);
+            border-bottom: 2px solid var(--accent-dark);
+            transform: rotate(45deg);
+            transition: transform var(--duration-normal) var(--ease-out);
+            flex-shrink: 0;
+            align-self: center;
+        }
+
+        .jump-nav[open] .jump-nav-summary::after {
+            transform: rotate(-135deg);
+        }
+
+        .jump-nav-summary:focus-visible {
+            outline: 3px solid var(--accent-gold);
+            outline-offset: 2px;
+        }
+
+        .jump-nav-summary-label {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--accent-dark);
+        }
+
+        .jump-nav-summary-hint {
+            font-size: 15px;
+            color: var(--text-light);
+            line-height: 1.5;
+        }
+
         .jump-nav-intro {
             font-size: 15px;
             color: var(--text-light);
@@ -1056,7 +1015,7 @@
 
         /* ===== LEARNING OBJECTIVES (M1) – elevation, premium ritmas ===== */
         .objectives {
-            background: linear-gradient(180deg, var(--white) 0%, #FAFBFC 100%);
+            background: var(--gradient-soft);
             border: 1px solid var(--border-subtle);
             border-radius: var(--r-card);
             padding: var(--space-28) var(--space-32);
@@ -1107,8 +1066,8 @@
             width: 28px;
             height: 28px;
             border-radius: 50%;
-            background: linear-gradient(145deg, var(--green) 0%, var(--green-dark) 100%);
-            box-shadow: 0 2px 6px rgba(56, 161, 105, 0.4), 0 1px 0 rgba(255, 255, 255, 0.3) inset;
+            background: linear-gradient(145deg, var(--accent-gold) 0%, var(--accent-gold-dark) 100%);
+            box-shadow: 0 2px 6px rgba(207, 167, 58, 0.35), 0 1px 0 rgba(255, 255, 255, 0.3) inset;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
@@ -1129,7 +1088,7 @@
         }
 
         .objectives li:hover::before {
-            box-shadow: 0 4px 10px rgba(56, 161, 105, 0.45);
+            box-shadow: 0 4px 10px rgba(207, 167, 58, 0.4);
             transform: scale(1.05);
         }
 
@@ -1222,7 +1181,9 @@
         }
 
         /* Viduje fazės kortelės fazės numeris / pavadinimas nebėra kartojamas – pakanka fazės header */
-        .phase-body .prompt .number {
+        /* v1: hide PHASE badge on all prompt cards — phase context is
+         * already shown by the workflow chips at the top of the page. */
+        .prompt .number {
             display: none;
         }
         .phase-body .prompt .category {
@@ -1235,9 +1196,9 @@
             min-height: 40px;
             display: inline-flex;
             align-items: center;
-            background: var(--tertiary-light);
-            color: var(--tertiary-dark);
-            border: var(--border-width) solid rgba(46, 158, 126, 0.35);
+            background: var(--blue-light);
+            color: var(--accent-dark);
+            border: var(--border-width) solid var(--border-subtle);
             border-radius: var(--r-badge);
             font-size: 12px;
             font-weight: 700;
@@ -1340,80 +1301,84 @@
         }
 
         /* Info box – subtilus tint, small caps title, icon su circle */
+        /* v1: info-box flattened from card-in-card to a single inline italic
+         * helper line. Markup preserved (icon/strong/p) for backward
+         * compatibility; visual chrome and the icon circle are removed. */
         .info-box {
-            background: rgba(204, 251, 241, 0.4);
-            border: 1px solid rgba(46, 158, 126, 0.12);
-            border-radius: var(--r-btn);
-            padding: var(--space-24) var(--space-24);
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            padding: 0;
+            margin-top: var(--space-12);
             display: flex;
             flex-direction: column;
             gap: 0;
         }
 
         .info-item {
-            display: flex;
-            gap: 16px;
-            align-items: flex-start;
+            display: block;
+            font-style: italic;
+            color: var(--text-light);
+            line-height: 1.5;
         }
 
         .info-item + .info-item {
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(46, 158, 126, 0.15);
+            margin-top: 6px;
+            padding-top: 0;
+            border-top: none;
         }
 
         .info-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            width: 32px;
-            height: 32px;
-            min-width: 32px;
-            min-height: 32px;
-            border-radius: 50%;
-            background: rgba(46, 158, 126, 0.15);
+            display: none;
         }
         .info-icon .icon {
             color: var(--tertiary-dark);
         }
 
         .info-item .info-content {
-            flex: 1;
-            min-width: 0;
+            display: inline;
         }
 
         .info-content strong {
-            display: block;
-            font-size: 12px;
+            display: inline;
+            font-size: 14px;
             font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            color: var(--tertiary-dark);
-            margin-bottom: 6px;
+            text-transform: none;
+            letter-spacing: 0;
+            color: var(--text);
+            margin-bottom: 0;
+            margin-right: 6px;
+            font-style: normal;
         }
 
         .info-content p {
-            font-size: 15px;
-            line-height: 1.6;
-            color: var(--text);
+            display: inline;
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--text-light);
             font-weight: 400;
         }
 
         .info-item-replace .info-content {
-            font-size: 15px;
+            font-size: 14px;
         }
 
         .info-item-replace .info-content strong {
-            font-size: 11px;
-            margin-bottom: 4px;
+            font-size: 14px;
+            margin-bottom: 0;
         }
 
         /* ===== BUTTON ===== */
+        /* v1: footer is a single flex row so the Copy button and
+         * "Mark as done" checkbox sit on one line (instead of stacking). */
         .prompt-footer {
             padding: var(--space-24) var(--space-32);
             background: var(--bg-subtle);
             border-top: var(--border-width) solid var(--border-subtle);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: var(--space-16);
         }
 
         .btn {
@@ -1442,7 +1407,7 @@
         }
 
         .btn:hover {
-            background: linear-gradient(180deg, #1a4d6e 0%, var(--cta-hover) 100%);
+            background: var(--gradient-cta-hover);
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(16, 59, 90, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
         }
@@ -1453,13 +1418,13 @@
         }
 
         .btn.success {
-            background: var(--green);
-            box-shadow: 0 4px 12px rgba(56, 161, 105, 0.3), 0 0 0 2px var(--green);
+            background: var(--accent-primary);
+            box-shadow: 0 4px 12px rgba(16, 59, 90, 0.3), 0 0 0 2px var(--accent-primary);
             transition: box-shadow 0.3s var(--ease-out), background var(--duration-normal) var(--ease-out);
         }
 
         .btn.success:hover {
-            background: var(--green-dark);
+            background: var(--accent-primary-hover);
         }
 
         .prompt-cta {
@@ -1470,10 +1435,10 @@
         }
 
         .prompt-done-wrap {
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: 10px;
-            margin-top: 16px;
+            margin: 0 0 0 auto;
             cursor: pointer;
             font-size: 15px;
             font-weight: 600;
@@ -1487,7 +1452,7 @@
             height: 22px;
             min-width: 22px;
             min-height: 22px;
-            accent-color: var(--green);
+            accent-color: var(--accent-primary);
         }
         .prompt-done-wrap input:focus-visible {
             outline: 3px solid var(--accent-gold);
@@ -1633,9 +1598,11 @@
         }
 
         /* ===== KAS TOLIAU (S2) ===== */
+        /* v1: --tertiary green demoted from primary action surfaces.
+         * --tertiary stays scoped to info contexts (.info-box, .faq-panel). */
         .next-steps {
             background: var(--white);
-            border: var(--border-width) solid rgba(46, 158, 126, 0.28);
+            border: var(--border-width) solid var(--border-subtle);
             border-radius: var(--r-card);
             padding: var(--space-24) var(--space-32);
             margin-bottom: var(--space-32);
@@ -1645,7 +1612,7 @@
         .next-steps h2 {
             font-size: 22px;
             font-weight: 800;
-            color: var(--tertiary);
+            color: var(--accent-primary);
             margin-bottom: 16px;
         }
 
@@ -1668,7 +1635,7 @@
             padding: 16px 18px;
             min-height: 44px;
             line-height: 24px;
-            background: var(--tertiary); /* PA ecosystem-1; WCAG2AA su baltu tekstu */
+            background: var(--cta-primary-bg);
             color: white;
             text-decoration: none;
             border-radius: var(--r-btn);
@@ -1678,7 +1645,7 @@
         }
 
         .next-steps-links a:hover {
-            background: var(--tertiary-dark);
+            background: var(--cta-primary-bg-hover);
         }
 
         .next-steps-links a:focus-visible {
@@ -1747,7 +1714,7 @@
         .pdf-guides {
             margin-top: var(--space-32);
             padding: var(--space-24) var(--space-32);
-            background: var(--white, #fff);
+            background: var(--surface-1);
             border: var(--border-width) solid var(--border-subtle);
             border-radius: var(--r-card);
             box-shadow: var(--shadow-card);
@@ -1767,24 +1734,24 @@
         .pdf-compare-note { font-size: 0.8rem; color: var(--text-light); margin: 0 0 var(--space-16); }
         .pdf-guides-lede {
             margin: 0 0 var(--space-20);
-            color: var(--text-light, #4A5568);
+            color: var(--text-light);
         }
         .pdf-guides-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: var(--space-16, 16px);
+            gap: var(--space-16);
         }
         .pdf-guide-card {
             border: var(--border-width) solid var(--border-subtle);
             border-radius: var(--r-card);
-            padding: var(--space-20, 20px);
-            background: var(--surface, #fff);
+            padding: var(--space-20);
+            background: var(--surface-1);
             display: flex;
             flex-direction: column;
             gap: 8px;
         }
         .pdf-guide-card--featured {
-            border-color: var(--brand-prompt-anatomy, #2B6CB0);
+            border-color: var(--brand-prompt-anatomy);
             box-shadow: 0 4px 12px rgba(43, 108, 176, 0.08);
         }
         .pdf-guide-card h3 {
@@ -1793,7 +1760,7 @@
         }
         .pdf-guide-desc {
             margin: 0;
-            color: var(--text-light, #4A5568);
+            color: var(--text-light);
             font-size: 0.95rem;
         }
         .pdf-guide-price {
@@ -1802,14 +1769,14 @@
         }
         .pdf-guide-price-old {
             text-decoration: line-through;
-            color: var(--text-light, #4A5568);
+            color: var(--text-light);
             margin-right: 8px;
             font-weight: 500;
         }
         .pdf-guide-price-new {
             font-weight: 700;
             font-size: 1.25rem;
-            color: var(--text, #1A202C);
+            color: var(--text);
         }
         .pdf-guide-cta {
             display: inline-flex;
@@ -1817,21 +1784,21 @@
             justify-content: center;
             margin-top: auto;
             padding: 12px 18px;
-            background: var(--community-cta-green, #2B6CB0);
-            color: var(--white, #fff);
+            background: var(--community-cta-green);
+            color: var(--surface-1);
             text-decoration: none;
-            border-radius: var(--r-btn, 10px);
+            border-radius: var(--r-btn);
             font-weight: 600;
             min-height: 44px;
         }
         .pdf-guide-cta:focus-visible {
-            outline: 3px solid var(--brand-prompt-anatomy, #2B6CB0);
+            outline: 3px solid var(--brand-prompt-anatomy-accent);
             outline-offset: 2px;
         }
         .pdf-guides-meta {
-            margin-top: var(--space-16, 16px);
+            margin-top: var(--space-16);
             font-size: 0.9rem;
-            color: var(--text-light, #4A5568);
+            color: var(--text-light);
         }
         .pdf-guides-meta a { font-weight: 600; }
         .pdf-guides-intro { margin: 0 0 var(--space-16); color: var(--text-light); font-size: 0.95rem; }
@@ -1867,6 +1834,9 @@
         .pdf-guide-trust-line { font-size: 0.85rem; color: var(--text-light); margin: 0; font-weight: 500; }
         .pdf-guide-sample { font-size: 0.85rem; margin: 0; }
         .pdf-guide-sample a { font-weight: 600; }
+        .pdf-guide-actions-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; margin: 0; }
+        .pdf-guide-sample-link { font-size: 0.85rem; font-weight: 600; color: var(--brand-prompt-anatomy); text-decoration: underline; text-underline-offset: 3px; min-height: 44px; display: inline-flex; align-items: center; }
+        .pdf-guide-sample-link:focus-visible { outline: 3px solid var(--brand-prompt-anatomy-accent); outline-offset: 2px; border-radius: 4px; }
         .pdf-guide-toc-details { font-size: 0.85rem; color: var(--text-light); }
         .pdf-guide-toc-summary { cursor: pointer; font-weight: 600; color: var(--text); }
         .pdf-bundle-offer { margin: var(--space-24) 0; padding: var(--space-20); border: 2px solid var(--brand-prompt-anatomy-accent); border-radius: var(--r-card); background: var(--surface); text-align: center; }
@@ -1874,7 +1844,24 @@
         .pdf-bundle-lede { margin: 0 0 12px; color: var(--text-light); }
         .pdf-sticky-cta { position: fixed; bottom: 0; left: 0; right: 0; z-index: 40; padding: 10px 16px 14px; background: rgba(247, 248, 250, 0.96); border-top: 1px solid var(--border-subtle); box-shadow: 0 -4px 16px rgba(15, 23, 42, 0.08); text-align: center; }
         .pdf-sticky-cta-btn { display: inline-block; width: min(100%, 22rem); padding: 12px 20px; background: var(--cta-primary-bg); color: #fff; font-weight: 700; text-decoration: none; border-radius: var(--r-btn); min-height: 44px; line-height: 1.3; }
-        .free-tier-label { font-size: 0.95rem; color: var(--text-light); margin: var(--space-24) 0 var(--space-16); font-weight: 600; }
+        .free-tier-band {
+            background: var(--bg-subtle);
+            border-radius: var(--r-card);
+            padding: var(--space-24);
+            margin: var(--space-32) 0 var(--space-24);
+            border: 1px solid var(--border-subtle);
+        }
+        .free-tier-label { font-size: 1.1rem; color: var(--text); margin: 0 0 var(--space-8); font-weight: 700; }
+        .free-tier-hint { font-size: 0.95rem; color: var(--text-light); margin: 0; line-height: 1.5; }
+        .pdf-meta-muted { font-size: 0.85rem; color: var(--text-light); line-height: 1.5; }
+        .pdf-section-trust { margin: var(--space-16) 0; }
+        .instructions-format-tips { margin-top: var(--space-16); }
+        .instructions-format-tips summary {
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--accent-primary);
+            padding: var(--space-8) 0;
+        }
 
         /* ===== BENDRUOMENĖ (puslapio pabaiga) ===== */
         .community {
@@ -1956,6 +1943,30 @@
         .community-cta-secondary:focus-visible {
             outline: 3px solid var(--brand-prompt-anatomy-accent);
             outline-offset: 2px;
+        }
+
+        /* v1: Telegram demoted from button to inline text link beneath primary CTA. */
+        .community-secondary-link {
+            margin: var(--space-16) 0 0;
+            font-size: 15px;
+            color: var(--text-light);
+        }
+
+        .community-secondary-link a {
+            color: var(--accent-primary);
+            font-weight: 600;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        .community-secondary-link a:hover {
+            color: var(--accent-primary-hover);
+        }
+
+        .community-secondary-link a:focus-visible {
+            outline: 3px solid var(--accent-gold);
+            outline-offset: 2px;
+            border-radius: 4px;
         }
 
         /* ===== FOOTER ===== */
@@ -2369,6 +2380,8 @@
             }
         }
     </style>
+    <script defer src="/_vercel/insights/script.js"></script>
+    <script defer src="/_vercel/speed-insights/script.js"></script>
 </head>
 <body>
     <a href="#main-content" class="skip-link">Pereiti prie turinio</a>
@@ -2383,16 +2396,24 @@
             <h1>{{SOT_HERO_HEADLINE}}</h1>
             <p>{{SOT_HERO_SUBHEAD}}</p>
             <p class="hero-price-teaser">{{SOT_HERO_PRICE_TEASER}}</p>
-            <p class="legal-disclaimer" data-sot-disclaimer role="note">{{SOT_DISCLAIMER}}</p>
             <div class="header-cta">
-                <a href="{{SOT_HERO_PRIMARY_CTA_HREF}}" class="cta-button" aria-label="Get PDF guides">{{SOT_HERO_PRIMARY_CTA_LABEL}}</a>
+                <a href="{{SOT_HERO_PRIMARY_CTA_HREF}}" class="cta-button" aria-label="See the PDF guides">{{SOT_HERO_PRIMARY_CTA_LABEL}}</a>
                 <a href="{{SOT_HERO_SECONDARY_CTA_HREF}}" class="cta-button-outline">{{SOT_HERO_SECONDARY_CTA_LABEL}}</a>
-                <a href="{{SOT_HERO_TERTIARY_CTA_HREF}}" class="cta-button-outline header-tertiary-cta">{{SOT_HERO_TERTIARY_CTA_LABEL}}</a>
                 <div class="lt-only-qa-nav" role="navigation" aria-label="Vieša JAV versija (EN)">
                     <a href="en/" class="cta-button-outline header-us-product-link">JAV svetainė (EN)</a>
                 </div>
             </div>
         </header>
+
+        <section class="objectives" aria-labelledby="objectives-title">
+            <h2 id="objectives-title"><span class="icon-wrap" aria-hidden="true"><i data-lucide="target" class="icon icon--md"></i></span> Ką ši sistema padeda išspręsti</h2>
+            <ul>
+                <li><strong>Nulinis srautas?</strong> Sugeneruokite pritraukiančius skelbimus ir paieškos žinutes.</li>
+                <li><strong>Netinkami žmonės?</strong> Tiksliai apibrėžkite profilį ir atsirinkite geriausius.</li>
+                <li><strong>Lėtas tempas?</strong> Identifikuokite „butelio kakliuką“ per 5 minutes.</li>
+                <li><strong>Prarandami talentai?</strong> Pateikite pasiūlymą, kurio neįmanoma atsisakyti.</li>
+            </ul>
+        </section>
 
         <section class="workflow-overview" id="workflow-overview" aria-labelledby="workflow-overview-title">
             <h2 id="workflow-overview-title">{{SOT_WORKFLOW_TITLE}}</h2>
@@ -2413,7 +2434,7 @@
 
             <p class="pdf-guides-lede">{{SOT_PDF_SECTION_LEDE}}</p>
 
-            <p class="pdf-guides-intro">Shaped for US HR teams running structured hiring with ChatGPT, Claude, or Gemini.</p>
+            <p class="pdf-guides-intro">{{SOT_PDF_SECTION_AUDIENCE}}</p>
 
 <div class="pdf-compare-strip" data-sot-compare-strip>{{SOT_COMPARE_STRIP}}</div>
 
@@ -2423,13 +2444,9 @@
 
                 <blockquote class="pdf-testimonial">“Cut our time-to-first-interview plan from ad hoc notes to one rubric the whole panel uses.”<cite>Pilot HR generalist · Midwest US</cite></blockquote>
 
-                <blockquote class="pdf-testimonial">“The kickoff checklist stopped us from skipping the ideal-candidate profile step.”<cite>Pilot recruiter · Northeast US</cite></blockquote>
-
-                <blockquote class="pdf-testimonial">“Used the Advanced debrief protocol in hiring manager training.”<cite>Pilot HRBP · West Coast US</cite></blockquote>
-
             </div>
 
-            <p class="pdf-compare-note">Quotes paraphrased from pilot feedback; identifiers redacted.</p>
+            <p class="pdf-compare-note pdf-meta-muted">Quote paraphrased from pilot feedback; identifier redacted.</p>
 
             <div class="pdf-guides-grid">
 
@@ -2451,10 +2468,6 @@
 
                         <ul class="pdf-guide-highlights" data-guide-highlights="beginner" aria-label="Key contents"></ul>
 
-                        <p class="pdf-guide-trust-line">Share within your HR team · prompts avoid candidate PII</p>
-
-                        <p class="pdf-guide-sample"><a href="/assets/samples/prompt-anatomy-hiring-kickoff-sample.pdf" data-sample-link="beginner" target="_blank" rel="noopener">Download 1-page sample (PDF)</a></p>
-
                         <details class="pdf-guide-toc-details">
 
                             <summary class="pdf-guide-toc-summary"><strong>What’s inside</strong> <span data-toc-count="beginner">11 sections</span></summary>
@@ -2465,17 +2478,12 @@
 
                         <p class="pdf-guide-price-row"><span class="pdf-guide-price-old" aria-label="Was">$15.99</span><span class="pdf-guide-price-new">$5.99</span></p>
 
-                        <button type="button" class="pdf-guide-preview-btn" data-preview-trigger="beginner" data-analytics="pdf_preview_open">Preview sample pages</button>
+                        <div class="pdf-guide-actions-row">
+                            <a class="pdf-guide-sample-link" href="/assets/samples/prompt-anatomy-hiring-kickoff-sample.pdf" data-sample-link="beginner" target="_blank" rel="noopener">Download 1-page sample (PDF)</a>
+                            <button type="button" class="pdf-guide-preview-btn" data-preview-trigger="beginner" data-analytics="pdf_preview_open">Preview sample pages</button>
+                        </div>
 
-                        <p class="pdf-guide-license">Personal license. Use within your HR team. Do not redistribute. <a href="/terms.html#paid-pdf-license">Full license</a>.</p>
-
-                        <a class="pdf-guide-cta" href="https://buy.stripe.com/REPLACE_BEGINNER_PAYMENT_LINK" rel="noopener" data-product="beginner-pdf" data-analytics="pdf_cta_click" aria-label="Buy Beginner PDF Guide for $5.99">Download PDF for $5.99</a>
-
-                        <p class="pdf-guide-trust">Stripe checkout · Visa · Mastercard · Amex · Apple Pay · 256-bit SSL</p>
-
-                        <p class="pdf-guide-refund">14-day no-questions refund. Reply to your receipt email.</p>
-
-                        <p class="pdf-guide-promise">Instant delivery. Email link + success page download. Valid 7 days — we resend on request.</p>
+                        <a class="pdf-guide-cta" href="https://buy.stripe.com/REPLACE_BEGINNER_PAYMENT_LINK" rel="noopener" data-product="beginner-pdf" data-analytics="pdf_cta_click" aria-label="Buy Beginner PDF Guide for $5.99">{{SOT_PDF_BEGINNER_CTA}}</a>
 
                     </div>
 
@@ -2499,10 +2507,6 @@
 
                         <ul class="pdf-guide-highlights" data-guide-highlights="advanced" aria-label="Key contents"></ul>
 
-                        <p class="pdf-guide-trust-line">Share within your HR team · prompts avoid candidate PII</p>
-
-                        <p class="pdf-guide-sample"><a href="/assets/samples/prompt-anatomy-advanced-scorecard-sample.pdf" data-sample-link="advanced" target="_blank" rel="noopener">Download 1-page sample (PDF)</a></p>
-
                         <details class="pdf-guide-toc-details">
 
                             <summary class="pdf-guide-toc-summary"><strong>What’s inside</strong> <span data-toc-count="advanced">23 sections</span></summary>
@@ -2513,17 +2517,12 @@
 
                         <p class="pdf-guide-price-row"><span class="pdf-guide-price-old" aria-label="Was">$22.99</span><span class="pdf-guide-price-new">$11.99</span></p>
 
-                        <button type="button" class="pdf-guide-preview-btn" data-preview-trigger="advanced" data-analytics="pdf_preview_open">Preview sample pages</button>
+                        <div class="pdf-guide-actions-row">
+                            <a class="pdf-guide-sample-link" href="/assets/samples/prompt-anatomy-advanced-scorecard-sample.pdf" data-sample-link="advanced" target="_blank" rel="noopener">Download 1-page sample (PDF)</a>
+                            <button type="button" class="pdf-guide-preview-btn" data-preview-trigger="advanced" data-analytics="pdf_preview_open">Preview sample pages</button>
+                        </div>
 
-                        <p class="pdf-guide-license">Personal license. Use within your HR team. Do not redistribute. <a href="/terms.html#paid-pdf-license">Full license</a>.</p>
-
-                        <a class="pdf-guide-cta" href="https://buy.stripe.com/REPLACE_ADVANCED_PAYMENT_LINK" rel="noopener" data-product="advanced-pdf" data-analytics="pdf_cta_click" aria-label="Buy Advanced PDF Guide for $11.99">Download PDF for $11.99</a>
-
-                        <p class="pdf-guide-trust">Stripe checkout · Visa · Mastercard · Amex · Apple Pay · 256-bit SSL</p>
-
-                        <p class="pdf-guide-refund">14-day no-questions refund. Reply to your receipt email.</p>
-
-                        <p class="pdf-guide-promise">Instant delivery. Email link + success page download. Valid 7 days — we resend on request.</p>
+                        <a class="pdf-guide-cta" href="https://buy.stripe.com/REPLACE_ADVANCED_PAYMENT_LINK" rel="noopener" data-product="advanced-pdf" data-analytics="pdf_cta_click" aria-label="Buy Advanced PDF Guide for $11.99">{{SOT_PDF_ADVANCED_CTA}}</a>
 
                     </div>
 
@@ -2531,9 +2530,13 @@
 
             </div>
 
+            <p class="pdf-guide-trust pdf-section-trust pdf-meta-muted" id="pdf-section-trust">{{SOT_PDF_SECTION_TRUST}}</p>
+
+            <p class="pdf-guide-trust-line pdf-meta-muted">Share within your HR team · prompts avoid candidate PII</p>
+
             <article class="pdf-bundle-offer" id="pdf-bundle-offer" data-bundle-offer hidden>
 
-                <h3>Both guides — save vs separate checkout</h3>
+                <h3>Buy both guides and save</h3>
 
                 <p class="pdf-bundle-lede">Get the 16-page Beginner and 32-page Advanced playbooks in one purchase.</p>
 
@@ -2565,6 +2568,8 @@
 
             <p class="pdf-guides-meta">Secure download links delivered to your billing email. <a href="/terms.html#paid-pdf-license">License terms</a>.</p>
 
+            <p class="legal-disclaimer pdf-meta-muted" data-sot-disclaimer role="note">{{SOT_DISCLAIMER}}</p>
+
         </section>
 
 
@@ -2589,68 +2594,61 @@
 
         <div class="pdf-sticky-cta" id="pdfStickyCta" role="region" aria-label="Quick link to PDF guides" hidden>
 
-            <a href="#pdf-guides" class="pdf-sticky-cta-btn" data-analytics="pdf_sticky_cta_click">Get PDF guides — from $5.99</a>
+            <a href="#pdf-guides" class="pdf-sticky-cta-btn" data-analytics="pdf_sticky_cta_click">{{SOT_HERO_STICKY_CTA_LABEL}}</a>
 
         </div>
 
 
-<!-- KĄ ŠI SISTEMA PADEDA IŠSPRĘSTI -->
-        <section class="objectives" aria-labelledby="objectives-title">
-            <h2 id="objectives-title"><span class="icon-wrap" aria-hidden="true"><i data-lucide="target" class="icon icon--md"></i></span> Ką ši sistema padeda išspręsti</h2>
-            <p class="objectives-intro">Ji skirta tam, kad nustotumėte švaistyti laiką „tuščioms“ paieškoms!</p>
-            <ul>
-                <li><strong>Nulinis srautas?</strong> Sugeneruokite pritraukiančius skelbimus ir paieškos žinutes.</li>
-                <li><strong>Netinkami žmonės?</strong> Tiksliai apibrėžkite profilį ir atsirinkite geriausius.</li>
-                <li><strong>Lėtas tempas?</strong> Identifikuokite „butelio kakliuką“ per 5 minutes.</li>
-                <li><strong>Prarandami talentai?</strong> Pateikite pasiūlymą, kurio neįmanoma atsisakyti.</li>
-            </ul>
-        </section>
+        <div class="free-tier-band" id="free-prompts-band">
+            <p class="free-tier-label" id="free-prompts-label">{{SOT_FREE_TIER_LABEL}}</p>
+            <p class="free-tier-hint">{{SOT_FREE_TIER_HINT}}</p>
+        </div>
 
         <!-- INSTRUCTIONS -->
         <section class="instructions" aria-labelledby="instructions-title">
             <h2 class="instructions-title" id="instructions-title">
                 <span class="instructions-title-main">
-                    <span class="icon-wrap" aria-hidden="true"><i data-lucide="book-open" class="icon icon--md"></i></span>
                     <span>Kaip naudoti US atrankos promptų sistemą</span>
                 </span>
                 <span class="instructions-title-meta">
-                    <span class="prompt-time" role="status" aria-label="4 žingsniai, apie 3–5 min vienam žingsniui">4 žingsniai · 3–5 min / žingsnis</span>
+                    <span class="prompt-time" role="status" aria-label="3 žingsniai, apie 3–5 min">3 žingsniai · 3–5 min</span>
                 </span>
             </h2>
             <ol>
-                <li>Pasirinkite fazę, atidarykite ją, tada pasirinkite konkretų promptą.</li>
-                <li>Spustelėkite <strong>„Kopijuoti promptą“</strong> arba naudokite <code>Ctrl+C</code> / <code>Cmd+C</code> ant pasirinkto prompto.</li>
-                <li>Įklijuokite į ChatGPT, Claude, Gemini ar kitą DI (dirbtinio intelekto) įrankį.</li>
-                <li class="instructions-li-stack"><span class="instructions-li-lead">Jei prompte yra laužtinių laukų, įrašykite savo duomenis.</span><div class="instructions-subcard" role="region" aria-label="Vietininkų pavyzdžiai ir DI vaidmuo"><p class="instructions-subrow"><strong>Pavyzdžiai:</strong> <code>[įmonė]</code>, <code>[pozicija]</code>, <code>[atlygis]</code>, <code>[ ]</code> ir kiti.</p><p class="instructions-subrow"><strong>Pastaba:</strong> DI vaidmens („Tu esi…“) keisti nereikia.</p></div></li>
+                <li>Pasirinkite promptą žemiau (arba naudokite fazės juostą viršuje).</li>
+                <li>Spustelėkite <strong>„Kopijuoti promptą“</strong> arba <code>Ctrl+C</code> / <code>Cmd+C</code>.</li>
+                <li>Įklijuokite į ChatGPT, Claude, Gemini ar kitą DI įrankį ir pakeiskite <code>[vietininkus]</code> savo duomenimis.</li>
             </ol>
+            <details class="instructions-format-tips">
+                <summary>US formatting tips (locations, dates, phone)</summary>
+                <div class="instructions-subcard" role="region" aria-label="Vietininkų pavyzdžiai">
+                    <p class="instructions-subrow"><strong>Vietininkai:</strong> <code>[įmonė]</code>, <code>[pozicija]</code>, <code>[vieta]</code>, <code>[atlygis]</code></p>
+                    <p class="instructions-subrow"><strong>Vietos:</strong> <code>New York, NY</code>, <code>Remote – US</code>, <code>Hybrid – Austin, TX</code></p>
+                    <p class="instructions-subrow"><strong>Datos:</strong> <code>MM/DD/YYYY</code>. <strong>Pastaba:</strong> DI vaidmens („Tu esi…“) keisti nereikia.</p>
+                    <p class="instructions-subrow"><strong>Adresų laukai:</strong> <code>Street Address</code>, <code>City</code>, <code>State</code>, pasirinktinas <code>Zip Code</code> — pvz. <code>San Francisco, CA 94105</code>, <code>Seattle, WA 98101</code></p>
+                    <p class="instructions-subrow"><strong>Telefono formatas:</strong> <code>+1 (XXX) XXX-XXXX</code>, pvz. <code>+1 (415) 555-0198</code></p>
+                </div>
+            </details>
         </section>
 
         <section class="faq" lang="lt" aria-labelledby="faq-title">
-            <h2 id="faq-title"><span class="icon-wrap" aria-hidden="true"><i data-lucide="help-circle" class="icon icon--md"></i></span> Dažni klausimai prieš pradedant</h2>
+            <h2 id="faq-title">Dažni klausimai prieš pradedant</h2>
             <p class="faq-intro">Trumpi atsakymai prieš kopijuojant pirmąjį promptą.</p>
-            <details class="faq-details">
-                <summary class="faq-summary">Ar būtina eiti visas 6 fazes iš eilės?</summary>
-                <div class="faq-panel">Ne, bet seka atspindi visą atrankos ciklą nuo diagnostikos iki išlaikymo. Paprastai geriausia pradėti nuo 1 fazės ir judėti pagal savo situaciją.</div>
-            </details>
-            <details class="faq-details">
-                <summary class="faq-summary">Ar reikia keisti eilutę „Tu esi…“ prompto pradžioje?</summary>
-                <div class="faq-panel">Ne. Keiskite tik laužtiniuose skliaustuose esančius vietininkus ir skaičius – DI vaidmuo jau suformuluotas aiškiam rezultatui.</div>
-            </details>
             <details class="faq-details">
                 <summary class="faq-summary">Ar tai klausimynas ar kandidatų valdymo sistema (ATS)?</summary>
                 <div class="faq-panel">Ne. Tai tekstai, kuriuos kopijuojate ir įklijuojate į savo DI įrankį – joks serveris neatlieka atrankos už jus.</div>
             </details>
             <details class="faq-details">
-                <summary class="faq-summary">Kiek laiko užtrunka vienas žingsnis?</summary>
-                <div class="faq-panel">Maždaug 3–5 minutes pasiruošti ir nukopijuoti; pats pokalbis su DI priklauso nuo jūsų klausimų ir atsakymų.</div>
-            </details>
-            <details class="faq-details">
-                <summary class="faq-summary">Ar tinka mažai įmonei ar vienam HR specialistui?</summary>
-                <div class="faq-panel">Taip. Promptai universūs – svarbu užpildyti vietininkus savo kontekstu, o ne bendrinėmis frazėmis.</div>
+                <summary class="faq-summary">Ar būtina eiti visas 6 fazes iš eilės?</summary>
+                <div class="faq-panel">Ne. Pradėkite nuo problemos, kuri skauda šiandien (pvz. skelbimas ar pokalbis), ir grįžkite prie kitų promptų vėliau.</div>
             </details>
             <details class="faq-details">
                 <summary class="faq-summary">Ar galiu naudoti tik vieną ar kelis promptus?</summary>
                 <div class="faq-panel">Taip. Galite pradėti nuo vienos problemos (pvz., skelbimo ar pokalbio) ir vėliau grįžti prie kitų.</div>
+            </details>
+            <details class="faq-details">
+                <summary class="faq-summary">Kiek laiko užtrunka vienas žingsnis?</summary>
+                <div class="faq-panel">Maždaug 3–5 minutes pasiruošti ir nukopijuoti; pats pokalbis su DI priklauso nuo jūsų klausimų ir atsakymų.</div>
             </details>
         </section>
 
@@ -2662,9 +2660,11 @@
             </div>
         </div>
 
-        <nav class="jump-nav" aria-labelledby="jump-nav-title">
-            <h2 id="jump-nav-title">Kas toliau?</h2>
-            <p class="jump-nav-intro">Geriausia eiti iš eilės nuo 1 iki 10. Paspaudus nuorodą pereisite prie atitinkamo prompto.</p>
+        <details class="jump-nav" id="jump-nav">
+            <summary class="jump-nav-summary">
+                <span class="jump-nav-summary-label">Kas toliau?</span>
+                <span class="jump-nav-summary-hint">Geriausia eiti iš eilės nuo 1 iki 10. Paspaudus nuorodą pereisite prie atitinkamo prompto.</span>
+            </summary>
             <ul>
                 <li><a href="#block1">1. Kur stringame?</a></li>
                 <li><a href="#block2">2. Koks žmogus mums iš tikrųjų tinka?</a></li>
@@ -2677,7 +2677,7 @@
                 <li><a href="#block9">9. Kodėl žmonės išeina?</a></li>
                 <li><a href="#block10">10. Pagrindinis promptas (vienas viskam)</a></li>
             </ul>
-        </nav>
+        </details>
 
         <!-- PROMPT 1 – FAZĖ 1 Diagnostika -->
         <article class="prompt" data-phase="1">
@@ -2720,20 +2720,11 @@ Pasakyk paprastai:
                         <div class="info-content">
                             <strong>Naudok kai:</strong>
                             <p>Nori greitai suprasti, kur stringa atranka. Kai matome skaičius, lengviau nuspręsti, kur dėti pastangas.</p>
-                            <p><strong>Tai nėra klausimynas.</strong> Nukopijuok šį tekstą ir įklijuok į ChatGPT arba Claude.</p>
-                        </div>
-                    </div>
-                    <div class="info-item info-item-replace">
-                        <span class="info-icon" aria-hidden="true"><i data-lucide="pencil" class="icon icon--md"></i></span>
-                        <div class="info-content">
-                            <strong>Pakeisk prieš naudodamas:</strong>
-                            <p>Skaičius (kandidatų, pokalbių, pasiūlymų, priėmė) – įrašyk savo skaičius į laukus [ ].</p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="prompt-footer">
-                <p class="prompt-cta">Nukopijuok ir įklijuok į ChatGPT arba Claude – tai šio žingsnio tikslas.</p>
                 <button type="button" class="btn" 
                         onclick="copyPrompt(this, 'prompt1')"
                         aria-label="Kopijuoti promptą 1 į mainų atmintinę"
@@ -2791,17 +2782,9 @@ Atsakyk paprastai:
                             <p>Aprašai idealų kandidatą pozicijai. Kai žinome, ko ieškome, lengviau atpažinti tinkamą žmogų.</p>
                         </div>
                     </div>
-                    <div class="info-item info-item-replace">
-                        <span class="info-icon" aria-hidden="true"><i data-lucide="pencil" class="icon icon--md"></i></span>
-                        <div class="info-content">
-                            <strong>Pakeisk prieš naudodamas:</strong>
-                            <p>[įmonė] → įmonės pavadinimas arba sritis (pvz. IT startupas, mažmeninė prekyba); [pozicija] → pareigos; geriausias darbuotojas – trumpas aprašymas; kodėl išeidavo – priežastis arba „–“.</p>
-                        </div>
-                    </div>
                 </div>
             </div>
             <div class="prompt-footer">
-                <p class="prompt-cta">Įklijuok į ChatGPT arba Claude ir pakeisk laukus savo duomenimis.</p>
                 <button type="button" class="btn" 
                         onclick="copyPrompt(this, 'prompt2')"
                         aria-label="Kopijuoti promptą 2 į mainų atmintinę"
@@ -2857,17 +2840,9 @@ Padaryk:
                             <p>Perrašai skelbimą paprasta kalba. Paprastas ir aiškus tekstas pritraukia tinkamus kandidatus.</p>
                         </div>
                     </div>
-                    <div class="info-item info-item-replace">
-                        <span class="info-icon" aria-hidden="true"><i data-lucide="pencil" class="icon icon--md"></i></span>
-                        <div class="info-content">
-                            <strong>Pakeisk prieš naudodamas:</strong>
-                            <p>[įmonė] → įmonės pavadinimas arba sritis (nebūtina, bet padeda pritaikyti toną); [įklijuok] → įklijuok savo darbo skelbimo tekstą.</p>
-                        </div>
-                    </div>
                 </div>
             </div>
             <div class="prompt-footer">
-                <p class="prompt-cta">Nukopijuok ir įklijuok į ChatGPT arba Claude – tai šio žingsnio tikslas.</p>
                 <button type="button" class="btn" 
                         onclick="copyPrompt(this, 'prompt3')"
                         aria-label="Kopijuoti promptą 3 į mainų atmintinę"
@@ -2922,17 +2897,9 @@ Pasiūlyk:
                             <p>Reikia daugiau kandidatų – LinkedIn, pažįstami, tiesioginis parašas. Paprasti žingsniai, ne tik skelbimai.</p>
                         </div>
                     </div>
-                    <div class="info-item info-item-replace">
-                        <span class="info-icon" aria-hidden="true"><i data-lucide="pencil" class="icon icon--md"></i></span>
-                        <div class="info-content">
-                            <strong>Pakeisk prieš naudodamas:</strong>
-                            <p>[įmonė] → įmonės pavadinimas arba sritis; [pozicija] → tavo pozicija (pvz. Pardavimų vadovas).</p>
-                        </div>
-                    </div>
                 </div>
             </div>
             <div class="prompt-footer">
-                <p class="prompt-cta">Nukopijuok, įklijuok į DI įrankį ir pakeisk [įmonė], [pozicija] savo duomenimis.</p>
                 <button type="button" class="btn" 
                         onclick="copyPrompt(this, 'prompt4')"
                         aria-label="Kopijuoti promptą 4 į mainų atmintinę"
@@ -2988,17 +2955,9 @@ Duok:
                             <p>Ruoši pokalbį ar nori geresnių klausimų. Struktūra padeda išgirsti tai, kas iš tikrųjų svarbu.</p>
                         </div>
                     </div>
-                    <div class="info-item info-item-replace">
-                        <span class="info-icon" aria-hidden="true"><i data-lucide="pencil" class="icon icon--md"></i></span>
-                        <div class="info-content">
-                            <strong>Pakeisk prieš naudodamas:</strong>
-                            <p>[įmonė] → įmonės pavadinimas arba sritis; [pozicija] → tavo pozicija.</p>
-                        </div>
-                    </div>
                 </div>
             </div>
             <div class="prompt-footer">
-                <p class="prompt-cta">Nukopijuok ir įklijuok į ChatGPT arba Claude – tai šio žingsnio tikslas.</p>
                 <button type="button" class="btn" 
                         onclick="copyPrompt(this, 'prompt5')"
                         aria-label="Kopijuoti promptą 5 į mainų atmintinę"
@@ -3055,17 +3014,9 @@ Duok:
                             <p>Kandidatai dažnai atsisako – nori suprasti kodėl. Supratus priežastis, galime koreguoti pasiūlymą arba komunikaciją.</p>
                         </div>
                     </div>
-                    <div class="info-item info-item-replace">
-                        <span class="info-icon" aria-hidden="true"><i data-lucide="pencil" class="icon icon--md"></i></span>
-                        <div class="info-content">
-                            <strong>Pakeisk prieš naudodamas:</strong>
-                            <p>[įmonė], [pozicija], [atlygis], [ką siūlome] – įrašyk savo duomenis.</p>
-                        </div>
-                    </div>
                 </div>
             </div>
             <div class="prompt-footer">
-                <p class="prompt-cta">Įklijuok į ChatGPT arba Claude – pakeisk įmonę, poziciją, atlygį ir ką siūlote.</p>
                 <button type="button" class="btn" 
                         onclick="copyPrompt(this, 'prompt6')"
                         aria-label="Kopijuoti promptą 6 į mainų atmintinę"
@@ -3121,17 +3072,9 @@ Padaryk:
                             <p>Formuluoji pasiūlymą kandidatui. Kai žmogus mato vertę, lengviau priimti sprendimą.</p>
                         </div>
                     </div>
-                    <div class="info-item info-item-replace">
-                        <span class="info-icon" aria-hidden="true"><i data-lucide="pencil" class="icon icon--md"></i></span>
-                        <div class="info-content">
-                            <strong>Pakeisk prieš naudodamas:</strong>
-                            <p>[įmonė], [pozicija], [ką siūlome] – įrašyk savo duomenis.</p>
-                        </div>
-                    </div>
                 </div>
             </div>
             <div class="prompt-footer">
-                <p class="prompt-cta">Nukopijuok ir įklijuok į ChatGPT arba Claude – tai šio žingsnio tikslas.</p>
                 <button type="button" class="btn" 
                         onclick="copyPrompt(this, 'prompt7')"
                         aria-label="Kopijuoti promptą 7 į mainų atmintinę"
@@ -3187,17 +3130,9 @@ Duok:
                             <p>Planuoji naujo darbuotojo pirmus mėnesius. Aiškūs lūkesčiai ir pagalba mažina išeitį per bandymo laikotarpį.</p>
                         </div>
                     </div>
-                    <div class="info-item info-item-replace">
-                        <span class="info-icon" aria-hidden="true"><i data-lucide="pencil" class="icon icon--md"></i></span>
-                        <div class="info-content">
-                            <strong>Pakeisk prieš naudodamas:</strong>
-                            <p>[įmonė] → įmonės pavadinimas arba sritis; [pozicija] → tavo pozicija.</p>
-                        </div>
-                    </div>
                 </div>
             </div>
             <div class="prompt-footer">
-                <p class="prompt-cta">Nukopijuok ir įklijuok – įrašyk įmonę, poziciją ir gauk planą.</p>
                 <button type="button" class="btn" 
                         onclick="copyPrompt(this, 'prompt8')"
                         aria-label="Kopijuoti promptą 8 į mainų atmintinę"
@@ -3251,17 +3186,9 @@ Pasakyk:
                             <p>Žmonės išeina per pirmus mėnesius – nori suprasti kodėl. Supratus priežastis, galime veikti proaktyviai.</p>
                         </div>
                     </div>
-                    <div class="info-item info-item-replace">
-                        <span class="info-icon" aria-hidden="true"><i data-lucide="pencil" class="icon icon--md"></i></span>
-                        <div class="info-content">
-                            <strong>Pakeisk prieš naudodamas:</strong>
-                            <p>[priežastys] – įrašyk, ką girdėjote, kodėl žmonės išeina (arba „dar nežinome“).</p>
-                        </div>
-                    </div>
                 </div>
             </div>
             <div class="prompt-footer">
-                <p class="prompt-cta">Nukopijuok ir įklijuok į ChatGPT arba Claude – tai šio žingsnio tikslas.</p>
                 <button type="button" class="btn"
                         onclick="copyPrompt(this, 'prompt9')"
                         aria-label="Kopijuoti promptą 9 į mainų atmintinę"
@@ -3326,17 +3253,9 @@ Be sudėtingų terminų.</pre>
                             <p>Norėtum vieną integruotą atrankos planą. Viskas vienoje vietoje: problema, savaitė, skelbimas, pokalbiai, sutikimas, pirmi mėnesiai.</p>
                         </div>
                     </div>
-                    <div class="info-item info-item-replace">
-                        <span class="info-icon" aria-hidden="true"><i data-lucide="pencil" class="icon icon--md"></i></span>
-                        <div class="info-content">
-                            <strong>Pakeisk prieš naudodamas:</strong>
-                            <p>[įmonė], [pozicija], kandidatų skaičius, kur stringame, ką bandėme – įrašyk savo duomenis.</p>
-                        </div>
-                    </div>
                 </div>
             </div>
             <div class="prompt-footer">
-                <p class="prompt-cta">Šis promptas apima viską – nukopijuok, įklijuok ir pildyk savo duomenimis.</p>
                 <button type="button" class="btn"
                         onclick="copyPrompt(this, 'prompt10')"
                         aria-label="Kopijuoti promptą 10 į mainų atmintinę"
@@ -3352,14 +3271,13 @@ Be sudėtingų terminų.</pre>
         </article>
 
         <section class="community" id="community" aria-labelledby="community-title">
-            <h2 id="community-title">Sistema sukurta.<br>Nori daugiau?</h2>
-            <a href="https://t.me/prompt_anatomy" class="community-cta-primary" target="_blank" rel="noopener noreferrer" aria-label="Atidaryti „Promptų anatomijos“ Telegram kanalą naujame lange">Sekite Telegram kanale</a>
-            <a href="https://www.promptanatomy.app/" class="community-cta-secondary" target="_blank" rel="noopener noreferrer" aria-label="Pilna Promptų anatomija – interaktyvus mokymas (atidaroma naujame lange)">Promptų anatomija →</a>
+            <h2 id="community-title">{{SOT_COMMUNITY_TITLE}}</h2>
+            <a href="https://www.promptanatomy.app/" class="community-cta-primary" target="_blank" rel="noopener noreferrer" aria-label="Pilna Promptų anatomija – interaktyvus mokymas (atidaroma naujame lange)">{{SOT_COMMUNITY_APP}}</a>
+            <p class="community-secondary-link">Arba <a href="https://t.me/prompt_anatomy" target="_blank" rel="noopener noreferrer" aria-label="Atidaryti „Promptų anatomijos“ Telegram kanalą naujame lange">{{SOT_COMMUNITY_TELEGRAM}} →</a></p>
         </section>
 
         <footer class="footer">
-            <h3>Sėkmės atrankoje <span class="icon-wrap" aria-hidden="true"><i data-lucide="rocket" class="icon icon--md"></i></span></h3>
-            <p>Nepamiršk pakeisti <strong>[įmonė]</strong>, <strong>[pozicija]</strong>, <strong>[atlygis]</strong>, <strong>[kandidatų skaičius]</strong> ir kitus laukus savo duomenimis.</p>
+            <h3>Sėkmės atrankoje</h3>
             <p class="footer-product-link">Tai Spin-off Nr. 3 iš „Promptų anatomijos“.</p>
             <p class="footer-contact">Promptų anatomija: <a href="https://www.promptanatomy.app/" target="_blank" rel="noopener noreferrer">promptanatomy.app</a> | El. paštas: <a href="mailto:info@promptanatomy.app">info@promptanatomy.app</a></p>
             {{SOT_BUSINESS_ADDRESS}}

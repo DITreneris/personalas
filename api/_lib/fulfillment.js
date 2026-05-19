@@ -66,7 +66,7 @@ const PRODUCTS = {
     priceEnv: 'STRIPE_PRICE_BEGINNER_PDF',
     sourceUrlEnv: 'PDF_BEGINNER_SOURCE_URL',
     localFileName: 'beginner-guide.pdf',
-    downloadFileName: 'personalas-beginner-guide.pdf'
+    downloadFileName: 'Beginner_HR_Hiring_Guide.pdf'
   },
   advanced: {
     id: 'advanced',
@@ -76,7 +76,7 @@ const PRODUCTS = {
     priceEnv: 'STRIPE_PRICE_ADVANCED_PDF',
     sourceUrlEnv: 'PDF_ADVANCED_SOURCE_URL',
     localFileName: 'advanced-guide.pdf',
-    downloadFileName: 'personalas-advanced-guide.pdf'
+    downloadFileName: 'Advanced_HR_Hiring_Guide.pdf'
   },
   bundle: {
     id: 'bundle',
