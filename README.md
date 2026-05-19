@@ -11,8 +11,10 @@ Static site: **10 free hiring prompts** + **paid PDF guides** (Beginner $5.99, A
 ```bash
 npm install
 npm run build   # templates → en/index.html, en/privacy.html, gateways, sitemap
-npm test
+npm test        # build + pdf:validate + structure tests + HTML/JS lint
 ```
+
+`npm test` is the merge gate (same as Vercel build). It runs `pdf:validate` — ensure PDF HTML sources are in place or fix before PR.
 
 - **Public UI copy & SEO:** [config/sot.json](config/sot.json) (`brand.publicName`, `marketing.*`) + [scripts/build-locale-pages.js](scripts/build-locale-pages.js)
 - **Page structure / prompts:** [templates/index-lt.html](templates/index-lt.html) (LT authoring source — **not shipped**; build outputs EN only)
@@ -37,6 +39,7 @@ See [docs/pdf-source/README.md](docs/pdf-source/README.md).
 ## Documentation
 
 - [docs/INDEX.md](docs/INDEX.md) — doc index  
+- [docs/AGENT_SOT.md](docs/AGENT_SOT.md) — **agent operational SOT** (paths, build, deploy)  
 - [AGENTS.md](AGENTS.md) — agent workflow  
 - [docs/language-guidelines-en-lt.md](docs/language-guidelines-en-lt.md) — **public brand + EN-only rules**  
 - [docs/process/development.md](docs/process/development.md) · [DEPLOYMENT.md](DEPLOYMENT.md)

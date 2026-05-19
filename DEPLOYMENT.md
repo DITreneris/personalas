@@ -29,7 +29,7 @@ Vercel Project → Settings → Environment Variables. **Niekada necommitinti sl
 | `STRIPE_PRICE_BUNDLE_PDF` | Taip | Stripe Price ID Bundle (Both guides, $15.99). |
 | `DOWNLOAD_TOKEN_SECRET` | Taip | HMAC raktas pasirašytoms download nuorodoms. Ilgas atsitiktinis (>= 32 baitai). |
 | `RESEND_API_KEY` | Taip | Siunčia transakcinius PDF pristatymo el. laiškus. |
-| `FULFILLMENT_FROM_EMAIL` | Taip | Patvirtintas siuntėjas, pvz. `Personalas <hello@promptanatomy.help>`. |
+| `FULFILLMENT_FROM_EMAIL` | Taip | Patvirtintas siuntėjas, pvz. `Prompt Anatomy <hello@promptanatomy.help>`. |
 | `UPSTASH_REDIS_REST_URL` | Taip | Upstash Redis REST URL fulfillment būsenai ir token jti. |
 | `UPSTASH_REDIS_REST_TOKEN` | Taip | Upstash Redis REST token (palaikomi ir `KV_REST_API_*`, `VERCEL_KV_REST_API_*` vardai). |
 | `REDIS_KEY_PREFIX` | Pasirinkt. | Prefiksas bendram Upstash DB (pvz. `personalas:` → raktai `personalas:fulfillment:cs_...`). |
@@ -132,9 +132,9 @@ A11y (pasirinktinai; tie patys keliai kaip CI po `npm test`):
 npx serve -s . -l 3000
 # Kitoje terminale:
 npx pa11y http://127.0.0.1:3000/ --config .pa11yrc.json
-npx pa11y http://127.0.0.1:3000/privatumas.html --config .pa11yrc.json
+npx pa11y http://127.0.0.1:3000/privacy.html --config .pa11yrc.json
 npx pa11y http://127.0.0.1:3000/en/ --config .pa11yrc.json
-npx pa11y http://127.0.0.1:3000/en/privatumas.html --config .pa11yrc.json
+npx pa11y http://127.0.0.1:3000/en/privacy.html --config .pa11yrc.json
 npx pa11y http://127.0.0.1:3000/success.html --config .pa11yrc.json
 npx pa11y http://127.0.0.1:3000/terms.html --config .pa11yrc.json
 ```
