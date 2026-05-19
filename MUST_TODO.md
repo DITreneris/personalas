@@ -35,27 +35,27 @@ Stripe Dashboard product metadata yra Stripe pusėje, **ne repo**. Po Advanced v
 - [x] [config/sot.json](config/sot.json): įrašyti realias `pdfGuides.beginner.stripePaymentLink`, `advanced` ir `bundle` (`https://buy.stripe.com/...`); po pakeitimo – `npm run build`
 - [x] Sugeneruoti / atnaujinti Beginner ir Advanced PDF turinį (EN) — žr. [docs/pdf-source/](docs/pdf-source/README.md); `npm run pdf:export`
 - [x] Įkelti PDF į **Vercel Blob** (private): `npm run pdf:upload:blob` → Blob path `prompt-anatomy/pdfs/*.pdf`
-- [ ] Vercel env: `PDF_BEGINNER_SOURCE_URL`, `PDF_ADVANCED_SOURCE_URL` (iš upload output) + `BLOB_READ_WRITE_TOKEN` (auto iš Blob store) → **Redeploy**
+- [x] Vercel env: `PDF_BEGINNER_SOURCE_URL`, `PDF_ADVANCED_SOURCE_URL` (iš upload output) + `BLOB_READ_WRITE_TOKEN` (auto iš Blob store) → **Redeploy**
 - [x] Lokalus dev: `api/_private/pdfs/beginner-guide.pdf` ir `advanced-guide.pdf` (gitignore; generuojami `npm run pdf:export`)
 
 ### Vercel env (Production / Preview)
 
 Pilnas sąrašas – [DEPLOYMENT.md](DEPLOYMENT.md). Privalomi:
 
-- [ ] `STRIPE_SECRET_KEY`
-- [ ] `STRIPE_WEBHOOK_SECRET`
-- [ ] `STRIPE_PRICE_BEGINNER_PDF`
-- [ ] `STRIPE_PRICE_ADVANCED_PDF`
-- [ ] `STRIPE_PRICE_BUNDLE_PDF`
-- [ ] `DOWNLOAD_TOKEN_SECRET` (>= 32 atsitiktinių baitų; pvz. `openssl rand -base64 48`)
-- [ ] `RESEND_API_KEY`
-- [ ] `FULFILLMENT_FROM_EMAIL` (verified Resend sender)
-- [ ] `UPSTASH_REDIS_REST_URL`
-- [ ] `UPSTASH_REDIS_REST_TOKEN`
-- [ ] `SITE_URL=https://promptanatomy.help`
-- [ ] `PDF_BEGINNER_SOURCE_URL` (iš `npm run pdf:upload:blob` output)
-- [ ] `PDF_ADVANCED_SOURCE_URL`
-- [ ] `BLOB_READ_WRITE_TOKEN` (Vercel Blob store → auto; lokaliai `.env`)
+- [x] `STRIPE_SECRET_KEY`
+- [x] `STRIPE_WEBHOOK_SECRET`
+- [x] `STRIPE_PRICE_BEGINNER_PDF`
+- [x] `STRIPE_PRICE_ADVANCED_PDF`
+- [x] `STRIPE_PRICE_BUNDLE_PDF`
+- [x] `DOWNLOAD_TOKEN_SECRET` (>= 32 atsitiktinių baitų; pvz. `openssl rand -base64 48`)
+- [x] `RESEND_API_KEY`
+- [x] `FULFILLMENT_FROM_EMAIL` (verified Resend sender)
+- [x] `UPSTASH_REDIS_REST_URL`
+- [x] `UPSTASH_REDIS_REST_TOKEN`
+- [x] `SITE_URL=https://promptanatomy.help`
+- [x] `PDF_BEGINNER_SOURCE_URL` (iš `npm run pdf:upload:blob` output)
+- [x] `PDF_ADVANCED_SOURCE_URL`
+- [x] `BLOB_READ_WRITE_TOKEN` (Vercel Blob store → auto; lokaliai `.env`)
 
 ### QA prieš release
 

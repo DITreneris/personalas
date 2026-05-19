@@ -129,7 +129,10 @@ function run() {
   const enPrivacyPath = path.join(ROOT, 'en', 'privacy.html');
 
   const enIndex = readFile(enIndexPath);
+  const landingCss = readFile(path.join(ROOT, 'assets', 'landing.css'));
+  const enSurfaceCss = (enIndex || '') + (landingCss || '');
   tally(assert(enIndex !== null && enIndex.length > 0, 'en/index.html exists'));
+  tally(assert(landingCss !== null && landingCss.length > 0, 'assets/landing.css exists'));
   tally(assert(readFile(enPrivacyPath) !== null, 'en/privacy.html exists'));
   tally(assert(!fs.existsSync(path.join(ROOT, 'en', 'privatumas.html')), 'no en/privatumas.html (renamed to privacy.html)'));
 
@@ -184,7 +187,10 @@ function run() {
     tally(assert(enIndex.includes('terms.html'), 'en/index.html footer links to terms'));
     tally(assert(enIndex.includes('info@promptanatomy.help'), 'en/index.html uses canonical support email'));
     tally(assert(!enIndex.includes('mailto:info@promptanatomy.app'), 'en/index.html has no legacy .app support email'));
-    tally(assert(enIndex.includes('legal-disclaimer') || enIndex.includes('not legal or HR advice'), 'en/index.html HR advisory disclaimer'));
+    tally(assert(
+      enIndex.includes('footer-disclaimer') || enIndex.includes('legal-disclaimer') || enIndex.includes('Not legal or HR advice'),
+      'en/index.html HR advisory disclaimer'
+    ));
     tally(assert(enIndex.includes('href="privacy.html"'), 'en/index.html privacy link uses privacy.html'));
     const heroBlock = enIndex.match(/<header class="header"[\s\S]*?<\/header>/);
     tally(assert(heroBlock && heroBlock[0].includes('See the PDF guides'), 'hero primary PDF CTA label'));
@@ -445,7 +451,44 @@ function run() {
     );
     tally(assert(enIndex.includes('id="pdfPreviewDialog"') && enIndex.includes('data-preview-trigger="beginner"'), 'PDF preview dialog'));
     tally(assert(enIndex.includes('id="pdf-guides-faq"') && enIndex.includes('data-buyer-faq-list'), 'Buyer FAQ hook'));
-    tally(assert(enIndex.includes('class="pdf-author-panel"') && enIndex.includes('promptanatomy.app'), 'Author panel'));
+    tally(assert(!enIndex.includes('class="pdf-author-panel"'), 'PDF author panel relict removed (info lives in footer)'));
+    tally(
+      assert(
+        /\.pdf-guide-cta[^{]*:visited[^{]*\{/.test(enSurfaceCss) ||
+          /\.pdf-guide-cta:link[\s\S]{0,200}:visited/.test(enSurfaceCss),
+        'PDF Buy CTA defines :visited (no dark visited link on navy)'
+      )
+    );
+    tally(
+      assert(
+        /\.pdf-guide-cta[\s\S]{0,400}var\(--text-on-accent\)/.test(enSurfaceCss),
+        'PDF Buy CTA uses --text-on-accent token'
+      )
+    );
+    tally(
+      assert(
+        enIndex.includes('class="pdf-guides-after-purchase"'),
+        'PDF after-purchase block (FAQ + free-bridge)'
+      )
+    );
+    tally(
+      assert(
+        !/--orange-light|--community-cta-green|--blue-light/.test(enSurfaceCss),
+        'built EN surface CSS must not use deprecated DS color aliases'
+      )
+    );
+    tally(
+      assert(
+        enIndex.includes('../assets/landing.css'),
+        'en/index.html links shared landing.css'
+      )
+    );
+    tally(
+      assert(
+        /data-buyer-faq-list[^>]*>\s*<details class="faq-details"/.test(enIndex),
+        'Buyer FAQ pre-rendered at build time (no JS fetch needed)'
+      )
+    );
     tally(assert(success && success.includes('terms.html#paid-pdf-license'), 'success.html license link'));
   }
 

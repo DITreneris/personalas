@@ -26,6 +26,7 @@ Kontaktinė forma (Google Apps Script) – **neįjungta**; žr. [INTEGRACIJA.md]
 | Redaguoti (šaltinis) | Generuojama / neliesti ranka |
 |----------------------|------------------------------|
 | [templates/index-lt.html](../templates/index-lt.html) | `en/index.html`, šaknies `index.html` (vartas) |
+| [assets/styles.css](../assets/styles.css), [assets/landing.css](../assets/landing.css) | Tokenai + komponentų CSS (v0.2; be inline `<style>` šablone) |
 | [templates/privacy.html](../templates/privacy.html) | `en/privacy.html`, šaknies `privacy.html` (vartas) |
 | [config/sot.json](../config/sot.json) | Marketing, PDF specs, `businessAddress`, Stripe Payment Links |
 | [docs/pdf-source/*.html](pdf-source/) | Eksportuoti PDF per `pdf:export` |

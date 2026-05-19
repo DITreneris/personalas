@@ -180,6 +180,42 @@ function renderAddressBlock(sot) {
   ].join('');
 }
 
+/**
+ * Inline mailto link inside FAQ answer text. Mirrors generator.js linkifyContactEmail
+ * so build-time FAQ HTML matches the runtime fallback exactly.
+ */
+function linkifyFaqEmail(text, email) {
+  if (!text) return '';
+  const safeText = escapeHtmlText(text);
+  if (!email) return safeText;
+  const safeEmail = escapeHtmlText(email);
+  const parts = safeText.split(safeEmail);
+  if (parts.length === 1) return safeText;
+  return parts.join('<a href="mailto:' + safeEmail + '">' + safeEmail + '</a>');
+}
+
+/**
+ * Pre-render Buyer FAQ <details> list at build time so it ships in en/index.html
+ * without requiring fetch('config/sot.json'). generator.js skips re-render when
+ * the list is already populated (see initBuyerFaq below).
+ */
+function buildBuyerFaqHtml(sot) {
+  if (!sot || !Array.isArray(sot.buyerFaq) || !sot.buyerFaq.length) return '';
+  const email = sot.product && sot.product.contactEmail;
+  return sot.buyerFaq
+    .map(function (item) {
+      if (!item || !item.q || !item.a) return '';
+      const idAttr = item.id ? ' id="' + escapeHtmlText(item.id) + '"' : '';
+      return (
+        '<details class="faq-details"' + idAttr + '>' +
+        '<summary class="faq-summary">' + escapeHtmlText(item.q) + '</summary>' +
+        '<div class="faq-panel">' + linkifyFaqEmail(item.a, email) + '</div>' +
+        '</details>'
+      );
+    })
+    .join('');
+}
+
 /** Schema.org PostalAddress object for Organization JSON-LD. */
 function buildPostalAddressJsonLd(sot) {
   const addr = sot.product.businessAddress;
@@ -279,6 +315,7 @@ function injectHead(html, basePath, sot) {
     ? '<script>window.BASE_PATH = \'' + basePath.replace(/'/g, "\\'") + '\';</script>\n    '
     : '';
   html = html.replace('href="assets/styles.css"', 'href="../assets/styles.css"');
+  html = html.replace('href="assets/landing.css"', 'href="../assets/landing.css"');
   html = html.replace(/<script src="generator\.js"><\/script>/, basePathScript + '<script src="../generator.js"></script>');
   html = injectPlausible(html);
   return html;
@@ -516,6 +553,7 @@ const EN_REPLACEMENTS = [
   ['{{SOT_PDF_SECTION_TITLE}}', '{{SOT_PDF_SECTION_TITLE}}'],
   ['{{SOT_PDF_SECTION_LEDE}}', '{{SOT_PDF_SECTION_LEDE}}'],
   ['{{SOT_PDF_SECTION_FREE_BRIDGE}}', '{{SOT_PDF_SECTION_FREE_BRIDGE}}'],
+  ['{{SOT_BUYER_FAQ_HTML}}', '{{SOT_BUYER_FAQ_HTML}}'],
   ['Nulinis srautas?', 'Zero pipeline?'],
   ['Sugeneruokite pritraukiančius skelbimus ir paieškos žinutes.', 'Generate clear job posts and outreach messages.'],
   ['Netinkami žmonės?', 'Wrong people?'],
@@ -891,6 +929,9 @@ function applyEnReplacements(html) {
   html = html.replace(/Analyse/g, 'Analyze');
   html = html.replace(/\/\*[\s\S]*?\*\//g, '');
   html = html.replace(/<!--[\s\S]*?-->/g, '');
+  html = html.replace(/(<style[^>]*>)([\s\S]*?)(<\/style>)/gi, function (_, open, body, close) {
+    return open + body.replace(/\n[ \t]*\n[ \t]*\n+/g, '\n\n') + close;
+  });
   return html;
 }
 
@@ -1009,6 +1050,7 @@ function applySot(html, sot) {
     '{{SOT_COMPARE_STRIP}}': sot.legal.compareStripHtml,
     '{{SOT_COMPARE_NOTE}}': sot.legal.compareStripNote,
     '{{SOT_BUSINESS_ADDRESS}}': renderAddressBlock(sot),
+    '{{SOT_BUYER_FAQ_HTML}}': buildBuyerFaqHtml(sot),
   };
 
   Object.keys(replacements).forEach(function (token) {

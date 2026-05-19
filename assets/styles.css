@@ -96,6 +96,7 @@ html {
     --bg-subtle: #F7FAFC;
 
     /* Community CTA – navy, suderinta su ekosistema */
+    /* v0.2: deprecated aliases — remove in v0.3 after grep clean */
     --community-cta-green: var(--accent-primary);  /* DEPRECATED: use --cta-primary-bg in new code */
     --community-cta-green-hover: var(--accent-primary-hover);
 
@@ -170,6 +171,13 @@ html {
     --fs-3xl: 28px;
     --fs-4xl: 36px;
     --fs-display: 48px;
+
+    /* v0.2 — semantic + elevation */
+    --success: var(--green);
+    --surface-overlay: rgba(11, 19, 32, 0.55);
+    --shadow-toast: 0 12px 40px rgba(0, 0, 0, 0.15);
+    --shadow-modal: 0 20px 60px rgba(0, 0, 0, 0.3);
+    --shadow-sticky: 0 -4px 16px rgba(15, 23, 42, 0.08);
 }
 
 
@@ -201,24 +209,24 @@ html {
     text-decoration: none;
     cursor: pointer;
     transition: box-shadow var(--duration-normal) var(--ease-out), transform var(--duration-fast) var(--ease-out), background var(--duration-normal) var(--ease-out);
-    box-shadow: 0 4px 14px rgba(16, 59, 90, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    box-shadow: var(--shadow-cta);
     outline: none;
 }
 
 .btn:focus-visible {
-    outline: 3px solid var(--accent-gold);
+    outline: var(--ring-focus);
     outline-offset: 2px;
 }
 
 .btn:hover {
-    background: linear-gradient(180deg, #1a4d6e 0%, var(--cta-hover) 100%);
+    background: var(--gradient-cta-hover);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(16, 59, 90, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    box-shadow: var(--shadow-cta);
 }
 
 .btn:active {
     transform: translateY(0) scale(0.98);
-    box-shadow: 0 2px 8px rgba(16, 59, 90, 0.2);
+    box-shadow: var(--shadow-cta);
 }
 
 @media (prefers-reduced-motion: reduce) {

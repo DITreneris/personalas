@@ -359,7 +359,10 @@
                 closeAllExcept(phaseObj);
                 setOpen(phaseObj, true);
                 setActiveHeaderPhase(phaseNum);
-                try { phaseObj.section.scrollIntoView({ block: 'start' }); } catch (_) { /* ignore */ }
+                var smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                try {
+                    phaseObj.section.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' });
+                } catch (_) { /* ignore */ }
             });
         });
 
@@ -592,6 +595,8 @@
         if (!config || !Array.isArray(config.buyerFaq)) return;
         var list = document.querySelector('[data-buyer-faq-list]');
         if (!list) return;
+        // Build-time pre-render: skip re-render if list already has FAQ entries.
+        if (list.querySelector('.faq-details')) return;
         var contactEmail = config.product && config.product.contactEmail;
         var html = '';
         for (var i = 0; i < config.buyerFaq.length; i += 1) {
