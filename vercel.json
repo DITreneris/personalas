@@ -5,7 +5,10 @@
     { "source": "/", "destination": "/en/", "permanent": true },
     { "source": "/lt", "destination": "/en/", "permanent": true },
     { "source": "/lt/", "destination": "/en/", "permanent": true },
-    { "source": "/lt/privatumas.html", "destination": "/en/privatumas.html", "permanent": true }
+    { "source": "/lt/privatumas.html", "destination": "/en/privacy.html", "permanent": true },
+    { "source": "/privatumas.html", "destination": "/en/privacy.html", "permanent": true },
+    { "source": "/en/privatumas.html", "destination": "/en/privacy.html", "permanent": true },
+    { "source": "/privacy.html", "destination": "/en/privacy.html", "permanent": true }
   ],
   "buildCommand": "npm test",
   "installCommand": "npm install",
@@ -51,7 +54,7 @@
       ]
     },
     {
-      "source": "/(index|privatumas|success|terms|404)\\.html",
+      "source": "/(index|privacy|privatumas|success|terms|404)\\.html",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
       ]

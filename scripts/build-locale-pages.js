@@ -5,8 +5,8 @@
  * Usage (GitHub Pages subpath): BASE_PATH=/personalas/ SITE_ORIGIN=https://ditreneris.github.io node scripts/build-locale-pages.js
  * Usage (Vercel / custom domain root): SITE_ORIGIN=https://promptanatomy.help node scripts/build-locale-pages.js
  * Optional override: SITE_PUBLIC_BASE=https://preview.vercel.app (full public origin, no trailing slash)
- * Source: templates/index-lt.html, templates/privatumas-lt.html
- * Output: en/index.html, en/privatumas.html, robots.txt, sitemap.xml
+ * Source: templates/index-lt.html, templates/privacy.html, templates/privacy-gateway.html
+ * Output: en/index.html, en/privacy.html, privacy.html (gateway), robots.txt, sitemap.xml
  */
 'use strict';
 
@@ -63,8 +63,55 @@ function extractMetaDescription(html) {
   return m ? m[1].trim() : '';
 }
 
-function buildJsonLdWebsiteGraph() {
+function loadSot() {
+  const raw = read('config/sot.json');
+  let sot;
+  try {
+    sot = JSON.parse(raw);
+  } catch (e) {
+    throw new Error('config/sot.json is invalid JSON: ' + e.message);
+  }
+  if (!sot.legal || !sot.legal.metaDescription) {
+    throw new Error('config/sot.json: legal.metaDescription is required');
+  }
+  if (!sot.product || !sot.product.contactEmail) {
+    throw new Error('config/sot.json: product.contactEmail is required');
+  }
+  return sot;
+}
+
+function isStripeLinkPlaceholder(url) {
+  if (!url || typeof url !== 'string') return true;
+  return url.includes('REPLACE_') || !/^https:\/\/buy\.stripe\.com\//.test(url);
+}
+
+function assertNoStripePlaceholders(sot) {
+  const beginner = sot.pdfGuides && sot.pdfGuides.beginner && sot.pdfGuides.beginner.stripePaymentLink;
+  const advanced = sot.pdfGuides && sot.pdfGuides.advanced && sot.pdfGuides.advanced.stripePaymentLink;
+  const bad = [];
+  if (isStripeLinkPlaceholder(beginner)) bad.push('pdfGuides.beginner.stripePaymentLink');
+  if (isStripeLinkPlaceholder(advanced)) bad.push('pdfGuides.advanced.stripePaymentLink');
+  if (!bad.length) return;
+  const msg =
+    'Stripe payment links still use placeholders in config/sot.json: ' +
+    bad.join(', ') +
+    '. Set real https://buy.stripe.com/... URLs before promotion.';
+  if (process.env.REQUIRE_STRIPE_LINKS === '1') {
+    throw new Error(msg);
+  }
+  console.warn('WARN: ' + msg);
+}
+
+function buildJsonLdWebsiteGraph(sot) {
   const base = absoluteBaseSlash().replace(/\/+$/, '');
+  const contactEmail = sot && sot.product ? sot.product.contactEmail : '';
+  const org = {
+    '@type': 'Organization',
+    name: 'Prompt Anatomy',
+    url: base + '/',
+    sameAs: ['https://t.me/prompt_anatomy'],
+  };
+  if (contactEmail) org.email = contactEmail;
   const graph = [
     {
       '@type': 'WebSite',
@@ -72,12 +119,7 @@ function buildJsonLdWebsiteGraph() {
       url: base + '/',
       inLanguage: ['en-US'],
     },
-    {
-      '@type': 'Organization',
-      name: 'Prompt Anatomy',
-      url: base + '/',
-      sameAs: ['https://t.me/prompt_anatomy'],
-    },
+    org,
   ];
   return (
     '<script type="application/ld+json">' +
@@ -105,7 +147,7 @@ function buildJsonLdWebPage(pageUrl, name, description) {
 }
 
 // ---- Inject SEO and script path ----
-function injectHead(html, basePath) {
+function injectHead(html, basePath, sot) {
   const abs = absoluteBaseSlash();
   const canonicalUrl = abs + 'en/';
   const linkCanonical = '<link rel="canonical" href="' + escapeHtmlAttr(canonicalUrl) + '">';
@@ -131,7 +173,7 @@ function injectHead(html, basePath) {
     '<meta name="twitter:image" content="' + escapeHtmlAttr(ogImage) + '">',
   ].join('\n    ');
 
-  const jsonLd = buildJsonLdWebsiteGraph();
+  const jsonLd = buildJsonLdWebsiteGraph(sot);
   const seoBlock =
     '\n    ' +
     [linkCanonical, linkEn, linkDefault, socialBlock, jsonLd].join('\n    ') +
@@ -152,8 +194,8 @@ function injectPrivacyHead(html, pathSuffix, title, description) {
   const ogImage = abs + 'images/og-default.png';
   const block = [
     '<link rel="canonical" href="' + escapeHtmlAttr(canonicalUrl) + '">',
-    '<link rel="alternate" hreflang="en-US" href="' + escapeHtmlAttr(abs + 'en/privatumas.html') + '">',
-    '<link rel="alternate" hreflang="x-default" href="' + escapeHtmlAttr(abs + 'en/privatumas.html') + '">',
+    '<link rel="alternate" hreflang="en-US" href="' + escapeHtmlAttr(canonicalUrl) + '">',
+    '<link rel="alternate" hreflang="x-default" href="' + escapeHtmlAttr(canonicalUrl) + '">',
     '<meta name="description" content="' + escapeHtmlAttr(description) + '">',
     '<meta property="og:type" content="website">',
     '<meta property="og:title" content="' + escapeHtmlAttr(title) + '">',
@@ -182,8 +224,8 @@ function writeRobotsAndSitemap() {
   const urls = [
     abs + '/en/',
     abs + '/',
-    abs + '/privatumas.html',
-    abs + '/en/privatumas.html',
+    abs + '/privacy.html',
+    abs + '/en/privacy.html',
     abs + '/terms.html',
     abs + '/success.html',
   ];
@@ -200,14 +242,21 @@ function writeRobotsAndSitemap() {
   write('sitemap.xml', sitemap);
 }
 
-function buildRootSeoFragment() {
+function buildRootSeoFragment(sot) {
   const base = absoluteBaseSlash().replace(/\/+$/, '');
   const img = base + '/images/og-default.png';
   const enLanding = base + '/en/';
-  const desc =
-    'Ten ready-to-use AI prompts for US hiring: diagnostics, role definition, job posts, sourcing, interviews, offers, and onboarding. Copy into ChatGPT or Claude—about 30 minutes end-to-end.';
+  const desc = sot.legal.metaDescription;
+  const contactEmail = sot.product.contactEmail;
+  const org = {
+    '@type': 'Organization',
+    name: 'Prompt Anatomy',
+    url: enLanding,
+    sameAs: ['https://t.me/prompt_anatomy'],
+    email: contactEmail,
+  };
   const lines = [
-    '<meta http-equiv="refresh" content="0; url=' + escapeHtmlAttr(enLanding) + '">',
+    '<meta http-equiv="refresh" content="0; url=en/">',
     '<link rel="canonical" href="' + escapeHtmlAttr(enLanding) + '">',
     '<link rel="alternate" hreflang="en-US" href="' + escapeHtmlAttr(enLanding) + '">',
     '<link rel="alternate" hreflang="x-default" href="' + escapeHtmlAttr(enLanding) + '">',
@@ -234,12 +283,7 @@ function buildRootSeoFragment() {
             url: enLanding,
             inLanguage: ['en-US'],
           },
-          {
-            '@type': 'Organization',
-            name: 'Prompt Anatomy',
-            url: enLanding,
-            sameAs: ['https://t.me/prompt_anatomy'],
-          },
+          org,
         ],
       }).replace(/</g, '\\u003c') +
       '</script>',
@@ -248,13 +292,13 @@ function buildRootSeoFragment() {
 }
 
 /** Idempotent: strip any prior head SEO between viewport and meta description, then inject root SEO. */
-function finalizeRootIndexHtml() {
+function finalizeRootIndexHtml(sot) {
   let html = read('index.html');
   html = html.replace(
     /(<meta name="viewport"[^>]*>\s*)(?:[\s\S]*?)(<meta name="description")/i,
     '$1$2'
   );
-  const frag = buildRootSeoFragment();
+  const frag = buildRootSeoFragment(sot);
   html = html.replace(/(<meta name="viewport"[^>]*>\s*)(<meta name="description")/i, '$1' + frag + '$2');
   html = html.replace(/<script>window\.BASE_PATH = '[^']*';<\/script>\s*\n?\s*/g, '');
   if (BASE_PATH) {
@@ -265,18 +309,19 @@ function finalizeRootIndexHtml() {
       basePathScript + '<script src="generator.js"></script>'
     );
   }
+  html = html.replace(/privatumas\.html/g, 'privacy.html');
   write('index.html', html);
 }
 
 function buildRootPrivacyFragment() {
   const base = absoluteBaseSlash().replace(/\/+$/, '');
   const img = base + '/images/og-default.png';
-  const enPrivacyUrl = base + '/en/privatumas.html';
+  const enPrivacyUrl = base + '/en/privacy.html';
   const enSite = base + '/en/';
   const desc =
     'Personalas – static site with US hiring prompts for HR teams. Stripe processes paid PDF purchases; Resend delivers download links.';
   const lines = [
-    '<meta http-equiv="refresh" content="0; url=' + escapeHtmlAttr(enPrivacyUrl) + '">',
+    '<meta http-equiv="refresh" content="0; url=en/privacy.html">',
     '<link rel="canonical" href="' + escapeHtmlAttr(enPrivacyUrl) + '">',
     '<link rel="alternate" hreflang="en-US" href="' + escapeHtmlAttr(enPrivacyUrl) + '">',
     '<link rel="alternate" hreflang="x-default" href="' + escapeHtmlAttr(enPrivacyUrl) + '">',
@@ -314,29 +359,21 @@ function buildRootPrivacyFragment() {
 }
 
 function finalizeRootPrivacyHtml() {
-  let html = read('privatumas.html');
+  let html = read('templates/privacy-gateway.html');
   html = html.replace(/(<meta name="viewport"[^>]*>\s*)(?:[\s\S]*?)(<title)/i, '$1$2');
   const frag = buildRootPrivacyFragment();
   html = html.replace(/(<meta name="viewport"[^>]*>\s*)(<title)/i, '$1' + frag + '$2');
-  write('privatumas.html', html);
+  write('privacy.html', html);
 }
 
 // ---- EN replacement pairs (order: more specific first) ----
 const EN_REPLACEMENTS = [
   ['<html lang="lt">', '<html lang="en-US">'],
   ['<title>HR kasdienė atrankos sistema – DI promptai</title>', '<title>HR hiring system – AI prompts for US teams</title>'],
-  [
-    '<meta name="description" content="Dešimt DI promptų HR atrankai: diagnostika, profilis, skelbimas, šaltiniai, pokalbiai, pasiūlymas. Kopijuok į ChatGPT arba Claude – praktinė sistema per ~30 min.">',
-    '<meta name="description" content="Ten ready-to-use AI prompts for US hiring: diagnostics, role definition, job posts, sourcing, interviews, offers, and onboarding. Copy into ChatGPT or Claude—about 30 minutes end-to-end.">',
-  ],
   ['Pereiti prie turinio', 'Skip to content'],
   ['Pilna Promptų anatomija – interaktyvus mokymas (atidaroma naujame lange)', 'Full Prompt Anatomy – interactive training (opens in a new tab)'],
   ['HR kasdienė atrankos sistema, Spin-off Nr. 3', 'HR hiring system for US teams, Series No. 3'],
   ['DI atrankos sistema<br>Personalo vadovui', 'AI hiring system<br>For US HR teams'],
-  [
-    'Pagalbinė versija iš Promptų anatomijos ekosistemos — veikianti atrankos struktūra per ~30 min.',
-    'A Prompt Anatomy ecosystem helper—a practical hiring workflow in about 30 minutes.',
-  ],
   ['6 sistemos fazės', '6 system phases'],
   ['1. Diagnostika', '1. Diagnose'],
   ['2. Profilis', '2. Define the Role'],
@@ -347,7 +384,11 @@ const EN_REPLACEMENTS = [
   ['Peržiūrėti sistemą – progresas ir fazės', 'View system – progress and phases'],
   ['Peržiūrėti sistemą', 'View system'],
   ['Ką ši sistema padeda išspręsti', 'What this hiring system helps solve'],
-  ['Ji skirta tam, kad nustotumėte švaistyti laiką „tuščioms“ paieškoms!', 'Stop wasting time on low-quality candidate searches.'],
+  ['Ji skirta tam, kad nustotumėte švaistyti laiką „tuščioms“ paieškoms!', 'Help structure sourcing and screening when pipeline quality is unclear.'],
+  [
+    'Pagalbinė versija iš Promptų anatomijos ekosistemos — veikianti atrankos struktūra per ~30 min.',
+    'A Prompt Anatomy ecosystem helper—a practical hiring workflow in about 30 minutes of prompt prep time.',
+  ],
   ['Nulinis srautas?', 'Zero pipeline?'],
   ['Sugeneruokite pritraukiančius skelbimus ir paieškos žinutes.', 'Generate clear job posts and outreach messages.'],
   ['Netinkami žmonės?', 'Wrong people?'],
@@ -426,6 +467,12 @@ const EN_REPLACEMENTS = [
   ['Kasdienės atrankos problemos', 'Everyday hiring problems'],
   ['Mokymų medžiaga. Visos teisės saugomos.', 'Training material. All rights reserved.'],
   ['Privatumas', 'Privacy'],
+  ['href="privatumas.html"', 'href="privacy.html"'],
+  ['Download PDF for $5.99', 'Buy & download — $5.99'],
+  ['Download PDF for $11.99', 'Buy & download — $11.99'],
+  ['aria-label="Buy Beginner PDF Guide for $5.99"', 'aria-label="Buy and download Beginner PDF Guide for $5.99"'],
+  ['aria-label="Buy Advanced PDF Guide for $11.99"', 'aria-label="Buy and download Advanced PDF Guide for $11.99"'],
+  ['info@promptanatomy.app', 'info@promptanatomy.help'],
   ['FAZĖ ', 'PHASE '],
   ['Sistema: X iš 6 fazių', 'System: X of 6 phases'],
   ['progresas ir fazės', 'progress and phases'],
@@ -745,40 +792,37 @@ function applyEnPromptUi(html) {
   return html;
 }
 
-// ---- Privacy EN ----
-const PRIVACY_EN = {
-  title: 'Privacy Policy – Personalas',
-  back: '← Back to Personalas',
-  backLink: '← Back to Personalas',
-  intro:
-    '<strong>Personalas</strong> – US hiring prompts for HR teams (Series No. 3 from Prompt Anatomy). Static English-only app with optional paid PDF guides processed by Stripe.',
-  q1: 'Do we collect your data?',
-  a1: '<strong>Free tool: no.</strong> The free prompt builder does not collect personal data – no forms, no email collection. <strong>Paid PDFs:</strong> Stripe processes your payment and provides your billing email to us so Resend can deliver the secure download link.',
-  q2: 'What happens on your device?',
-  a2: 'Only the browser <strong>localStorage</strong>: we save which prompts you marked as “Marked as done”. Progress data stays only on your device.',
-  q3: 'Sub-processors for paid PDFs',
-  a3: '<strong>Stripe</strong> (payment processor, billing email + payment metadata), <strong>Resend</strong> (transactional email delivery), and <strong>Upstash Redis</strong> (fulfillment state and short-lived download tokens). We retain fulfillment records for up to 90 days. See <a href="../terms.html">Terms</a> for license and refunds.'
-};
+const PRIVACY_PAGE_TITLE = 'Privacy Policy – Personalas';
 
 function buildPrivacyEn(html) {
   return html
-    .replace('<html lang="lt">', '<html lang="en-US">')
-    .replace(/<title>.*?<\/title>/, '<title>' + PRIVACY_EN.title + '</title>')
     .replace('href="favicon.svg"', 'href="../favicon.svg"')
-    .replace('href="assets/styles.css"', 'href="../assets/styles.css"')
-    .replace(
-      '<a href="index.html" class="btn privacy-back">← Grįžti į Personalą</a>',
-      '<a href="index.html" class="btn privacy-back">' + PRIVACY_EN.back + '</a>'
-    )
-    .replace('Privatumo politika', 'Privacy Policy')
-    .replace(/<p class="intro"><strong>Personalas<\/strong>[^]*?<\/p>/, '<p class="intro">' + PRIVACY_EN.intro + '</p>')
-    .replace('Ar renkame tavo duomenis?', PRIVACY_EN.q1)
-    .replace(/<p><strong>Ne\.<\/strong>.*?serverius\.<\/p>/, '<p>' + PRIVACY_EN.a1 + '</p>')
-    .replace('Kas vyksta tavo įrenginyje?', PRIVACY_EN.q2)
-    .replace(/<p>Tik naršyklės.*?įrenginyje\.<\/p>/, '<p>' + PRIVACY_EN.a2 + '</p>')
-    .replace('Jei vėliau bus forma', PRIVACY_EN.q3)
-    .replace(/<p>Jei įjungsime.*?naudojame\.<\/p>/, '<p>' + PRIVACY_EN.a3 + '</p>')
-    .replace('← Grįžti į Personalą', PRIVACY_EN.backLink);
+    .replace('href="assets/styles.css"', 'href="../assets/styles.css"');
+}
+
+function applySotMetaDescription(html, desc) {
+  return html.replace(
+    /<meta name="description" content="[^"]*">/i,
+    '<meta name="description" content="' + escapeHtmlAttr(desc) + '">'
+  );
+}
+
+function applySotToEnIndex(html, sot) {
+  const email = sot.product.contactEmail;
+  html = applySotMetaDescription(html, sot.legal.metaDescription);
+  html = html.replace(/https:\/\/buy\.stripe\.com\/REPLACE_BEGINNER_PAYMENT_LINK/g, sot.pdfGuides.beginner.stripePaymentLink);
+  html = html.replace(/https:\/\/buy\.stripe\.com\/REPLACE_ADVANCED_PAYMENT_LINK/g, sot.pdfGuides.advanced.stripePaymentLink);
+  html = html.replace(/info@promptanatomy\.app/g, email);
+  if (sot.legal.disclaimerShort) {
+    html = html.replace('{{SOT_DISCLAIMER}}', sot.legal.disclaimerShort);
+  }
+  if (sot.legal.compareStripHtml) {
+    html = html.replace('{{SOT_COMPARE_STRIP}}', sot.legal.compareStripHtml);
+  }
+  if (sot.legal.compareStripNote) {
+    html = html.replace('{{SOT_COMPARE_NOTE}}', sot.legal.compareStripNote);
+  }
+  return html;
 }
 
 /** Strip injected SEO between viewport and meta description so locale builds work after finalizeRootIndexHtml. */
@@ -801,31 +845,45 @@ function stripLanguageSwitcher(html) {
     .replace(/\s*<nav class="lang-switcher"[\s\S]*?<\/nav>\s*/gi, '\n');
 }
 
+function removeLegacyPrivacyOutputs() {
+  const legacy = [
+    path.join(ROOT, 'en', 'privatumas.html'),
+    path.join(ROOT, 'privatumas.html'),
+  ];
+  legacy.forEach(function (file) {
+    if (fs.existsSync(file)) fs.unlinkSync(file);
+  });
+}
+
 // ---- Main ----
 function main() {
+  const sot = loadSot();
+  assertNoStripePlaceholders(sot);
+
   let indexHtml = stripIndexForLocaleBuild(read('templates/index-lt.html'));
-  let privacyHtml = stripPrivacyForLocaleBuild(read('templates/privatumas-lt.html'));
+  let privacyHtml = stripPrivacyForLocaleBuild(read('templates/privacy.html'));
 
   const privacyEnDesc =
     'Personalas – static site with US hiring prompts for HR teams. Stripe processes paid PDF purchases; Resend delivers download links.';
 
   let enIndex = applyEnReplacements(indexHtml);
   enIndex = applyEnPromptUi(enIndex);
+  enIndex = applySotToEnIndex(enIndex, sot);
   enIndex = stripLanguageSwitcher(enIndex);
-  enIndex = injectHead(enIndex, BASE_PATH);
+  enIndex = injectHead(enIndex, BASE_PATH, sot);
   write('en/index.html', enIndex);
 
   let enPrivacy = buildPrivacyEn(privacyHtml);
-  enPrivacy = injectPrivacyHead(enPrivacy, 'en/privatumas.html', PRIVACY_EN.title, privacyEnDesc);
-  write('en/privatumas.html', enPrivacy);
+  enPrivacy = injectPrivacyHead(enPrivacy, 'en/privacy.html', PRIVACY_PAGE_TITLE, privacyEnDesc);
+  write('en/privacy.html', enPrivacy);
 
   writeRobotsAndSitemap();
+  removeLegacyPrivacyOutputs();
 
-  finalizeRootIndexHtml();
-
+  finalizeRootIndexHtml(sot);
   finalizeRootPrivacyHtml();
 
-  console.log('Build done: en/index.html, en/privatumas.html, robots.txt, sitemap.xml');
+  console.log('Build done: en/index.html, en/privacy.html, privacy.html, robots.txt, sitemap.xml');
   console.log('BASE_PATH:', BASE_PATH || '(root – no subpath)');
   console.log('SITE_ORIGIN:', SITE_ORIGIN);
   console.log('SITE_PUBLIC_BASE:', SITE_PUBLIC_BASE || '(not set)');
