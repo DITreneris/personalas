@@ -2052,9 +2052,78 @@
         .pdf-guide-license, .pdf-guide-refund, .pdf-guide-promise { font-size: var(--fs-sm); color: var(--text-light); margin: 0; }
         .pdf-guide-trust { display: flex; flex-wrap: wrap; gap: 8px; font-size: var(--fs-xs); color: var(--text-light); margin: 0; }
         .pdf-guide-price-row { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
-        .pdf-testimonials { margin: 0; }
-        .pdf-testimonial { margin: 0; padding: 12px; border: 1px solid var(--border-subtle); border-radius: var(--r-sm); font-size: var(--fs-sm); color: var(--text-light); }
-        .pdf-testimonial cite { display: block; margin-top: 8px; font-style: normal; font-size: var(--fs-xs); }
+        /* PDF expert scenarios: 3-card row replacing the single pilot blockquote.
+         * Elevation ladder (DS v0.2.1 §6.3) — soft / medium / raised — gives a
+         * subtle visual rhythm without changing copy hierarchy. Order-driven
+         * modifiers come from buildExpertCardsHtml() in scripts/build-locale-pages.js. */
+        .pdf-expert-scenarios-title {
+            margin: 0 0 var(--space-8);
+            font-size: var(--fs-lg);
+            color: var(--text);
+        }
+        .pdf-expert-scenarios-disclaimer {
+            margin: 0 0 var(--space-16);
+        }
+        .pdf-expert-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-16);
+            margin: var(--space-16) 0 0;
+            padding: 0;
+            list-style: none;
+            align-items: stretch;
+        }
+        .pdf-expert-card {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-12);
+            padding: var(--space-20);
+            background: var(--surface-1);
+            border: var(--border-width) solid var(--border-subtle);
+            border-radius: var(--r-card);
+            transition:
+                box-shadow var(--duration-normal) var(--ease-out),
+                transform var(--duration-fast) var(--ease-out);
+        }
+        .pdf-expert-card--elev-soft { box-shadow: var(--shadow-soft); }
+        .pdf-expert-card--elev-medium { box-shadow: var(--shadow-medium); }
+        .pdf-expert-card--elev-raised { box-shadow: var(--shadow-elevated); }
+        .pdf-expert-card--elev-soft:hover { box-shadow: var(--shadow-medium); }
+        .pdf-expert-card--elev-medium:hover { box-shadow: var(--shadow-elevated); }
+        .pdf-expert-card--elev-raised:hover { box-shadow: var(--shadow-elevated); }
+        .pdf-expert-card:hover {
+            transform: translateY(var(--lift-sm));
+        }
+        .pdf-expert-card__approach {
+            margin: 0;
+            font-size: var(--fs-xs);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--accent-dark);
+        }
+        .pdf-expert-card__quote {
+            margin: 0;
+            padding: 0;
+            border: none;
+            font-size: var(--fs-sm);
+            line-height: var(--leading-relaxed);
+            color: var(--text);
+        }
+        .pdf-expert-card__meta {
+            margin-top: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .pdf-expert-card__meta strong {
+            color: var(--text);
+            font-size: var(--fs-sm);
+        }
+        .pdf-expert-card__meta span {
+            color: var(--text-muted);
+            font-size: var(--fs-xs);
+        }
         .pdf-author-panel { margin-top: var(--space-20); padding: 16px; border-top: 1px solid var(--border-subtle); font-size: var(--fs-sm); color: var(--text-light); }
         .pdf-guides-faq { margin-top: var(--space-24); }
         .pdf-guides-faq h3 { margin: 0 0 12px; font-size: var(--fs-xl); }
@@ -2453,6 +2522,10 @@
                 right: 20px;
                 bottom: 20px;
             }
+
+            .pdf-expert-cards {
+                grid-template-columns: 1fr;
+            }
         }
 
         @media (max-width: 480px) {
@@ -2540,6 +2613,10 @@
                 left: 12px;
                 right: 12px;
                 bottom: 16px;
+            }
+
+            .pdf-expert-card {
+                padding: var(--space-16);
             }
 
             .faq,

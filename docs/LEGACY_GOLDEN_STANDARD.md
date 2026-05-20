@@ -2,7 +2,7 @@
 
 **Paskirtis:** Vienas operacinis sąrašas — ką **ne laužyti** keičiant turinį, CSS arba build. Detalus DS implementacijos planas — [design_systemv02.md](design_systemv02.md). Keliai, deploy, brand — [AGENT_SOT.md](AGENT_SOT.md). Agentų seka — [AGENTS.md](../AGENTS.md) §9.
 
-**Paskutinis atnaujinimas:** 2026-05-20 (DS v0.2.5)
+**Paskutinis atnaujinimas:** 2026-05-20 (DS v0.2.6)
 
 ---
 
@@ -28,7 +28,7 @@ hero (primary CTA → #pdf-guides)
   → #page-lanes-nav (sticky: PDF guides | Free prompts)
   → page-lane--shop
       → objectives
-      → #pdf-guides (grid → trust → Buyer FAQ → testimonial → free-bridge)
+      → #pdf-guides (grid → trust → Buyer FAQ → 3 expert cards → free-bridge)
   → page-lane--free
       → free-tier-band (#free-prompts-label + section title)
       → #workflow-overview (6 fazės chip'ai — ne hero viduje)
@@ -95,7 +95,8 @@ Struktūra **nekeičiama**; tik CSS arba minimalūs markup pašalinimai:
 | Stripe | `data-product`, `data-analytics` ant CTA; URL iš SOT → build |
 | Buyer FAQ | `{{SOT_BUYER_FAQ_HTML}}` build metu; `<details class="faq-details">` **be** `open`; `initBuyerFaq()` skip jei jau užpildyta |
 | Disclaimer | Tik footer `.footer-disclaimer` + `{{SOT_DISCLAIMER}}` — **ne** dubliuoti `.pdf-guides-after-purchase` |
-| Po pirkimo blokas | `#pdf-guides-faq` po grid; `.pdf-guides-after-purchase`: testimonial + `pdf-guides-free-bridge` |
+| Po pirkimo blokas | `#pdf-guides-faq` po grid; `.pdf-guides-after-purchase`: **3 ekspertų kortelės** (`.pdf-expert-cards` grid) + `pdf-guides-free-bridge` |
+| Ekspertų kortelės (DS v0.2.6) | Lygiai 3 `li.pdf-expert-card[role="listitem"]` viduje `ul.pdf-expert-cards[role="list"]` su elevation modifikatoriais `--elev-soft / --elev-medium / --elev-raised`; turinys iš `marketing.pdfSection.expertScenarios` SOT (Joan/Ohio, Lane/Oregon, Emanuel/Texas); privalomas `pdf-expert-scenarios-disclaimer` („Illustrative scenarios … not client testimonials") |
 
 **PDF sekcijos fragmentas:** sinchronizuoti [templates/index-lt.html](../templates/index-lt.html) su [scripts/pdf-guides-section.fragment.html](../scripts/pdf-guides-section.fragment.html) jei keičiate HTML struktūrą.
 
@@ -206,3 +207,4 @@ Nelaužyti be QA:
 | 2026-05-20 | v0.2.3 | Motion ritmu & lift token sistema (--lift-sm/-md, transition tokens, reduced-motion transform reset) |
 | 2026-05-20 | v0.2.4 | Focus + radius + form consolidation (--ring-focus-on-dark, --r-xs, gold form ring, code-block 3px) |
 | 2026-05-20 | v0.2.5 | Affordance & state polish (:has done state, selected check marker, prompt hover lift, featured gold inset, scrollbar styling, .btn deduplication) |
+| 2026-05-20 | v0.2.6 | PDF expert scenarios row (3 illustrative cards: Joan/Ohio, Lane/Oregon, Emanuel/Texas) replaces single pilot blockquote; new `.pdf-expert-cards` grid + soft/medium/raised elevation modifiers; SOT-driven via `marketing.pdfSection.expertScenarios` |

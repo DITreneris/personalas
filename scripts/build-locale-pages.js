@@ -130,9 +130,37 @@ function validateSot(sot) {
   if (!m.pdfSection || !m.pdfSection.title || !m.pdfSection.lede) {
     throw new Error('config/sot.json: marketing.pdfSection.title and lede are required');
   }
+  validateExpertScenarios(m.pdfSection);
   if (!m.workflowOverview || !m.workflowOverview.title) {
     throw new Error('config/sot.json: marketing.workflowOverview.title is required');
   }
+}
+
+function validateExpertScenarios(pdfSection) {
+  const es = pdfSection && pdfSection.expertScenarios;
+  if (!es) {
+    throw new Error('config/sot.json: marketing.pdfSection.expertScenarios is required (3 illustrative cards)');
+  }
+  if (!es.title || typeof es.title !== 'string') {
+    throw new Error('config/sot.json: marketing.pdfSection.expertScenarios.title is required');
+  }
+  if (!es.disclaimer || typeof es.disclaimer !== 'string') {
+    throw new Error('config/sot.json: marketing.pdfSection.expertScenarios.disclaimer is required (illustrative scenarios — not testimonials)');
+  }
+  if (!Array.isArray(es.cards) || es.cards.length !== 3) {
+    throw new Error('config/sot.json: marketing.pdfSection.expertScenarios.cards must contain exactly 3 items');
+  }
+  const requiredCardKeys = ['approach', 'quote', 'name', 'role', 'region'];
+  es.cards.forEach(function (card, idx) {
+    if (!card || typeof card !== 'object') {
+      throw new Error('config/sot.json: expertScenarios.cards[' + idx + '] must be an object');
+    }
+    for (const key of requiredCardKeys) {
+      if (!card[key] || typeof card[key] !== 'string') {
+        throw new Error('config/sot.json: expertScenarios.cards[' + idx + '].' + key + ' is required');
+      }
+    }
+  });
 }
 
 function getSeoMetaDescription(sot) {
@@ -232,6 +260,45 @@ function buildBuyerFaqHtml(sot) {
         '<summary class="faq-summary">' + escapeHtmlText(item.q) + '</summary>' +
         '<div class="faq-panel">' + linkifyFaqEmail(item.a, email) + '</div>' +
         '</details>'
+      );
+    })
+    .join('');
+}
+
+/**
+ * Render the 3-card "illustrative hiring scenarios" row in the PDF section.
+ * Elevation ladder (DS v0.2.1 §6.3): soft → medium → raised, mapped by card index
+ * so the visual rhythm stays predictable when SOT order changes.
+ */
+const EXPERT_CARD_ELEV_MODIFIERS = [
+  'pdf-expert-card--elev-soft',
+  'pdf-expert-card--elev-medium',
+  'pdf-expert-card--elev-raised',
+];
+
+function buildExpertCardsHtml(sot) {
+  const cards =
+    sot && sot.marketing && sot.marketing.pdfSection &&
+    sot.marketing.pdfSection.expertScenarios &&
+    sot.marketing.pdfSection.expertScenarios.cards;
+  if (!Array.isArray(cards) || !cards.length) return '';
+  return cards
+    .map(function (card, idx) {
+      const elev = EXPERT_CARD_ELEV_MODIFIERS[idx] || EXPERT_CARD_ELEV_MODIFIERS[EXPERT_CARD_ELEV_MODIFIERS.length - 1];
+      const approach = escapeHtmlText(card.approach);
+      const quote = escapeHtmlText(card.quote);
+      const name = escapeHtmlText(card.name);
+      const role = escapeHtmlText(card.role);
+      const region = escapeHtmlText(card.region);
+      return (
+        '<li class="pdf-expert-card ' + elev + '" role="listitem">' +
+          '<p class="pdf-expert-card__approach">' + approach + '</p>' +
+          '<blockquote class="pdf-expert-card__quote">' + quote + '</blockquote>' +
+          '<footer class="pdf-expert-card__meta">' +
+            '<strong>' + name + '</strong>' +
+            '<span>' + role + ' &middot; ' + region + '</span>' +
+          '</footer>' +
+        '</li>'
       );
     })
     .join('');
@@ -577,6 +644,9 @@ const EN_REPLACEMENTS = [
   ['{{SOT_PDF_SECTION_TITLE}}', '{{SOT_PDF_SECTION_TITLE}}'],
   ['{{SOT_PDF_SECTION_LEDE}}', '{{SOT_PDF_SECTION_LEDE}}'],
   ['{{SOT_PDF_SECTION_FREE_BRIDGE}}', '{{SOT_PDF_SECTION_FREE_BRIDGE}}'],
+  ['{{SOT_PDF_EXPERT_SCENARIOS_TITLE}}', '{{SOT_PDF_EXPERT_SCENARIOS_TITLE}}'],
+  ['{{SOT_PDF_EXPERT_SCENARIOS_DISCLAIMER}}', '{{SOT_PDF_EXPERT_SCENARIOS_DISCLAIMER}}'],
+  ['{{SOT_PDF_EXPERT_CARDS_HTML}}', '{{SOT_PDF_EXPERT_CARDS_HTML}}'],
   ['{{SOT_BUYER_FAQ_HTML}}', '{{SOT_BUYER_FAQ_HTML}}'],
   ['Nulinis srautas?', 'Zero pipeline?'],
   ['Sugeneruokite pritraukiančius skelbimus ir paieškos žinutes.', 'Generate clear job posts and outreach messages.'],
@@ -1077,6 +1147,9 @@ function applySot(html, sot) {
     '{{SOT_PDF_BEGINNER_CTA}}': p.beginnerCtaLabel || 'Buy Beginner — $5.99',
     '{{SOT_PDF_ADVANCED_CTA}}': p.advancedCtaLabel || 'Buy Advanced — $11.99',
     '{{SOT_PDF_SECTION_FREE_BRIDGE}}': p.freeBridge || '',
+    '{{SOT_PDF_EXPERT_SCENARIOS_TITLE}}': (p.expertScenarios && p.expertScenarios.title) || '',
+    '{{SOT_PDF_EXPERT_SCENARIOS_DISCLAIMER}}': (p.expertScenarios && p.expertScenarios.disclaimer) || '',
+    '{{SOT_PDF_EXPERT_CARDS_HTML}}': buildExpertCardsHtml(sot),
     '{{SOT_FREE_TIER_LABEL}}': (m.freeTier && m.freeTier.label) || 'Free copy-paste prompts on this page',
     '{{SOT_FREE_TIER_HINT}}': (m.freeTier && m.freeTier.hint) || '',
     '{{SOT_FREE_TIER_CTA_LABEL}}': (m.freeTier && m.freeTier.ctaLabel) || '',

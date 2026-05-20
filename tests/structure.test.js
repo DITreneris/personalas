@@ -242,7 +242,75 @@ function run() {
     tally(assert(!enIndex.includes('Typical live workshops'), 'en/index.html: no workshop price compare strip'));
     tally(assert(!enIndex.includes('Illustrative comparison, not a specific'), 'en/index.html: no compare-strip disclaimer'));
     tally(assert(!enIndex.includes('Quote paraphrased from pilot'), 'en/index.html: no paraphrased-quote footnote'));
-    tally(assert(enIndex.includes('class="pdf-testimonial"'), 'en/index.html: pilot testimonial remains'));
+    // --- PDF expert scenarios (3-card illustrative row, DS v0.2.6) ---
+    const expertCardCount = (enIndex.match(/class="pdf-expert-card /g) || []).length;
+    tally(
+      assert(
+        expertCardCount >= 3,
+        'en/index.html: 3+ pdf-expert-card articles in after-purchase block (got ' + expertCardCount + ')'
+      )
+    );
+    tally(
+      assert(
+        enIndex.includes('class="pdf-expert-cards"') && enIndex.includes('role="list"') && enIndex.includes('Illustrative hiring approaches'),
+        'en/index.html: pdf-expert-cards grid with role="list" + aria-label'
+      )
+    );
+    tally(
+      assert(
+        enIndex.includes('pdf-expert-card--elev-soft') &&
+          enIndex.includes('pdf-expert-card--elev-medium') &&
+          enIndex.includes('pdf-expert-card--elev-raised'),
+        'en/index.html: three distinct elevation modifiers (soft / medium / raised)'
+      )
+    );
+    tally(
+      assert(
+        enIndex.includes('Joan Cole') &&
+          enIndex.includes('Lane Lincoln') &&
+          enIndex.includes('Emanuel Manolo'),
+        'en/index.html: expert scenario personas (Joan / Lane / Emanuel)'
+      )
+    );
+    tally(
+      assert(
+        enIndex.includes('Ohio') && enIndex.includes('Oregon') && enIndex.includes('Texas'),
+        'en/index.html: expert scenario US regions (Ohio / Oregon / Texas)'
+      )
+    );
+    tally(
+      assert(
+        enIndex.includes('pdf-expert-scenarios-disclaimer') && enIndex.includes('not client testimonials'),
+        'en/index.html: expert scenarios disclaimer element (illustrative, not testimonials)'
+      )
+    );
+    tally(
+      assert(
+        !enIndex.includes('Pilot HR generalist') && !enIndex.includes('class="pdf-testimonial"'),
+        'en/index.html: legacy single pilot testimonial removed'
+      )
+    );
+    tally(
+      assert(
+        /\.pdf-expert-cards\s*\{[\s\S]{0,400}grid-template-columns:\s*repeat\(3,\s*1fr\)/.test(landingCss || ''),
+        'landing.css: .pdf-expert-cards grid uses repeat(3, 1fr)'
+      )
+    );
+    tally(
+      assert(
+        /\.pdf-expert-card--elev-soft\s*\{[^}]*box-shadow:\s*var\(--shadow-soft\)/.test(landingCss || '') &&
+          /\.pdf-expert-card--elev-medium\s*\{[^}]*box-shadow:\s*var\(--shadow-medium\)/.test(landingCss || '') &&
+          /\.pdf-expert-card--elev-raised\s*\{[^}]*box-shadow:\s*var\(--shadow-elevated\)/.test(landingCss || ''),
+        'landing.css: three expert-card elevation modifiers map to soft / medium / elevated shadow tokens'
+      )
+    );
+    tally(
+      assert(
+        enIndex.includes('class="pdf-guides-free-bridge"') &&
+          enIndex.indexOf('class="pdf-expert-cards"') < enIndex.indexOf('class="pdf-guides-free-bridge"'),
+        'en/index.html: pdf-guides-free-bridge still sits after expert cards'
+      )
+    );
     tally(assert(enIndex.includes('id="workflow-overview"'), 'en/index.html workflow-overview section'));
     tally(assert(fs.existsSync(path.join(ROOT, 'favicon.svg')), 'favicon.svg exists at site root'));
     tally(assert(fs.existsSync(path.join(ROOT, 'favicon.ico')), 'favicon.ico exists at site root'));

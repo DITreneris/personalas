@@ -67,7 +67,34 @@
       "freeBridge": "Not ready to buy? <a href=\"#free-prompts-label\">Jump to free prompts</a>—or start with Prompt 1.",
       "sectionTrustHtml": "Stripe checkout · 14-day refund · Instant email delivery · Personal license — <a href=\"/terms.html#paid-pdf-license\">terms</a>",
       "beginnerCtaLabel": "Buy Beginner — $5.99",
-      "advancedCtaLabel": "Buy Advanced — $11.99"
+      "advancedCtaLabel": "Buy Advanced — $11.99",
+      "expertScenarios": {
+        "title": "How three hiring leads use one shared rubric",
+        "disclaimer": "Illustrative scenarios for US hiring teams—not client testimonials.",
+        "cards": [
+          {
+            "approach": "Panel alignment",
+            "quote": "Replaced ad hoc notes with one scorecard the whole panel uses, so debriefs end with a single ranked candidate list.",
+            "name": "Joan Cole",
+            "role": "HR Manager",
+            "region": "Ohio"
+          },
+          {
+            "approach": "Culture + debrief",
+            "quote": "Kept the same rubric, added a 15-minute debrief after each stage—culture calls now rest on shared evidence, not gut feel.",
+            "name": "Lane Lincoln",
+            "role": "Culture and People Manager",
+            "region": "Oregon"
+          },
+          {
+            "approach": "Time-to-first-interview",
+            "quote": "Same rubric from job post to first phone screen—shaved a week off time-to-first-interview without rushing candidate review.",
+            "name": "Emanuel Manolo",
+            "role": "Recruitment Officer",
+            "region": "Texas"
+          }
+        ]
+      }
     },
     "community": {
       "title": "Want the full Prompt Anatomy training?",
