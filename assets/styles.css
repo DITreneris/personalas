@@ -229,6 +229,25 @@ html {
     box-shadow: var(--shadow-cta);
 }
 
+.btn.btn--ghost {
+    background: var(--surface-2);
+    border: 1px solid var(--border-subtle-dark);
+    color: var(--accent-primary);
+    box-shadow: none;
+    font-weight: 600;
+}
+
+.btn.btn--ghost:hover {
+    background: var(--surface-3);
+    transform: none;
+    box-shadow: none;
+}
+
+.btn.btn--ghost:active {
+    transform: scale(0.98);
+    box-shadow: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
     html {
         scroll-behavior: auto;

@@ -232,6 +232,47 @@ function run() {
         'landing.css: workflow phase chips use --text on light surface'
       )
     );
+    tally(
+      assert(
+        /\.workflow-overview[\s\S]{0,900}background:\s*var\(--surface-2\)/.test(landingCss || ''),
+        'landing.css: workflow phase chips default surface-2 (DS v0.2.1 elevation)'
+      )
+    );
+    tally(
+      assert(
+        /\.pdf-guides\s*\{[\s\S]{0,400}background:\s*var\(--surface-2\)/.test(landingCss || ''),
+        'landing.css: pdf-guides section uses surface-2 background (DS v0.2.1)'
+      )
+    );
+    tally(
+      assert(
+        /\.pdf-guide-card\s*\{[\s\S]{0,500}box-shadow:\s*var\(--shadow-soft\)/.test(landingCss || ''),
+        'landing.css: pdf-guide-card rest elevation shadow-soft (DS v0.2.1)'
+      )
+    );
+    tally(
+      assert(
+        enIndex.includes('class="btn btn--ghost pdf-guide-preview-btn"'),
+        'en/index.html: PDF preview buttons use btn--ghost'
+      )
+    );
+    const sharedCss = fs.readFileSync(path.join(ROOT, 'assets/styles.css'), 'utf8');
+    tally(
+      assert(/\.btn\.btn--ghost\s*\{/.test(sharedCss), 'assets/styles.css: btn--ghost component (DS v0.2.1)')
+    );
+    const ringFocusCount = (landingCss.match(/outline:\s*var\(--ring-focus\)/g) || []).length;
+    tally(
+      assert(ringFocusCount >= 8, 'landing.css: --ring-focus on >=8 components (DS v0.2)')
+    );
+    const afterPurchaseBlock = enIndex.match(
+      /class="pdf-guides-after-purchase"[\s\S]*?<\/div>\s*\n\s*<\/section>/
+    );
+    tally(
+      assert(
+        afterPurchaseBlock && !afterPurchaseBlock[0].includes('class="legal-disclaimer"'),
+        'en/index.html: no duplicate legal-disclaimer in pdf-guides-after-purchase (footer only)'
+      )
+    );
     const pdfPos = enIndex.indexOf('id="pdf-guides"');
     const block1Pos = enIndex.indexOf('id="block1"');
     tally(assert(pdfPos !== -1 && block1Pos !== -1 && pdfPos < block1Pos, 'pdf-guides appears before first free prompt'));

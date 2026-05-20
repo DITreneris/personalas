@@ -59,6 +59,7 @@ Pilnas sąrašas – [DEPLOYMENT.md](DEPLOYMENT.md). Privalomi:
 
 ### QA prieš release
 
+- [ ] DS v0.2.1 elevation: `/en/` — PDF sekcija pilkas fonas, kortelės su šešėliu, workflow chip'ai skaitomi; preview mygtukas ne „tuščias“ ant baltos
 - [ ] Hero/PDF funnel: `/en/` – primary CTA scroll į `#pdf-guides`; secondary → Prompt 1; PDF blokas virš nemokamų promptų
 - [ ] Stripe **test mode**: pirkti Beginner ir Advanced → patikrinti, kad atvyksta el. laiškas iš Resend su veikiančia download nuoroda
 - [ ] [success.html](success.html) parodo „Download PDF“ mygtuką per ~5 s po `Stripe redirect` (poll į `/api/download-link`)

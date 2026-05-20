@@ -43,7 +43,7 @@
             background: var(--cta-bg);
             color: var(--cta-text);
             font-weight: 700;
-            font-size: 16px;
+            font-size: var(--fs-md);
             text-decoration: none;
             border-radius: 0 0 var(--r-btn) 0;
             transition: left 0.2s ease;
@@ -60,7 +60,7 @@
             background: var(--bg);
             color: var(--text);
             line-height: 1.6;
-            font-size: 18px;
+            font-size: var(--fs-lg);
         }
 
         .container {
@@ -142,7 +142,7 @@
             padding: 6px 14px;
             min-height: 32px;
             border-radius: var(--r-badge);
-            font-size: 11px;
+            font-size: var(--fs-xs);
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.1em;
@@ -184,7 +184,7 @@
         }
 
         .header p {
-            font-size: 20px;
+            font-size: var(--fs-xl);
             line-height: 1.5;
             opacity: 0.95;
             font-weight: 500;
@@ -196,7 +196,7 @@
             display: flex;
             flex-wrap: wrap;
             gap: var(--space-12) var(--space-16);
-            font-size: 14px;
+            font-size: var(--fs-sm);
             font-weight: 600;
             opacity: 0.9;
             margin-bottom: var(--space-24);
@@ -213,7 +213,7 @@
             margin-left: var(--space-8);
             margin-right: var(--space-8);
             opacity: 0.8;
-            font-size: 14px;
+            font-size: var(--fs-sm);
         }
 
         .header-phases li:last-child::after {
@@ -271,7 +271,7 @@
         }
 
         .header-note {
-            font-size: 13px;
+            font-size: var(--fs-sm);
             opacity: 0.85;
             margin-top: var(--space-16);
             font-weight: 500;
@@ -304,7 +304,7 @@
             min-width: 44px;
             border-radius: var(--r-btn);
             border: none;
-            font-size: 17px;
+            font-size: var(--fs-lg);
             font-weight: 700;
             cursor: pointer;
             transition: background var(--duration-normal) var(--ease-out), transform var(--duration-fast) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out);
@@ -321,7 +321,7 @@
             border: 1px solid rgba(0, 0, 0, 0.08);
             min-height: 56px;
             padding: 28px 48px;
-            font-size: 18px;
+            font-size: var(--fs-lg);
             font-weight: 800;
             transition: transform var(--duration-fast) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out), background var(--duration-normal) var(--ease-out);
         }
@@ -365,7 +365,7 @@
 
         /* Hero secondary – aiškiai silpnesnis už primary, glass */
         .header .header-cta .cta-button-outline {
-            font-size: 15px;
+            font-size: var(--fs-sm);
             font-weight: 600;
             padding: 16px 24px;
             min-height: 48px;
@@ -395,7 +395,7 @@
             min-width: 44px;
             border-radius: var(--r-btn);
             border: var(--border-width) solid rgba(255, 255, 255, 0.6);
-            font-size: 16px;
+            font-size: var(--fs-md);
             font-weight: 600;
             cursor: pointer;
             transition: background var(--duration-normal) var(--ease-out), border-color var(--duration-normal) var(--ease-out), color var(--duration-normal) var(--ease-out), transform var(--duration-fast) var(--ease-out);
@@ -427,7 +427,7 @@
         }
 
         .cta-secondary {
-            font-size: 15px;
+            font-size: var(--fs-sm);
             font-weight: 600;
             color: rgba(255, 255, 255, 0.9);
             text-decoration: underline;
@@ -495,7 +495,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: var(--fs-xl);
             color: var(--text-light);
             transition: background var(--duration-normal) var(--ease-out), transform var(--duration-fast) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out);
         }
@@ -511,21 +511,21 @@
         }
 
         .modal-title {
-            font-size: 28px;
+            font-size: var(--fs-3xl);
             font-weight: 800;
             margin-bottom: 12px;
             color: var(--text);
         }
 
         .modal-desc {
-            font-size: 16px;
+            font-size: var(--fs-md);
             color: var(--text-light);
             margin-bottom: 28px;
             line-height: 1.6;
         }
 
         .modal-privacy {
-            font-size: 14px;
+            font-size: var(--fs-sm);
         }
 
         .modal-privacy a {
@@ -539,7 +539,7 @@
 
         .form-label {
             display: block;
-            font-size: 14px;
+            font-size: var(--fs-sm);
             font-weight: 700;
             color: var(--text);
             margin-bottom: 8px;
@@ -553,7 +553,7 @@
             min-height: 44px;
             border: var(--border-width) solid var(--border);
             border-radius: var(--r-btn);
-            font-size: 16px;
+            font-size: var(--fs-md);
             font-family: 'Inter', sans-serif;
             transition: background var(--duration-normal) var(--ease-out), transform var(--duration-fast) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out);
             outline: none;
@@ -571,7 +571,7 @@
 
         .form-error {
             color: var(--error);
-            font-size: 14px;
+            font-size: var(--fs-sm);
             margin-top: 6px;
             display: none;
         }
@@ -588,7 +588,7 @@
             color: white;
             border: none;
             border-radius: var(--r-btn);
-            font-size: 18px;
+            font-size: var(--fs-lg);
             font-weight: 700;
             cursor: pointer;
             transition: background var(--duration-normal) var(--ease-out), transform var(--duration-fast) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out);
@@ -602,7 +602,7 @@
         }
 
         .form-submit:focus-visible {
-            outline: 3px solid var(--accent-gold);
+            outline: var(--ring-focus);
             outline-offset: 2px;
         }
 
@@ -654,19 +654,19 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 32px;
+            font-size: var(--fs-3xl);
             margin: 0 auto 20px;
         }
 
         .form-success h3 {
-            font-size: 24px;
+            font-size: var(--fs-2xl);
             font-weight: 800;
             margin-bottom: 12px;
             color: var(--text);
         }
 
         .form-success p {
-            font-size: 16px;
+            font-size: var(--fs-md);
             color: var(--text-light);
             line-height: 1.6;
         }
@@ -682,7 +682,7 @@
         }
 
         .instructions-title {
-            font-size: 24px;
+            font-size: var(--fs-2xl);
             font-weight: 800;
             color: var(--accent-dark);
             margin-bottom: var(--space-24);
@@ -713,7 +713,7 @@
         }
 
         .instructions li {
-            font-size: 18px;
+            font-size: var(--fs-lg);
             margin-bottom: var(--space-16);
             line-height: 1.65;
             color: var(--text);
@@ -744,7 +744,7 @@
         }
 
         .instructions-subrow {
-            font-size: 16px;
+            font-size: var(--fs-md);
             line-height: 1.6;
             color: var(--text);
             margin: 0 0 var(--space-12) 0;
@@ -766,7 +766,7 @@
             left: -28px;
             font-weight: 800;
             color: var(--accent-gold-dark);
-            font-size: 20px;
+            font-size: var(--fs-xl);
         }
 
         /* kbd/code – „quiet tokens“ tik instrukcijų bloke */
@@ -777,7 +777,7 @@
             min-height: 0;
             border-radius: 8px;
             font-family: 'JetBrains Mono', monospace;
-            font-size: 12px;
+            font-size: var(--fs-xs);
             font-weight: 600;
             color: var(--accent-dark);
             line-height: 1.45;
@@ -806,7 +806,7 @@
         }
 
         .faq-intro {
-            font-size: 16px;
+            font-size: var(--fs-md);
             color: var(--text-light);
             margin-bottom: var(--space-20);
             line-height: 1.55;
@@ -828,7 +828,7 @@
             list-style: none;
             cursor: pointer;
             padding: var(--space-16) var(--space-20);
-            font-size: 17px;
+            font-size: var(--fs-lg);
             font-weight: 700;
             color: var(--text);
             min-height: 44px;
@@ -863,7 +863,7 @@
         }
 
         .faq-summary:focus-visible {
-            outline: 3px solid var(--brand-prompt-anatomy-accent);
+            outline: var(--ring-focus);
             outline-offset: 2px;
         }
 
@@ -872,7 +872,7 @@
             padding-left: calc(var(--space-20) + var(--space-12));
             border-left: 3px solid var(--tertiary);
             margin-left: var(--space-20);
-            font-size: 16px;
+            font-size: var(--fs-md);
             line-height: 1.6;
             color: var(--text-light);
         }
@@ -892,7 +892,7 @@
         }
 
         .jump-nav h2 {
-            font-size: 20px;
+            font-size: var(--fs-xl);
             font-weight: 800;
             color: var(--accent-dark);
             margin-bottom: var(--space-12);
@@ -934,24 +934,24 @@
         }
 
         .jump-nav-summary:focus-visible {
-            outline: 3px solid var(--accent-gold);
+            outline: var(--ring-focus);
             outline-offset: 2px;
         }
 
         .jump-nav-summary-label {
-            font-size: 20px;
+            font-size: var(--fs-xl);
             font-weight: 800;
             color: var(--accent-dark);
         }
 
         .jump-nav-summary-hint {
-            font-size: 15px;
+            font-size: var(--fs-sm);
             color: var(--text-light);
             line-height: 1.5;
         }
 
         .jump-nav-intro {
-            font-size: 15px;
+            font-size: var(--fs-sm);
             color: var(--text-light);
             margin-bottom: var(--space-16);
             line-height: 1.5;
@@ -971,7 +971,7 @@
             align-items: center;
             min-height: 44px;
             padding: 8px 14px;
-            font-size: 15px;
+            font-size: var(--fs-sm);
             font-weight: 600;
             color: var(--accent-primary);
             text-decoration: none;
@@ -987,7 +987,7 @@
         }
 
         .jump-nav a:focus-visible {
-            outline: 3px solid var(--accent-gold);
+            outline: var(--ring-focus);
             outline-offset: 2px;
         }
 
@@ -1020,7 +1020,7 @@
             position: relative;
             padding-left: 44px;
             margin-bottom: var(--space-20);
-            font-size: 17px;
+            font-size: var(--fs-lg);
             line-height: 1.6;
             color: var(--text);
             transition: color 0.2s ease;
@@ -1058,7 +1058,7 @@
             height: 28px;
             line-height: 28px;
             text-align: center;
-            font-size: 14px;
+            font-size: var(--fs-sm);
             font-weight: 800;
             color: white;
             text-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
@@ -1076,7 +1076,7 @@
 
         .objectives-intro {
             margin-bottom: var(--space-20);
-            font-size: 17px;
+            font-size: var(--fs-lg);
             line-height: 1.6;
             color: var(--text);
         }
@@ -1116,24 +1116,24 @@
         }
 
         .workflow-overview .header-phase-link {
-            border: 1px solid var(--border-subtle);
-            background: var(--surface-1);
+            border: 1px solid var(--border-subtle-dark);
+            background: var(--surface-2);
             color: var(--text);
         }
 
         .workflow-overview .header-phase-link::before {
             background: var(--text-muted);
-            opacity: 0.4;
+            opacity: 0.55;
         }
 
         .workflow-overview .header-phase-link:hover {
-            background: var(--surface-2);
+            background: var(--surface-3);
             color: var(--accent-dark);
             border-color: var(--accent-primary);
         }
 
         .workflow-overview .header-phase-link:focus-visible {
-            outline: 2px solid var(--ring-focus);
+            outline: var(--ring-focus);
             outline-offset: 2px;
         }
 
@@ -1153,7 +1153,7 @@
         .prompt-time {
             display: inline-flex;
             align-items: center;
-            font-size: 12px;
+            font-size: var(--fs-xs);
             font-weight: 700;
             color: var(--text-light);
             background: var(--bg);
@@ -1168,7 +1168,7 @@
             margin-left: 0;
             padding: 4px 10px;
             min-height: 0;
-            font-size: 12px;
+            font-size: var(--fs-xs);
             font-weight: 600;
             color: var(--text-light);
             background: rgba(255, 255, 255, 0.55);
@@ -1217,7 +1217,7 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: 12px;
+            font-size: var(--fs-xs);
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 0.06em;
@@ -1246,14 +1246,14 @@
             color: var(--accent-dark);
             border: var(--border-width) solid var(--border-subtle);
             border-radius: var(--r-badge);
-            font-size: 12px;
+            font-size: var(--fs-xs);
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
 
         .prompt-title {
-            font-size: 32px;
+            font-size: var(--fs-3xl);
             font-weight: 700;
             color: var(--text);
             margin-bottom: 12px;
@@ -1292,7 +1292,7 @@
         }
 
         .code-block:focus-visible {
-            outline: 3px solid var(--accent-gold);
+            outline: var(--ring-focus);
             outline-offset: 2px;
         }
 
@@ -1309,7 +1309,7 @@
             color: white;
             padding: 6px 12px;
             border-radius: var(--r-badge);
-            font-size: 12px;
+            font-size: var(--fs-xs);
             font-weight: 700;
             opacity: 0;
             transition: opacity 0.2s;
@@ -1337,7 +1337,7 @@
 
         .code-text {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 15px;
+            font-size: var(--fs-sm);
             line-height: 1.65;
             color: var(--text);
             white-space: pre-wrap;
@@ -1387,7 +1387,7 @@
 
         .info-content strong {
             display: inline;
-            font-size: 14px;
+            font-size: var(--fs-sm);
             font-weight: 700;
             text-transform: none;
             letter-spacing: 0;
@@ -1399,18 +1399,18 @@
 
         .info-content p {
             display: inline;
-            font-size: 14px;
+            font-size: var(--fs-sm);
             line-height: 1.5;
             color: var(--text-light);
             font-weight: 400;
         }
 
         .info-item-replace .info-content {
-            font-size: 14px;
+            font-size: var(--fs-sm);
         }
 
         .info-item-replace .info-content strong {
-            font-size: 14px;
+            font-size: var(--fs-sm);
             margin-bottom: 0;
         }
 
@@ -1438,7 +1438,7 @@
             min-width: 44px;
             border-radius: var(--r-btn);
             border: none;
-            font-size: 18px;
+            font-size: var(--fs-lg);
             font-weight: 700;
             cursor: pointer;
             transition: box-shadow var(--duration-normal) var(--ease-out), transform var(--duration-fast) var(--ease-out), background var(--duration-normal) var(--ease-out);
@@ -1448,7 +1448,7 @@
         }
 
         .btn:focus-visible {
-            outline: 3px solid var(--accent-gold);
+            outline: var(--ring-focus);
             outline-offset: 2px;
         }
 
@@ -1474,7 +1474,7 @@
         }
 
         .prompt-cta {
-            font-size: 15px;
+            font-size: var(--fs-sm);
             color: var(--text-light);
             margin-bottom: 16px;
             line-height: 1.5;
@@ -1486,7 +1486,7 @@
             gap: 10px;
             margin: 0 0 0 auto;
             cursor: pointer;
-            font-size: 15px;
+            font-size: var(--fs-sm);
             font-weight: 600;
             color: var(--text);
             min-height: 44px;
@@ -1501,7 +1501,7 @@
             accent-color: var(--accent-primary);
         }
         .prompt-done-wrap input:focus-visible {
-            outline: 3px solid var(--accent-gold);
+            outline: var(--ring-focus);
             outline-offset: 2px;
         }
 
@@ -1518,7 +1518,7 @@
 
         .progress-wrap p {
             margin: 0;
-            font-size: 16px;
+            font-size: var(--fs-md);
             font-weight: 700;
             color: var(--accent-dark);
         }
@@ -1564,7 +1564,7 @@
         }
 
         .phase-header:focus-visible {
-            outline: 3px solid var(--accent-gold);
+            outline: var(--ring-focus);
             outline-offset: 2px;
         }
 
@@ -1582,7 +1582,7 @@
             border-radius: var(--r-badge);
             background: var(--accent-primary);
             color: var(--white);
-            font-size: 12px;
+            font-size: var(--fs-xs);
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 0.06em;
@@ -1592,7 +1592,7 @@
         }
 
         .phase-title {
-            font-size: 18px;
+            font-size: var(--fs-lg);
             font-weight: 800;
             letter-spacing: -0.01em;
         }
@@ -1606,7 +1606,7 @@
             border-radius: var(--r-badge);
             background: rgba(255, 255, 255, 0.55);
             border: var(--border-width) solid var(--border-subtle-dark);
-            font-size: 12px;
+            font-size: var(--fs-xs);
             font-weight: 700;
             letter-spacing: 0.05em;
             text-transform: uppercase;
@@ -1663,7 +1663,7 @@
         }
 
         .next-steps p {
-            font-size: 16px;
+            font-size: var(--fs-md);
             color: var(--text);
             margin-bottom: 16px;
             line-height: 1.6;
@@ -1686,7 +1686,7 @@
             text-decoration: none;
             border-radius: var(--r-btn);
             font-weight: 700;
-            font-size: 15px;
+            font-size: var(--fs-sm);
             transition: background 0.2s ease, color 0.2s ease;
         }
 
@@ -1695,7 +1695,7 @@
         }
 
         .next-steps-links a:focus-visible {
-            outline: 3px solid var(--brand-prompt-anatomy-accent);
+            outline: var(--ring-focus);
             outline-offset: 2px;
         }
 
@@ -1725,7 +1725,7 @@
             color: var(--text);
             padding: var(--space-24) var(--space-32);
             border-radius: var(--r-btn);
-            font-size: 18px;
+            font-size: var(--fs-lg);
             font-weight: 700;
             opacity: 0;
             transform: translateY(12px) scale(0.98);
@@ -1760,7 +1760,7 @@
         .pdf-guides {
             margin-top: var(--space-32);
             padding: var(--space-24) var(--space-32);
-            background: var(--surface-1);
+            background: var(--surface-2);
             border: var(--border-width) solid var(--border-subtle);
             border-radius: var(--r-card);
             box-shadow: var(--shadow-card);
@@ -1795,10 +1795,18 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
+            box-shadow: var(--shadow-soft);
+            transition: box-shadow var(--duration-normal) var(--ease-out);
+        }
+        .pdf-guide-card:hover {
+            box-shadow: var(--shadow-medium);
         }
         .pdf-guide-card--featured {
             border-color: var(--brand-prompt-anatomy);
             box-shadow: var(--shadow-medium);
+        }
+        .pdf-guide-card--featured:hover {
+            box-shadow: var(--shadow-elevated);
         }
         .pdf-guide-card h3 {
             margin: 0;
@@ -1912,8 +1920,10 @@
         .pdf-guide-specs li { margin: 0; }
         .pdf-guide-toc { font-size: var(--fs-sm); color: var(--text-light); }
         .pdf-guide-toc ul { margin: 4px 0 0; padding-left: 1.2rem; max-height: 6em; overflow: hidden; }
-        .pdf-guide-preview-btn { background: transparent; border: 1px solid var(--border-subtle); color: var(--brand-prompt-anatomy); padding: 8px 14px; border-radius: var(--r-btn); font-weight: 600; cursor: pointer; min-height: 44px; }
-        .pdf-guide-preview-btn:focus-visible { outline: var(--ring-focus); outline-offset: 2px; }
+        .pdf-guide-preview-btn {
+            padding: 8px 14px;
+            font-size: var(--fs-sm);
+        }
         .pdf-guide-license, .pdf-guide-refund, .pdf-guide-promise { font-size: var(--fs-sm); color: var(--text-light); margin: 0; }
         .pdf-guide-trust { display: flex; flex-wrap: wrap; gap: 8px; font-size: var(--fs-xs); color: var(--text-light); margin: 0; }
         .pdf-guide-price-row { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
@@ -1940,11 +1950,39 @@
         .pdf-guide-sample-link:focus-visible { outline: var(--ring-focus); outline-offset: 2px; border-radius: 4px; }
         .pdf-guide-toc-details { font-size: var(--fs-sm); color: var(--text-light); }
         .pdf-guide-toc-summary { cursor: pointer; font-weight: 600; color: var(--text); }
-        .pdf-bundle-offer { margin: var(--space-24) 0; padding: var(--space-20); border: 2px solid var(--brand-prompt-anatomy-accent); border-radius: var(--r-card); background: var(--surface); text-align: center; }
+        .pdf-guide-toc-summary:focus-visible {
+            outline: var(--ring-focus);
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
+        .pdf-bundle-offer {
+            margin: var(--space-24) 0;
+            padding: var(--space-20);
+            border: 2px solid var(--brand-prompt-anatomy-accent);
+            border-radius: var(--r-card);
+            background: var(--surface-1);
+            box-shadow: var(--shadow-soft);
+            text-align: center;
+        }
         .pdf-bundle-offer h3 { margin: 0 0 8px; }
         .pdf-bundle-lede { margin: 0 0 12px; color: var(--text-light); }
         .pdf-sticky-cta { position: fixed; bottom: 0; left: 0; right: 0; z-index: 40; padding: 10px 16px 14px; background: rgba(247, 248, 250, 0.96); border-top: 1px solid var(--border-subtle); box-shadow: var(--shadow-sticky); text-align: center; }
-        .pdf-sticky-cta-btn { display: inline-block; width: min(100%, 22rem); padding: 12px 20px; background: var(--cta-primary-bg); color: #fff; font-weight: 700; text-decoration: none; border-radius: var(--r-btn); min-height: 44px; line-height: 1.3; }
+        .pdf-sticky-cta-btn {
+            display: inline-block;
+            width: min(100%, 22rem);
+            padding: 12px 20px;
+            background: var(--cta-primary-bg);
+            color: #fff;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: var(--r-btn);
+            min-height: 44px;
+            line-height: 1.3;
+        }
+        .pdf-sticky-cta-btn:focus-visible {
+            outline: var(--ring-focus);
+            outline-offset: 2px;
+        }
         .free-tier-band {
             background: var(--bg-subtle);
             border-radius: var(--r-card);
@@ -1976,7 +2014,7 @@
         }
 
         .community h2 {
-            font-size: 24px;
+            font-size: var(--fs-2xl);
             font-weight: 800;
             color: var(--text);
             margin-bottom: 16px;
@@ -1984,7 +2022,7 @@
         }
 
         .community p {
-            font-size: 17px;
+            font-size: var(--fs-lg);
             color: var(--text-light);
             margin-bottom: 24px;
             line-height: 1.5;
@@ -2001,7 +2039,7 @@
             padding: 20px 32px;
             min-height: 48px;
             border-radius: var(--r-btn);
-            font-size: 18px;
+            font-size: var(--fs-lg);
             font-weight: 600;
             text-decoration: none;
             transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
@@ -2015,7 +2053,7 @@
         }
 
         .community-cta-primary:focus-visible {
-            outline: 3px solid var(--accent-gold);
+            outline: var(--ring-focus);
             outline-offset: 2px;
         }
 
@@ -2027,7 +2065,7 @@
             padding: 12px 20px;
             border: 2px solid var(--brand-prompt-anatomy);
             border-radius: var(--r-btn);
-            font-size: 16px;
+            font-size: var(--fs-md);
             font-weight: 600;
             color: var(--brand-prompt-anatomy);
             background: transparent;
@@ -2042,14 +2080,14 @@
         }
 
         .community-cta-secondary:focus-visible {
-            outline: 3px solid var(--brand-prompt-anatomy-accent);
+            outline: var(--ring-focus);
             outline-offset: 2px;
         }
 
         /* v1: Telegram demoted from button to inline text link beneath primary CTA. */
         .community-secondary-link {
             margin: var(--space-16) 0 0;
-            font-size: 15px;
+            font-size: var(--fs-sm);
             color: var(--text-light);
         }
 
@@ -2065,7 +2103,7 @@
         }
 
         .community-secondary-link a:focus-visible {
-            outline: 3px solid var(--accent-gold);
+            outline: var(--ring-focus);
             outline-offset: 2px;
             border-radius: 4px;
         }
@@ -2082,14 +2120,14 @@
         }
 
         .footer h3 {
-            font-size: 28px;
+            font-size: var(--fs-3xl);
             font-weight: 800;
             margin-bottom: 16px;
             color: var(--text);
         }
 
         .footer p {
-            font-size: 18px;
+            font-size: var(--fs-lg);
             color: var(--text-light);
             line-height: 1.6;
             margin-bottom: 28px;
@@ -2115,7 +2153,7 @@
 
         .business-address {
             font-style: normal;
-            font-size: 14px;
+            font-size: var(--fs-sm);
             line-height: 1.55;
             color: var(--text-light);
             margin: 0 auto 24px;
@@ -2147,7 +2185,7 @@
             background: var(--bg);
             border: var(--border-width) solid var(--border-subtle);
             border-radius: var(--r-badge);
-            font-size: 13px;
+            font-size: var(--fs-sm);
             font-weight: 700;
             color: var(--text-light);
         }
@@ -2159,7 +2197,7 @@
         }
 
         .copyright p {
-            font-size: 14px;
+            font-size: var(--fs-sm);
             color: var(--text-light);
             margin: 0;
             font-weight: 500;
@@ -2177,7 +2215,7 @@
         }
 
         .copyright a:focus-visible {
-            outline: 3px solid var(--accent-gold);
+            outline: var(--ring-focus);
             outline-offset: 2px;
         }
 
@@ -2201,7 +2239,7 @@
 
         @media (max-width: 768px) {
             body {
-                font-size: 16px;
+                font-size: var(--fs-md);
             }
 
             .container {
@@ -2218,13 +2256,13 @@
             }
 
             .header p {
-                font-size: 18px;
+                font-size: var(--fs-lg);
             }
 
             .cta-button {
                 min-height: 48px;
                 padding: 14px 28px;
-                font-size: 16px;
+                font-size: var(--fs-md);
             }
 
             .instructions {
@@ -2242,7 +2280,7 @@
             }
 
             .code-text {
-                font-size: 14px;
+                font-size: var(--fs-sm);
             }
 
             .phase-header {
@@ -2250,7 +2288,7 @@
             }
 
             .phase-title {
-                font-size: 16px;
+                font-size: var(--fs-md);
             }
 
             .toast {
@@ -2284,7 +2322,7 @@
             }
 
             .header h1 {
-                font-size: 28px;
+                font-size: var(--fs-3xl);
             }
 
             .cta-button,
@@ -2306,7 +2344,7 @@
             }
 
             .community h2 {
-                font-size: 20px;
+                font-size: var(--fs-xl);
             }
 
             .prompt-title {
@@ -2319,7 +2357,7 @@
 
             .btn {
                 padding: 14px 28px;
-                font-size: 16px;
+                font-size: var(--fs-md);
                 min-height: 44px;
             }
 
@@ -2340,7 +2378,7 @@
             }
 
             .toast {
-                font-size: 16px;
+                font-size: var(--fs-md);
                 padding: 16px 20px;
                 left: 12px;
                 right: 12px;
@@ -2383,11 +2421,11 @@
                 gap: 8px;
             }
             .header-badges .badge {
-                font-size: 11px;
+                font-size: var(--fs-xs);
             }
 
             .header h1 {
-                font-size: 24px;
+                font-size: var(--fs-2xl);
                 line-height: 1.2;
             }
 
@@ -2402,7 +2440,7 @@
             .next-steps-links a {
                 padding: 12px 14px;
                 min-height: 44px;
-                font-size: 14px;
+                font-size: var(--fs-sm);
                 min-width: 0;
             }
 
@@ -2417,7 +2455,7 @@
             }
 
             .code-text {
-                font-size: 14px;
+                font-size: var(--fs-sm);
                 word-break: break-word;
             }
 
@@ -2426,11 +2464,11 @@
             }
 
             .objectives h2 {
-                font-size: 18px;
+                font-size: var(--fs-lg);
             }
 
             .objectives li {
-                font-size: 15px;
+                font-size: var(--fs-sm);
             }
 
             .progress-wrap {
@@ -2442,12 +2480,12 @@
             }
 
             .next-steps h2 {
-                font-size: 18px;
+                font-size: var(--fs-lg);
             }
 
             .next-steps-links a {
                 padding: 12px 14px;
-                font-size: 14px;
+                font-size: var(--fs-sm);
             }
 
             .footer {

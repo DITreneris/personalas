@@ -29,6 +29,9 @@ Desktop.ini
 !DEPLOYMENT.md
 !AGENTS.md
 !docs/AGENT_SOT.md
+!docs/INDEX.md
+!docs/LEGACY_GOLDEN_STANDARD.md
+!docs/design_systemv02.md
 !MUST_TODO.md
 !MVP_ROADMAP.md
 !feedback-schema.md
