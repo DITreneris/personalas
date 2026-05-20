@@ -204,6 +204,22 @@ function run() {
     );
     tally(assert(heroBlock && !heroBlock[0].includes('header-phases'), 'phase chips not inside hero'));
     tally(assert(enIndex.includes('id="workflow-overview"'), 'en/index.html workflow-overview section'));
+    tally(assert(fs.existsSync(path.join(ROOT, 'favicon.svg')), 'favicon.svg exists at site root'));
+    tally(assert(fs.existsSync(path.join(ROOT, 'favicon.ico')), 'favicon.ico exists at site root'));
+    tally(
+      assert(
+        /href="https:\/\/[^"]+\/favicon\.svg"/.test(enIndex) &&
+          enIndex.includes('rel="apple-touch-icon"') &&
+          /href="https:\/\/[^"]+\/favicon\.ico"/.test(enIndex),
+        'en/index.html favicon links use absolute site-root URLs'
+      )
+    );
+    tally(
+      assert(
+        !/<link rel="icon" type="image\/svg\+xml" href="favicon\.svg">/.test(enIndex),
+        'en/index.html must not use broken relative favicon.svg (resolves to /en/favicon.svg)'
+      )
+    );
     tally(
       assert(
         /\.workflow-overview[\s\S]{0,1200}\.header-phase-link/.test(landingCss || ''),

@@ -145,6 +145,7 @@ npx pa11y http://127.0.0.1:3000/terms.html --config .pa11yrc.json
 
 - Atlikti gyvą testavimą pagal [docs/TESTAVIMAS.md](docs/TESTAVIMAS.md).
 - Rezultatus įrašyti į testavimo žurnalą (tame pačiame faile arba susietame).
+- **Favicon:** `https://promptanatomy.help/favicon.svg` (ir `.ico`) grąžina 200; `/en/` skirtuke matoma ikona (ne 404 į `/en/favicon.svg`). Po SVG keitimo: `npm run generate:favicon` ir redeploy.
 
 ---
 

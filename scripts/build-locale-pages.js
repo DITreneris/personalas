@@ -46,6 +46,27 @@ function write(file, content) {
   fs.writeFileSync(outPath, content, 'utf8');
 }
 
+const FAVICON_LINK_BLOCK_RE =
+  /\s*<link rel="icon" href="[^"]*favicon\.ico"[^>]*>\s*<link rel="icon" type="image\/svg\+xml" href="[^"]*favicon\.svg">\s*<link rel="apple-touch-icon" href="[^"]*apple-touch-icon\.png">/;
+
+/** Favicon links (site-root assets). baseHref: absoluteBaseSlash() or relative prefix e.g. ../ */
+function buildFaviconLinkTags(baseHref) {
+  const b = baseHref || '';
+  return [
+    '<link rel="icon" href="' + escapeHtmlAttr(b + 'favicon.ico') + '" sizes="any">',
+    '<link rel="icon" type="image/svg+xml" href="' + escapeHtmlAttr(b + 'favicon.svg') + '">',
+    '<link rel="apple-touch-icon" href="' + escapeHtmlAttr(b + 'apple-touch-icon.png') + '">',
+  ].join('\n    ');
+}
+
+function injectFaviconLinks(html, baseHref) {
+  const block = buildFaviconLinkTags(baseHref);
+  if (html.includes('rel="apple-touch-icon"')) {
+    return html.replace(FAVICON_LINK_BLOCK_RE, '\n    ' + block);
+  }
+  return html.replace(/<link rel="icon" type="image\/svg\+xml" href="[^"]*favicon\.svg">/, block);
+}
+
 function escapeHtmlAttr(s) {
   return String(s)
     .replace(/&/g, '&amp;')
@@ -317,6 +338,7 @@ function injectHead(html, basePath, sot) {
   html = html.replace('href="assets/styles.css"', 'href="../assets/styles.css"');
   html = html.replace('href="assets/landing.css"', 'href="../assets/landing.css"');
   html = html.replace(/<script src="generator\.js"><\/script>/, basePathScript + '<script src="../generator.js"></script>');
+  html = injectFaviconLinks(html, abs);
   html = injectPlausible(html);
   return html;
 }
@@ -459,6 +481,7 @@ function finalizeRootIndexHtml(sot) {
     );
   }
   html = html.replace(/privatumas\.html/g, 'privacy.html');
+  html = injectFaviconLinks(html, absoluteBaseSlash());
   write('index.html', html);
 }
 
@@ -512,6 +535,7 @@ function finalizeRootPrivacyHtml() {
   html = html.replace(/(<meta name="viewport"[^>]*>\s*)(?:[\s\S]*?)(<title)/i, '$1$2');
   const frag = buildRootPrivacyFragment();
   html = html.replace(/(<meta name="viewport"[^>]*>\s*)(<title)/i, '$1' + frag + '$2');
+  html = injectFaviconLinks(html, absoluteBaseSlash());
   write('privacy.html', html);
 }
 
@@ -981,9 +1005,9 @@ function applyEnPromptUi(html) {
 const PRIVACY_PAGE_TITLE = 'Privacy Policy – Prompt Anatomy';
 
 function buildPrivacyEn(html, sot) {
-  let out = html
-    .replace('href="favicon.svg"', 'href="../favicon.svg"')
-    .replace('href="assets/styles.css"', 'href="../assets/styles.css"');
+  const abs = absoluteBaseSlash();
+  let out = html.replace('href="assets/styles.css"', 'href="../assets/styles.css"');
+  out = injectFaviconLinks(out, abs);
   if (sot && sot.product && sot.product.businessAddress) {
     out = replaceAllGlobal(out, '{{SOT_BUSINESS_ADDRESS}}', renderAddressBlock(sot));
   }

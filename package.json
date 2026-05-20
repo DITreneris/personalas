@@ -10,6 +10,7 @@
   "scripts": {
     "build": "node scripts/build-locale-pages.js",
     "generate:og": "node scripts/generate-og-image.js",
+    "generate:favicon": "node scripts/generate-favicon-assets.js",
     "test": "npm run build && npm run pdf:validate && node tests/structure.test.js && npm run lint:html && npm run lint:html:privacy && npm run lint:html:locales && npm run lint:html:static && npm run lint:js",
     "test:structure": "node tests/structure.test.js",
     "lint:html": "npx html-validator-cli --file index.html --validator=https://html5.validator.nu/",
@@ -38,6 +39,7 @@
     "pa11y": "^6.2.3",
     "serve": "^14.2.1",
     "sharp": "^0.34.5",
+    "to-ico": "^1.1.5",
     "wait-on": "^8.0.1"
   }
 }
