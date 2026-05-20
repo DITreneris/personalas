@@ -69,29 +69,69 @@
       "beginnerCtaLabel": "Buy Beginner — $5.99",
       "advancedCtaLabel": "Buy Advanced — $11.99",
       "expertScenarios": {
-        "title": "How three hiring leads use one shared rubric",
-        "disclaimer": "Illustrative scenarios for US hiring teams—not client testimonials.",
+        "title": "Three sample hiring workflows using the same rubric",
+        "sectionBadgeLabel": "Sample workflows",
+        "disclaimer": "Three workflow patterns from US HR practice — not paid endorsements.",
         "cards": [
           {
             "approach": "Panel alignment",
             "quote": "Replaced ad hoc notes with one scorecard the whole panel uses, so debriefs end with a single ranked candidate list.",
+            "outcome": "1 ranked candidate list per debrief",
             "name": "Joan Cole",
+            "initials": "JC",
             "role": "HR Manager",
             "region": "Ohio"
           },
           {
             "approach": "Culture + debrief",
             "quote": "Kept the same rubric, added a 15-minute debrief after each stage—culture calls now rest on shared evidence, not gut feel.",
+            "outcome": "15-min debrief on shared evidence",
             "name": "Lane Lincoln",
+            "initials": "LL",
             "role": "Culture and People Manager",
             "region": "Oregon"
           },
           {
             "approach": "Time-to-first-interview",
             "quote": "Same rubric from job post to first phone screen—shaved a week off time-to-first-interview without rushing candidate review.",
+            "outcome": "−1 week to first phone screen",
             "name": "Emanuel Manolo",
+            "initials": "EM",
             "role": "Recruitment Officer",
             "region": "Texas"
+          }
+        ]
+      },
+      "proofInside": {
+        "title": "What's inside the paid PDFs",
+        "lede": "Three real artifacts you'll use the same week you buy.",
+        "items": [
+          {
+            "id": "scorecard",
+            "label": "Filled multi-candidate scorecard",
+            "blurb": "Real rubric with 3 candidates scored side-by-side, ready to copy into your panel template.",
+            "thumbnail": "/assets/pdf-covers/advanced-p15.png",
+            "thumbnailAlt": "Filled multi-candidate scorecard sample page",
+            "previewTrigger": "advanced",
+            "guideRef": "Advanced · p.15"
+          },
+          {
+            "id": "interview-kit",
+            "label": "Full interview kit + STAR bank",
+            "blurb": "Filled sample with 5 competencies × 10 STAR questions and rubric anchors per level.",
+            "thumbnail": "/assets/pdf-covers/advanced-p10.png",
+            "thumbnailAlt": "Full interview kit sample page",
+            "previewTrigger": "advanced",
+            "guideRef": "Advanced · p.10"
+          },
+          {
+            "id": "kickoff-worksheet",
+            "label": "15-minute hiring kickoff worksheet",
+            "blurb": "Fillable lines for role, panel, must-haves, plus a 7-point AI safety + decision log.",
+            "thumbnail": "/assets/pdf-covers/beginner-p9.png",
+            "thumbnailAlt": "Hiring kickoff worksheet sample page",
+            "previewTrigger": "beginner",
+            "guideRef": "Beginner · p.9"
           }
         ]
       }

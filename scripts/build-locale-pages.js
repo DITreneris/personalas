@@ -131,6 +131,7 @@ function validateSot(sot) {
     throw new Error('config/sot.json: marketing.pdfSection.title and lede are required');
   }
   validateExpertScenarios(m.pdfSection);
+  validateProofInside(m.pdfSection);
   if (!m.workflowOverview || !m.workflowOverview.title) {
     throw new Error('config/sot.json: marketing.workflowOverview.title is required');
   }
@@ -144,13 +145,16 @@ function validateExpertScenarios(pdfSection) {
   if (!es.title || typeof es.title !== 'string') {
     throw new Error('config/sot.json: marketing.pdfSection.expertScenarios.title is required');
   }
+  if (!es.sectionBadgeLabel || typeof es.sectionBadgeLabel !== 'string') {
+    throw new Error('config/sot.json: marketing.pdfSection.expertScenarios.sectionBadgeLabel is required (e.g. "Sample workflows")');
+  }
   if (!es.disclaimer || typeof es.disclaimer !== 'string') {
-    throw new Error('config/sot.json: marketing.pdfSection.expertScenarios.disclaimer is required (illustrative scenarios — not testimonials)');
+    throw new Error('config/sot.json: marketing.pdfSection.expertScenarios.disclaimer is required (FTC-safe: e.g. "not paid endorsements")');
   }
   if (!Array.isArray(es.cards) || es.cards.length !== 3) {
     throw new Error('config/sot.json: marketing.pdfSection.expertScenarios.cards must contain exactly 3 items');
   }
-  const requiredCardKeys = ['approach', 'quote', 'name', 'role', 'region'];
+  const requiredCardKeys = ['approach', 'quote', 'outcome', 'name', 'role', 'region'];
   es.cards.forEach(function (card, idx) {
     if (!card || typeof card !== 'object') {
       throw new Error('config/sot.json: expertScenarios.cards[' + idx + '] must be an object');
@@ -159,6 +163,50 @@ function validateExpertScenarios(pdfSection) {
       if (!card[key] || typeof card[key] !== 'string') {
         throw new Error('config/sot.json: expertScenarios.cards[' + idx + '].' + key + ' is required');
       }
+    }
+    if (card.initials != null) {
+      if (typeof card.initials !== 'string' || !/^[A-Z]{2}$/.test(card.initials)) {
+        throw new Error('config/sot.json: expertScenarios.cards[' + idx + '].initials must be 2 uppercase letters (or omitted)');
+      }
+    }
+  });
+}
+
+const ALLOWED_PREVIEW_TRIGGERS = ['beginner', 'advanced', 'bundle'];
+
+function validateProofInside(pdfSection) {
+  const pi = pdfSection && pdfSection.proofInside;
+  if (!pi) {
+    throw new Error('config/sot.json: marketing.pdfSection.proofInside is required (3 product-proof cards)');
+  }
+  if (!pi.title || typeof pi.title !== 'string') {
+    throw new Error('config/sot.json: marketing.pdfSection.proofInside.title is required');
+  }
+  if (!pi.lede || typeof pi.lede !== 'string') {
+    throw new Error('config/sot.json: marketing.pdfSection.proofInside.lede is required');
+  }
+  if (!Array.isArray(pi.items) || pi.items.length !== 3) {
+    throw new Error('config/sot.json: marketing.pdfSection.proofInside.items must contain exactly 3 items');
+  }
+  const requiredItemKeys = ['id', 'label', 'blurb', 'thumbnail', 'thumbnailAlt', 'previewTrigger', 'guideRef'];
+  pi.items.forEach(function (item, idx) {
+    if (!item || typeof item !== 'object') {
+      throw new Error('config/sot.json: proofInside.items[' + idx + '] must be an object');
+    }
+    for (const key of requiredItemKeys) {
+      if (!item[key] || typeof item[key] !== 'string') {
+        throw new Error('config/sot.json: proofInside.items[' + idx + '].' + key + ' is required');
+      }
+    }
+    if (!item.thumbnail.startsWith('/assets/pdf-covers/')) {
+      throw new Error('config/sot.json: proofInside.items[' + idx + '].thumbnail must start with /assets/pdf-covers/');
+    }
+    if (ALLOWED_PREVIEW_TRIGGERS.indexOf(item.previewTrigger) === -1) {
+      throw new Error('config/sot.json: proofInside.items[' + idx + '].previewTrigger must be one of ' + ALLOWED_PREVIEW_TRIGGERS.join(', '));
+    }
+    const thumbAbs = path.join(ROOT, item.thumbnail.replace(/^\//, ''));
+    if (!fs.existsSync(thumbAbs)) {
+      throw new Error('config/sot.json: proofInside.items[' + idx + '].thumbnail file not found on disk: ' + item.thumbnail);
     }
   });
 }
@@ -276,6 +324,16 @@ const EXPERT_CARD_ELEV_MODIFIERS = [
   'pdf-expert-card--elev-raised',
 ];
 
+function deriveInitials(name) {
+  if (!name || typeof name !== 'string') return '';
+  const parts = name.trim().split(/\s+/);
+  if (parts.length === 0) return '';
+  if (parts.length === 1) {
+    return parts[0].slice(0, 2).toUpperCase();
+  }
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+}
+
 function buildExpertCardsHtml(sot) {
   const cards =
     sot && sot.marketing && sot.marketing.pdfSection &&
@@ -287,13 +345,19 @@ function buildExpertCardsHtml(sot) {
       const elev = EXPERT_CARD_ELEV_MODIFIERS[idx] || EXPERT_CARD_ELEV_MODIFIERS[EXPERT_CARD_ELEV_MODIFIERS.length - 1];
       const approach = escapeHtmlText(card.approach);
       const quote = escapeHtmlText(card.quote);
+      const outcome = escapeHtmlText(card.outcome);
       const name = escapeHtmlText(card.name);
       const role = escapeHtmlText(card.role);
       const region = escapeHtmlText(card.region);
+      const initials = escapeHtmlText(card.initials || deriveInitials(card.name));
       return (
         '<li class="pdf-expert-card ' + elev + '" role="listitem">' +
-          '<p class="pdf-expert-card__approach">' + approach + '</p>' +
+          '<header class="pdf-expert-card__header">' +
+            '<span class="pdf-expert-card__avatar" aria-hidden="true">' + initials + '</span>' +
+            '<span class="pdf-expert-card__approach">' + approach + '</span>' +
+          '</header>' +
           '<blockquote class="pdf-expert-card__quote">' + quote + '</blockquote>' +
+          '<p class="pdf-expert-card__outcome"><strong>Result:</strong> ' + outcome + '</p>' +
           '<footer class="pdf-expert-card__meta">' +
             '<strong>' + name + '</strong>' +
             '<span>' + role + ' &middot; ' + region + '</span>' +
@@ -302,6 +366,57 @@ function buildExpertCardsHtml(sot) {
       );
     })
     .join('');
+}
+
+/**
+ * Render the "What's inside the paid PDFs" 3-card grid that sits between
+ * .pdf-guides-grid and #pdf-guides-faq. Each card's <button data-preview-trigger>
+ * reuses the existing pdfPreviewDialog wired in generator.js initPdfPreviewDialog
+ * — no new JS needed; analytics events flow through the [data-analytics] listener.
+ */
+function buildProofInsideHtml(sot) {
+  const pi =
+    sot && sot.marketing && sot.marketing.pdfSection &&
+    sot.marketing.pdfSection.proofInside;
+  if (!pi || !Array.isArray(pi.items) || !pi.items.length) return '';
+  const title = escapeHtmlText(pi.title);
+  const lede = escapeHtmlText(pi.lede);
+  const cards = pi.items
+    .map(function (item) {
+      const label = escapeHtmlText(item.label);
+      const blurb = escapeHtmlText(item.blurb);
+      const thumb = escapeHtmlText(item.thumbnail);
+      const thumbAlt = escapeHtmlText(item.thumbnailAlt);
+      const trigger = escapeHtmlText(item.previewTrigger);
+      const guideRef = escapeHtmlText(item.guideRef);
+      const ariaLabel = escapeHtmlText('Preview ' + item.label + ' sample pages');
+      return (
+        '<li class="pdf-proof-inside__card">' +
+          '<button type="button" class="pdf-proof-inside__media"' +
+            ' data-preview-trigger="' + trigger + '"' +
+            ' data-analytics="pdf_proof_preview_open"' +
+            ' aria-label="' + ariaLabel + '">' +
+            '<img src="' + thumb + '" alt="' + thumbAlt + '" loading="lazy" decoding="async" />' +
+            '<span class="pdf-proof-inside__media-overlay" aria-hidden="true">Preview pages &rarr;</span>' +
+          '</button>' +
+          '<div class="pdf-proof-inside__body">' +
+            '<p class="pdf-proof-inside__guide-ref">' + guideRef + '</p>' +
+            '<h4 class="pdf-proof-inside__label">' + label + '</h4>' +
+            '<p class="pdf-proof-inside__blurb">' + blurb + '</p>' +
+          '</div>' +
+        '</li>'
+      );
+    })
+    .join('');
+  return (
+    '<section class="pdf-proof-inside" id="pdf-proof-inside" aria-labelledby="pdf-proof-inside-title">' +
+      '<header class="pdf-proof-inside__header">' +
+        '<h3 id="pdf-proof-inside-title" class="pdf-proof-inside__title">' + title + '</h3>' +
+        '<p class="pdf-proof-inside__lede">' + lede + '</p>' +
+      '</header>' +
+      '<ul class="pdf-proof-inside__grid" role="list">' + cards + '</ul>' +
+    '</section>'
+  );
 }
 
 /** Schema.org PostalAddress object for Organization JSON-LD. */
@@ -1148,8 +1263,10 @@ function applySot(html, sot) {
     '{{SOT_PDF_ADVANCED_CTA}}': p.advancedCtaLabel || 'Buy Advanced — $11.99',
     '{{SOT_PDF_SECTION_FREE_BRIDGE}}': p.freeBridge || '',
     '{{SOT_PDF_EXPERT_SCENARIOS_TITLE}}': (p.expertScenarios && p.expertScenarios.title) || '',
+    '{{SOT_PDF_EXPERT_SCENARIOS_BADGE}}': (p.expertScenarios && p.expertScenarios.sectionBadgeLabel) || '',
     '{{SOT_PDF_EXPERT_SCENARIOS_DISCLAIMER}}': (p.expertScenarios && p.expertScenarios.disclaimer) || '',
     '{{SOT_PDF_EXPERT_CARDS_HTML}}': buildExpertCardsHtml(sot),
+    '{{SOT_PDF_PROOF_INSIDE_HTML}}': buildProofInsideHtml(sot),
     '{{SOT_FREE_TIER_LABEL}}': (m.freeTier && m.freeTier.label) || 'Free copy-paste prompts on this page',
     '{{SOT_FREE_TIER_HINT}}': (m.freeTier && m.freeTier.hint) || '',
     '{{SOT_FREE_TIER_CTA_LABEL}}': (m.freeTier && m.freeTier.ctaLabel) || '',

@@ -2144,6 +2144,158 @@
             color: var(--text-muted);
             font-size: var(--fs-xs);
         }
+        .pdf-expert-card__header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-12);
+        }
+        .pdf-expert-card__avatar {
+            flex: 0 0 auto;
+            width: 36px;
+            height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--r-pill);
+            background: var(--accent-dark);
+            color: var(--surface-1);
+            font-size: var(--fs-xs);
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            box-shadow: var(--shadow-soft), var(--shadow-inset-hi);
+            border: 1px solid var(--accent-gold);
+        }
+        .pdf-expert-card__outcome {
+            margin: 0;
+            padding: var(--space-8) var(--space-12);
+            background: var(--surface-2);
+            border-left: 3px solid var(--accent-gold);
+            border-radius: var(--r-xs);
+            font-size: var(--fs-xs);
+            color: var(--text);
+        }
+        .pdf-expert-card__outcome strong {
+            color: var(--accent-dark);
+            margin-right: 4px;
+        }
+        .pdf-guides-social__header {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-8);
+            margin-bottom: var(--space-16);
+        }
+        .pdf-guides-social__badge {
+            align-self: flex-start;
+            padding: 2px var(--space-12);
+            background: var(--surface-2);
+            color: var(--accent-dark);
+            border-radius: var(--r-pill);
+            font-size: var(--fs-xs);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+        .pdf-proof-inside {
+            margin-top: var(--space-32);
+            padding: var(--space-24) 0;
+            border-top: 1px solid var(--border-subtle);
+        }
+        .pdf-proof-inside__header {
+            margin: 0 0 var(--space-20);
+        }
+        .pdf-proof-inside__title {
+            margin: 0;
+            font-size: var(--fs-xl);
+            color: var(--text);
+        }
+        .pdf-proof-inside__lede {
+            margin: var(--space-8) 0 0;
+            color: var(--text-muted);
+        }
+        .pdf-proof-inside__grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-16);
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .pdf-proof-inside__card {
+            display: flex;
+            flex-direction: column;
+            background: var(--surface-1);
+            border: var(--border-width) solid var(--border-subtle);
+            border-radius: var(--r-card);
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
+            transition:
+                box-shadow var(--duration-normal) var(--ease-out),
+                transform var(--duration-fast) var(--ease-out);
+        }
+        .pdf-proof-inside__card:hover {
+            box-shadow: var(--shadow-medium);
+            transform: translateY(var(--lift-sm));
+        }
+        .pdf-proof-inside__media {
+            position: relative;
+            display: block;
+            width: 100%;
+            aspect-ratio: 4 / 5;
+            overflow: hidden;
+            border: 0;
+            padding: 0;
+            background: var(--surface-2);
+            cursor: pointer;
+        }
+        .pdf-proof-inside__media img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top center;
+            transition: transform var(--duration-slow) var(--ease-out);
+        }
+        .pdf-proof-inside__media:hover img {
+            transform: scale(1.04);
+        }
+        .pdf-proof-inside__media:focus-visible {
+            outline: var(--ring-focus);
+            outline-offset: 2px;
+        }
+        .pdf-proof-inside__media-overlay {
+            position: absolute;
+            inset: auto 0 0 0;
+            padding: var(--space-12);
+            background: linear-gradient(180deg, transparent, rgba(11, 19, 32, 0.85));
+            color: var(--surface-1);
+            font-size: var(--fs-sm);
+            font-weight: 600;
+            text-align: right;
+        }
+        .pdf-proof-inside__body {
+            padding: var(--space-16);
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-8);
+        }
+        .pdf-proof-inside__guide-ref {
+            margin: 0;
+            font-size: var(--fs-xs);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--accent-dark);
+            font-weight: 700;
+        }
+        .pdf-proof-inside__label {
+            margin: 0;
+            font-size: var(--fs-md);
+            color: var(--text);
+        }
+        .pdf-proof-inside__blurb {
+            margin: 0;
+            font-size: var(--fs-sm);
+            color: var(--text-muted);
+            line-height: var(--leading-relaxed);
+        }
         .pdf-author-panel { margin-top: var(--space-20); padding: 16px; border-top: 1px solid var(--border-subtle); font-size: var(--fs-sm); color: var(--text-light); }
         .pdf-guides-faq { margin-top: var(--space-24); }
         .pdf-guides-faq h3 { margin: 0 0 12px; font-size: var(--fs-xl); }
@@ -2565,6 +2717,10 @@
             .pdf-expert-cards {
                 grid-template-columns: 1fr;
             }
+
+            .pdf-proof-inside__grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         @media (max-width: 480px) {
@@ -2795,6 +2951,9 @@
             }
             *:hover,
             *:focus-visible {
+                transform: none !important;
+            }
+            .pdf-proof-inside__media:hover img {
                 transform: none !important;
             }
         }

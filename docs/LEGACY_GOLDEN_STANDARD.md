@@ -2,7 +2,7 @@
 
 **Paskirtis:** Vienas operacinis sąrašas — ką **ne laužyti** keičiant turinį, CSS arba build. Detalus DS implementacijos planas — [design_systemv02.md](design_systemv02.md). Keliai, deploy, brand — [AGENT_SOT.md](AGENT_SOT.md). Agentų seka — [AGENTS.md](../AGENTS.md) §9.
 
-**Paskutinis atnaujinimas:** 2026-05-20 (DS v0.3.0)
+**Paskutinis atnaujinimas:** 2026-05-20 (DS v0.3.2)
 
 ---
 
@@ -96,7 +96,8 @@ Struktūra **nekeičiama**; tik CSS arba minimalūs markup pašalinimai:
 | Buyer FAQ | `{{SOT_BUYER_FAQ_HTML}}` build metu; `<details class="faq-details">` **be** `open`; `initBuyerFaq()` skip jei jau užpildyta |
 | Disclaimer | Tik footer `.footer-disclaimer` + `{{SOT_DISCLAIMER}}` — **ne** dubliuoti `.pdf-guides-after-purchase` |
 | Po pirkimo blokas | `#pdf-guides-faq` po grid; `.pdf-guides-after-purchase`: **3 ekspertų kortelės** (`.pdf-expert-cards` grid) + `pdf-guides-free-bridge` |
-| Ekspertų kortelės (DS v0.2.6) | Lygiai 3 `li.pdf-expert-card[role="listitem"]` viduje `ul.pdf-expert-cards[role="list"]` su elevation modifikatoriais `--elev-soft / --elev-medium / --elev-raised`; turinys iš `marketing.pdfSection.expertScenarios` SOT (Joan/Ohio, Lane/Oregon, Emanuel/Texas); privalomas `pdf-expert-scenarios-disclaimer` („Illustrative scenarios … not client testimonials") |
+| Proof-inside (DS v0.3.2 / C) | `<section class="pdf-proof-inside">` **tarp** `.pdf-guides-grid` ir `#pdf-guides-faq`. Lygiai 3 `li.pdf-proof-inside__card`: `<button class="pdf-proof-inside__media" data-preview-trigger="beginner\|advanced">` (reuse `pdfPreviewDialog`) + `<img>` su `loading="lazy"` `decoding="async"` `alt`; turinys iš `marketing.pdfSection.proofInside` SOT; thumbnail'ai privalo egzistuoti `/assets/pdf-covers/` (build-time `fs.existsSync` guard) |
+| Ekspertų kortelės v2 (DS v0.3.2) | Lygiai 3 `li.pdf-expert-card[role="listitem"]` viduje `ul.pdf-expert-cards[role="list" aria-label="Sample hiring workflows"]` su elevation modifikatoriais `--elev-soft / --elev-medium / --elev-raised`; kiekvienoje kortelėje `pdf-expert-card__header` (avatar inicialai `--r-pill` navy/gold + approach), `__quote`, **`__outcome` chip** (gold left border, „Result:"), `__meta`. Section badge `.pdf-guides-social__badge` virš title; FTC-safe disclaimer (privalomi raktažodžiai „not paid endorsements" arba „workflow patterns") **PO** `pdf-expert-cards`. SOT: `marketing.pdfSection.expertScenarios` su `sectionBadgeLabel`, per-card `outcome` (privalomas) + optional `initials` (auto-derive iš `name`). |
 
 **PDF sekcijos fragmentas:** sinchronizuoti [templates/index-lt.html](../templates/index-lt.html) su [scripts/pdf-guides-section.fragment.html](../scripts/pdf-guides-section.fragment.html) jei keičiate HTML struktūrą.
 
@@ -214,3 +215,4 @@ Nelaužyti be QA:
 | 2026-05-20 | v0.2.5 | Affordance & state polish (:has done state, selected check marker, prompt hover lift, featured gold inset, scrollbar styling, .btn deduplication) |
 | 2026-05-20 | v0.2.6 | PDF expert scenarios row (3 illustrative cards: Joan/Ohio, Lane/Oregon, Emanuel/Texas) replaces single pilot blockquote; new `.pdf-expert-cards` grid + soft/medium/raised elevation modifiers; SOT-driven via `marketing.pdfSection.expertScenarios` |
 | 2026-05-20 | v0.3.0 | Token harmonization & premium polish: shadow inset system (`--shadow-inset-hi`, `--shadow-cta-press`, `--shadow-glow-*`), gradient + navy border tokens, hover ladders rise (rest != hover), `:active` press feedback on every primary, font smoothing + tabular-nums + fluid hero H1, `.pdf-sticky-cta` glass parity, deprecation guard for v0.3.1 hard removal |
+| 2026-05-20 | v0.3.2 | PDF social proof v2: (B) expert scenarios v2 — `pdf-expert-card__avatar` (--r-pill navy/gold initials), `__outcome` chip (gold left border „Result:"), `pdf-guides-social__badge` virš title, FTC-safe disclaimer („not paid endorsements") perkeltas PO kortelių; (C) NAUJAS `.pdf-proof-inside` 3-card grid tarp `.pdf-guides-grid` ir `#pdf-guides-faq`, `__media` button (aspect-ratio 4/5) reuse'ina `pdfPreviewDialog` per `data-preview-trigger`, thumbnails iš `/assets/pdf-covers/*-p*.png` (build-time `fs.existsSync` guard); SOT-driven via `marketing.pdfSection.expertScenarios` (extended) + `proofInside` (new) |

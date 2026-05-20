@@ -179,6 +179,8 @@
 
             </article>
 
+            {{SOT_PDF_PROOF_INSIDE_HTML}}
+
             <section class="pdf-guides-faq" id="pdf-guides-faq" aria-labelledby="pdf-guides-faq-title">
 
                 <h3 id="pdf-guides-faq-title">Buyer FAQ</h3>
@@ -191,11 +193,14 @@
 
                 <div class="pdf-guides-social">
 
-                    <h3 class="pdf-expert-scenarios-title">{{SOT_PDF_EXPERT_SCENARIOS_TITLE}}</h3>
+                    <header class="pdf-guides-social__header">
+                        <span class="pdf-guides-social__badge">{{SOT_PDF_EXPERT_SCENARIOS_BADGE}}</span>
+                        <h3 class="pdf-expert-scenarios-title">{{SOT_PDF_EXPERT_SCENARIOS_TITLE}}</h3>
+                    </header>
+
+                    <ul class="pdf-expert-cards" role="list" aria-label="Sample hiring workflows">{{SOT_PDF_EXPERT_CARDS_HTML}}</ul>
 
                     <p class="pdf-meta-muted pdf-expert-scenarios-disclaimer">{{SOT_PDF_EXPERT_SCENARIOS_DISCLAIMER}}</p>
-
-                    <ul class="pdf-expert-cards" role="list" aria-label="Illustrative hiring approaches">{{SOT_PDF_EXPERT_CARDS_HTML}}</ul>
 
                 </div>
 

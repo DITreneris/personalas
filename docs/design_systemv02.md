@@ -695,6 +695,50 @@ Existing `var(--shadow-card)` and `var(--shadow-card-hover)` consumers in `landi
 
 ---
 
+## 22. v0.3.2 — PDF social proof v2 (expert scenarios v2 + proof-inside)
+
+**Goal:** convert the "after-purchase" social block from a defensive illustrative card row into a high-conversion, FTC-safe social proof + product proof system without crossing endorsement lines.
+
+### B — Expert scenarios v2 (`.pdf-expert-card`)
+
+New parts wrapped around the existing v0.2.6 elevation ladder:
+
+- **`.pdf-expert-card__header`** — flex row, holds `__avatar` + `__approach` (`<span>` instead of `<p>`).
+- **`.pdf-expert-card__avatar`** — 36×36 `--r-pill` circle, navy bg (`--accent-dark`), 1px gold border (`--accent-gold`), white initials, `--shadow-soft` + `--shadow-inset-hi`. **Decorative** (`aria-hidden="true"`); name follows in `__meta`. **No stock human photos** — geometric initial bubbles only (FTC-safe; see §22 rationale).
+- **`.pdf-expert-card__outcome`** — full-width chip below quote; `--surface-2` bg, **3px gold left border** (`--accent-gold`), `--r-xs`, `--fs-xs`. `<strong>Result:</strong>` prefix in `--accent-dark`.
+- **`.pdf-guides-social__header`** — vertical stack containing badge + title.
+- **`.pdf-guides-social__badge`** — `--r-pill` pill, `--surface-2` bg, `--accent-dark` text, uppercase `--fs-xs` letter-spacing 0.06em. SOT-driven (`expertScenarios.sectionBadgeLabel`, default "Sample workflows").
+- **Disclaimer reposition:** `.pdf-expert-scenarios-disclaimer` moves to AFTER `<ul.pdf-expert-cards>`, becoming a small muted footnote rather than a defensive header. SOT contract requires FTC-safe wording (regex `/(not paid endorsements|workflow patterns)/i`).
+
+### C — Proof-inside grid (`.pdf-proof-inside`)
+
+Brand-new section between `.pdf-guides-grid` and `#pdf-guides-faq`:
+
+- **`.pdf-proof-inside__grid`** — `repeat(3, 1fr)` desktop / `1fr` <768px.
+- **`.pdf-proof-inside__media`** — full-card `<button>` with `aspect-ratio: 4 / 5`, `data-preview-trigger="beginner|advanced"` (reuses existing `pdfPreviewDialog` via `generator.js initPdfPreviewDialog`). Hover `transform: scale(1.04)` on `<img>`; reduced-motion override neutralizes it (`*:hover` global rule covers element-level transforms only, descendant transforms need explicit `transform: none !important`).
+- **`.pdf-proof-inside__media-overlay`** — bottom-anchored gradient (180deg, transparent → rgba(11,19,32,0.85)), white "Preview pages →" text right-aligned. `aria-hidden="true"`; the `<button>` itself has descriptive `aria-label="Preview <label> sample pages"`.
+- **`.pdf-proof-inside__body`** — `__guide-ref` (uppercase navy, e.g. "Advanced · p.15"), `__label` (`--fs-md` heading), `__blurb` (`--fs-sm` muted relaxed line-height).
+- **Asset reuse:** thumbnails point to existing watermarked PDF preview pages in `/assets/pdf-covers/*-p*.png`. `validateProofInside()` runs `fs.existsSync` at build time → broken thumbnails fail the build before deploy.
+- **JS = 0 new code:** `<button data-preview-trigger>` is already wired in `generator.js:626-650`; analytics events flow through the existing `[data-analytics]` listener (`pdf_proof_preview_open`).
+
+### Rationale (FTC § 16 CFR Part 255)
+
+US-targeted product (Alameda CA, US HR audience). Fabricated personas with stock human photos = endorsement violation (~$51,744/violation post-2024 rule). v0.3.2 keeps personas **clearly framed as workflow patterns**: section badge says "Sample workflows", disclaimer says "not paid endorsements", initial avatars are geometric (no human photos), and proof-inside replaces "what some random person says" with "what's actually in the PDF" — verifiable product content. This converts visually without legal risk.
+
+### SOT contract (`config/sot.json`)
+
+- `marketing.pdfSection.expertScenarios.sectionBadgeLabel` — required string (e.g. "Sample workflows").
+- `marketing.pdfSection.expertScenarios.disclaimer` — required, FTC-safe wording.
+- `marketing.pdfSection.expertScenarios.cards[].outcome` — required string (outcome chip text).
+- `marketing.pdfSection.expertScenarios.cards[].initials` — optional (2 uppercase letters; auto-derived from `name` if omitted).
+- `marketing.pdfSection.proofInside` — required block: `title`, `lede`, `items[3]` with `id`, `label`, `blurb`, `thumbnail` (`/assets/pdf-covers/...`, build-checked on disk), `thumbnailAlt`, `previewTrigger` (`beginner|advanced|bundle`), `guideRef`.
+
+### Tests (`tests/structure.test.js`)
+
+3× avatar count, 3× outcome count, badge presence, disclaimer-after-cards order, regex disclaimer wording, proof-inside section position (between grid and FAQ), 3 preview-trigger buttons, all `<img>` have `alt` + `loading="lazy"` + `decoding="async"`, all 3 thumbnails resolve on disk, CSS asserts (`--r-pill` avatar, `--accent-gold` outcome border, `repeat(3, 1fr)` proof grid, `aspect-ratio: 4/5` media).
+
+---
+
 ## 18. v0.3 backlog → shipped + v0.3.1 backlog
 
 **Shipped in v0.3.0:**

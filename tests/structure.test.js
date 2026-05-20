@@ -242,7 +242,7 @@ function run() {
     tally(assert(!enIndex.includes('Typical live workshops'), 'en/index.html: no workshop price compare strip'));
     tally(assert(!enIndex.includes('Illustrative comparison, not a specific'), 'en/index.html: no compare-strip disclaimer'));
     tally(assert(!enIndex.includes('Quote paraphrased from pilot'), 'en/index.html: no paraphrased-quote footnote'));
-    // --- PDF expert scenarios (3-card illustrative row, DS v0.2.6) ---
+    // --- PDF expert scenarios v2 (3-card sample workflows row, DS v0.3.2) ---
     const expertCardCount = (enIndex.match(/class="pdf-expert-card /g) || []).length;
     tally(
       assert(
@@ -252,8 +252,8 @@ function run() {
     );
     tally(
       assert(
-        enIndex.includes('class="pdf-expert-cards"') && enIndex.includes('role="list"') && enIndex.includes('Illustrative hiring approaches'),
-        'en/index.html: pdf-expert-cards grid with role="list" + aria-label'
+        enIndex.includes('class="pdf-expert-cards"') && enIndex.includes('role="list"') && enIndex.includes('Sample hiring workflows'),
+        'en/index.html: pdf-expert-cards grid with role="list" + aria-label "Sample hiring workflows"'
       )
     );
     tally(
@@ -280,14 +280,34 @@ function run() {
     );
     tally(
       assert(
-        enIndex.includes('pdf-expert-scenarios-disclaimer') && enIndex.includes('not client testimonials'),
-        'en/index.html: expert scenarios disclaimer element (illustrative, not testimonials)'
+        enIndex.includes('pdf-expert-scenarios-disclaimer') &&
+          /(not paid endorsements|workflow patterns)/i.test(enIndex),
+        'en/index.html: expert scenarios disclaimer element (FTC-safe wording)'
       )
     );
     tally(
       assert(
         !enIndex.includes('Pilot HR generalist') && !enIndex.includes('class="pdf-testimonial"'),
         'en/index.html: legacy single pilot testimonial removed'
+      )
+    );
+    // v2: avatar circles (3x), outcome chips (3x), section badge, disclaimer-after-cards order
+    const avatarCount = (enIndex.match(/class="pdf-expert-card__avatar"/g) || []).length;
+    tally(assert(avatarCount === 3, 'en/index.html: 3 pdf-expert-card__avatar circles (got ' + avatarCount + ')'));
+    const outcomeCount = (enIndex.match(/class="pdf-expert-card__outcome"/g) || []).length;
+    tally(assert(outcomeCount === 3, 'en/index.html: 3 pdf-expert-card__outcome chips (got ' + outcomeCount + ')'));
+    tally(
+      assert(
+        enIndex.includes('class="pdf-guides-social__badge"') && enIndex.includes('Sample workflows'),
+        'en/index.html: pdf-guides-social__badge with "Sample workflows" label'
+      )
+    );
+    const cardsPos = enIndex.indexOf('class="pdf-expert-cards"');
+    const disclaimerPos = enIndex.indexOf('class="pdf-meta-muted pdf-expert-scenarios-disclaimer"');
+    tally(
+      assert(
+        cardsPos !== -1 && disclaimerPos !== -1 && cardsPos < disclaimerPos,
+        'en/index.html: expert scenarios disclaimer sits AFTER pdf-expert-cards (v2 reframe)'
       )
     );
     tally(
@@ -302,6 +322,77 @@ function run() {
           /\.pdf-expert-card--elev-medium\s*\{[^}]*box-shadow:\s*var\(--shadow-medium\)/.test(landingCss || '') &&
           /\.pdf-expert-card--elev-raised\s*\{[^}]*box-shadow:\s*var\(--shadow-elevated\)/.test(landingCss || ''),
         'landing.css: three expert-card elevation modifiers map to soft / medium / elevated shadow tokens'
+      )
+    );
+    tally(
+      assert(
+        /\.pdf-expert-card__avatar\s*\{[^}]*border-radius:\s*var\(--r-pill\)/.test(landingCss || ''),
+        'landing.css: .pdf-expert-card__avatar uses --r-pill'
+      )
+    );
+    tally(
+      assert(
+        /\.pdf-expert-card__outcome\s*\{[^}]*border-left:\s*3px solid var\(--accent-gold\)/.test(landingCss || ''),
+        'landing.css: .pdf-expert-card__outcome uses gold left border'
+      )
+    );
+    tally(
+      assert(
+        /\.pdf-guides-social__badge\s*\{[^}]*border-radius:\s*var\(--r-pill\)/.test(landingCss || ''),
+        'landing.css: .pdf-guides-social__badge uses --r-pill'
+      )
+    );
+    // --- PDF proof-inside (C): 3 product-proof cards between grid and FAQ ---
+    const proofPos = enIndex.indexOf('class="pdf-proof-inside"');
+    const gridPos = enIndex.indexOf('class="pdf-guides-grid"');
+    const faqPos = enIndex.indexOf('id="pdf-guides-faq"');
+    tally(
+      assert(
+        proofPos !== -1 && gridPos !== -1 && faqPos !== -1 && proofPos > gridPos && proofPos < faqPos,
+        'en/index.html: pdf-proof-inside section between pdf-guides-grid and pdf-guides-faq'
+      )
+    );
+    const proofTriggerCount =
+      (enIndex.match(/class="pdf-proof-inside__media"[^>]*data-preview-trigger="(beginner|advanced|bundle)"/g) || []).length;
+    tally(
+      assert(
+        proofTriggerCount === 3,
+        'en/index.html: pdf-proof-inside has 3 preview-trigger buttons (got ' + proofTriggerCount + ')'
+      )
+    );
+    const proofImgs = enIndex.match(/<img[^>]*\/assets\/pdf-covers\/[^>]*>/g) || [];
+    const proofCardImgs = proofImgs.filter(function (img) {
+      return /-p\d+\.png/.test(img);
+    });
+    tally(
+      assert(
+        proofCardImgs.length >= 3 &&
+          proofCardImgs.every(function (img) {
+            return /\salt="[^"]+"/.test(img) && /loading="lazy"/.test(img) && /decoding="async"/.test(img);
+          }),
+        'en/index.html: pdf-proof-inside imgs have alt + loading=lazy + decoding=async (' + proofCardImgs.length + ' imgs)'
+      )
+    );
+    ['/assets/pdf-covers/advanced-p15.png',
+     '/assets/pdf-covers/advanced-p10.png',
+     '/assets/pdf-covers/beginner-p9.png'].forEach(function (rel) {
+      tally(
+        assert(
+          fs.existsSync(path.join(ROOT, rel.replace(/^\//, ''))),
+          'pdf-proof-inside thumbnail exists: ' + rel
+        )
+      );
+    });
+    tally(
+      assert(
+        /\.pdf-proof-inside__grid\s*\{[\s\S]{0,400}grid-template-columns:\s*repeat\(3,\s*1fr\)/.test(landingCss || ''),
+        'landing.css: .pdf-proof-inside__grid uses repeat(3, 1fr)'
+      )
+    );
+    tally(
+      assert(
+        /\.pdf-proof-inside__media\s*\{[\s\S]{0,400}aspect-ratio:\s*4\s*\/\s*5/.test(landingCss || ''),
+        'landing.css: .pdf-proof-inside__media uses aspect-ratio 4/5'
       )
     );
     tally(
