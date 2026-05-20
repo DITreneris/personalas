@@ -204,6 +204,18 @@ function run() {
     );
     tally(assert(heroBlock && !heroBlock[0].includes('header-phases'), 'phase chips not inside hero'));
     tally(assert(enIndex.includes('id="workflow-overview"'), 'en/index.html workflow-overview section'));
+    tally(
+      assert(
+        /\.workflow-overview[\s\S]{0,1200}\.header-phase-link/.test(landingCss || ''),
+        'landing.css: workflow-overview scoped phase chip styles'
+      )
+    );
+    tally(
+      assert(
+        /\.workflow-overview[\s\S]{0,800}color:\s*var\(--text\)/.test(landingCss || ''),
+        'landing.css: workflow phase chips use --text on light surface'
+      )
+    );
     const pdfPos = enIndex.indexOf('id="pdf-guides"');
     const block1Pos = enIndex.indexOf('id="block1"');
     tally(assert(pdfPos !== -1 && block1Pos !== -1 && pdfPos < block1Pos, 'pdf-guides appears before first free prompt'));

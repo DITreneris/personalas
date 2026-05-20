@@ -1081,6 +1081,74 @@
             color: var(--text);
         }
 
+        /* ===== WORKFLOW OVERVIEW – phase chips on light card (not hero navy) ===== */
+        .workflow-overview {
+            background: var(--gradient-soft);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--r-card);
+            padding: var(--space-28) var(--space-32);
+            margin-bottom: var(--space-32);
+            box-shadow: var(--shadow-medium), 0 1px 0 rgba(255, 255, 255, 0.8) inset;
+        }
+
+        .workflow-overview h2 {
+            font-size: var(--fs-2xl);
+            font-weight: 800;
+            color: var(--accent-dark);
+            margin-bottom: var(--space-12);
+        }
+
+        .workflow-overview-lede {
+            margin-bottom: var(--space-20);
+            font-size: var(--fs-md);
+            line-height: 1.6;
+            color: var(--text);
+        }
+
+        .workflow-overview .header-phases {
+            opacity: 1;
+            margin-bottom: 0;
+        }
+
+        .workflow-overview .header-phases li::after {
+            color: var(--text-muted);
+            opacity: 0.65;
+        }
+
+        .workflow-overview .header-phase-link {
+            border: 1px solid var(--border-subtle);
+            background: var(--surface-1);
+            color: var(--text);
+        }
+
+        .workflow-overview .header-phase-link::before {
+            background: var(--text-muted);
+            opacity: 0.4;
+        }
+
+        .workflow-overview .header-phase-link:hover {
+            background: var(--surface-2);
+            color: var(--accent-dark);
+            border-color: var(--accent-primary);
+        }
+
+        .workflow-overview .header-phase-link:focus-visible {
+            outline: 2px solid var(--ring-focus);
+            outline-offset: 2px;
+        }
+
+        .workflow-overview .header-phase-link.is-active {
+            background: var(--surface-1);
+            color: var(--accent-primary);
+            border-color: var(--accent-primary);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .workflow-overview .header-phase-link.is-active::before {
+            background: var(--accent-gold);
+            opacity: 1;
+        }
+
         /* Badge sistemos dalis – prompt kortelėse */
         .prompt-time {
             display: inline-flex;
