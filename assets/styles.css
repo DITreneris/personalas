@@ -178,6 +178,18 @@ html {
     --shadow-toast: 0 12px 40px rgba(0, 0, 0, 0.15);
     --shadow-modal: 0 20px 60px rgba(0, 0, 0, 0.3);
     --shadow-sticky: 0 -4px 16px rgba(15, 23, 42, 0.08);
+
+    /* v0.2.3 — Hover lift scale.
+     * Rule: primary CTA = --lift-md; secondary / dense / hero = --lift-sm. */
+    --lift-sm: -1px;
+    --lift-md: -2px;
+
+    /* v0.2.4 — Focus ring on dark surfaces (hero / navy nav).
+     * Light surfaces continue to use --ring-focus (gold). */
+    --ring-focus-on-dark: 3px solid #FFFFFF;
+
+    /* v0.2.4 — Radius xs (replaces literal 4px in landing.css). */
+    --r-xs: 4px;
 }
 
 
@@ -220,7 +232,7 @@ html {
 
 .btn:hover {
     background: var(--gradient-cta-hover);
-    transform: translateY(-2px);
+    transform: translateY(var(--lift-md));
     box-shadow: var(--shadow-cta);
 }
 

@@ -685,7 +685,6 @@ const EN_REPLACEMENTS = [
   ['Download PDF for $11.99', 'Buy & download — $11.99'],
   ['aria-label="Buy Beginner PDF Guide for $5.99"', 'aria-label="Buy and download Beginner PDF Guide for $5.99"'],
   ['aria-label="Buy Advanced PDF Guide for $11.99"', 'aria-label="Buy and download Advanced PDF Guide for $11.99"'],
-  ['info@promptanatomy.app', 'info@promptanatomy.help'],
   ['FAZĖ ', 'PHASE '],
   ['Sistema: X iš 6 fazių', 'Progress: X of 6'],
   ['progresas ir fazės', 'progress and phases'],
@@ -1012,6 +1011,9 @@ function buildPrivacyEn(html, sot) {
   const abs = absoluteBaseSlash();
   let out = html.replace('href="assets/styles.css"', 'href="../assets/styles.css"');
   out = injectFaviconLinks(out, abs);
+  if (sot && sot.product && sot.product.contactEmail) {
+    out = replaceAllGlobal(out, '{{SOT_CONTACT_EMAIL}}', sot.product.contactEmail);
+  }
   if (sot && sot.product && sot.product.businessAddress) {
     out = replaceAllGlobal(out, '{{SOT_BUSINESS_ADDRESS}}', renderAddressBlock(sot));
   }
@@ -1048,6 +1050,7 @@ function applySot(html, sot) {
     );
   }
   html = html.replace(/info@promptanatomy\.app/g, email);
+  html = html.replace(/info@promptanatomy\.help/g, email);
 
   const replacements = {
     '{{SOT_SEO_TITLE}}': getSeoTitle(sot),
@@ -1076,12 +1079,16 @@ function applySot(html, sot) {
     '{{SOT_PDF_SECTION_FREE_BRIDGE}}': p.freeBridge || '',
     '{{SOT_FREE_TIER_LABEL}}': (m.freeTier && m.freeTier.label) || 'Free copy-paste prompts on this page',
     '{{SOT_FREE_TIER_HINT}}': (m.freeTier && m.freeTier.hint) || '',
+    '{{SOT_FREE_TIER_CTA_LABEL}}': (m.freeTier && m.freeTier.ctaLabel) || '',
+    '{{SOT_FREE_TIER_CTA_HREF}}': (m.freeTier && m.freeTier.ctaHref) || '#workflow-overview',
     '{{SOT_COMMUNITY_TITLE}}': (m.community && m.community.title) || 'Want more?',
     '{{SOT_COMMUNITY_TELEGRAM}}': (m.community && m.community.telegramCta) || 'Join on Telegram',
     '{{SOT_COMMUNITY_APP}}': (m.community && m.community.appCta) || 'Prompt Anatomy →',
     '{{SOT_DISCLAIMER}}': sot.legal.disclaimerShort,
     '{{SOT_BUSINESS_ADDRESS}}': renderAddressBlock(sot),
     '{{SOT_BUYER_FAQ_HTML}}': buildBuyerFaqHtml(sot),
+    '{{SOT_CONTACT_EMAIL}}': email,
+    '{{SOT_MOTHER_BRAND_URL}}': sot.brand.motherBrandUrl || sot.product.motherBrandUrl || 'https://www.promptanatomy.app',
   };
 
   Object.keys(replacements).forEach(function (token) {

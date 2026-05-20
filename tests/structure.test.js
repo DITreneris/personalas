@@ -185,8 +185,18 @@ function run() {
     tally(assert(!/(€|\bEUR\b|Postcode|postcode|Colour|colour|organisation|optimise|centre|grey|Analyse|analyse|Spin-off Nr\.)/.test(enIndex), 'en/index.html: no obvious non-US locale fragments'));
     tally(assert(!/[ąčęėįšųūžĄČĘĖĮŠŲŪŽ]/.test(enIndex), 'en/index.html: no Lithuanian diacritics'));
     tally(assert(enIndex.includes('terms.html'), 'en/index.html footer links to terms'));
-    tally(assert(enIndex.includes('info@promptanatomy.help'), 'en/index.html uses canonical support email'));
-    tally(assert(!enIndex.includes('mailto:info@promptanatomy.app'), 'en/index.html has no legacy .app support email'));
+    tally(assert(enIndex.includes('info@promptanatomy.app'), 'en/index.html uses canonical support email'));
+    tally(assert(!enIndex.includes('mailto:info@promptanatomy.help'), 'en/index.html has no legacy .help support email in mailto'));
+    tally(assert(!enIndex.includes('Built by Prompt Anatomy'), 'en/index.html footer: no redundant Built by line (variant A)'));
+    tally(assert(!enIndex.includes('footer-product-link'), 'en/index.html footer: no footer-product-link'));
+    tally(
+      assert(
+        enIndex.includes('class="footer-contact"') &&
+          enIndex.includes('promptanatomy.app</a>') &&
+          enIndex.includes('info@promptanatomy.app</a>'),
+        'en/index.html footer: app link and email without Prompt Anatomy prefix'
+      )
+    );
     tally(assert(
       enIndex.includes('footer-disclaimer') || enIndex.includes('legal-disclaimer') || enIndex.includes('Not legal or HR advice'),
       'en/index.html HR advisory disclaimer'
@@ -293,6 +303,152 @@ function run() {
     const ringFocusCount = (landingCss.match(/outline:\s*var\(--ring-focus\)/g) || []).length;
     tally(
       assert(ringFocusCount >= 8, 'landing.css: --ring-focus on >=8 components (DS v0.2)')
+    );
+    // --- DS v0.2.2: sticky & anchor polish ---
+    tally(
+      assert(
+        /scroll-margin-top:\s*clamp\(/.test(landingCss),
+        'landing.css: scroll-margin-top clamp() for sticky-overlapped anchors (DS v0.2.2)'
+      )
+    );
+    tally(
+      assert(
+        /backdrop-filter:\s*saturate\(180%\)\s*blur\(12px\)/.test(landingCss) &&
+          /@supports not \(backdrop-filter:\s*blur\(12px\)\)/.test(landingCss),
+        'landing.css: .page-lanes-nav backdrop-filter glass + @supports fallback (DS v0.2.2)'
+      )
+    );
+    tally(
+      assert(
+        /env\(safe-area-inset-bottom\)/.test(landingCss),
+        'landing.css: .pdf-sticky-cta safe-area inset for iOS (DS v0.2.2)'
+      )
+    );
+    tally(
+      assert(
+        /\.skip-link:focus\s*\{[^}]*outline:\s*var\(--ring-focus\)/.test(landingCss),
+        'landing.css: .skip-link:focus uses --ring-focus token (DS v0.2.2)'
+      )
+    );
+    // --- DS v0.2.3: motion ritmu & lift token sistema ---
+    const transitionLiteralMatches = (
+      landingCss.match(/transition:[^;]*\b\d+(?:\.\d+)?s\s+(?:ease|var)/g) || []
+    );
+    tally(
+      assert(
+        transitionLiteralMatches.length === 0,
+        `landing.css: no literal "Ns ease" transitions left (DS v0.2.3); found ${transitionLiteralMatches.length}`
+      )
+    );
+    const liftSmCount = (landingCss.match(/translateY\(var\(--lift-sm\)\)/g) || []).length;
+    const liftMdCountLanding = (landingCss.match(/translateY\(var\(--lift-md\)\)/g) || []).length;
+    const liftMdCountShared = (sharedCss.match(/translateY\(var\(--lift-md\)\)/g) || []).length;
+    const liftMdCountTotal = liftMdCountLanding + liftMdCountShared;
+    tally(
+      assert(
+        liftSmCount >= 4 && liftMdCountTotal >= 2,
+        `landing.css: --lift-sm >=4 (got ${liftSmCount}); --lift-md across landing+styles >=2 (got ${liftMdCountTotal}) (DS v0.2.3 + v0.2.5 .btn dedup)`
+      )
+    );
+    tally(
+      assert(
+        /--lift-sm:\s*-1px/.test(sharedCss) && /--lift-md:\s*-2px/.test(sharedCss),
+        'assets/styles.css: declares --lift-sm and --lift-md tokens (DS v0.2.3)'
+      )
+    );
+    tally(
+      assert(
+        /@media \(prefers-reduced-motion: reduce\)[\s\S]{0,600}transform:\s*none\s*!important/.test(landingCss),
+        'landing.css: reduced-motion explicitly resets hover/focus transform (DS v0.2.3)'
+      )
+    );
+    // --- DS v0.2.4: focus + radius + form consolidation ---
+    tally(
+      assert(
+        /--ring-focus-on-dark:\s*3px solid #FFFFFF/.test(sharedCss) && /--r-xs:\s*4px/.test(sharedCss),
+        'assets/styles.css: declares --ring-focus-on-dark and --r-xs tokens (DS v0.2.4)'
+      )
+    );
+    const literalOutlineMatches = (
+      landingCss.match(/outline:\s*\d+px solid (#|var\(--white\)|var\(--text\)|var\(--accent-dark\)|var\(--brand-prompt-anatomy-accent\))/g) || []
+    );
+    tally(
+      assert(
+        literalOutlineMatches.length === 0,
+        `landing.css: no literal outline declarations left — all use --ring-focus / --ring-focus-on-dark (DS v0.2.4); found ${literalOutlineMatches.length}`
+      )
+    );
+    const literalRadiusMatches = (
+      landingCss.match(/border-radius:\s*(?:999px|8px|4px|12px)\b/g) || []
+    );
+    tally(
+      assert(
+        literalRadiusMatches.length === 0,
+        `landing.css: no literal border-radius (999/8/4/12 px) — all use --r-* tokens (DS v0.2.4); found ${literalRadiusMatches.length}`
+      )
+    );
+    tally(
+      assert(
+        /\.form-input:focus-visible\s*\{[^}]*border-color:\s*var\(--accent-gold-dark\)[^}]*box-shadow:\s*0\s+0\s+0\s+4px\s+rgba\(207,\s*167,\s*58/.test(landingCss),
+        'landing.css: .form-input:focus-visible uses gold ring (DS v0.2.4)'
+      )
+    );
+    tally(
+      assert(
+        /\.code-block\s*\{[\s\S]{0,400}border-left:\s*3px solid var\(--accent-primary\)/.test(landingCss),
+        'landing.css: .code-block border-left 3px (matches .faq-panel gravitas, DS v0.2.4)'
+      )
+    );
+    // --- DS v0.2.5: affordance & state polish ---
+    tally(
+      assert(
+        /@supports selector\(:has\(\*\)\)[\s\S]{0,200}\.prompt:has\(\.prompt-done:checked\)/.test(landingCss),
+        'landing.css: .prompt:has(.prompt-done:checked) gated by @supports (DS v0.2.5)'
+      )
+    );
+    tally(
+      assert(
+        /\.code-block\.selected::after\s*\{[\s\S]{0,400}transform:\s*rotate\(45deg\)/.test(landingCss),
+        'landing.css: .code-block.selected::after gold check marker (DS v0.2.5)'
+      )
+    );
+    tally(
+      assert(
+        /\.prompt:hover\s*\{[\s\S]{0,300}transform:\s*translateY\(var\(--lift-sm\)\)/.test(landingCss),
+        'landing.css: .prompt:hover lift matches CTA physics (DS v0.2.5)'
+      )
+    );
+    tally(
+      assert(
+        /\.pdf-guide-card--featured\s*\{[\s\S]{0,300}inset 0 0 0 1px var\(--accent-gold\)/.test(landingCss),
+        'landing.css: .pdf-guide-card--featured gold inset stroke (DS v0.2.5)'
+      )
+    );
+    tally(
+      assert(
+        /\.code-block\s*\{[\s\S]{0,1500}scrollbar-color:\s*var\(--border-subtle-dark\)/.test(landingCss) &&
+          /\.code-block::-webkit-scrollbar\s*\{/.test(landingCss),
+        'landing.css: .code-block scrollbar styling (DS v0.2.5)'
+      )
+    );
+    tally(
+      assert(
+        /\.business-address\s*\{[\s\S]{0,400}max-width:\s*420px/.test(landingCss),
+        'landing.css: .business-address desktop max-width 420px (DS v0.2.5)'
+      )
+    );
+    const landingBtnTopLevel = (landingCss.match(/^\s+\.btn\s*\{/gm) || []).length;
+    tally(
+      assert(
+        landingBtnTopLevel === 0,
+        `landing.css: no top-level .btn { } block (deduplicated to assets/styles.css, DS v0.2.5); found ${landingBtnTopLevel}`
+      )
+    );
+    tally(
+      assert(
+        /\.prompt-footer \.btn\s*\{/.test(landingCss),
+        'landing.css: .prompt-footer .btn scoped override (DS v0.2.5)'
+      )
     );
     const afterPurchaseBlock = enIndex.match(
       /class="pdf-guides-after-purchase"[\s\S]*?<\/div>\s*\n\s*<\/section>/
@@ -498,7 +654,7 @@ function run() {
   tally(assert(sot && sot.legal && sot.legal.metaDescription, 'sot.json legal.metaDescription'));
   tally(assert(sot && sot.positioning && sot.positioning.primaryKpi === 'pdf', 'sot.json positioning.primaryKpi is pdf'));
   tally(assert(sot && sot.marketing && sot.marketing.hero && sot.marketing.hero.primaryCtaHref === '#pdf-guides', 'sot.json hero primary CTA targets pdf-guides'));
-  tally(assert(sot && sot.product && sot.product.contactEmail === 'info@promptanatomy.help', 'sot.json canonical contactEmail'));
+  tally(assert(sot && sot.product && sot.product.contactEmail === 'info@promptanatomy.app', 'sot.json canonical contactEmail'));
   tally(assert(sot && sot.brand && sot.brand.publicName === 'Prompt Anatomy', 'sot.json brand.publicName'));
 
   // --- Business postal address (CAN-SPAM + Stripe trust + footer/privacy/terms) ---

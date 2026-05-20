@@ -2,7 +2,7 @@
 
 **Paskirtis:** Vienas operacinis sąrašas — ką **ne laužyti** keičiant turinį, CSS arba build. Detalus DS implementacijos planas — [design_systemv02.md](design_systemv02.md). Keliai, deploy, brand — [AGENT_SOT.md](AGENT_SOT.md). Agentų seka — [AGENTS.md](../AGENTS.md) §9.
 
-**Paskutinis atnaujinimas:** 2026-05-20 (DS v0.2.1)
+**Paskutinis atnaujinimas:** 2026-05-20 (DS v0.2.5)
 
 ---
 
@@ -117,9 +117,16 @@ Po pakeitimų: **`npm run build`** → **`npm test`**.
 
 - **Nenaudoti** naujame CSS: `--orange-light`, `--blue-light`, `--community-cta-green*` (deprecated iki v0.3).
 - **Focus** ant šviesaus fono: `outline: var(--ring-focus); outline-offset: 2px`.
-- **Hero** ant navy: 3px baltas outline (išimtis).
+- **Focus ant tamsaus fono (v0.2.4):** `outline: var(--ring-focus-on-dark); outline-offset: 2px` (hero, `.header-phase-link`, `.cta-button*`, `.hero-lane-hint`).
+- **Jokių literal'ių `outline: Npx solid …`** landing.css — visos `outline` deklaracijos privalo naudoti vieną iš dviejų token'ų.
+- **Border-radius (v0.2.4):** literal'ai `999px / 8px / 4px / 12px` neleistini — naudoti `--r-pill / --r-sm / --r-xs / --r-md`.
+- **State feedback per `:has()` (v0.2.5):** CSS-only būsenų grįžtamasis ryšys (pvz. `.prompt:has(.prompt-done:checked)`) **privalo** būti gate'intas `@supports selector(:has(*))` blokuose — Safari <15.4 / senesni Firefox išlieka su native checkbox tick'u kaip pagrindinis signalas.
+- **`.btn` deduplikacija (v0.2.5):** vienintelė autoritetinė `.btn { ... }` deklaracija — [assets/styles.css](../assets/styles.css). [assets/landing.css](../assets/landing.css) neturi top-level `.btn { }` blokų, tik scoped override'us (`.prompt-footer .btn`) ir `.btn.success` state'ą.
 - **Šešėliai:** `--shadow-soft` / `--medium` / `--elevated` / `--shadow-cta` / `--shadow-toast` / `--shadow-modal` / `--shadow-sticky`.
 - **Tipografija:** `--fs-*`; hero H1 responsive `px` leidžiami.
+- **Motion (v0.2.3):** `transition` deklaracijos naudoja `var(--duration-fast|normal|slow) var(--ease-out)`; jokių literal'ių `0.2s ease` / `0.3s ease`.
+- **Hover lift (v0.2.3):** primary CTA = `translateY(var(--lift-md))`; hero / secondary / dense / sticky = `var(--lift-sm)`; ghost / info — be lift.
+- **Reduced motion:** `@media (prefers-reduced-motion: reduce)` blokas privalo turėti `*:hover, *:focus-visible { transform: none !important; }` (vestibulinė apsauga).
 - **Hero sentence case:** `h1`, subhead, `.hero-price-teaser`, hero CTA labels — `text-transform: none` (turinys iš [config/sot.json](../config/sot.json)); uppercase tik `.badge`. Headline naudoja **U.S.** (ne izoliuotas `US` su forced caps). Kaina hero: tik `priceTeaser`, ne subhead. Žr. [design_systemv02.md](design_systemv02.md) §4.3.1; testai `structure.test.js`.
 
 ### 6.3 Surface ladder (v0.2.1 — elevation)
@@ -136,6 +143,12 @@ Ant šviesaus fono **vengti** `surface-1` ant `surface-1` be šešėlio arba tar
 | Chip active | `--surface-1`, navy border, `--shadow-soft` |
 
 Pilna lentelė: [design_systemv02.md](design_systemv02.md) §17.
+
+### 6.4 Sticky overlap & anchor clearance (v0.2.2)
+
+- Visi sticky-perdengti anchor target'ai (`#pdf-guides`, `#free-prompts-label`, `#workflow-overview`, `.prompt[id^="prompt"]`, `[id^="block"]`) **privalo** turėti `scroll-margin-top: clamp(72px, 12vh, 96px)` (deklaruota globaliu `:where()` rule'u landing.css; specificity 0).
+- `.page-lanes-nav` glass: `backdrop-filter: saturate(180%) blur(12px)` + `@supports not` solid fallback'as.
+- `.pdf-sticky-cta` iOS safe-area: `padding-bottom: max(14px, env(safe-area-inset-bottom))`.
 
 ---
 
@@ -189,3 +202,7 @@ Nelaužyti be QA:
 | 2026-05 | v1 | Prompt kompresija, PDF CTA visited fix |
 | 2026-05-19 | v0.2 | `landing.css`, tokenai, inline CSS pašalintas |
 | 2026-05-20 | v0.2.1 | Surface ladder, `btn--ghost`, išplėstas golden standard (šis failas) |
+| 2026-05-20 | v0.2.2 | Sticky & anchor polish (scroll-margin, glass nav, safe-area, skip-link token) |
+| 2026-05-20 | v0.2.3 | Motion ritmu & lift token sistema (--lift-sm/-md, transition tokens, reduced-motion transform reset) |
+| 2026-05-20 | v0.2.4 | Focus + radius + form consolidation (--ring-focus-on-dark, --r-xs, gold form ring, code-block 3px) |
+| 2026-05-20 | v0.2.5 | Affordance & state polish (:has done state, selected check marker, prompt hover lift, featured gold inset, scrollbar styling, .btn deduplication) |

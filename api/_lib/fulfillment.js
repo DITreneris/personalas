@@ -342,7 +342,7 @@ function buildEmailText(product, downloadUrl) {
     'Full terms: https://promptanatomy.help/terms.html#paid-pdf-license',
     '',
     '14-day no-questions refund: just reply to this email or to your Stripe receipt.',
-    'Need help? Contact info@promptanatomy.help.',
+    'Need help? Contact info@promptanatomy.app.',
     '',
     'This email was sent to fulfill your purchase. Our mailing address is below.',
     ''
@@ -369,7 +369,7 @@ function buildEmailHtml(product, downloadUrl) {
     '<hr style="border:none;border-top:1px solid #E2E8F0;margin:1.25rem 0;">',
     '<p style="color:#4A5568;font-size:0.9rem;">Personal license. Use this guide within your own HR team. Do not redistribute as-is. <a href="https://promptanatomy.help/terms.html#paid-pdf-license">Full terms.</a></p>',
     '<p style="color:#4A5568;font-size:0.9rem;">14-day no-questions refund. Reply to this email or to your Stripe receipt and we will revoke this link.</p>',
-    '<p style="color:#4A5568;font-size:0.9rem;">Need help? Contact <a href="mailto:info@promptanatomy.help">info@promptanatomy.help</a>.</p>',
+    '<p style="color:#4A5568;font-size:0.9rem;">Need help? Contact <a href="mailto:info@promptanatomy.app">info@promptanatomy.app</a>.</p>',
     '<p style="color:#718096;font-size:0.8rem;margin-top:1rem;">This email was sent to fulfill your purchase. Our mailing address is below.</p>',
     addressBlock,
     '</div>'
@@ -418,7 +418,7 @@ function buildBundleEmailHtml(downloads) {
     buttons,
     `<p style="color:#4A5568;font-size:0.95rem;">Links expire in ${days} days.</p>`,
     '<p style="color:#4A5568;font-size:0.9rem;">Personal license. Use within your HR team. Do not redistribute as-is. <a href="https://promptanatomy.help/terms.html#paid-pdf-license">Full terms.</a></p>',
-    '<p style="color:#4A5568;font-size:0.9rem;">Need help? Contact <a href="mailto:info@promptanatomy.help">info@promptanatomy.help</a>.</p>',
+    '<p style="color:#4A5568;font-size:0.9rem;">Need help? Contact <a href="mailto:info@promptanatomy.app">info@promptanatomy.app</a>.</p>',
     '<p style="color:#718096;font-size:0.8rem;margin-top:1rem;">This email was sent to fulfill your purchase. Our mailing address is below.</p>',
     addressBlock,
     '</div>'

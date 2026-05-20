@@ -4,7 +4,7 @@
     "series": "Prompt Anatomy Series No. 3",
     "siteUrl": "https://promptanatomy.help",
     "motherBrandUrl": "https://www.promptanatomy.app",
-    "contactEmail": "info@promptanatomy.help",
+    "contactEmail": "info@promptanatomy.app",
     "operatorName": "Tomas Staniulis",
     "effectiveDate": "May 2026",
     "businessAddress": {
@@ -41,7 +41,7 @@
       "primaryCtaHref": "#pdf-guides",
       "secondaryCtaLabel": "Start free prompts",
       "secondaryCtaHref": "#free-prompts-label",
-      "stickyCtaLabel": "PDF guides",
+      "stickyCtaLabel": "Get PDF guides — from $5.99",
       "laneHintHtml": "<a href=\"#free-prompts-band\">Free prompts are in the section below ↓</a>"
     },
     "lanes": {
@@ -51,8 +51,10 @@
     },
     "freeTier": {
       "sectionTitle": "Free prompt toolkit",
-      "label": "Free prompts — copy, paste, replace.",
-      "hint": "10 prompts across the hiring cycle, free on this page."
+      "label": "10 copy-paste prompts — full hiring cycle.",
+      "hint": "Pick a phase below to jump straight to the prompt.",
+      "ctaLabel": "Open the 6-phase workflow ↓",
+      "ctaHref": "#workflow-overview"
     },
     "workflowOverview": {
       "title": "How the 6-phase workflow works",
@@ -198,7 +200,7 @@
     {
       "id": "faq-license-team",
       "q": "Can I share this guide with my recruiting team?",
-      "a": "Yes, within your organization. The Personal license covers your HR and hiring team. Do not post the PDF publicly or resell it. Department-wide redistribution outside your company requires permission — email info@promptanatomy.help."
+      "a": "Yes, within your organization. The Personal license covers your HR and hiring team. Do not post the PDF publicly or resell it. Department-wide redistribution outside your company requires permission — email info@promptanatomy.app."
     },
     {
       "id": "faq-team-rollout",
@@ -213,7 +215,7 @@
     {
       "id": "faq-lost-email",
       "q": "What if I lose the download email?",
-      "a": "Email info@promptanatomy.help from your purchase address and we will resend a fresh signed link. Links expire after 7 days; we re-issue on request."
+      "a": "Email info@promptanatomy.app from your purchase address and we will resend a fresh signed link. Links expire after 7 days; we re-issue on request."
     },
     {
       "id": "faq-refund",

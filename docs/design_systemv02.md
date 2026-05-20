@@ -502,6 +502,102 @@ Each PR is CSS/build-only. Rollback = revert commit + `npm run build`. No data m
 
 ---
 
+## 19. v0.2.2 — Sticky & anchor polish (2026-05)
+
+**Goal:** Fix anchor-target clipping under the sticky `#page-lanes-nav` and add premium glass affordance without DOM or layout changes.
+
+| Surface | Rule |
+|---------|------|
+| Sticky-overlapped anchors (`#pdf-guides`, `#free-prompts-label`, `#workflow-overview`, `.prompt[id^="prompt"]`, `[id^="block"]`) | `scroll-margin-top: clamp(72px, 12vh, 96px)` via `:where()` (specificity 0) |
+| `.page-lanes-nav` | `background: rgba(255, 255, 255, 0.85); backdrop-filter: saturate(180%) blur(12px)` |
+| `.page-lanes-nav` (Firefox / older Safari fallback) | `@supports not (backdrop-filter: blur(12px))` → solid `var(--surface-1)` |
+| `.pdf-sticky-cta` | `padding-bottom: max(14px, env(safe-area-inset-bottom))` (iOS home indicator) |
+| `.skip-link:focus` | `outline: var(--ring-focus)` (token, replaces literal `3px solid var(--text)`) |
+
+**Tests:** [`tests/structure.test.js`](../tests/structure.test.js) — `scroll-margin-top` clamp, `backdrop-filter` + `@supports` fallback, `env(safe-area-inset-bottom)`, `.skip-link:focus` token.
+
+---
+
+## 19a. v0.2.3 — Motion ritmu & lift token sistema (2026-05)
+
+**Goal:** One motion ritmu across the page; codified hover lift scale; reduced-motion that actually neutralizes transforms.
+
+### Tokens added (assets/styles.css `:root`)
+
+| Token | Value | Use |
+|-------|-------|-----|
+| `--lift-sm` | `-1px` | Hero CTA, dense / secondary surfaces, sticky CTA |
+| `--lift-md` | `-2px` | Primary CTA (`.btn`, `.pdf-guide-cta`) |
+
+### Rules
+
+- **Transitions:** Replace literal `\d+(\.\d+)?s ease` with `var(--duration-fast|normal|slow) var(--ease-out)` across `landing.css`. Existing `--duration-fast: 150ms`, `--duration-normal: 250ms`, `--duration-slow: 400ms`.
+- **Lift:** Primary action = `translateY(var(--lift-md))`; hero / secondary / dense / sticky = `translateY(var(--lift-sm))`; ghost / info = no lift.
+- **Reduced motion:** `@media (prefers-reduced-motion: reduce)` block adds `*::before, *::after` coverage, `animation-iteration-count: 1`, `scroll-behavior: auto !important`, and explicit `*:hover, *:focus-visible { transform: none !important; }` (vestibular safety per WCAG 2.3.3).
+
+**Affected selectors (lift):** `.btn`, `.pdf-guide-cta` (md); `.cta-button` (hero override + base), `.cta-button-outline`, `.form-submit`, `.phase-header`, `.community-cta-primary`, `.pdf-sticky-cta-btn` (sm).
+
+**Tests:** [`tests/structure.test.js`](../tests/structure.test.js) — no literal `Ns ease` transitions, `--lift-sm` ≥4×, `--lift-md` ≥2×, tokens declared in `styles.css`, reduced-motion `transform: none !important`.
+
+---
+
+## 19b. v0.2.4 — Focus + radius + form consolidation (2026-05)
+
+**Goal:** Zero literal `outline:` and `border-radius:` declarations in `landing.css`; form input focus speaks the same brand language as the rest of the UI.
+
+### Tokens added (assets/styles.css `:root`)
+
+| Token | Value | Use |
+|-------|-------|-----|
+| `--ring-focus-on-dark` | `3px solid #FFFFFF` | Hero / navy nav focus rings (light surfaces continue with `--ring-focus`) |
+| `--r-xs` | `4px` | Progress bar, preview thumb, focus-ring border-radius on inline links |
+
+### Rules
+
+| Surface | Token |
+|---------|-------|
+| `.skip-link:focus`, `.modal-close:focus-visible`, `.header-badges a.badge`, `.footer-product-link a` | `--ring-focus` |
+| `.header-phase-link`, hero `.cta-button*`, `.hero-lane-hint a` | `--ring-focus-on-dark` |
+| `.form-input:focus-visible` | `border-color: var(--accent-gold-dark); box-shadow: 0 0 0 4px rgba(207, 167, 58, 0.25)` (gold ring matches rest of UI) |
+| `.code-block` border-left | 3px (matches `.faq-panel` gravitas) |
+| Pill-shaped chips (`.header-phase-link`, `::before`, `.phase-chevron`) | `var(--r-pill)` |
+| 8px radius surfaces (instructions code, prompt-time, pdf cover, testimonial) | `var(--r-sm)` |
+| 4px radius (progress bar, preview thumb, focus border-radius) | `var(--r-xs)` |
+| Dialog modal | `var(--r-md)` |
+
+**Tests:** [`tests/structure.test.js`](../tests/structure.test.js) — token declarations, no literal outline / border-radius (999/8/4/12 px), gold form ring, code-block 3px border-left.
+
+---
+
+## 20. v0.2.5 — Affordance & state polish (2026-05)
+
+**Goal:** Add CSS-only state feedback that vartotojui matomas po kliko / po kopijavimo / po featured-card rinkimosi — be naujo teksto, be DOM lūžių, be JS.
+
+### Rules
+
+| Surface | Rule |
+|---------|------|
+| `.prompt:hover` | Add `transform: translateY(var(--lift-sm))` (matches CTA hover physics) |
+| `.prompt:has(.prompt-done:checked)` | `opacity: 0.85; border-left: 3px solid var(--accent-gold)` — gated by `@supports selector(:has(*))` so Safari < 15.4 fallback'as is the native checkbox tick |
+| `.code-block.selected::after` | Small gold check marker (top-right, 8×8px, rotated borders, `opacity: 0.7`) — color-blind safe affordance beyond the gold border |
+| `.code-block` overflow | `scrollbar-width: thin; scrollbar-color: var(--border-subtle-dark) transparent` + WebKit thumb 6px |
+| `.pdf-guide-card--featured` | Add `inset 0 0 0 1px var(--accent-gold)` to existing `--shadow-medium` — premium "Recommended" affordance |
+| `.business-address` | Desktop `max-width: 320px → 420px` (less orphaned on wide footer) |
+
+### Hygiene
+
+- **`.btn` deduplication.** Baseline declared in [`assets/styles.css`](../assets/styles.css). [`assets/landing.css`](../assets/landing.css) keeps only `.prompt-footer .btn` scoped override (`padding`, `font-size`, `font-family`) and `.btn.success` state. Mobile breakpoint scoped to `.prompt-footer .btn`.
+- **`*` reset deduplication.** [`assets/landing.css`](../assets/landing.css) `*` no longer redeclares `box-sizing` (inherited from [`assets/styles.css`](../assets/styles.css) `*`). Landing only neutralizes `margin: 0; padding: 0`.
+
+### Browser support
+
+- `:has()` — Safari ≥15.4, Chrome ≥105, Firefox ≥121. Older browsers fall back to native checkbox tick (no regression, just no card-level dim/gold border).
+- `@supports selector(:has(*))` — universally supported as a feature query syntax even where `:has()` itself isn't.
+
+**Tests:** [`tests/structure.test.js`](../tests/structure.test.js) — `:has()` gated by `@supports`, selected `::after` rotate(45deg), `.prompt:hover` lift-sm, featured gold inset, scrollbar styling, business-address 420px, no top-level `.btn { }` in landing.css, `.prompt-footer .btn` scope.
+
+---
+
 ## 18. v0.3 backlog (not in v0.2.1 scope)
 
 - Remove deprecated `:root` aliases (`--orange-light`, `--community-cta-green*`) after `rg` clean.
@@ -542,6 +638,10 @@ rg -i "personalas|series no" en/ templates/
 | `--shadow-sticky` | Add | PR-1 |
 | `--orange-light` | Deprecate → remove refs | PR-2, delete alias v0.3 |
 | `--fs-*` | Adopt widely | PR-3 |
+| `--lift-sm` | Add (-1px) | v0.2.3 |
+| `--lift-md` | Add (-2px) | v0.2.3 |
+| `--ring-focus-on-dark` | Add (3px white) | v0.2.4 |
+| `--r-xs` | Add (4px) | v0.2.4 |
 
 ---
 
@@ -564,6 +664,10 @@ rg -i "personalas|series no" en/ templates/
 |------|---------|-------|
 | 2026-05-19 | 0.2.0-plan | Initial implementation plan from v0.1 audit |
 | 2026-05-20 | 0.2.1 | Elevation & affordance (PDF surface-2, card shadows, workflow chips, btn--ghost) |
+| 2026-05-20 | 0.2.2 | Sticky & anchor polish (scroll-margin clearance, glass nav, safe-area, skip-link token) |
+| 2026-05-20 | 0.2.3 | Motion ritmu & lift token sistema (--lift-sm/-md, transition tokens, reduced-motion transform reset) |
+| 2026-05-20 | 0.2.4 | Focus + radius + form consolidation (--ring-focus-on-dark, --r-xs, gold form ring, code-block 3px) |
+| 2026-05-20 | 0.2.5 | Affordance & state polish (:has done state, selected check marker, prompt hover lift, featured gold inset, scrollbar styling, .btn deduplication) |
 
 ---
 
