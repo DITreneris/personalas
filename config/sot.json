@@ -34,16 +34,23 @@
       "ogTitle": "HR hiring PDF guides for US teams"
     },
     "hero": {
-      "headline": "Run a repeatable US hiring loop in 6 phases—with AI prompts.",
-      "subhead": "10 free copy-paste prompts on this page. Full PDF playbook from $5.99.",
+      "headline": "Run a repeatable U.S. hiring loop in 6 phases—with AI prompts.",
+      "subhead": "10 free copy-paste prompts on this page. Paid PDF playbooks with instant download.",
       "priceTeaser": "Beginner $5.99 · Advanced $11.99 · Instant download",
       "primaryCtaLabel": "See the PDF guides",
       "primaryCtaHref": "#pdf-guides",
-      "secondaryCtaLabel": "Try a free prompt",
-      "secondaryCtaHref": "#block1",
-      "stickyCtaLabel": "PDF guides"
+      "secondaryCtaLabel": "Start free prompts",
+      "secondaryCtaHref": "#free-prompts-label",
+      "stickyCtaLabel": "PDF guides",
+      "laneHintHtml": "<a href=\"#free-prompts-band\">Free prompts are in the section below ↓</a>"
+    },
+    "lanes": {
+      "navAria": "On this page",
+      "pdfLabel": "PDF guides",
+      "freeLabel": "Free prompts"
     },
     "freeTier": {
+      "sectionTitle": "Free prompt toolkit",
       "label": "Free prompts — copy, paste, replace.",
       "hint": "10 prompts across the hiring cycle, free on this page."
     },
@@ -68,9 +75,7 @@
   },
   "legal": {
     "metaDescription": "US HR hiring playbooks from $5.99—checklists, rubrics, and 10 free copy-paste prompts on the page. Instant PDF download.",
-    "disclaimerShort": "Educational workflow. Not legal or HR advice. Human review required.",
-    "compareStripHtml": "<div class=\"pdf-compare-col\"><span>Typical live workshops</span><strong>$100–$300+</strong></div><div class=\"pdf-compare-col pdf-compare-col--highlight\"><span>Beginner guide</span><strong>$5.99</strong></div><div class=\"pdf-compare-col pdf-compare-col--highlight\"><span>Advanced guide</span><strong>$11.99</strong></div>",
-    "compareStripNote": "Illustrative comparison, not a specific third-party offer."
+    "disclaimerShort": "Educational workflow. Not legal or HR advice. Human review required."
   },
   "colors": {
     "navy": "#103b5a",

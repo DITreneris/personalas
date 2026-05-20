@@ -105,19 +105,6 @@
             mix-blend-mode: overlay;
         }
 
-        .header .header-badges,
-        .header h1,
-        .header p,
-        .header .header-cta,
-        .header .hero-price-teaser {
-            font-size: var(--fs-sm);
-            font-weight: 600;
-            letter-spacing: 0.02em;
-            text-transform: uppercase;
-            opacity: 0.78;
-            margin-top: var(--space-8);
-        }
-
         .header-note {
             position: relative;
             z-index: 1;
@@ -176,19 +163,39 @@
         }
 
         .header h1 {
+            position: relative;
+            z-index: 1;
             font-size: 52px;
             font-weight: 800;
             line-height: var(--leading-tight);
             margin-bottom: var(--space-24);
             letter-spacing: -0.02em;
+            text-transform: none;
+            opacity: 1;
         }
 
-        .header p {
+        .header > p:not(.hero-price-teaser) {
+            position: relative;
+            z-index: 1;
             font-size: var(--fs-xl);
             line-height: 1.5;
             opacity: 0.95;
             font-weight: 500;
-            margin-bottom: var(--space-12);
+            margin-bottom: var(--space-8);
+            text-transform: none;
+        }
+
+        .header .hero-price-teaser {
+            position: relative;
+            z-index: 1;
+            font-size: var(--fs-sm);
+            font-weight: 600;
+            line-height: 1.45;
+            letter-spacing: 0.01em;
+            opacity: 0.82;
+            margin-top: 0;
+            margin-bottom: 0;
+            text-transform: none;
         }
 
         .header-phases {
@@ -278,17 +285,22 @@
         }
 
         /* Daugiau oro tarp H1 → sub → CTA */
-        .header-cta {
+        .header .header-cta {
+            position: relative;
+            z-index: 1;
             display: flex;
             align-items: center;
             flex-wrap: wrap;
             gap: var(--space-16);
-            margin-top: var(--space-32);
-            padding-top: var(--space-24);
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: var(--space-16);
+            margin-top: var(--space-24);
+            padding-top: var(--space-16);
+            text-transform: none;
+            opacity: 1;
+        }
+
+        .header .header-cta .cta-button,
+        .header .header-cta .cta-button-outline {
+            text-transform: none;
         }
 
         /* CTA – primary (vienas ryškus kelias), secondary (ghost) */
@@ -1081,6 +1093,99 @@
             color: var(--text);
         }
 
+        /* ===== PAGE LANES (Shop / Free toolkit) ===== */
+        .page-lanes-nav {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            margin-bottom: var(--space-24);
+            padding: var(--space-12) var(--space-16);
+            background: var(--surface-1);
+            border-bottom: 1px solid var(--border-subtle);
+            box-shadow: var(--shadow-sticky);
+        }
+
+        .page-lanes-nav-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-12);
+            justify-content: center;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .page-lanes-nav-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            padding: var(--space-10) var(--space-20);
+            font-size: var(--fs-sm);
+            font-weight: 700;
+            color: var(--accent-dark);
+            text-decoration: none;
+            border: 1px solid var(--border-subtle-dark);
+            border-radius: var(--r-pill);
+            background: var(--surface-2);
+        }
+
+        .page-lanes-nav-link:hover {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        .page-lanes-nav-link:focus-visible {
+            outline: var(--ring-focus);
+            outline-offset: 2px;
+        }
+
+        .page-lane--shop {
+            padding-bottom: var(--space-8);
+            border-bottom: 2px solid var(--border-subtle);
+            margin-bottom: var(--space-8);
+        }
+
+        .page-lane--free {
+            padding-top: var(--space-16);
+        }
+
+        .hero-lane-hint {
+            width: 100%;
+            margin: var(--space-12) 0 0;
+            font-size: var(--fs-sm);
+            color: rgba(255, 255, 255, 0.88);
+            text-align: center;
+        }
+
+        .hero-lane-hint a {
+            color: inherit;
+            font-weight: 600;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+
+        .hero-lane-hint a:focus-visible {
+            outline: 2px solid #fff;
+            outline-offset: 2px;
+        }
+
+        .free-tier-section-title {
+            font-size: var(--fs-2xl);
+            font-weight: 800;
+            color: var(--accent-dark);
+            margin: 0 0 var(--space-12);
+            text-align: center;
+        }
+
+        .page-lane--free .free-tier-band {
+            margin-bottom: var(--space-24);
+        }
+
+        .instructions-reference > summary {
+            font-weight: 600;
+        }
+
         /* ===== WORKFLOW OVERVIEW – phase chips on light card (not hero navy) ===== */
         .workflow-overview {
             background: var(--gradient-soft);
@@ -1777,7 +1882,6 @@
         }
         .footer-legal { font-size: var(--fs-sm); margin: 0 0 var(--space-12); }
         .footer-legal a { color: var(--accent-primary); font-weight: 600; }
-        .pdf-compare-note { font-size: var(--fs-xs); color: var(--text-light); margin: 0 0 var(--space-16); }
         .pdf-guides-lede {
             margin: 0 0 var(--space-20);
             color: var(--text-light);
@@ -1886,25 +1990,6 @@
             font-size: var(--fs-sm);
             color: var(--text);
         }
-        .pdf-compare-strip {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 12px;
-            margin-bottom: var(--space-12);
-            padding: 12px;
-            background: var(--surface-3);
-            border-radius: var(--r-card);
-            font-size: var(--fs-sm);
-        }
-        @media (max-width: 768px) {
-            .pdf-compare-strip {
-                grid-template-columns: 1fr;
-            }
-        }
-        .pdf-compare-col--highlight {
-            font-weight: 600;
-            color: var(--brand-prompt-anatomy);
-        }
         .pdf-guides-meta {
             margin-top: var(--space-16);
             font-size: var(--fs-sm);
@@ -1927,7 +2012,7 @@
         .pdf-guide-license, .pdf-guide-refund, .pdf-guide-promise { font-size: var(--fs-sm); color: var(--text-light); margin: 0; }
         .pdf-guide-trust { display: flex; flex-wrap: wrap; gap: 8px; font-size: var(--fs-xs); color: var(--text-light); margin: 0; }
         .pdf-guide-price-row { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
-        .pdf-testimonials { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: var(--space-12) 0; }
+        .pdf-testimonials { margin: 0; }
         .pdf-testimonial { margin: 0; padding: 12px; border: 1px solid var(--border-subtle); border-radius: 8px; font-size: var(--fs-sm); color: var(--text-light); }
         .pdf-testimonial cite { display: block; margin-top: 8px; font-style: normal; font-size: var(--fs-xs); }
         .pdf-author-panel { margin-top: var(--space-20); padding: 16px; border-top: 1px solid var(--border-subtle); font-size: var(--fs-sm); color: var(--text-light); }
@@ -2255,7 +2340,7 @@
                 font-size: 36px;
             }
 
-            .header p {
+            .header > p:not(.hero-price-teaser) {
                 font-size: var(--fs-lg);
             }
 

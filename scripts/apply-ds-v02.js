@@ -89,8 +89,6 @@ function revertFromEn(html, sot, EN_REPLACEMENTS, EN_PROMPT_UI) {
     [(m.community && m.community.telegramCta) || '', '{{SOT_COMMUNITY_TELEGRAM}}'],
     [(m.community && m.community.appCta) || '', '{{SOT_COMMUNITY_APP}}'],
     [sot.legal.disclaimerShort, '{{SOT_DISCLAIMER}}'],
-    [sot.legal.compareStripHtml, '{{SOT_COMPARE_STRIP}}'],
-    [sot.legal.compareStripNote, '{{SOT_COMPARE_NOTE}}'],
   ];
   if (sot.pdfGuides.beginner.stripePaymentLink) {
     html = html.split(sot.pdfGuides.beginner.stripePaymentLink).join('https://buy.stripe.com/REPLACE_BEGINNER_PAYMENT_LINK');
@@ -183,10 +181,10 @@ function applyDsV02(html) {
       `.hero-price-teaser {
             font-size: var(--fs-sm);
             font-weight: 600;
-            letter-spacing: 0.02em;
-            text-transform: uppercase;
-            opacity: 0.78;
-            margin-top: var(--space-8);
+            letter-spacing: 0.01em;
+            text-transform: none;
+            opacity: 0.82;
+            margin-top: 0;
         }
 
         .header-note {`

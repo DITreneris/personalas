@@ -44,7 +44,7 @@ Do **not** rename or remove:
 
 - Prompt IDs: `prompt1` … `prompt10`, anchors `block1` … `block10`
 - Classes: `.prompt`, `.prompt-header`, `.prompt-body`, `.prompt-footer`, `.code-block`, `.btn`, `.prompt-done`
-- Section order enforced by `tests/structure.test.js`: hero → objectives → workflow → `#pdf-guides` → free band → instructions → FAQ → progress → jump-nav → prompts → community → footer
+- Section order enforced by `tests/structure.test.js`: hero → `#page-lanes-nav` → shop lane (objectives → `#pdf-guides`) → free lane (free band → `#workflow-overview` → instructions → FAQ → progress → jump-nav) → prompts → community → footer
 - `.pdf-guide-cta` must keep `:link/:visited/:hover/:active` + `--text-on-accent` + `--ring-focus` (regression tested)
 
 ### 2.3 Brand (public EN)
@@ -121,6 +121,16 @@ assets/styles.css (:root)
 | Micro / badge | `--fs-xs` | 12 |
 
 **Remove in P1/P2:** 11, 13, 15, 17, 19, 22px one-offs.
+
+#### 4.3.1 Hero typography (navy `.header`)
+
+| Element | Case | CSS |
+|---------|------|-----|
+| `.badge` | Uppercase (brand chip only) | `.badge { text-transform: uppercase; }` |
+| `h1`, subhead `p`, `.hero-price-teaser`, hero CTAs | **Sentence case** (match SOT DOM text) | `text-transform: none` on each; never group `h1` with badge meta styles |
+| `.hero-price-teaser` | Muted secondary | `--fs-sm`, `opacity: ~0.82` |
+
+**Ban:** a shared rule like `.header h1, .header p { text-transform: uppercase; }` — it overrides SOT copy and breaks **U.S.** readability. Regression: [tests/structure.test.js](../tests/structure.test.js) hero CSS asserts.
 
 ### 4.4 Shadow levels
 

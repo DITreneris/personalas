@@ -203,6 +203,36 @@ function run() {
       )
     );
     tally(assert(heroBlock && !heroBlock[0].includes('header-phases'), 'phase chips not inside hero'));
+    tally(
+      assert(
+        landingCss.includes('.header h1') && /\.header h1\s*\{[^}]*text-transform:\s*none/.test(landingCss),
+        'landing.css: hero h1 sentence case (text-transform none)'
+      )
+    );
+    tally(
+      assert(
+        !/\.header h1,\s*[\s\S]*?text-transform:\s*uppercase/.test(landingCss),
+        'landing.css: hero h1 not grouped with uppercase rule'
+      )
+    );
+    tally(assert(heroBlock && heroBlock[0].includes('U.S. hiring'), 'hero headline uses U.S. disambiguation'));
+    const heroSubheadMatch = heroBlock && heroBlock[0].match(/<p>([^<]*)<\/p>/);
+    tally(
+      assert(
+        heroSubheadMatch && !heroSubheadMatch[1].includes('$5.99'),
+        'hero subhead has no duplicate $5.99 (price only in priceTeaser)'
+      )
+    );
+    tally(
+      assert(
+        heroBlock && heroBlock[0].includes('Beginner $5.99'),
+        'hero priceTeaser shows Beginner $5.99'
+      )
+    );
+    tally(assert(!enIndex.includes('Typical live workshops'), 'en/index.html: no workshop price compare strip'));
+    tally(assert(!enIndex.includes('Illustrative comparison, not a specific'), 'en/index.html: no compare-strip disclaimer'));
+    tally(assert(!enIndex.includes('Quote paraphrased from pilot'), 'en/index.html: no paraphrased-quote footnote'));
+    tally(assert(enIndex.includes('class="pdf-testimonial"'), 'en/index.html: pilot testimonial remains'));
     tally(assert(enIndex.includes('id="workflow-overview"'), 'en/index.html workflow-overview section'));
     tally(assert(fs.existsSync(path.join(ROOT, 'favicon.svg')), 'favicon.svg exists at site root'));
     tally(assert(fs.existsSync(path.join(ROOT, 'favicon.ico')), 'favicon.ico exists at site root'));
@@ -290,6 +320,42 @@ function run() {
       assert(
         objectivesPos !== -1 && pdfPos !== -1 && objectivesPos < pdfPos,
         'objectives section appears before pdf-guides'
+      )
+    );
+    tally(assert(enIndex.includes('id="page-lanes-nav"'), 'en/index.html: sticky page lanes nav'));
+    tally(assert(enIndex.includes('page-lane--shop') && enIndex.includes('page-lane--free'), 'en/index.html: shop and free lane wrappers'));
+    const workflowPos = enIndex.indexOf('id="workflow-overview"');
+    const instructionsPos = enIndex.indexOf('class="instructions"');
+    tally(
+      assert(
+        freeLabelPos !== -1 && workflowPos !== -1 && freeLabelPos < workflowPos,
+        'workflow-overview after free-prompts-label (free lane)'
+      )
+    );
+    tally(
+      assert(
+        workflowPos !== -1 && instructionsPos !== -1 && workflowPos < instructionsPos,
+        'workflow-overview before instructions'
+      )
+    );
+    tally(
+      assert(
+        pdfPos !== -1 && workflowPos !== -1 && workflowPos > pdfPos,
+        'workflow-overview not between objectives and pdf-guides'
+      )
+    );
+    const pdfGridPos = enIndex.indexOf('class="pdf-guides-grid"');
+    const buyerFaqPos = enIndex.indexOf('id="pdf-guides-faq"');
+    tally(
+      assert(
+        pdfGridPos !== -1 && buyerFaqPos !== -1 && pdfGridPos < buyerFaqPos,
+        'buyer FAQ after pdf-guides-grid'
+      )
+    );
+    tally(
+      assert(
+        heroBlock && heroBlock[0].includes('href="#free-prompts-label"'),
+        'hero secondary CTA targets free-prompts-label'
       )
     );
     tally(assertPublicEnSurface('en/index.html', enIndex));

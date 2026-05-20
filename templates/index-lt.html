@@ -49,11 +49,21 @@
             <div class="header-cta">
                 <a href="{{SOT_HERO_PRIMARY_CTA_HREF}}" class="cta-button" aria-label="See the PDF guides">{{SOT_HERO_PRIMARY_CTA_LABEL}}</a>
                 <a href="{{SOT_HERO_SECONDARY_CTA_HREF}}" class="cta-button-outline">{{SOT_HERO_SECONDARY_CTA_LABEL}}</a>
+                <p class="hero-lane-hint">{{SOT_HERO_LANE_HINT}}</p>
                 <div class="lt-only-qa-nav" role="navigation" aria-label="Vieša JAV versija (EN)">
                     <a href="en/" class="cta-button-outline header-us-product-link">JAV svetainė (EN)</a>
                 </div>
             </div>
         </header>
+
+        <nav class="page-lanes-nav" id="page-lanes-nav" aria-label="{{SOT_LANES_NAV_ARIA}}">
+            <ul class="page-lanes-nav-list">
+                <li><a href="#pdf-guides" class="page-lanes-nav-link" data-lane-target="shop">{{SOT_LANES_PDF_LABEL}}</a></li>
+                <li><a href="#free-prompts-band" class="page-lanes-nav-link" data-lane-target="free">{{SOT_LANES_FREE_LABEL}}</a></li>
+            </ul>
+        </nav>
+
+        <div class="page-lane page-lane--shop" data-lane="shop">
 
         <section class="objectives" aria-labelledby="objectives-title">
             <h2 id="objectives-title"><span class="icon-wrap" aria-hidden="true"><i data-lucide="target" class="icon icon--md"></i></span> Ką ši sistema padeda išspręsti</h2>
@@ -62,19 +72,6 @@
                 <li><strong>Netinkami žmonės?</strong> Tiksliai apibrėžkite profilį ir atsirinkite geriausius.</li>
                 <li><strong>Lėtas tempas?</strong> Identifikuokite „butelio kakliuką“ per 5 minutes.</li>
                 <li><strong>Prarandami talentai?</strong> Pateikite pasiūlymą, kurio neįmanoma atsisakyti.</li>
-            </ul>
-        </section>
-
-        <section class="workflow-overview" id="workflow-overview" aria-labelledby="workflow-overview-title">
-            <h2 id="workflow-overview-title">{{SOT_WORKFLOW_TITLE}}</h2>
-            <p class="workflow-overview-lede">{{SOT_WORKFLOW_LEDE}}</p>
-            <ul class="header-phases workflow-phase-chips" aria-label="6 sistemos fazės">
-                <li><button type="button" class="header-phase-link is-active" data-phase="1">1. Diagnostika</button></li>
-                <li><button type="button" class="header-phase-link" data-phase="2">2. Profilis</button></li>
-                <li><button type="button" class="header-phase-link" data-phase="3">3. Pritraukimas</button></li>
-                <li><button type="button" class="header-phase-link" data-phase="4">4. Atranka</button></li>
-                <li><button type="button" class="header-phase-link" data-phase="5">5. Pasiūlymas</button></li>
-                <li><button type="button" class="header-phase-link" data-phase="6">6. Išlaikymas</button></li>
             </ul>
         </section>
 
@@ -182,11 +179,17 @@
 
             </article>
 
-            <div class="pdf-guides-social">
+            <section class="pdf-guides-faq" id="pdf-guides-faq" aria-labelledby="pdf-guides-faq-title">
 
-                <div class="pdf-compare-strip" data-sot-compare-strip>{{SOT_COMPARE_STRIP}}</div>
+                <h3 id="pdf-guides-faq-title">Buyer FAQ</h3>
 
-                <p class="pdf-compare-note" data-sot-compare-note>{{SOT_COMPARE_NOTE}}</p>
+                <div data-buyer-faq-list>{{SOT_BUYER_FAQ_HTML}}</div>
+
+            </section>
+
+            <div class="pdf-guides-after-purchase">
+
+                <div class="pdf-guides-social">
 
                 <div class="pdf-testimonials" aria-label="Pilot feedback">
 
@@ -194,25 +197,15 @@
 
                 </div>
 
-                <p class="pdf-compare-note pdf-meta-muted">Quote paraphrased from pilot feedback; identifier redacted.</p>
-
-            </div>
-
-            <div class="pdf-guides-after-purchase">
-
-                <section class="pdf-guides-faq" id="pdf-guides-faq" aria-labelledby="pdf-guides-faq-title">
-
-                    <h3 id="pdf-guides-faq-title">Buyer FAQ</h3>
-
-                    <div data-buyer-faq-list>{{SOT_BUYER_FAQ_HTML}}</div>
-
-                </section>
+                </div>
 
                 <p class="pdf-guides-free-bridge">{{SOT_PDF_SECTION_FREE_BRIDGE}}</p>
 
             </div>
 
         </section>
+
+        </div>
 
 
         <dialog id="pdfPreviewDialog" aria-labelledby="pdfPreviewTitle">
@@ -240,10 +233,26 @@
         </div>
 
 
+        <div class="page-lane page-lane--free" data-lane="free">
+
         <div class="free-tier-band" id="free-prompts-band">
+            <h2 class="free-tier-section-title" id="free-toolkit-title">{{SOT_FREE_TIER_SECTION_TITLE}}</h2>
             <p class="free-tier-label" id="free-prompts-label">{{SOT_FREE_TIER_LABEL}}</p>
             <p class="free-tier-hint">{{SOT_FREE_TIER_HINT}}</p>
         </div>
+
+        <section class="workflow-overview" id="workflow-overview" aria-labelledby="workflow-overview-title">
+            <h2 id="workflow-overview-title">{{SOT_WORKFLOW_TITLE}}</h2>
+            <p class="workflow-overview-lede">{{SOT_WORKFLOW_LEDE}}</p>
+            <ul class="header-phases workflow-phase-chips" aria-label="6 sistemos fazės">
+                <li><button type="button" class="header-phase-link is-active" data-phase="1">1. Diagnostika</button></li>
+                <li><button type="button" class="header-phase-link" data-phase="2">2. Profilis</button></li>
+                <li><button type="button" class="header-phase-link" data-phase="3">3. Pritraukimas</button></li>
+                <li><button type="button" class="header-phase-link" data-phase="4">4. Atranka</button></li>
+                <li><button type="button" class="header-phase-link" data-phase="5">5. Pasiūlymas</button></li>
+                <li><button type="button" class="header-phase-link" data-phase="6">6. Išlaikymas</button></li>
+            </ul>
+        </section>
 
         <!-- INSTRUCTIONS -->
         <section class="instructions" aria-labelledby="instructions-title">
@@ -256,12 +265,12 @@
                 </span>
             </h2>
             <ol>
-                <li>Pasirinkite promptą žemiau (arba naudokite fazės juostą viršuje).</li>
+                <li>Pasirinkite promptą žemiau (arba naudokite <a href="#workflow-overview">6 fazių juostą</a> aukščiau).</li>
                 <li>Spustelėkite <strong>„Kopijuoti promptą“</strong> arba <code>Ctrl+C</code> / <code>Cmd+C</code>.</li>
                 <li>Įklijuokite į ChatGPT, Claude, Gemini ar kitą DI įrankį ir pakeiskite <code>[vietininkus]</code> savo duomenimis.</li>
             </ol>
-            <details class="instructions-format-tips">
-                <summary>US formatting tips (locations, dates, phone)</summary>
+            <details class="instructions-format-tips instructions-reference">
+                <summary>US placeholder reference (locations, dates, phone)</summary>
                 <div class="instructions-subcard" role="region" aria-label="Vietininkų pavyzdžiai">
                     <p class="instructions-subrow"><strong>Vietininkai:</strong> <code>[įmonė]</code>, <code>[pozicija]</code>, <code>[vieta]</code>, <code>[atlygis]</code></p>
                     <p class="instructions-subrow"><strong>Vietos:</strong> <code>New York, NY</code>, <code>Remote – US</code>, <code>Hybrid – Austin, TX</code></p>
@@ -319,6 +328,8 @@
                 <li><a href="#block10">10. Pagrindinis promptas (vienas viskam)</a></li>
             </ul>
         </details>
+
+        </div>
 
         <!-- PROMPT 1 – FAZĖ 1 Diagnostika -->
         <article class="prompt" data-phase="1">

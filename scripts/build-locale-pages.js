@@ -588,7 +588,11 @@ const EN_REPLACEMENTS = [
   ['Pateikite pasiūlymą, kurio neįmanoma atsisakyti.', 'Present a clear offer candidates can evaluate quickly.'],
   ['aria-label="3 žingsniai, apie 3–5 min"', 'aria-label="3 steps, about 3–5 minutes"'],
   ['3 žingsniai · 3–5 min', '3 steps · 3–5 min'],
-  ['Pasirinkite promptą žemiau (arba naudokite fazės juostą viršuje).', 'Pick a prompt below (or use the phase bar above).'],
+  [
+    'Pasirinkite promptą žemiau (arba naudokite <a href="#workflow-overview">6 fazių juostą</a> aukščiau).',
+    'Pick a prompt below (or use the <a href="#workflow-overview">6-phase bar</a> above).',
+  ],
+  ['US formatting tips (locations, dates, phone)', 'US placeholder reference (locations, dates, phone)'],
   ['Spustelėkite <strong>„Kopijuoti promptą“</strong> arba <code>Ctrl+C</code> / <code>Cmd+C</code>.', 'Click <strong>“Copy prompt”</strong> or <code>Ctrl+C</code> / <code>Cmd+C</code>.'],
   [
     'Įklijuokite į ChatGPT, Claude, Gemini ar kitą DI įrankį ir pakeiskite <code>[vietininkus]</code> savo duomenimis.',
@@ -1056,6 +1060,11 @@ function applySot(html, sot) {
     '{{SOT_HERO_SECONDARY_CTA_LABEL}}': h.secondaryCtaLabel,
     '{{SOT_HERO_SECONDARY_CTA_HREF}}': h.secondaryCtaHref,
     '{{SOT_HERO_STICKY_CTA_LABEL}}': h.stickyCtaLabel || 'PDF guides',
+    '{{SOT_HERO_LANE_HINT}}': h.laneHintHtml || '',
+    '{{SOT_LANES_NAV_ARIA}}': (m.lanes && m.lanes.navAria) || 'On this page',
+    '{{SOT_LANES_PDF_LABEL}}': (m.lanes && m.lanes.pdfLabel) || 'PDF guides',
+    '{{SOT_LANES_FREE_LABEL}}': (m.lanes && m.lanes.freeLabel) || 'Free prompts',
+    '{{SOT_FREE_TIER_SECTION_TITLE}}': (m.freeTier && m.freeTier.sectionTitle) || 'Free prompt toolkit',
     '{{SOT_WORKFLOW_TITLE}}': w.title,
     '{{SOT_WORKFLOW_LEDE}}': w.lede,
     '{{SOT_PDF_SECTION_TITLE}}': p.title,
@@ -1071,8 +1080,6 @@ function applySot(html, sot) {
     '{{SOT_COMMUNITY_TELEGRAM}}': (m.community && m.community.telegramCta) || 'Join on Telegram',
     '{{SOT_COMMUNITY_APP}}': (m.community && m.community.appCta) || 'Prompt Anatomy →',
     '{{SOT_DISCLAIMER}}': sot.legal.disclaimerShort,
-    '{{SOT_COMPARE_STRIP}}': sot.legal.compareStripHtml,
-    '{{SOT_COMPARE_NOTE}}': sot.legal.compareStripNote,
     '{{SOT_BUSINESS_ADDRESS}}': renderAddressBlock(sot),
     '{{SOT_BUYER_FAQ_HTML}}': buildBuyerFaqHtml(sot),
   };

@@ -25,21 +25,26 @@ Viešas EN puslapis (`en/index.html` po build) turi išlaikyti **sekos logiką**
 
 ```
 hero (primary CTA → #pdf-guides)
-  → objectives
-  → #workflow-overview (6 fazės chip'ai — ne hero viduje)
-  → #pdf-guides (mokami PDF)
-  → free-tier-band (#free-prompts-label)
-  → instructions → FAQ → progress → jump-nav
+  → #page-lanes-nav (sticky: PDF guides | Free prompts)
+  → page-lane--shop
+      → objectives
+      → #pdf-guides (grid → trust → Buyer FAQ → testimonial → free-bridge)
+  → page-lane--free
+      → free-tier-band (#free-prompts-label + section title)
+      → #workflow-overview (6 fazės chip'ai — ne hero viduje)
+      → instructions → FAQ → progress → jump-nav
   → promptai (block1…block10, prompt1…prompt10)
   → community → footer
 ```
 
 | Sutartis | Kodėl |
 |----------|--------|
-| Hero **neturi** `.header-phases` | Fazės perkeltos į `#workflow-overview` (PDF-first UX) |
+| Hero **neturi** `.header-phases` | Fazės — `#workflow-overview` free lane (šalia promptų) |
 | `#pdf-guides` **prieš** `#block1` / nemokamus promptus | Konversijos KPI: PDF virš free tier |
-| `#free-prompts-label` tarp PDF ir pirmo prompto | Aiškus „free band“ atskyrimas |
-| `objectives` **prieš** `pdf-guides` | Problemos → workflow → produktas |
+| `#workflow-overview` **po** `#free-prompts-label`, **prieš** instructions | Free toolkit kelias: fazės šalia darbo |
+| Buyer FAQ **po** `.pdf-guides-grid`, ne po testimonial | Pirkimo objection'ai prie produkto (Gumroad pattern) |
+| Hero secondary CTA → `#free-prompts-label` | Nemokamas kelias nepraleidžia free band |
+| `objectives` **prieš** `pdf-guides` | Problemos → produktas (shop lane) |
 
 **Šaltinis turiniui:** [templates/index-lt.html](../templates/index-lt.html) (authoring). **Neredaguoti ranka:** `en/index.html` — tik per build.
 
@@ -90,7 +95,7 @@ Struktūra **nekeičiama**; tik CSS arba minimalūs markup pašalinimai:
 | Stripe | `data-product`, `data-analytics` ant CTA; URL iš SOT → build |
 | Buyer FAQ | `{{SOT_BUYER_FAQ_HTML}}` build metu; `<details class="faq-details">` **be** `open`; `initBuyerFaq()` skip jei jau užpildyta |
 | Disclaimer | Tik footer `.footer-disclaimer` + `{{SOT_DISCLAIMER}}` — **ne** dubliuoti `.pdf-guides-after-purchase` |
-| Po pirkimo blokas | `.pdf-guides-after-purchase`: FAQ + `pdf-guides-free-bridge` |
+| Po pirkimo blokas | `#pdf-guides-faq` po grid; `.pdf-guides-after-purchase`: testimonial + `pdf-guides-free-bridge` |
 
 **PDF sekcijos fragmentas:** sinchronizuoti [templates/index-lt.html](../templates/index-lt.html) su [scripts/pdf-guides-section.fragment.html](../scripts/pdf-guides-section.fragment.html) jei keičiate HTML struktūrą.
 
@@ -115,6 +120,7 @@ Po pakeitimų: **`npm run build`** → **`npm test`**.
 - **Hero** ant navy: 3px baltas outline (išimtis).
 - **Šešėliai:** `--shadow-soft` / `--medium` / `--elevated` / `--shadow-cta` / `--shadow-toast` / `--shadow-modal` / `--shadow-sticky`.
 - **Tipografija:** `--fs-*`; hero H1 responsive `px` leidžiami.
+- **Hero sentence case:** `h1`, subhead, `.hero-price-teaser`, hero CTA labels — `text-transform: none` (turinys iš [config/sot.json](../config/sot.json)); uppercase tik `.badge`. Headline naudoja **U.S.** (ne izoliuotas `US` su forced caps). Kaina hero: tik `priceTeaser`, ne subhead. Žr. [design_systemv02.md](design_systemv02.md) §4.3.1; testai `structure.test.js`.
 
 ### 6.3 Surface ladder (v0.2.1 — elevation)
 
