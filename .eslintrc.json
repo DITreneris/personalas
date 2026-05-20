@@ -13,7 +13,7 @@
     "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
     "no-console": ["warn", { "allow": ["warn", "error"] }]
   },
-  "ignorePatterns": ["node_modules/", "*.min.js", "en/"],
+  "ignorePatterns": ["node_modules/", "*.min.js", "en/", "scripts/archive/"],
   "overrides": [
     {
       "files": ["scripts/**/*.js"],

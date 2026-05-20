@@ -30,11 +30,19 @@ Desktop.ini
 !AGENTS.md
 !docs/AGENT_SOT.md
 !docs/INDEX.md
+!docs/DOCUMENTATION.md
 !docs/LEGACY_GOLDEN_STANDARD.md
 !docs/design_systemv02.md
+!docs/language-guidelines-en-lt.md
+!docs/QA_STANDARTAS.md
+!docs/TESTAVIMAS.md
+!docs/security.md
+!docs/process/development.md
+!docs/pdf-source/README.md
 !MUST_TODO.md
 !MVP_ROADMAP.md
 !feedback-schema.md
+!scripts/archive/README.md
 
 # ─── Temporary & build ───
 *.tmp

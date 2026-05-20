@@ -2,7 +2,7 @@
 
 **Paskirtis:** Vienas operacinis sąrašas — ką **ne laužyti** keičiant turinį, CSS arba build. Detalus DS implementacijos planas — [design_systemv02.md](design_systemv02.md). Keliai, deploy, brand — [AGENT_SOT.md](AGENT_SOT.md). Agentų seka — [AGENTS.md](../AGENTS.md) §9.
 
-**Paskutinis atnaujinimas:** 2026-05-20 (DS v0.2.6)
+**Paskutinis atnaujinimas:** 2026-05-20 (DS v0.3.0)
 
 ---
 
@@ -116,18 +116,23 @@ Po pakeitimų: **`npm run build`** → **`npm test`**.
 
 ### 6.2 Tokenai ir draudimai
 
-- **Nenaudoti** naujame CSS: `--orange-light`, `--blue-light`, `--community-cta-green*` (deprecated iki v0.3).
+- **Nenaudoti** naujame CSS: `--orange-light`, `--orange`, `--blue-light`, `--community-cta-green*`, `--shadow-card*` (deprecated; v0.3.0 PR-4 strukturinis guard'as blokuoja `var(--token)` naudojimą `templates/index-lt.html` ir `assets/landing.css`; **REMOVED IN v0.3.1**).
 - **Focus** ant šviesaus fono: `outline: var(--ring-focus); outline-offset: 2px`.
 - **Focus ant tamsaus fono (v0.2.4):** `outline: var(--ring-focus-on-dark); outline-offset: 2px` (hero, `.header-phase-link`, `.cta-button*`, `.hero-lane-hint`).
 - **Jokių literal'ių `outline: Npx solid …`** landing.css — visos `outline` deklaracijos privalo naudoti vieną iš dviejų token'ų.
 - **Border-radius (v0.2.4):** literal'ai `999px / 8px / 4px / 12px` neleistini — naudoti `--r-pill / --r-sm / --r-xs / --r-md`.
 - **State feedback per `:has()` (v0.2.5):** CSS-only būsenų grįžtamasis ryšys (pvz. `.prompt:has(.prompt-done:checked)`) **privalo** būti gate'intas `@supports selector(:has(*))` blokuose — Safari <15.4 / senesni Firefox išlieka su native checkbox tick'u kaip pagrindinis signalas.
 - **`.btn` deduplikacija (v0.2.5):** vienintelė autoritetinė `.btn { ... }` deklaracija — [assets/styles.css](../assets/styles.css). [assets/landing.css](../assets/landing.css) neturi top-level `.btn { }` blokų, tik scoped override'us (`.prompt-footer .btn`) ir `.btn.success` state'ą.
-- **Šešėliai:** `--shadow-soft` / `--medium` / `--elevated` / `--shadow-cta` / `--shadow-toast` / `--shadow-modal` / `--shadow-sticky`.
-- **Tipografija:** `--fs-*`; hero H1 responsive `px` leidžiami.
+- **Šešėliai:** `--shadow-soft` / `--medium` / `--elevated` / `--shadow-cta` / `--shadow-toast` / `--shadow-modal` / `--shadow-sticky`. **DS v0.3.0:** prie jų prisideda `--shadow-cta-press` (`:active` sunken), `--shadow-glow-success` (`.btn.success`), `--shadow-glow-gold` / `-hover` (`.objectives li::before`).
+- **Inset highlights (v0.3.0):** vienintelis kanoninis token'as — `--shadow-inset-hi` (canonical, 0.6 opacity); hero CTA naudoja `--shadow-inset-hi-strong` (0.95). Jokių literal'ių `inset 0 1px 0 rgba(255, 255, 255, 0.x)` landing.css.
+- **Hover ladder (v0.3.0):** `rest != hover`. Primary CTA hover'as privalo elevuoti šešėlį (`var(--shadow-medium), var(--shadow-cta)`), ne tik translateY. **`:active` press feedback**: kiekvienas primary mygtukas (`translateY(0) scale(0.98)` + `var(--shadow-cta-press)`).
+- **Gradients (v0.3.0):** `--gradient-hero` / `--gradient-card-tint` / `--gradient-jump-nav` / `--gradient-gold-pearl` / `--gradient-soft` / `--gradient-cta-hover`. Code-block kairiojo krašto akcentas — dokumentuotas page-specific exception.
+- **Borders (v0.3.0):** navy-tinted border'ams naudoti `--border-navy-soft` / `--border-navy` / `--border-navy-strong`; jokių literal'ių `rgba(16, 59, 90, X)` border'iuose.
+- **Tipografija:** `--fs-*`; hero H1 — `clamp(28px, 6vw + 8px, 52px)` (DS v0.3.0 PR-2; replaces 4 media-query overrides). **Globals (v0.3.0):** body privalo turėti `-webkit-font-smoothing: antialiased`, `-moz-osx-font-smoothing: grayscale`, `text-rendering: optimizeLegibility`; `:root` privalo turėti `color-scheme: light`, `accent-color: var(--accent-primary)`. Numeric komponentams (`.pdf-guide-price-new`, `.progress-wrap p`, `.prompt-time`, `.phase-meta`, `.phase-badge`) — `font-variant-numeric: tabular-nums`.
 - **Motion (v0.2.3):** `transition` deklaracijos naudoja `var(--duration-fast|normal|slow) var(--ease-out)`; jokių literal'ių `0.2s ease` / `0.3s ease`.
 - **Hover lift (v0.2.3):** primary CTA = `translateY(var(--lift-md))`; hero / secondary / dense / sticky = `var(--lift-sm)`; ghost / info — be lift.
 - **Reduced motion:** `@media (prefers-reduced-motion: reduce)` blokas privalo turėti `*:hover, *:focus-visible { transform: none !important; }` (vestibulinė apsauga).
+- **Sticky bars (v0.3.0):** `.page-lanes-nav` ir `.pdf-sticky-cta` privalo turėti glass treatment'ą (`backdrop-filter: saturate(180%) blur(12px)` + `@supports not` solid fallback). Bottom sticky == top sticky.
 - **Hero sentence case:** `h1`, subhead, `.hero-price-teaser`, hero CTA labels — `text-transform: none` (turinys iš [config/sot.json](../config/sot.json)); uppercase tik `.badge`. Headline naudoja **U.S.** (ne izoliuotas `US` su forced caps). Kaina hero: tik `priceTeaser`, ne subhead. Žr. [design_systemv02.md](design_systemv02.md) §4.3.1; testai `structure.test.js`.
 
 ### 6.3 Surface ladder (v0.2.1 — elevation)
@@ -208,3 +213,4 @@ Nelaužyti be QA:
 | 2026-05-20 | v0.2.4 | Focus + radius + form consolidation (--ring-focus-on-dark, --r-xs, gold form ring, code-block 3px) |
 | 2026-05-20 | v0.2.5 | Affordance & state polish (:has done state, selected check marker, prompt hover lift, featured gold inset, scrollbar styling, .btn deduplication) |
 | 2026-05-20 | v0.2.6 | PDF expert scenarios row (3 illustrative cards: Joan/Ohio, Lane/Oregon, Emanuel/Texas) replaces single pilot blockquote; new `.pdf-expert-cards` grid + soft/medium/raised elevation modifiers; SOT-driven via `marketing.pdfSection.expertScenarios` |
+| 2026-05-20 | v0.3.0 | Token harmonization & premium polish: shadow inset system (`--shadow-inset-hi`, `--shadow-cta-press`, `--shadow-glow-*`), gradient + navy border tokens, hover ladders rise (rest != hover), `:active` press feedback on every primary, font smoothing + tabular-nums + fluid hero H1, `.pdf-sticky-cta` glass parity, deprecation guard for v0.3.1 hard removal |

@@ -598,11 +598,118 @@ Each PR is CSS/build-only. Rollback = revert commit + `npm run build`. No data m
 
 ---
 
-## 18. v0.3 backlog (not in v0.2.1 scope)
+## 21. v0.3.0 — Token harmonization & premium polish (2026-05)
 
-- Remove deprecated `:root` aliases (`--orange-light`, `--community-cta-green*`) after `rg` clean.
+**Goal:** Lift perceived quality to premium SaaS tier without any layout, redesign, copy, DOM, or JS changes. Pure token completion + micro-polish on shadows, gradients, borders, button physics, and global typography. Four small reviewable PRs.
+
+### 21.1 PR-1 — Shadow & inset system
+
+**Tokens added** (`assets/styles.css :root`):
+
+| Token | Value | Use |
+|-------|-------|-----|
+| `--shadow-inset-hi` | `inset 0 1px 0 rgba(255, 255, 255, 0.6)` | Canonical inset highlight on every elevated surface |
+| `--shadow-inset-hi-strong` | `inset 0 1px 0 rgba(255, 255, 255, 0.95)` | Hero CTA only — premium glass tell |
+| `--shadow-cta-press` | `0 1px 2px rgba(11, 19, 32, 0.18), inset 0 1px 2px rgba(0, 0, 0, 0.08)` | `:active` sunken press feedback |
+| `--shadow-glow-success` | `0 4px 12px rgba(16, 59, 90, 0.3), 0 0 0 2px var(--accent-primary)` | `.btn.success` copy-state glow |
+| `--shadow-glow-gold` | `0 2px 6px rgba(207, 167, 58, 0.35), 0 1px 0 rgba(255, 255, 255, 0.3) inset` | Objectives gold checkmark sphere |
+| `--shadow-glow-gold-hover` | `0 4px 10px rgba(207, 167, 58, 0.4)` | Same on hover (1.05× scale) |
+
+**Rules**
+
+- **Inset highlight is the only inset-highlight token** going forward. 11 literal `inset 0 1px 0 rgba(255, 255, 255, 0.x)` sites collapse to two tokens.
+- **Hover ladder** (rest != hover):
+  - Rest = `--shadow-soft` (or `--shadow-cta` for CTAs)
+  - Hover = `--shadow-medium, --shadow-cta` (CTAs lift visually, not just translate)
+  - Press = `--shadow-cta-press` (applied via `:active`)
+- **Press feedback** added to 5 buttons that previously had none or only `translateY(0)`: `.cta-button`, `.community-cta-primary`, `.form-submit`, `.next-steps-links a`, `.pdf-sticky-cta-btn`. Pattern: `transform: translateY(0) scale(0.98); box-shadow: var(--shadow-cta-press)`.
+- The `.code-block` left-edge multi-shadow stack is the documented page-specific exception (kept as-is).
+
+**Affected selectors:** `.btn` (rest+hover+active), `.cta-button` (hero rest+hover+active), `.pdf-guide-cta` (rest+hover+active), `.community-cta-primary` (hover+active), `.pdf-sticky-cta-btn` (hover+active), `.form-submit` (hover+active), `.next-steps-links a` (active), `.btn.success`, `.objectives li::before`/`:hover`, `.prompt`/`:hover`, `.phase`, `.instructions`, `.objectives`, `.workflow-overview`, `.free-tier-band`, `.header-phase-link.is-active`.
+
+### 21.2 PR-2 — Typography polish
+
+**Globals on `body`** (`assets/landing.css`):
+
+```css
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+text-rendering: optimizeLegibility;
+```
+
+**Globals on `:root`** (`assets/styles.css`):
+
+```css
+color-scheme: light;
+accent-color: var(--accent-primary);
+```
+
+`accent-color` natively brand-colors all checkbox/radio/range/progress controls — the local declaration on `.prompt-done-wrap input` is no longer necessary (kept for safety; it inherits the same value).
+
+**Tabular-nums applied to 5 numeric components:** `.pdf-guide-price-new`, `.progress-wrap p`, `.prompt-time`, `.phase-meta`, `.phase-badge`. Prices align across PDF cards; progress digits don't shift width.
+
+**Hero H1 fluid type:**
+
+```css
+.header h1 { font-size: clamp(28px, 6vw + 8px, 52px); }
+```
+
+Collapses 4 media-query overrides (1024 / 768 / 480 / 375) into a single rule. The `375px` rule keeps `line-height: 1.2` only.
+
+### 21.3 PR-3 — Color & gradient tokens
+
+**Gradient tokens** (`assets/styles.css :root`):
+
+| Token | Use |
+|-------|-----|
+| `--gradient-hero` | `.header` (radial light + linear navy) |
+| `--gradient-card-tint` | `.instructions` (surface-3 → surface-2) |
+| `--gradient-jump-nav` | `.jump-nav` (surface-2 → white) |
+| `--gradient-gold-pearl` | `.objectives li::before` (gold sphere) |
+
+Code-block left-edge accent gradient is the documented page-specific exception.
+
+**Border tokens** (replace 5+ literal `rgba(16, 59, 90, X)`):
+
+| Token | Value |
+|-------|-------|
+| `--border-navy-soft` | `rgba(16, 59, 90, 0.14)` |
+| `--border-navy` | `rgba(16, 59, 90, 0.25)` |
+| `--border-navy-strong` | `rgba(16, 59, 90, 0.35)` |
+
+Migrated: `.instructions`, `.instructions-subcard`, `.instructions code`, `.instructions-title .prompt-time`, `.jump-nav a`, `.code-block:hover`, `.progress-wrap`.
+
+**Glass parity:** `.pdf-sticky-cta` gets the same `backdrop-filter: saturate(180%) blur(12px)` + `@supports not` solid fallback as `.page-lanes-nav` (DS v0.2.2). Bottom sticky now matches top sticky.
+
+**Fix:** removed `opacity: 0.95` leftover from hero `.cta-button-outline` (DS v0.2 §6.1.2 P0 item that slipped through).
+
+### 21.4 PR-4 — Deprecation warnings (aliases stay one more release)
+
+Per release decision: **aliases kept declared in `assets/styles.css` for v0.3.0 back-compat**, with a consolidated `DEPRECATED — REMOVED IN v0.3.1` block. Structural test guard blocks any **new** usage in [`templates/index-lt.html`](../templates/index-lt.html) and [`assets/landing.css`](../assets/landing.css).
+
+Existing `var(--shadow-card)` and `var(--shadow-card-hover)` consumers in `landing.css` (13 sites) were migrated to the canonical `--shadow-soft` / `--shadow-medium` since those are 1:1 aliases (value-preserving).
+
+**Hard removal (with grep clean) is the v0.3.1 release goal.**
+
+**Tests:** [`tests/structure.test.js`](../tests/structure.test.js) — 30+ new asserts across PR-1 through PR-4 (token declarations, hover ladder shape, press states, glass fallback, deprecation guard).
+
+---
+
+## 18. v0.3 backlog → shipped + v0.3.1 backlog
+
+**Shipped in v0.3.0:**
+- Token harmonization (shadow inset system, gradient tokens, navy border ladder).
+- Premium SaaS typography globals (font smoothing, optimizeLegibility, tabular-nums, fluid hero H1).
+- Hover ladders rise (rest != hover); `:active` press feedback on every primary button.
+- Glass treatment on `.pdf-sticky-cta` (parity with `.page-lanes-nav`).
+- Hero secondary CTA `opacity: 0.95` leftover removed.
+
+**v0.3.1 backlog:**
+- Hard removal of 7 deprecated `:root` aliases (`--orange-light`, `--orange`, `--blue-light`, `--community-cta-green*`, `--shadow-card*`); the v0.3.0 PR-4 guard already enforces zero new usage.
+- PR-5 — CTA size-token harmonization (`--btn-pad-sm/md/lg/xl`, `--btn-min-h-sm/md/lg`) applied to existing 7 selectors (no new class names per AGENTS.md §10). Requires screenshot baseline first.
+- Line-height token consolidation (7 ad-hoc literals → 3 `--leading-*` tokens).
 - Deduplicate `:root` on `success.html` / `terms.html` → link shared `assets/styles.css` only.
-- Optional: Playwright or manual screenshot baseline (1440 / 768 / 375) per §9.4.
+- Optional Playwright or manual screenshot baseline (1440 / 768 / 375) per §9.4.
 
 ---
 
@@ -642,6 +749,18 @@ rg -i "personalas|series no" en/ templates/
 | `--lift-md` | Add (-2px) | v0.2.3 |
 | `--ring-focus-on-dark` | Add (3px white) | v0.2.4 |
 | `--r-xs` | Add (4px) | v0.2.4 |
+| `--shadow-inset-hi` | Add (canonical inset highlight) | v0.3.0 PR-1 |
+| `--shadow-inset-hi-strong` | Add (hero CTA inset) | v0.3.0 PR-1 |
+| `--shadow-cta-press` | Add (`:active` sunken state) | v0.3.0 PR-1 |
+| `--shadow-glow-success` | Add (.btn.success copy-state) | v0.3.0 PR-1 |
+| `--shadow-glow-gold` / `-hover` | Add (objectives checkmark) | v0.3.0 PR-1 |
+| `--gradient-hero` | Add (radial light + linear navy) | v0.3.0 PR-3 |
+| `--gradient-card-tint` | Add (surface-3 → surface-2) | v0.3.0 PR-3 |
+| `--gradient-jump-nav` | Add (surface-2 → white) | v0.3.0 PR-3 |
+| `--gradient-gold-pearl` | Add (gold sphere) | v0.3.0 PR-3 |
+| `--border-navy-soft` / `--border-navy` / `--border-navy-strong` | Add (replaces 5+ rgba(16, 59, 90, X) literals) | v0.3.0 PR-3 |
+| `color-scheme` / `accent-color` (root globals) | Add | v0.3.0 PR-2 |
+| `--orange*`, `--blue-light`, `--community-cta-green*`, `--shadow-card*` | Mark consolidated DEPRECATED block; new usage blocked by structural test | v0.3.0 PR-4 (delete in v0.3.1) |
 
 ---
 
@@ -668,6 +787,7 @@ rg -i "personalas|series no" en/ templates/
 | 2026-05-20 | 0.2.3 | Motion ritmu & lift token sistema (--lift-sm/-md, transition tokens, reduced-motion transform reset) |
 | 2026-05-20 | 0.2.4 | Focus + radius + form consolidation (--ring-focus-on-dark, --r-xs, gold form ring, code-block 3px) |
 | 2026-05-20 | 0.2.5 | Affordance & state polish (:has done state, selected check marker, prompt hover lift, featured gold inset, scrollbar styling, .btn deduplication) |
+| 2026-05-20 | 0.3.0 | Token harmonization & premium polish (shadow inset system, gradient + navy border tokens, hover ladders rise, :active press on every primary, font smoothing + tabular-nums + fluid hero H1, .pdf-sticky-cta glass parity, deprecation guard for v0.3.1 hard removal) |
 
 ---
 

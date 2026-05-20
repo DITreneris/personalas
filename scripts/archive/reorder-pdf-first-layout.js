@@ -2,13 +2,13 @@
 
 /**
  * PDF-first layout: hero SOT placeholders, workflow section, pdf block before objectives.
- * Run: node scripts/reorder-pdf-first-layout.js && node scripts/patch-pdf-guides-section.js
+ * Run from repo root: node scripts/archive/reorder-pdf-first-layout.js (historical — do not re-run on current template)
  */
 
 const fs = require('fs');
 const path = require('path');
 
-const templatePath = path.join(__dirname, '..', 'templates', 'index-lt.html');
+const templatePath = path.join(__dirname, '..', '..', 'templates', 'index-lt.html');
 let html = fs.readFileSync(templatePath, 'utf8');
 
 const pdfStart = html.indexOf('<section class="pdf-guides" id="pdf-guides"');

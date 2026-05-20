@@ -518,6 +518,231 @@ function run() {
         'landing.css: .prompt-footer .btn scoped override (DS v0.2.5)'
       )
     );
+    // --- DS v0.3.0 PR-1: shadow & inset system ---
+    [
+      '--shadow-inset-hi',
+      '--shadow-inset-hi-strong',
+      '--shadow-cta-press',
+      '--shadow-glow-success',
+      '--shadow-glow-gold',
+      '--shadow-glow-gold-hover',
+    ].forEach((tok) => {
+      tally(
+        assert(
+          new RegExp(tok + ':').test(sharedCss),
+          'assets/styles.css: ' + tok + ' declared (DS v0.3.0 PR-1)'
+        )
+      );
+    });
+    const insetHiUsages = (landingCss.match(/var\(--shadow-inset-hi\)/g) || []).length;
+    tally(
+      assert(
+        insetHiUsages >= 8,
+        'landing.css: --shadow-inset-hi used >=8 times (DS v0.3.0 PR-1); found ' + insetHiUsages
+      )
+    );
+    // DS v0.3.0 PR-1: card/CTA inset highlights must use --shadow-inset-hi(-strong).
+    // Two documented exceptions remain (page-specific layering, not "card highlight"):
+    //   1. .badge:hover  — glass-on-navy chip (deliberately low opacity, scoped to hero)
+    //   2. .code-block   — multi-shadow stack composing the accent-edge effect
+    const literalInsetHi = (landingCss.match(/inset 0 1px 0 rgba\(255,\s*255,\s*255,\s*0\.[3-9]/g) || []).length;
+    tally(
+      assert(
+        literalInsetHi <= 2,
+        'landing.css: literal inset highlights tokenized (DS v0.3.0 PR-1; <=2 documented exceptions: .badge:hover, .code-block); found ' + literalInsetHi
+      )
+    );
+    tally(
+      assert(
+        /\.btn:hover\s*\{[^}]*box-shadow:\s*var\(--shadow-medium\),\s*var\(--shadow-cta\)/.test(sharedCss),
+        'styles.css: .btn:hover ladder uses shadow-medium + shadow-cta (DS v0.3.0 PR-1)'
+      )
+    );
+    tally(
+      assert(
+        /\.btn:active\s*\{[^}]*box-shadow:\s*var\(--shadow-cta-press\)/.test(sharedCss),
+        'styles.css: .btn:active uses shadow-cta-press (DS v0.3.0 PR-1)'
+      )
+    );
+    tally(
+      assert(
+        /\.cta-button:active\s*\{[^}]*box-shadow:\s*var\(--shadow-cta-press\)/.test(landingCss),
+        'landing.css: .cta-button:active uses shadow-cta-press (DS v0.3.0 PR-1)'
+      )
+    );
+    tally(
+      assert(
+        /\.community-cta-primary:active\s*\{[^}]*box-shadow:\s*var\(--shadow-cta-press\)/.test(landingCss),
+        'landing.css: .community-cta-primary:active press state added (DS v0.3.0 PR-1)'
+      )
+    );
+    tally(
+      assert(
+        /\.form-submit:active(?::not\(:disabled\))?\s*\{[^}]*box-shadow:\s*var\(--shadow-cta-press\)/.test(landingCss),
+        'landing.css: .form-submit:active press state added (DS v0.3.0 PR-1)'
+      )
+    );
+    tally(
+      assert(
+        /\.next-steps-links a:active\s*\{[^}]*box-shadow:\s*var\(--shadow-cta-press\)/.test(landingCss),
+        'landing.css: .next-steps-links a:active press state added (DS v0.3.0 PR-1)'
+      )
+    );
+    tally(
+      assert(
+        /\.btn\.success\s*\{[^}]*box-shadow:\s*var\(--shadow-glow-success\)/.test(landingCss),
+        'landing.css: .btn.success uses --shadow-glow-success (DS v0.3.0 PR-1)'
+      )
+    );
+    tally(
+      assert(
+        /\.objectives li::before\s*\{[\s\S]{0,400}box-shadow:\s*var\(--shadow-glow-gold\)/.test(landingCss),
+        'landing.css: .objectives li::before uses --shadow-glow-gold (DS v0.3.0 PR-1)'
+      )
+    );
+    // --- DS v0.3.0 PR-2: typography polish ---
+    tally(
+      assert(
+        landingCss.includes('-webkit-font-smoothing: antialiased') &&
+          landingCss.includes('-moz-osx-font-smoothing: grayscale'),
+        'landing.css: body font smoothing (DS v0.3.0 PR-2)'
+      )
+    );
+    tally(
+      assert(
+        landingCss.includes('text-rendering: optimizeLegibility'),
+        'landing.css: body text-rendering optimizeLegibility (DS v0.3.0 PR-2)'
+      )
+    );
+    tally(
+      assert(
+        sharedCss.includes('color-scheme: light'),
+        'styles.css: :root color-scheme: light (DS v0.3.0 PR-2)'
+      )
+    );
+    tally(
+      assert(
+        /:root\s*\{[\s\S]{0,400}accent-color:\s*var\(--accent-primary\)/.test(sharedCss),
+        'styles.css: :root accent-color via --accent-primary (DS v0.3.0 PR-2)'
+      )
+    );
+    const tabularUsages = (landingCss.match(/font-variant-numeric:\s*tabular-nums/g) || []).length;
+    tally(
+      assert(
+        tabularUsages >= 5,
+        'landing.css: tabular-nums applied to >=5 numeric selectors (DS v0.3.0 PR-2); found ' + tabularUsages
+      )
+    );
+    tally(
+      assert(
+        /\.header h1\s*\{[\s\S]{0,400}font-size:\s*clamp\(28px,\s*6vw \+ 8px,\s*52px\)/.test(landingCss),
+        'landing.css: hero h1 fluid clamp() (DS v0.3.0 PR-2)'
+      )
+    );
+    const literalHeroH1 = (
+      landingCss.match(/\.header h1\s*\{[^}]*font-size:\s*(?:52px|44px|36px|26px|var\(--fs-3xl\)|var\(--fs-2xl\))/g) || []
+    ).length;
+    tally(
+      assert(
+        literalHeroH1 === 0,
+        'landing.css: no literal .header h1 font-size in media queries (DS v0.3.0 PR-2); found ' + literalHeroH1
+      )
+    );
+    // --- DS v0.3.0 PR-3: color & gradient tokens ---
+    [
+      '--gradient-hero',
+      '--gradient-card-tint',
+      '--gradient-jump-nav',
+      '--gradient-gold-pearl',
+      '--border-navy-soft',
+      '--border-navy',
+      '--border-navy-strong',
+    ].forEach((tok) => {
+      tally(
+        assert(
+          new RegExp(tok + ':').test(sharedCss),
+          'assets/styles.css: ' + tok + ' declared (DS v0.3.0 PR-3)'
+        )
+      );
+    });
+    tally(
+      assert(
+        /\.header\s*\{[\s\S]{0,400}background:\s*var\(--gradient-hero\)/.test(landingCss),
+        'landing.css: .header uses --gradient-hero token (DS v0.3.0 PR-3)'
+      )
+    );
+    tally(
+      assert(
+        /\.instructions\s*\{[\s\S]{0,400}background:\s*var\(--gradient-card-tint\)/.test(landingCss),
+        'landing.css: .instructions uses --gradient-card-tint token (DS v0.3.0 PR-3)'
+      )
+    );
+    tally(
+      assert(
+        /\.objectives li::before\s*\{[\s\S]{0,400}background:\s*var\(--gradient-gold-pearl\)/.test(landingCss),
+        'landing.css: .objectives li::before uses --gradient-gold-pearl token (DS v0.3.0 PR-3)'
+      )
+    );
+    const navyLiterals = (landingCss.match(/border(?:-color)?:\s*[^;]*rgba\(16,\s*59,\s*90/g) || []).length;
+    tally(
+      assert(
+        navyLiterals === 0,
+        'landing.css: no literal navy-tint borders (use --border-navy* tokens, DS v0.3.0 PR-3); found ' + navyLiterals
+      )
+    );
+    tally(
+      assert(
+        !/\.header \.header-cta \.cta-button-outline\s*\{[^}]*opacity:\s*0\.95/.test(landingCss),
+        'landing.css: hero .cta-button-outline has no opacity 0.95 leftover (DS v0.3.0 PR-3)'
+      )
+    );
+    tally(
+      assert(
+        /\.pdf-sticky-cta\s*\{[\s\S]{0,600}backdrop-filter:\s*saturate\(180%\)\s*blur\(12px\)/.test(landingCss),
+        'landing.css: .pdf-sticky-cta uses glass backdrop-filter (DS v0.3.0 PR-3)'
+      )
+    );
+    tally(
+      assert(
+        /@supports not \(backdrop-filter:\s*blur\(12px\)\)\s*\{[\s\S]{0,400}\.pdf-sticky-cta/.test(landingCss),
+        'landing.css: .pdf-sticky-cta has @supports fallback (DS v0.3.0 PR-3)'
+      )
+    );
+    // --- DS v0.3.0 PR-4: deprecated alias guard ---
+    // Aliases stay declared in assets/styles.css for back-compat (REMOVED IN v0.3.1).
+    // Templates and landing.css must not reference them in new code.
+    const DEPRECATED_TOKENS = [
+      '--orange-light',
+      '--orange',
+      '--blue-light',
+      '--community-cta-green',
+      '--community-cta-green-hover',
+      '--shadow-card',
+      '--shadow-card-hover',
+    ];
+    const deprecatedTargets = {
+      'templates/index-lt.html': template,
+      'assets/landing.css': landingCss,
+    };
+    for (const [filePath, body] of Object.entries(deprecatedTargets)) {
+      if (!body) continue;
+      for (const tok of DEPRECATED_TOKENS) {
+        // Match `var(--token` boundaries; --shadow-card-hover must not also match --shadow-card.
+        const re = new RegExp('var\\(\\s*' + tok.replace(/-/g, '\\-') + '(?![\\w-])');
+        tally(
+          assert(
+            !re.test(body),
+            'DS v0.3.0 PR-4: deprecated alias ' + tok + ' must not be used in ' + filePath
+          )
+        );
+      }
+    }
+    tally(
+      assert(
+        /DEPRECATED ALIASES — REMOVED IN v0\.3\.1/.test(sharedCss),
+        'styles.css: consolidated deprecation block declares v0.3.1 hard removal (DS v0.3.0 PR-4)'
+      )
+    );
     const afterPurchaseBlock = enIndex.match(
       /class="pdf-guides-after-purchase"[\s\S]*?<\/div>\s*\n\s*<\/section>/
     );

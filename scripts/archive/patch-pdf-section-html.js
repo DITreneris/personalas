@@ -1,7 +1,7 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
-const ROOT = path.join(__dirname, '..');
+const ROOT = path.join(__dirname, '..', '..');
 const templatePath = path.join(ROOT, 'templates', 'index-lt.html');
 const fragmentPath = path.join(ROOT, 'scripts', 'pdf-guides-section.fragment.html');
 

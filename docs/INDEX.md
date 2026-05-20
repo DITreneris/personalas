@@ -6,7 +6,7 @@
 | [DOCUMENTATION.md](DOCUMENTATION.md) | Dokumentų valdymas ir atsakomybės |
 | [process/development.md](process/development.md) | PR ir lokalaus kūrimo procesas |
 | [security.md](security.md) | npm audit, priklausomybės |
-| [language-guidelines-en-lt.md](language-guidelines-en-lt.md) | LT / EN, prekės ženklas **Personalas**, **SOT: viešas produktas = anglų** (UI, deploy, SEO, OG) |
+| [language-guidelines-en-lt.md](language-guidelines-en-lt.md) | LT authoring / EN viešas produktas; viešas brand **Prompt Anatomy**, vidinis repo **Personalas** |
 | [QA_STANDARTAS.md](QA_STANDARTAS.md) | QA standartas |
 | [TESTAVIMAS.md](TESTAVIMAS.md) | Gyvas testavimas po deploy |
 | [LEGACY_GOLDEN_STANDARD.md](LEGACY_GOLDEN_STANDARD.md) | Golden standard: DOM, PDF-first seka, DS sutartys, QA (ne tik turinys) |

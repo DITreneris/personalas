@@ -5,7 +5,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const ROOT = path.join(__dirname, '..');
+const ROOT = path.join(__dirname, '..', '..');
 const read = (f) => fs.readFileSync(path.join(ROOT, f), 'utf8');
 const write = (f, c) => fs.writeFileSync(path.join(ROOT, f), c, 'utf8');
 

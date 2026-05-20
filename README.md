@@ -18,14 +18,14 @@ npm test        # build + pdf:validate + structure tests + HTML/JS lint
 
 - **Public UI copy & SEO:** [config/sot.json](config/sot.json) (`brand.publicName`, `marketing.*`) + [scripts/build-locale-pages.js](scripts/build-locale-pages.js)
 - **Page structure / prompts:** [templates/index-lt.html](templates/index-lt.html) (LT authoring source — **not shipped**; build outputs EN only)
-- **Privacy:** [templates/privacy.html](templates/privacy.html) — not [templates/privatumas-lt.html](templates/privatumas-lt.html) (deprecated)
+- **Privacy:** [templates/privacy.html](templates/privacy.html)
 - Do **not** hand-edit generated `en/*` except via rebuild
 
 **OG image:** `npm run generate:og` → [images/og-default.png](images/og-default.png)
 
 ## PDF guides (source → export → covers)
 
-1. Edit [docs/pdf-source/beginner-personalas-hr.html](docs/pdf-source/beginner-personalas-hr.html) and [advanced-personalas-hr.html](docs/pdf-source/advanced-personalas-hr.html) (brand: **Prompt Anatomy** on covers/footers)
+1. Edit [docs/pdf-source/beginner-personalas-hr.html](docs/pdf-source/beginner-personalas-hr.html) and [docs/pdf-source/advanced-personalas-hr.html](docs/pdf-source/advanced-personalas-hr.html) (brand: **Prompt Anatomy** on covers/footers)
 2. `npm run pdf:validate && npm run pdf:export`
 3. `npm run pdf:covers && npm run pdf:covers:preview` → [assets/pdf-covers/](assets/pdf-covers/)
 

@@ -112,7 +112,15 @@ Prieš PR įsitikinti, kad `npm test` praeina. PDF: `pdf:validate`, `pdf:export`
 - **Repo (vidinis):** Personalas. Dokumentacijoje nenaudoti **„marketingas“**. LT šablone vengti **„biblioteka“**; EN – vengti **„prompt library“** kaip prekės ženklo.
 - **Techninė:** `npm test` privalo praeiti; deploy ir a11y URL – [DEPLOYMENT.md](DEPLOYMENT.md).
 - **Greita paieška** (repo šaknyje, išskyrus `node_modules`): `rg -i "personalas|series no|spin-off|promptų|biblioteka|marketingas|prompt.?library"` – viešame UI likučiai turi būti paaiškinti arba pašalinti.
-- **Turinio šaltinis:** [templates/index-lt.html](templates/index-lt.html) (authoring → `npm run build` → `en/`), [templates/privacy.html](templates/privacy.html). Ne `privatumas-lt.html` (deprecated). Šaknies `index.html` / `privacy.html` – EN vartai po build.
+- **Turinio šaltinis:** [templates/index-lt.html](templates/index-lt.html) (authoring → `npm run build` → `en/`), [templates/privacy.html](templates/privacy.html). Šaknies `index.html` / `privacy.html` – EN vartai po build.
+
+---
+
+## 10. UI / CTA sutartys (Design System)
+
+- Po DS v0.2 **neįvesti naujų CTA klasės pavadinimų** — naudoti esamus (`.btn`, `.cta-button`, `.pdf-guide-cta`, `.community-cta-primary`, `.pdf-sticky-cta-btn`, `.form-submit`, `.btn--ghost`).
+- Dydžių harmonizacija (v0.3.1 backlog): `--btn-pad-*` / `--btn-min-h-*` token'ai pritaikomi **tiems patiems** selectoriams, ne naujiems komponentams.
+- Detaliau: [docs/design_systemv02.md](docs/design_systemv02.md) §18, [docs/LEGACY_GOLDEN_STANDARD.md](docs/LEGACY_GOLDEN_STANDARD.md).
 
 ---
 

@@ -33,10 +33,6 @@ Kontaktinė forma (Google Apps Script) – **neįjungta**; žr. [INTEGRACIJA.md]
 | [api/_lib/fulfillment.js](../api/_lib/fulfillment.js), `api/*.js` | — |
 | [success.html](../success.html), [terms.html](../terms.html) | Hand-edit (trust adresas sinchronizuoti su SOT) |
 
-| Deprecated — neredaguoti |
-|--------------------------|
-| [templates/privatumas-lt.html](../templates/privatumas-lt.html) |
-
 Po turinio pakeitimų: **`npm run build`** (arba **`npm test`**, kuris build'ą paleidžia pirmas).
 
 ---
@@ -145,7 +141,7 @@ Scenarijai: [TESTAVIMAS.md](TESTAVIMAS.md). Stripe gyvas testas: [MUST_TODO.md](
 |------------|--------|
 | `.cursor/plans/hr_atrankos_spin-off_nr.3_*.plan.md` | Spin-off Nr. 3, žalia HR tema — pakeista Prompt Anatomy navy + gold |
 | Viešas `/lt/` kaip QA svetainė | Build negeneruoja `lt/`; URL redirect į EN |
-| `templates/privatumas-lt.html` | Deprecated; naudoti `templates/privacy.html` |
+| `templates/privatumas-lt.html` | Pašalintas v1.2.0; naudoti `templates/privacy.html` |
 | Privalomas Google Apps Script kontaktų forma | Neįjungta — [INTEGRACIJA.md](../INTEGRACIJA.md) |
 | PDF 12 + 24 psl. | Dabar **16 + 32** |
 
