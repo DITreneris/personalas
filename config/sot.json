@@ -6,6 +6,8 @@
     "motherBrandUrl": "https://www.promptanatomy.app",
     "contactEmail": "info@promptanatomy.app",
     "operatorName": "Tomas Staniulis",
+    "operatorLinkedin": "https://www.linkedin.com/in/staniulis/",
+    "operatorTwitter": "https://x.com/TStaniulis_NFT",
     "effectiveDate": "May 2026",
     "businessAddress": {
       "name": "Prompt Anatomy",
@@ -21,7 +23,25 @@
   "brand": {
     "publicName": "Prompt Anatomy",
     "motherBrandUrl": "https://www.promptanatomy.app",
-    "productSiteUrl": "https://promptanatomy.help/en/"
+    "productSiteUrl": "https://promptanatomy.help/en/",
+    "slogan": "Hire better, one prompt at a time.",
+    "logoUrl": "https://promptanatomy.help/favicon.svg",
+    "knowsAbout": [
+      "US HR hiring",
+      "AI prompts for HR",
+      "Structured interviewing",
+      "Hiring rubrics",
+      "Onboarding"
+    ],
+    "socialProfiles": {
+      "telegram": "https://t.me/prompt_anatomy",
+      "x": "https://x.com/promptanatom",
+      "linkedin": "https://www.linkedin.com/in/staniulis/"
+    },
+    "verification": {
+      "google": "",
+      "bing": ""
+    }
   },
   "positioning": {
     "primaryKpi": "pdf",
@@ -163,11 +183,15 @@
   "pdfGuides": {
     "beginner": {
       "id": "beginner-pdf",
+      "sku": "beginner-pdf",
       "title": "Beginner HR Hiring Guide",
       "subtitle": "First structured US hiring loop",
+      "description": "Step-by-step walkthrough for HR generalists running their first structured US hiring loop. 16 pages of checklists, worked prompt outputs, a fillable 15-minute kickoff worksheet, and a 7-point AI safety verify + decision log.",
       "pages": 16,
       "price": 5.99,
+      "priceUSD": "5.99",
       "priceWas": 15.99,
+      "priceValidUntil": "2027-05-21",
       "stripePaymentLink": "https://buy.stripe.com/28E9ATfGAebzcO011ufjG06",
       "coverImage": "/assets/pdf-covers/beginner.png",
       "previewPrefix": "beginner",
@@ -198,11 +222,15 @@
     },
     "advanced": {
       "id": "advanced-pdf",
+      "sku": "advanced-pdf",
       "title": "Advanced HR Hiring Guide",
       "subtitle": "Scorecards, rubrics & calibration",
+      "description": "Senior-IC playbook with scorecards, calibration scripts, structured interview rubrics, and offer scenarios. 32 pages including STAR question bank, multi-candidate scorecard, sample debrief transcript, and a 4-week team pilot rollout.",
       "pages": 32,
       "price": 11.99,
+      "priceUSD": "11.99",
       "priceWas": 22.99,
+      "priceValidUntil": "2027-05-21",
       "stripePaymentLink": "https://buy.stripe.com/14A14n660d7vcO0aC4fjG07",
       "coverImage": "/assets/pdf-covers/advanced.png",
       "previewPrefix": "advanced",
@@ -250,10 +278,15 @@
     },
     "bundle": {
       "id": "bundle-pdf",
+      "sku": "bundle-pdf",
       "title": "Both HR Hiring Guides",
       "subtitle": "Beginner + Advanced — save when you buy both",
+      "description": "Beginner (16 pages) and Advanced (32 pages) HR hiring playbooks together. One Stripe checkout, two PDFs delivered by email — full hiring system from kickoff worksheet through calibration debrief.",
+      "pages": 48,
       "price": 15.99,
+      "priceUSD": "15.99",
       "priceWas": 17.98,
+      "priceValidUntil": "2027-05-21",
       "stripePaymentLink": "https://buy.stripe.com/5kQ6oH660ebz29m39CfjG08",
       "delivers": ["beginner", "advanced"],
       "highlights": [
@@ -263,6 +296,28 @@
       ]
     }
   },
+  "frontFaq": [
+    {
+      "id": "faq-is-ats",
+      "q": "Is this an ATS or recruiting tool?",
+      "a": "No. These are prompts you copy into ChatGPT, Claude, or Gemini. Nothing runs on our servers."
+    },
+    {
+      "id": "faq-phase-order",
+      "q": "Do I have to go through all 6 phases in order?",
+      "a": "No. Start with the problem that hurts today (e.g. job ad or interview), then return to other prompts later."
+    },
+    {
+      "id": "faq-subset-prompts",
+      "q": "Can I use just one or a few prompts?",
+      "a": "Yes. Start with one problem (e.g. job ad or interview) and come back to the others later."
+    },
+    {
+      "id": "faq-prompt-time",
+      "q": "How long does each prompt take?",
+      "a": "About 3–5 minutes to prepare and copy; the AI chat itself depends on your questions and answers."
+    }
+  ],
   "buyerFaq": [
     {
       "id": "faq-license-team",

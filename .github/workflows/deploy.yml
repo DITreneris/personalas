@@ -64,3 +64,14 @@ jobs:
           path: .
       - id: deploy
         uses: actions/deploy-pages@v4
+
+      # Post-deploy: ping IndexNow with URLs changed in the latest commit so
+      # Bing / Yandex / ChatGPT Search backends pull fresh content quickly.
+      # Only runs after a successful deploy on main. Non-blocking: failures
+      # log a warning and do not fail the workflow.
+      - name: IndexNow ping (post-deploy)
+        if: github.ref == 'refs/heads/main'
+        continue-on-error: true
+        run: npm run seo:indexnow:diff
+        env:
+          SITE_ORIGIN: https://promptanatomy.help

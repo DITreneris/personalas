@@ -23,6 +23,46 @@ const SITE_PUBLIC_BASE = (process.env.SITE_PUBLIC_BASE || '').trim().replace(/\/
 /** Bump filename when busting Twitter/OG image cache (same URL = stale card). */
 const OG_IMAGE_REL = 'images/og-default-v2.png';
 
+/** Static alt text reused on og:image:alt, twitter:image:alt across all public pages. */
+const OG_IMAGE_ALT = 'HR hiring PDF guides for US teams - Prompt Anatomy';
+
+/** Browser chrome theme color (navy --accent-primary). Mirrored in manifest.webmanifest. */
+const THEME_COLOR = '#103B5A';
+
+/** Background color for the standalone manifest (light surface). */
+const BG_COLOR = '#F7F8FA';
+
+/**
+ * IndexNow protocol key. Hosted at /{INDEXNOW_KEY}.txt with the same value as body,
+ * referenced from robots.txt and pinged from scripts/indexnow-ping.js after deploy.
+ * Key must be 8-128 chars of [a-zA-Z0-9-]; this is a stable per-site identifier.
+ */
+const INDEXNOW_KEY = '7a4b9e2c8f1d4a3b9c6e5d2a1f8b7c4d';
+
+/**
+ * Opt-in self-hosted fonts for LCP / privacy. Off by default because:
+ *   1. Inter weight 500 (medium) is not shipped in docs/pdf-source/fonts/ yet.
+ *   2. Removing Google Fonts requires en/privacy.html sub-processor disclosure update.
+ * Flip with `BUILD_SELFHOST_FONTS=1 npm run build` once fonts and copy are aligned.
+ */
+const SELF_HOST_FONTS = process.env.BUILD_SELFHOST_FONTS === '1';
+
+/**
+ * Schema.org Person id fragment used by the Organization.founder reference and the
+ * Person node in the same @graph. Stable per-site (so AI engines can dedupe).
+ */
+function personId(base) {
+  return base + '/#tomas';
+}
+
+function organizationId(base) {
+  return base + '/#organization';
+}
+
+function websiteId(base) {
+  return base + '/#website';
+}
+
 /** Full public site base URL with trailing slash (canonical / OG / sitemap). */
 function absoluteBaseSlash() {
   if (SITE_PUBLIC_BASE) {
@@ -138,6 +178,77 @@ function validateSot(sot) {
   if (!m.workflowOverview || !m.workflowOverview.title) {
     throw new Error('config/sot.json: marketing.workflowOverview.title is required');
   }
+  validateGeoFields(sot);
+}
+
+/**
+ * Validate the GEO/AI-optimization fields introduced in 2026 hardening:
+ *   - sot.brand.socialProfiles (X + LinkedIn + Telegram for Organization.sameAs)
+ *   - sot.brand.knowsAbout, brand.slogan, brand.logoUrl
+ *   - sot.product.operatorLinkedin / operatorTwitter (Person.sameAs)
+ *   - sot.pdfGuides.{beginner|advanced|bundle} description / priceUSD / priceValidUntil (Product/Offer)
+ *   - sot.frontFaq (4 items, mirrors visible front FAQ for FAQPage parity)
+ *   - sot.buyerFaq (5 items) — already required elsewhere; we re-check shape here for FAQPage parity.
+ */
+function validateGeoFields(sot) {
+  const brand = sot.brand || {};
+  if (!brand.slogan || typeof brand.slogan !== 'string') {
+    throw new Error('config/sot.json: brand.slogan is required (Organization.slogan)');
+  }
+  if (!brand.logoUrl || typeof brand.logoUrl !== 'string') {
+    throw new Error('config/sot.json: brand.logoUrl is required (Organization.logo)');
+  }
+  if (!Array.isArray(brand.knowsAbout) || brand.knowsAbout.length < 3) {
+    throw new Error('config/sot.json: brand.knowsAbout must be a string array of >=3 topics');
+  }
+  const social = brand.socialProfiles;
+  if (!social || typeof social !== 'object') {
+    throw new Error('config/sot.json: brand.socialProfiles object is required');
+  }
+  ['telegram', 'x', 'linkedin'].forEach(function (k) {
+    if (!social[k] || typeof social[k] !== 'string' || !/^https:\/\//.test(social[k])) {
+      throw new Error('config/sot.json: brand.socialProfiles.' + k + ' must be an https URL');
+    }
+  });
+  if (!brand.verification || typeof brand.verification !== 'object') {
+    throw new Error('config/sot.json: brand.verification object is required (may be empty strings)');
+  }
+  const product = sot.product || {};
+  ['operatorLinkedin', 'operatorTwitter'].forEach(function (k) {
+    if (!product[k] || typeof product[k] !== 'string' || !/^https:\/\//.test(product[k])) {
+      throw new Error('config/sot.json: product.' + k + ' must be an https URL');
+    }
+  });
+  const guides = sot.pdfGuides || {};
+  ['beginner', 'advanced', 'bundle'].forEach(function (key) {
+    const g = guides[key];
+    if (!g) throw new Error('config/sot.json: pdfGuides.' + key + ' is required');
+    if (!g.description || typeof g.description !== 'string') {
+      throw new Error('config/sot.json: pdfGuides.' + key + '.description is required (Product.description)');
+    }
+    if (!g.priceUSD || !/^\d+(\.\d{2})?$/.test(g.priceUSD)) {
+      throw new Error('config/sot.json: pdfGuides.' + key + '.priceUSD must match /^\\d+(\\.\\d{2})?$/');
+    }
+    if (!g.priceValidUntil || !/^\d{4}-\d{2}-\d{2}$/.test(g.priceValidUntil)) {
+      throw new Error('config/sot.json: pdfGuides.' + key + '.priceValidUntil must be ISO YYYY-MM-DD');
+    }
+    if (!g.sku || typeof g.sku !== 'string') {
+      throw new Error('config/sot.json: pdfGuides.' + key + '.sku is required');
+    }
+  });
+  if (!Array.isArray(sot.frontFaq) || sot.frontFaq.length !== 4) {
+    throw new Error('config/sot.json: frontFaq must contain exactly 4 items (mirrors visible front FAQ)');
+  }
+  if (!Array.isArray(sot.buyerFaq) || sot.buyerFaq.length !== 5) {
+    throw new Error('config/sot.json: buyerFaq must contain exactly 5 items');
+  }
+  [['frontFaq', sot.frontFaq], ['buyerFaq', sot.buyerFaq]].forEach(function ([name, list]) {
+    list.forEach(function (item, idx) {
+      if (!item || typeof item !== 'object' || !item.q || !item.a) {
+        throw new Error('config/sot.json: ' + name + '[' + idx + '] must have q and a fields');
+      }
+    });
+  });
 }
 
 function validateExpertScenarios(pdfSection) {
@@ -435,28 +546,80 @@ function buildPostalAddressJsonLd(sot) {
   };
 }
 
-function buildJsonLdWebsiteGraph(sot) {
-  const base = absoluteBaseSlash().replace(/\/+$/, '');
-  const contactEmail = sot && sot.product ? sot.product.contactEmail : '';
+/**
+ * Build Organization + Person nodes consumed by both the locale-built pages
+ * (en/index.html via buildJsonLdWebsiteGraph) and the root gateway SEO fragment
+ * (buildRootSeoFragment). Shared so sameAs / contactPoint / founder ref stay in lockstep.
+ */
+function buildOrganizationAndPersonNodes(sot, base) {
+  const brand = (sot && sot.brand) || {};
+  const product = (sot && sot.product) || {};
+  const contactEmail = product.contactEmail || '';
+  const social = brand.socialProfiles || {};
+  const sameAsRaw = [social.telegram, brand.motherBrandUrl, social.x, social.linkedin].filter(Boolean);
+  const sameAs = Array.from(new Set(sameAsRaw));
+  const personSameAs = Array.from(
+    new Set([product.operatorLinkedin, product.operatorTwitter].filter(Boolean))
+  );
+
   const org = {
     '@type': 'Organization',
-    name: 'Prompt Anatomy',
+    '@id': organizationId(base),
+    name: brand.publicName || 'Prompt Anatomy',
     url: base + '/',
-    sameAs: ['https://t.me/prompt_anatomy'],
+    sameAs: sameAs.length ? sameAs : ['https://t.me/prompt_anatomy'],
   };
-  if (contactEmail) org.email = contactEmail;
-  if (sot && sot.product && sot.product.businessAddress) {
+  if (brand.logoUrl) org.logo = brand.logoUrl;
+  if (brand.slogan) org.slogan = brand.slogan;
+  if (sot && sot.legal && sot.legal.metaDescription) {
+    org.description = sot.legal.metaDescription;
+  }
+  if (Array.isArray(brand.knowsAbout) && brand.knowsAbout.length) {
+    org.knowsAbout = brand.knowsAbout.slice();
+  }
+  if (contactEmail) {
+    org.email = contactEmail;
+    org.contactPoint = {
+      '@type': 'ContactPoint',
+      email: contactEmail,
+      contactType: 'customer support',
+      availableLanguage: ['en'],
+    };
+  }
+  if (product.businessAddress) {
     org.address = buildPostalAddressJsonLd(sot);
   }
-  const graph = [
-    {
-      '@type': 'WebSite',
-      name: 'Prompt Anatomy – US hiring prompts',
-      url: base + '/',
-      inLanguage: ['en-US'],
-    },
-    org,
-  ];
+  if (product.operatorName) {
+    org.founder = { '@id': personId(base) };
+  }
+
+  const person = product.operatorName
+    ? {
+        '@type': 'Person',
+        '@id': personId(base),
+        name: product.operatorName,
+        jobTitle: 'Operator',
+        worksFor: { '@id': organizationId(base) },
+        sameAs: personSameAs.length ? personSameAs : undefined,
+      }
+    : null;
+  if (person && !person.sameAs) delete person.sameAs;
+
+  return { org: org, person: person };
+}
+
+function buildJsonLdWebsiteGraph(sot) {
+  const base = absoluteBaseSlash().replace(/\/+$/, '');
+  const { org, person } = buildOrganizationAndPersonNodes(sot, base);
+  const website = {
+    '@type': 'WebSite',
+    '@id': websiteId(base),
+    name: 'Prompt Anatomy – US hiring prompts',
+    url: base + '/',
+    inLanguage: ['en-US'],
+    publisher: { '@id': organizationId(base) },
+  };
+  const graph = person ? [website, org, person] : [website, org];
   return (
     '<script type="application/ld+json">' +
     JSON.stringify({ '@context': 'https://schema.org', '@graph': graph }).replace(/</g, '\\u003c') +
@@ -464,23 +627,499 @@ function buildJsonLdWebsiteGraph(sot) {
   );
 }
 
-function buildJsonLdWebPage(pageUrl, name, description) {
-  const graph = [
-    {
-      '@type': 'WebPage',
-      name: name,
-      description: description,
-      url: pageUrl,
-      inLanguage: 'en-US',
-      isPartOf: { '@type': 'WebSite', url: absoluteBaseSlash().replace(/\/+$/, '') + '/' },
+/**
+ * WebPage node + optional BreadcrumbList (Home -> page). The speakable
+ * SpeakableSpecification points voice-mode assistants (Siri / Alexa / ChatGPT voice)
+ * at the H1 and known lede selectors so they read the right copy aloud.
+ *
+ * @param {string} pageUrl       Absolute canonical URL of this page.
+ * @param {string} name          Page title (matches <title>).
+ * @param {string} description   Meta description (matches <meta name="description">).
+ * @param {object} [opts]
+ * @param {string} [opts.breadcrumbLabel]  If set, emits a BreadcrumbList Home -> {label}.
+ */
+function buildJsonLdWebPage(pageUrl, name, description, opts) {
+  opts = opts || {};
+  const siteBase = absoluteBaseSlash().replace(/\/+$/, '');
+  const webPage = {
+    '@type': 'WebPage',
+    name: name,
+    description: description,
+    url: pageUrl,
+    inLanguage: 'en-US',
+    isPartOf: { '@type': 'WebSite', url: siteBase + '/' },
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '.pdf-guides-lede', '.pdf-guide-desc', '.intro'],
     },
-  ];
+  };
+  const graph = [webPage];
+  if (opts.breadcrumbLabel) {
+    graph.push({
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: siteBase + '/en/',
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: opts.breadcrumbLabel,
+          item: pageUrl,
+        },
+      ],
+    });
+  }
   return (
     '<script type="application/ld+json">' +
     JSON.stringify({ '@context': 'https://schema.org', '@graph': graph }).replace(/</g, '\\u003c') +
     '</script>'
   );
 }
+
+/**
+ * Strip simple HTML tags + entity-decode a few common entities so JSON-LD
+ * answer.text equals the visible plain-text answer (Google requires parity
+ * between FAQPage acceptedAnswer.text and the rendered FAQ panel text).
+ */
+function stripFaqHtml(html) {
+  if (!html) return '';
+  return String(html)
+    .replace(/<a[^>]*>(.*?)<\/a>/gi, '$1')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/**
+ * FAQPage JSON-LD aggregating frontFaq (4) + buyerFaq (5) so visible FAQ text
+ * has an entity-linked structured equivalent. Per 2026 GEO research, FAQPage
+ * markup yields 3.2x AI Overview citations vs. plain text.
+ */
+function buildJsonLdFaqPage(sot) {
+  const front = (sot && Array.isArray(sot.frontFaq)) ? sot.frontFaq : [];
+  const buyer = (sot && Array.isArray(sot.buyerFaq)) ? sot.buyerFaq : [];
+  const all = front.concat(buyer);
+  if (!all.length) return '';
+  const questions = all.map(function (item) {
+    return {
+      '@type': 'Question',
+      name: stripFaqHtml(item.q),
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: stripFaqHtml(item.a),
+      },
+    };
+  });
+  const payload = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: questions,
+  };
+  return (
+    '<script type="application/ld+json">' +
+    JSON.stringify(payload).replace(/</g, '\\u003c') +
+    '</script>'
+  );
+}
+
+/**
+ * Product + Offer JSON-LD for one PDF guide. Wraps the seller in a stable
+ * Organization @id reference so it dedupes with the WebSite graph.
+ * NO aggregateRating intentionally (no real reviews; faking it is a Google penalty).
+ */
+function buildProductNode(guide, sot, base) {
+  if (!guide) return null;
+  const product = sot.product || {};
+  const coverPath = guide.coverImage || (guide.previewPrefix
+    ? '/assets/pdf-covers/' + guide.previewPrefix + '.png'
+    : '/assets/pdf-covers/beginner.png');
+  const image = base + coverPath;
+  const sku = guide.sku || guide.id || 'unknown';
+  const node = {
+    '@type': 'Product',
+    '@id': base + '/en/#product-' + sku,
+    name: guide.title,
+    description: guide.description,
+    image: image,
+    sku: sku,
+    category: 'HR / Hiring guides',
+    isAccessibleForFree: false,
+    inLanguage: 'en-US',
+    brand: { '@id': organizationId(base) },
+    audience: { '@type': 'BusinessAudience', audienceType: 'US HR teams' },
+  };
+  if (typeof guide.pages === 'number' && guide.pages > 0) {
+    node.numberOfPages = guide.pages;
+  }
+  const seller = {
+    '@type': 'Organization',
+    '@id': organizationId(base),
+    name: (sot.brand && sot.brand.publicName) || 'Prompt Anatomy',
+  };
+  if (product.businessAddress) {
+    seller.address = buildPostalAddressJsonLd(sot);
+  }
+  node.offers = {
+    '@type': 'Offer',
+    price: guide.priceUSD,
+    priceCurrency: 'USD',
+    priceValidUntil: guide.priceValidUntil,
+    availability: 'https://schema.org/InStock',
+    url: base + '/en/#pdf-guides',
+    itemCondition: 'https://schema.org/NewCondition',
+    seller: seller,
+    hasMerchantReturnPolicy: {
+      '@type': 'MerchantReturnPolicy',
+      applicableCountry: 'US',
+      returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
+      merchantReturnDays: 14,
+      returnMethod: 'https://schema.org/ReturnByMail',
+      returnFees: 'https://schema.org/FreeReturn',
+    },
+  };
+  return node;
+}
+
+function buildJsonLdProducts(sot) {
+  const base = absoluteBaseSlash().replace(/\/+$/, '');
+  const guides = (sot && sot.pdfGuides) || {};
+  const order = ['beginner', 'advanced', 'bundle'];
+  const nodes = order
+    .map(function (key) { return buildProductNode(guides[key], sot, base); })
+    .filter(Boolean);
+  if (!nodes.length) return '';
+  return nodes
+    .map(function (node) {
+      const payload = { '@context': 'https://schema.org' };
+      Object.keys(node).forEach(function (k) { payload[k] = node[k]; });
+      return (
+        '<script type="application/ld+json">' +
+        JSON.stringify(payload).replace(/</g, '\\u003c') +
+        '</script>'
+      );
+    })
+    .join('\n    ');
+}
+
+/** Read `git log -1 --format=%cs <file>` for an accurate sitemap <lastmod>. */
+function gitLastModified(relPath) {
+  try {
+    const { execFileSync } = require('child_process');
+    const out = execFileSync('git', ['log', '-1', '--format=%cs', '--', relPath], {
+      cwd: ROOT,
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'ignore'],
+    }).trim();
+    if (/^\d{4}-\d{2}-\d{2}$/.test(out)) return out;
+  } catch (_e) {
+    /* git missing, shallow clone, or untracked file -- fall through */
+  }
+  const d = new Date();
+  const y = d.getUTCFullYear();
+  const m = String(d.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(d.getUTCDate()).padStart(2, '0');
+  return y + '-' + m + '-' + day;
+}
+
+/**
+ * llms.txt -- short (<5 KB) machine-friendly site map for AI assistants
+ * (Anthropic + Perplexity actively read it; Google says not required).
+ * Format per 2026 best practice: H1 + blockquote summary + sections by function.
+ */
+function buildLlmsTxt(sot) {
+  const base = absoluteBaseSlash().replace(/\/+$/, '');
+  const brand = (sot && sot.brand) || {};
+  const product = (sot && sot.product) || {};
+  const guides = (sot && sot.pdfGuides) || {};
+  const beginner = guides.beginner || {};
+  const advanced = guides.advanced || {};
+  const bundle = guides.bundle || {};
+  const summary =
+    (brand.publicName || 'Prompt Anatomy') +
+    ' publishes free copy-paste AI prompts and paid PDF playbooks that help US HR teams run a repeatable hiring loop (Diagnose, Define, Source, Screen, Offer, Onboard). ' +
+    'Operated by ' + (product.operatorName || 'Tomas Staniulis') +
+    ' from ' + (product.businessAddress ? (product.businessAddress.city + ', ' + product.businessAddress.region) : 'the United States') +
+    '. Site is English-only; paid PDFs delivered via Stripe with 14-day refund.';
+  const lines = [
+    '# ' + (brand.publicName || 'Prompt Anatomy') + ' - US HR hiring prompts and PDF guides',
+    '',
+    '> ' + summary,
+    '',
+    '## Free resources',
+    '- [Landing - 10 free prompts and 6-phase workflow](' + base + '/en/)',
+    '- [Full prompt digest (markdown)](' + base + '/llms-full.txt)',
+    '',
+    '## Paid PDF guides',
+    '- [' + (beginner.title || 'Beginner HR Hiring Guide') + ' - $' + (beginner.priceUSD || '5.99') +
+      ' - ' + (beginner.pages || 16) + ' pages](' + base + '/en/#pdf-guides)',
+    '- [' + (advanced.title || 'Advanced HR Hiring Guide') + ' - $' + (advanced.priceUSD || '11.99') +
+      ' - ' + (advanced.pages || 32) + ' pages](' + base + '/en/#pdf-guides)',
+    '- [' + (bundle.title || 'Both HR Hiring Guides') + ' (Beginner + Advanced) - $' +
+      (bundle.priceUSD || '15.99') + '](' + base + '/en/#pdf-guides)',
+    '',
+    '## Policies',
+    '- [Privacy](' + base + '/en/privacy.html)',
+    '- [Terms - Personal license, 14-day refund](' + base + '/terms.html)',
+    '',
+    '## Contact',
+    '- Email: ' + (product.contactEmail || 'info@promptanatomy.app'),
+    '',
+  ];
+  return lines.join('\n');
+}
+
+/**
+ * llms-full.txt -- exhaustive markdown digest of the 10 free prompts and the
+ * 6-phase workflow, generated from the EN PROMPTS_EN array below. Long-form
+ * counterpart to llms.txt; ~15 KB, intended for AI assistants that follow
+ * the secondary link from llms.txt.
+ */
+function buildLlmsFullTxt(sot) {
+  const base = absoluteBaseSlash().replace(/\/+$/, '');
+  const brand = (sot && sot.brand) || {};
+  const PHASE_LABELS = [
+    'Diagnose',
+    'Define the Role',
+    'Source Candidates',
+    'Screen & Interview',
+    'Close the Offer',
+    'Close the Offer',
+    'Close the Offer',
+    'Onboard & Retain',
+    'Onboard & Retain',
+    'Onboard & Retain',
+  ];
+  const TITLES = [
+    'Where are we stuck?',
+    'Who really fits us?',
+    'Rewrite the job ad in plain language',
+    'How to find more people today?',
+    'How to run a better interview?',
+    'Why do candidates decline?',
+    'How to present the offer better?',
+    'How to support a new hire in the first 3 months?',
+    'Why do people leave?',
+    'Master prompt (one for everything)',
+  ];
+  const out = [
+    '# ' + (brand.publicName || 'Prompt Anatomy') + ' - Full prompt digest',
+    '',
+    'Source: ' + base + '/en/',
+    'License: free for personal and team use. Attribution appreciated; do not republish in bulk.',
+    '',
+    '## 6-phase hiring workflow',
+    '',
+    '1. Diagnose',
+    '2. Define the Role',
+    '3. Source Candidates',
+    '4. Screen & Interview',
+    '5. Close the Offer',
+    '6. Onboard & Retain',
+    '',
+    '## 10 free prompts',
+    '',
+  ];
+  for (let i = 0; i < PROMPTS_EN.length; i++) {
+    out.push('### Prompt ' + (i + 1) + ': ' + TITLES[i] + ' (Phase: ' + PHASE_LABELS[i] + ')');
+    out.push('');
+    out.push('```');
+    out.push(PROMPTS_EN[i]);
+    out.push('```');
+    out.push('');
+  }
+  out.push('## Paid PDF guides (commercial; do not redistribute)');
+  out.push('');
+  out.push('See ' + base + '/llms.txt for the short index.');
+  out.push('');
+  return out.join('\n');
+}
+
+function writeLlmsTxt(sot) {
+  write('llms.txt', buildLlmsTxt(sot));
+  write('llms-full.txt', buildLlmsFullTxt(sot));
+}
+
+/** /<key>.txt for the IndexNow protocol (Bing, Yandex, ChatGPT Search backend). */
+function writeIndexNowKey() {
+  write(INDEXNOW_KEY + '.txt', INDEXNOW_KEY + '\n');
+}
+
+/**
+ * BUILD_SELFHOST_FONTS=1 opt-in path: copy woff2 files from docs/pdf-source/fonts
+ * into assets/fonts and emit a tiny assets/fonts.css with @font-face declarations.
+ * Returns true if fonts.css was written so callers can swap the Google Fonts link.
+ *
+ * Inter weights mapped: 400 (Regular), 600 (SemiBold), 700 (Bold), 800 (ExtraBold).
+ * Weight 500 is intentionally absent in the source set; browsers synthesize from 400.
+ * JetBrains Mono weights: 500 (Regular -> medium), 600 (SemiBold).
+ */
+function writeSelfHostedFonts() {
+  if (!SELF_HOST_FONTS) return false;
+  const srcDir = path.join(ROOT, 'docs', 'pdf-source', 'fonts');
+  const dstDir = path.join(ROOT, 'assets', 'fonts');
+  if (!fs.existsSync(srcDir)) {
+    console.warn('BUILD_SELFHOST_FONTS=1 but ' + srcDir + ' not found -- skipping');
+    return false;
+  }
+  ensureDir(dstDir);
+  const mapping = [
+    { src: 'Inter-Regular.woff2', dst: 'Inter-Regular.woff2', family: 'Inter', weight: 400 },
+    { src: 'Inter-SemiBold.woff2', dst: 'Inter-SemiBold.woff2', family: 'Inter', weight: 600 },
+    { src: 'Inter-Bold.woff2', dst: 'Inter-Bold.woff2', family: 'Inter', weight: 700 },
+    { src: 'Inter-ExtraBold.woff2', dst: 'Inter-ExtraBold.woff2', family: 'Inter', weight: 800 },
+    { src: 'JetBrainsMono-Regular.woff2', dst: 'JetBrainsMono-Regular.woff2', family: 'JetBrains Mono', weight: 500 },
+    { src: 'JetBrainsMono-SemiBold.woff2', dst: 'JetBrainsMono-SemiBold.woff2', family: 'JetBrains Mono', weight: 600 },
+  ];
+  const usable = [];
+  mapping.forEach(function (m) {
+    const srcPath = path.join(srcDir, m.src);
+    if (!fs.existsSync(srcPath)) return;
+    fs.copyFileSync(srcPath, path.join(dstDir, m.dst));
+    usable.push(m);
+  });
+  if (!usable.length) {
+    console.warn('BUILD_SELFHOST_FONTS=1 but no woff2 files copied -- skipping');
+    return false;
+  }
+  const css = usable
+    .map(function (m) {
+      return (
+        '@font-face {\n' +
+        '  font-family: "' + m.family + '";\n' +
+        '  font-style: normal;\n' +
+        '  font-weight: ' + m.weight + ';\n' +
+        '  font-display: swap;\n' +
+        '  src: url("/assets/fonts/' + m.dst + '") format("woff2");\n' +
+        '  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;\n' +
+        '}'
+      );
+    })
+    .join('\n\n') + '\n';
+  write('assets/fonts.css', css);
+  return true;
+}
+
+/**
+ * When self-hosting is enabled, strip Google Fonts preconnects + stylesheet
+ * link from the generated HTML and replace with our local fonts.css link.
+ * No-op when SELF_HOST_FONTS is false (default), so existing behavior unchanged.
+ */
+function swapGoogleFontsForSelfHosted(html, isLocalePath) {
+  if (!SELF_HOST_FONTS) return html;
+  const localRel = isLocalePath ? '../assets/fonts.css' : '/assets/fonts.css';
+  return html
+    .replace(/\s*<link rel="preconnect" href="https:\/\/fonts\.googleapis\.com">/i, '')
+    .replace(/\s*<link rel="preconnect" href="https:\/\/fonts\.gstatic\.com" crossorigin>/i, '')
+    .replace(
+      /<link href="https:\/\/fonts\.googleapis\.com\/css2[^"]*" rel="stylesheet">/i,
+      '<link rel="stylesheet" href="' + localRel + '">'
+    );
+}
+
+/** Minimal PWA manifest so Android share targets and theme color resolve correctly. */
+function writeManifest(sot) {
+  const brand = (sot && sot.brand) || {};
+  const manifest = {
+    name: brand.publicName || 'Prompt Anatomy',
+    short_name: brand.publicName || 'Prompt Anatomy',
+    description: (sot && sot.legal && sot.legal.metaDescription) || '',
+    start_url: '/en/',
+    scope: '/',
+    display: 'standalone',
+    orientation: 'portrait',
+    background_color: BG_COLOR,
+    theme_color: THEME_COLOR,
+    lang: 'en-US',
+    icons: [
+      { src: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png', purpose: 'any' },
+      { src: '/favicon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' },
+    ],
+  };
+  write('manifest.webmanifest', JSON.stringify(manifest, null, 2) + '\n');
+}
+
+/**
+ * 404.html -- noindex, EN-only, links back to /en/. Vercel serves this when no
+ * route matches; cached for 5 minutes per vercel.json.
+ */
+function write404Html(sot) {
+  const brand = (sot && sot.brand) || {};
+  const base = absoluteBaseSlash().replace(/\/+$/, '');
+  const html =
+    '<!DOCTYPE html>\n' +
+    '<html lang="en-US">\n' +
+    '<head>\n' +
+    '    <meta charset="UTF-8">\n' +
+    '    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
+    '    <meta name="robots" content="noindex, follow">\n' +
+    '    <link rel="canonical" href="' + escapeHtmlAttr(base + '/en/') + '">\n' +
+    '    <meta name="description" content="Page not found. Continue to the Prompt Anatomy English landing.">\n' +
+    '    <meta name="theme-color" content="' + THEME_COLOR + '">\n' +
+    '    <title>Page not found - ' + escapeHtmlAttr(brand.publicName || 'Prompt Anatomy') + '</title>\n' +
+    '    <link rel="icon" href="/favicon.ico" sizes="any">\n' +
+    '    <link rel="icon" type="image/svg+xml" href="/favicon.svg">\n' +
+    '    <link rel="apple-touch-icon" href="/apple-touch-icon.png">\n' +
+    '    <link rel="manifest" href="/manifest.webmanifest">\n' +
+    '    <link rel="stylesheet" href="/assets/styles.css">\n' +
+    '    <style>\n' +
+    '        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg, #F7F8FA); color: var(--text, #1A202C); padding: 48px 20px; line-height: 1.55; }\n' +
+    '        main { max-width: 36rem; margin: 0 auto; }\n' +
+    '        h1 { font-size: clamp(1.75rem, 4vw, 2.25rem); margin: 0 0 16px; letter-spacing: -0.02em; }\n' +
+    '        ul { padding-left: 1.25rem; }\n' +
+    '        a { color: var(--accent-primary, #103B5A); font-weight: 600; }\n' +
+    '        a:focus-visible { outline: var(--ring-focus, 3px solid #cfa73a); outline-offset: 2px; }\n' +
+    '    </style>\n' +
+    '    <script defer src="/_vercel/insights/script.js"></script>\n' +
+    '    <script defer src="/_vercel/speed-insights/script.js"></script>\n' +
+    '</head>\n' +
+    '<body>\n' +
+    '    <main>\n' +
+    '        <h1>Page not found.</h1>\n' +
+    '        <p>The page you requested does not exist. It may have moved, or the link may be out of date.</p>\n' +
+    '        <ul>\n' +
+    '            <li><a href="/en/">Continue to the Prompt Anatomy landing</a></li>\n' +
+    '            <li><a href="/en/privacy.html">Privacy</a></li>\n' +
+    '            <li><a href="/terms.html">Terms</a></li>\n' +
+    '        </ul>\n' +
+    '    </main>\n' +
+    '</body>\n' +
+    '</html>\n';
+  write('404.html', html);
+}
+
+/**
+ * Optional GSC + Bing Webmaster verification meta tags. Emitted only when
+ * sot.brand.verification.{google|bing} is a non-empty string -- keeps the
+ * SOT shape stable without leaking blanks into HTML.
+ */
+function buildVerificationMeta(sot) {
+  const v = (sot && sot.brand && sot.brand.verification) || {};
+  const out = [];
+  if (v.google && typeof v.google === 'string' && v.google.trim()) {
+    out.push('<meta name="google-site-verification" content="' + escapeHtmlAttr(v.google.trim()) + '">');
+  }
+  if (v.bing && typeof v.bing === 'string' && v.bing.trim()) {
+    out.push('<meta name="msvalidate.01" content="' + escapeHtmlAttr(v.bing.trim()) + '">');
+  }
+  return out.join('\n    ');
+}
+
+/**
+ * Shared meta robots + manifest + theme-color block injected into every public
+ * page so AI engines can render unlimited snippets and large image previews
+ * (which is the difference between being mentioned and being prominently shown
+ * in AI Overviews).
+ */
+const ROBOTS_META = '<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">';
 
 // ---- Inject SEO and script path ----
 function injectHead(html, basePath, sot) {
@@ -489,13 +1128,17 @@ function injectHead(html, basePath, sot) {
   const linkCanonical = '<link rel="canonical" href="' + escapeHtmlAttr(canonicalUrl) + '">';
   const linkEn = '<link rel="alternate" hreflang="en-US" href="' + escapeHtmlAttr(canonicalUrl) + '">';
   const linkDefault = '<link rel="alternate" hreflang="x-default" href="' + escapeHtmlAttr(canonicalUrl) + '">';
+  const linkManifest = '<link rel="manifest" href="/manifest.webmanifest">';
+  const metaThemeColor = '<meta name="theme-color" content="' + THEME_COLOR + '">';
   const title = extractTitle(html);
   const description = extractMetaDescription(html);
   const ogTitle = sot ? getSeoOgTitle(sot) : title;
   const ogImage = abs + OG_IMAGE_REL;
+  const brandName = (sot && sot.brand && sot.brand.publicName) || 'Prompt Anatomy';
 
   const socialBlock = [
     '<meta property="og:type" content="website">',
+    '<meta property="og:site_name" content="' + escapeHtmlAttr(brandName) + '">',
     '<meta property="og:title" content="' + escapeHtmlAttr(ogTitle) + '">',
     '<meta property="og:description" content="' + escapeHtmlAttr(description) + '">',
     '<meta property="og:url" content="' + escapeHtmlAttr(canonicalUrl) + '">',
@@ -504,16 +1147,36 @@ function injectHead(html, basePath, sot) {
     '<meta property="og:image:width" content="1200">',
     '<meta property="og:image:height" content="630">',
     '<meta property="og:image:type" content="image/png">',
+    '<meta property="og:image:alt" content="' + escapeHtmlAttr(OG_IMAGE_ALT) + '">',
     '<meta name="twitter:card" content="summary_large_image">',
+    '<meta name="twitter:site" content="@promptanatom">',
     '<meta name="twitter:title" content="' + escapeHtmlAttr(ogTitle) + '">',
     '<meta name="twitter:description" content="' + escapeHtmlAttr(description) + '">',
     '<meta name="twitter:image" content="' + escapeHtmlAttr(ogImage) + '">',
+    '<meta name="twitter:image:alt" content="' + escapeHtmlAttr(OG_IMAGE_ALT) + '">',
   ].join('\n    ');
 
   const jsonLd = buildJsonLdWebsiteGraph(sot);
+  const faqJsonLd = buildJsonLdFaqPage(sot);
+  const productsJsonLd = buildJsonLdProducts(sot);
+  const verification = buildVerificationMeta(sot);
   const seoBlock =
     '\n    ' +
-    [linkCanonical, linkEn, linkDefault, socialBlock, jsonLd].join('\n    ') +
+    [
+      ROBOTS_META,
+      linkCanonical,
+      linkEn,
+      linkDefault,
+      linkManifest,
+      metaThemeColor,
+      socialBlock,
+      jsonLd,
+      faqJsonLd,
+      productsJsonLd,
+      verification,
+    ]
+      .filter(Boolean)
+      .join('\n    ') +
     '\n';
   html = html.replace(/(<meta name="viewport"[^>]*>\s*)(<meta name="description")/i, '$1' + seoBlock + '$2');
 
@@ -525,6 +1188,7 @@ function injectHead(html, basePath, sot) {
   html = html.replace(/<script src="generator\.js"><\/script>/, basePathScript + '<script src="../generator.js"></script>');
   html = injectFaviconLinks(html, abs);
   html = injectPlausible(html);
+  html = swapGoogleFontsForSelfHosted(html, true);
   return html;
 }
 
@@ -540,16 +1204,22 @@ function injectPlausible(html) {
   return html.replace('</head>', script + '\n</head>');
 }
 
-function injectPrivacyHead(html, pathSuffix, title, description) {
+function injectPrivacyHead(html, pathSuffix, title, description, opts) {
+  opts = opts || {};
   const abs = absoluteBaseSlash();
   const canonicalUrl = abs + pathSuffix;
   const ogImage = abs + OG_IMAGE_REL;
+  const brandName = (opts.sot && opts.sot.brand && opts.sot.brand.publicName) || 'Prompt Anatomy';
   const block = [
+    ROBOTS_META,
     '<link rel="canonical" href="' + escapeHtmlAttr(canonicalUrl) + '">',
     '<link rel="alternate" hreflang="en-US" href="' + escapeHtmlAttr(canonicalUrl) + '">',
     '<link rel="alternate" hreflang="x-default" href="' + escapeHtmlAttr(canonicalUrl) + '">',
+    '<link rel="manifest" href="/manifest.webmanifest">',
+    '<meta name="theme-color" content="' + THEME_COLOR + '">',
     '<meta name="description" content="' + escapeHtmlAttr(description) + '">',
     '<meta property="og:type" content="website">',
+    '<meta property="og:site_name" content="' + escapeHtmlAttr(brandName) + '">',
     '<meta property="og:title" content="' + escapeHtmlAttr(title) + '">',
     '<meta property="og:description" content="' + escapeHtmlAttr(description) + '">',
     '<meta property="og:url" content="' + escapeHtmlAttr(canonicalUrl) + '">',
@@ -558,40 +1228,130 @@ function injectPrivacyHead(html, pathSuffix, title, description) {
     '<meta property="og:image:width" content="1200">',
     '<meta property="og:image:height" content="630">',
     '<meta property="og:image:type" content="image/png">',
+    '<meta property="og:image:alt" content="' + escapeHtmlAttr(OG_IMAGE_ALT) + '">',
     '<meta name="twitter:card" content="summary_large_image">',
+    '<meta name="twitter:site" content="@promptanatom">',
     '<meta name="twitter:title" content="' + escapeHtmlAttr(title) + '">',
     '<meta name="twitter:description" content="' + escapeHtmlAttr(description) + '">',
     '<meta name="twitter:image" content="' + escapeHtmlAttr(ogImage) + '">',
-    buildJsonLdWebPage(canonicalUrl, title, description),
-  ].join('\n    ');
+    '<meta name="twitter:image:alt" content="' + escapeHtmlAttr(OG_IMAGE_ALT) + '">',
+    buildJsonLdWebPage(canonicalUrl, title, description, { breadcrumbLabel: opts.breadcrumbLabel }),
+    buildVerificationMeta(opts.sot),
+  ]
+    .filter(Boolean)
+    .join('\n    ');
   return html.replace(/(<meta name="viewport"[^>]*>\s*)(<title)/i, '$1' + block + '\n    $2');
 }
 
-function writeRobotsAndSitemap() {
-  const abs = absoluteBaseSlash().replace(/\/+$/, '');
-  const sitemapUrl = abs + '/sitemap.xml';
-  const robots = 'User-agent: *\nAllow: /\n\nSitemap: ' + sitemapUrl + '\n';
-  write('robots.txt', robots);
+/**
+ * 2026 AI-crawler policy. Three classes:
+ *   1. ALLOW search/citation bots that drive referral traffic.
+ *   2. ALLOW-with-carveouts for training-capable bots: keep landing crawlable
+ *      so our brand appears in AI answers, but block /assets/samples/,
+ *      /assets/pdf-covers/, and /api/ so PDF sample content + admin endpoints
+ *      do not flow into training datasets.
+ *   3. BLOCK fully for training-only crawlers with no useful referral output.
+ *
+ * Always pair with Disallow: /api/ in the default block (no robot needs admin
+ * endpoints). Reference INDEXNOW_KEY so bots that respect IndexNow can validate.
+ */
+function buildRobotsTxt(absRoot) {
+  const sitemapUrl = absRoot + '/sitemap.xml';
+  const indexNowLoc = absRoot + '/' + INDEXNOW_KEY + '.txt';
 
-  const urls = [
-    abs + '/en/',
-    abs + '/',
-    abs + '/privacy.html',
-    abs + '/en/privacy.html',
-    abs + '/terms.html',
-    abs + '/success.html',
+  const allowSearch = ['OAI-SearchBot', 'ChatGPT-User', 'PerplexityBot', 'Perplexity-User', 'Claude-SearchBot', 'Claude-User', 'Applebot-Extended'];
+  const allowWithCarveouts = ['GPTBot', 'ClaudeBot', 'Google-Extended', 'Amazonbot'];
+  const blockAll = ['anthropic-ai', 'cohere-ai', 'CCBot', 'Bytespider', 'Meta-ExternalAgent'];
+
+  const blocks = [];
+  blocks.push('# Search and citation bots -- ALLOW (drives referral traffic to PDFs).');
+  allowSearch.forEach(function (ua) {
+    blocks.push('User-agent: ' + ua);
+    blocks.push('Allow: /');
+    blocks.push('');
+  });
+
+  blocks.push('# Training-capable bots -- ALLOW landing, DISALLOW paid PDF surfaces and admin endpoints.');
+  allowWithCarveouts.forEach(function (ua) {
+    blocks.push('User-agent: ' + ua);
+    blocks.push('Disallow: /assets/samples/');
+    blocks.push('Disallow: /assets/pdf-covers/');
+    blocks.push('Disallow: /api/');
+    blocks.push('Allow: /');
+    blocks.push('');
+  });
+
+  blocks.push('# Training-only crawlers with no useful referral -- BLOCK.');
+  blockAll.forEach(function (ua) {
+    blocks.push('User-agent: ' + ua);
+    blocks.push('Disallow: /');
+    blocks.push('');
+  });
+
+  blocks.push('# Default policy for all other bots (Googlebot, Bingbot, etc.).');
+  blocks.push('User-agent: *');
+  blocks.push('Disallow: /api/');
+  blocks.push('Allow: /');
+  blocks.push('');
+
+  blocks.push('Sitemap: ' + sitemapUrl);
+  blocks.push('# IndexNow: ' + indexNowLoc);
+  blocks.push('');
+
+  return blocks.join('\n');
+}
+
+/**
+ * Sitemap entries with optional <lastmod> and <image:image> children. Source
+ * file used for lastmod is provided by caller so git history of templates and
+ * built outputs both flow into Google's freshness signal.
+ */
+function buildSitemapXml(absRoot, sot) {
+  const entries = [
+    { loc: absRoot + '/en/', lastmodSrc: 'templates/index-lt.html', images: [
+      { loc: absRoot + '/' + OG_IMAGE_REL, caption: 'HR hiring PDF guides for US teams - Prompt Anatomy' },
+      { loc: absRoot + '/assets/pdf-covers/beginner.png', caption: 'Cover of Beginner HR Hiring Guide PDF' },
+      { loc: absRoot + '/assets/pdf-covers/advanced.png', caption: 'Cover of Advanced HR Hiring Guide PDF' },
+    ] },
+    { loc: absRoot + '/', lastmodSrc: 'index.html' },
+    { loc: absRoot + '/privacy.html', lastmodSrc: 'templates/privacy-gateway.html' },
+    { loc: absRoot + '/en/privacy.html', lastmodSrc: 'templates/privacy.html' },
+    { loc: absRoot + '/terms.html', lastmodSrc: 'terms.html' },
+    { loc: absRoot + '/success.html', lastmodSrc: 'success.html' },
   ];
-  const locs = urls
-    .map(function (u) {
-      return '  <url><loc>' + u + '</loc></url>';
-    })
-    .join('\n');
-  const sitemap =
-    '<?xml version="1.0" encoding="UTF-8"?>\n' +
-    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
-    locs +
-    '\n</urlset>\n';
-  write('sitemap.xml', sitemap);
+
+  const lines = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"',
+    '        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">',
+  ];
+  entries.forEach(function (e) {
+    lines.push('  <url>');
+    lines.push('    <loc>' + e.loc + '</loc>');
+    const lm = gitLastModified(e.lastmodSrc);
+    if (lm) lines.push('    <lastmod>' + lm + '</lastmod>');
+    if (Array.isArray(e.images)) {
+      e.images.forEach(function (img) {
+        lines.push('    <image:image>');
+        lines.push('      <image:loc>' + img.loc + '</image:loc>');
+        if (img.caption) lines.push('      <image:caption>' + escapeHtmlText(img.caption) + '</image:caption>');
+        lines.push('    </image:image>');
+      });
+    }
+    lines.push('  </url>');
+  });
+  lines.push('</urlset>');
+  lines.push('');
+
+  // sot is reserved for future per-product entries (sample PDFs once linkable).
+  void sot;
+  return lines.join('\n');
+}
+
+function writeRobotsAndSitemap(sot) {
+  const abs = absoluteBaseSlash().replace(/\/+$/, '');
+  write('robots.txt', buildRobotsTxt(abs));
+  write('sitemap.xml', buildSitemapXml(abs, sot));
 }
 
 function buildRootSeoFragment(sot) {
@@ -600,23 +1360,28 @@ function buildRootSeoFragment(sot) {
   const enLanding = base + '/en/';
   const desc = getSeoMetaDescription(sot);
   const ogTitle = getSeoOgTitle(sot);
-  const contactEmail = sot.product.contactEmail;
-  const org = {
-    '@type': 'Organization',
-    name: 'Prompt Anatomy',
-    url: enLanding,
-    sameAs: ['https://t.me/prompt_anatomy'],
-    email: contactEmail,
+  const brandName = (sot.brand && sot.brand.publicName) || 'Prompt Anatomy';
+  const { org, person } = buildOrganizationAndPersonNodes(sot, base);
+  const website = {
+    '@type': 'WebSite',
+    '@id': websiteId(base),
+    name: brandName + ' – US hiring prompts',
+    url: base + '/',
+    inLanguage: ['en-US'],
+    publisher: { '@id': organizationId(base) },
   };
-  if (sot.product.businessAddress) {
-    org.address = buildPostalAddressJsonLd(sot);
-  }
+  const graph = person ? [website, org, person] : [website, org];
+  const verification = buildVerificationMeta(sot);
   const lines = [
     '<meta http-equiv="refresh" content="0; url=en/">',
+    ROBOTS_META,
     '<link rel="canonical" href="' + escapeHtmlAttr(enLanding) + '">',
     '<link rel="alternate" hreflang="en-US" href="' + escapeHtmlAttr(enLanding) + '">',
     '<link rel="alternate" hreflang="x-default" href="' + escapeHtmlAttr(enLanding) + '">',
+    '<link rel="manifest" href="/manifest.webmanifest">',
+    '<meta name="theme-color" content="' + THEME_COLOR + '">',
     '<meta property="og:type" content="website">',
+    '<meta property="og:site_name" content="' + escapeHtmlAttr(brandName) + '">',
     '<meta property="og:title" content="' + escapeHtmlAttr(ogTitle) + '">',
     '<meta property="og:description" content="' + escapeHtmlAttr(desc) + '">',
     '<meta property="og:url" content="' + escapeHtmlAttr(enLanding) + '">',
@@ -625,25 +1390,18 @@ function buildRootSeoFragment(sot) {
     '<meta property="og:image:width" content="1200">',
     '<meta property="og:image:height" content="630">',
     '<meta property="og:image:type" content="image/png">',
+    '<meta property="og:image:alt" content="' + escapeHtmlAttr(OG_IMAGE_ALT) + '">',
     '<meta name="twitter:card" content="summary_large_image">',
+    '<meta name="twitter:site" content="@promptanatom">',
     '<meta name="twitter:title" content="' + escapeHtmlAttr(ogTitle) + '">',
     '<meta name="twitter:description" content="' + escapeHtmlAttr(desc) + '">',
     '<meta name="twitter:image" content="' + img + '">',
+    '<meta name="twitter:image:alt" content="' + escapeHtmlAttr(OG_IMAGE_ALT) + '">',
     '<script type="application/ld+json">' +
-      JSON.stringify({
-        '@context': 'https://schema.org',
-        '@graph': [
-          {
-            '@type': 'WebSite',
-            name: 'Prompt Anatomy – US hiring prompts',
-            url: enLanding,
-            inLanguage: ['en-US'],
-          },
-          org,
-        ],
-      }).replace(/</g, '\\u003c') +
+      JSON.stringify({ '@context': 'https://schema.org', '@graph': graph }).replace(/</g, '\\u003c') +
       '</script>',
   ];
+  if (verification) lines.push(verification);
   return lines.join('\n    ') + '\n    ';
 }
 
@@ -670,20 +1428,25 @@ function finalizeRootIndexHtml(sot) {
   write('index.html', html);
 }
 
-function buildRootPrivacyFragment() {
+function buildRootPrivacyFragment(sot) {
   const base = absoluteBaseSlash().replace(/\/+$/, '');
   const img = base + '/' + OG_IMAGE_REL;
   const enPrivacyUrl = base + '/en/privacy.html';
-  const enSite = base + '/en/';
+  const brandName = (sot && sot.brand && sot.brand.publicName) || 'Prompt Anatomy';
   const desc =
     'Prompt Anatomy – static site with US hiring prompts for HR teams. Stripe processes paid PDF purchases; Resend delivers download links.';
+  const verification = buildVerificationMeta(sot);
   const lines = [
     '<meta http-equiv="refresh" content="0; url=en/privacy.html">',
+    ROBOTS_META,
     '<link rel="canonical" href="' + escapeHtmlAttr(enPrivacyUrl) + '">',
     '<link rel="alternate" hreflang="en-US" href="' + escapeHtmlAttr(enPrivacyUrl) + '">',
     '<link rel="alternate" hreflang="x-default" href="' + escapeHtmlAttr(enPrivacyUrl) + '">',
+    '<link rel="manifest" href="/manifest.webmanifest">',
+    '<meta name="theme-color" content="' + THEME_COLOR + '">',
     '<meta name="description" content="' + escapeHtmlAttr(desc) + '">',
     '<meta property="og:type" content="website">',
+    '<meta property="og:site_name" content="' + escapeHtmlAttr(brandName) + '">',
     '<meta property="og:title" content="Privacy Policy – Prompt Anatomy">',
     '<meta property="og:description" content="' + escapeHtmlAttr(desc) + '">',
     '<meta property="og:url" content="' + escapeHtmlAttr(enPrivacyUrl) + '">',
@@ -692,33 +1455,23 @@ function buildRootPrivacyFragment() {
     '<meta property="og:image:width" content="1200">',
     '<meta property="og:image:height" content="630">',
     '<meta property="og:image:type" content="image/png">',
+    '<meta property="og:image:alt" content="' + escapeHtmlAttr(OG_IMAGE_ALT) + '">',
     '<meta name="twitter:card" content="summary_large_image">',
+    '<meta name="twitter:site" content="@promptanatom">',
     '<meta name="twitter:title" content="Privacy Policy – Prompt Anatomy">',
     '<meta name="twitter:description" content="' + escapeHtmlAttr(desc) + '">',
     '<meta name="twitter:image" content="' + img + '">',
-    '<script type="application/ld+json">' +
-      JSON.stringify({
-        '@context': 'https://schema.org',
-        '@graph': [
-          {
-            '@type': 'WebPage',
-            name: 'Privacy Policy – Prompt Anatomy',
-            description: desc,
-            url: enPrivacyUrl,
-            inLanguage: 'en-US',
-            isPartOf: { '@type': 'WebSite', url: enSite },
-          },
-        ],
-      }).replace(/</g, '\\u003c') +
-      '</script>',
+    '<meta name="twitter:image:alt" content="' + escapeHtmlAttr(OG_IMAGE_ALT) + '">',
+    buildJsonLdWebPage(enPrivacyUrl, 'Privacy Policy – ' + brandName, desc, { breadcrumbLabel: 'Privacy' }),
   ];
+  if (verification) lines.push(verification);
   return lines.join('\n    ') + '\n    ';
 }
 
-function finalizeRootPrivacyHtml() {
+function finalizeRootPrivacyHtml(sot) {
   let html = read('templates/privacy-gateway.html');
   html = html.replace(/(<meta name="viewport"[^>]*>\s*)(?:[\s\S]*?)(<title)/i, '$1$2');
-  const frag = buildRootPrivacyFragment();
+  const frag = buildRootPrivacyFragment(sot);
   html = html.replace(/(<meta name="viewport"[^>]*>\s*)(<title)/i, '$1' + frag + '$2');
   html = injectFaviconLinks(html, absoluteBaseSlash());
   write('privacy.html', html);
@@ -1205,6 +1958,7 @@ function buildPrivacyEn(html, sot) {
   if (sot && sot.product && sot.product.businessAddress) {
     out = replaceAllGlobal(out, '{{SOT_BUSINESS_ADDRESS}}', renderAddressBlock(sot));
   }
+  out = swapGoogleFontsForSelfHosted(out, true);
   return out;
 }
 
@@ -1343,20 +2097,29 @@ function main() {
   write('en/index.html', enIndex);
 
   let enPrivacy = buildPrivacyEn(privacyHtml, sot);
-  enPrivacy = injectPrivacyHead(enPrivacy, 'en/privacy.html', PRIVACY_PAGE_TITLE, privacyEnDesc);
+  enPrivacy = injectPrivacyHead(enPrivacy, 'en/privacy.html', PRIVACY_PAGE_TITLE, privacyEnDesc, {
+    sot: sot,
+    breadcrumbLabel: 'Privacy',
+  });
   write('en/privacy.html', enPrivacy);
 
-  writeRobotsAndSitemap();
+  writeRobotsAndSitemap(sot);
+  writeLlmsTxt(sot);
+  writeIndexNowKey();
+  writeManifest(sot);
+  write404Html(sot);
+  const fontsSelfHosted = writeSelfHostedFonts();
   removeLegacyPrivacyOutputs();
 
   finalizeRootIndexHtml(sot);
-  finalizeRootPrivacyHtml();
+  finalizeRootPrivacyHtml(sot);
 
-  console.log('Build done: en/index.html, en/privacy.html, privacy.html, robots.txt, sitemap.xml');
+  console.log('Build done: en/index.html, en/privacy.html, privacy.html, robots.txt, sitemap.xml, llms.txt, llms-full.txt, manifest.webmanifest, 404.html, ' + INDEXNOW_KEY + '.txt');
   console.log('BASE_PATH:', BASE_PATH || '(root – no subpath)');
   console.log('SITE_ORIGIN:', SITE_ORIGIN);
   console.log('SITE_PUBLIC_BASE:', SITE_PUBLIC_BASE || '(not set)');
   console.log('Absolute base:', absoluteBaseSlash());
+  console.log('Self-hosted fonts:', fontsSelfHosted ? 'YES (assets/fonts.css)' : 'no (Google Fonts CDN)');
 }
 
 main();

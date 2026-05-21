@@ -23,6 +23,21 @@ npm test        # build + pdf:validate + structure tests + HTML/JS lint
 
 **OG image:** `npm run generate:og` → [images/og-default-v2.png](images/og-default-v2.png) (bump filename in [scripts/build-locale-pages.js](scripts/build-locale-pages.js) `OG_IMAGE_REL` when busting social caches)
 
+## SEO + GEO + AI crawlers (2026)
+
+The build script emits every SEO / GEO / AI-crawler surface from `config/sot.json` — never hand-edit the outputs:
+
+- [robots.txt](robots.txt) — per-AI-bot policy (allow citation bots like `OAI-SearchBot`, `PerplexityBot`; carve out `/assets/samples/` + `/assets/pdf-covers/` + `/api/` from training bots like `GPTBot`, `Google-Extended`; block training-only crawlers like `CCBot`, `Bytespider`).
+- [sitemap.xml](sitemap.xml) — `xmlns:image`, per-URL `<lastmod>` from git history, image entries for `/en/`.
+- [llms.txt](llms.txt) + [llms-full.txt](llms-full.txt) — AI-friendly site map (`H1 + blockquote summary` + sections) and full prompt digest.
+- [manifest.webmanifest](manifest.webmanifest) — PWA-lite manifest (`start_url: /en/`, theme_color navy).
+- [404.html](404.html) — EN-only, `noindex, follow`, canonical to `/en/`.
+- `7a4b...4d.txt` — IndexNow protocol key. Post-deploy ping wired into [.github/workflows/deploy.yml](.github/workflows/deploy.yml) via `npm run seo:indexnow:diff` (non-blocking).
+- JSON-LD on every page: `WebSite` + `Organization` (logo, slogan, knowsAbout, contactPoint, sameAs ×4) + `Person` Tomas Staniulis + `FAQPage` (9 Q+A) + 3× `Product` with `Offer` and `MerchantReturnPolicy` + `BreadcrumbList` + `speakable`.
+- Headers ([vercel.json](vercel.json)): `Content-Security-Policy-Report-Only` baseline, `Origin-Agent-Cluster: ?1`, content-type rules for `llms.txt` / `manifest.webmanifest` / IndexNow key.
+
+**Full contract + promotion path:** [docs/AGENT_SOT.md](docs/AGENT_SOT.md) §6a, [docs/security.md](docs/security.md).
+
 ## PDF guides (source → export → covers)
 
 1. Edit [docs/pdf-source/beginner-personalas-hr.html](docs/pdf-source/beginner-personalas-hr.html) and [docs/pdf-source/advanced-personalas-hr.html](docs/pdf-source/advanced-personalas-hr.html) (brand: **Prompt Anatomy** on covers/footers)

@@ -1,4 +1,70 @@
+# Search and citation bots -- ALLOW (drives referral traffic to PDFs).
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Training-capable bots -- ALLOW landing, DISALLOW paid PDF surfaces and admin endpoints.
+User-agent: GPTBot
+Disallow: /assets/samples/
+Disallow: /assets/pdf-covers/
+Disallow: /api/
+Allow: /
+
+User-agent: ClaudeBot
+Disallow: /assets/samples/
+Disallow: /assets/pdf-covers/
+Disallow: /api/
+Allow: /
+
+User-agent: Google-Extended
+Disallow: /assets/samples/
+Disallow: /assets/pdf-covers/
+Disallow: /api/
+Allow: /
+
+User-agent: Amazonbot
+Disallow: /assets/samples/
+Disallow: /assets/pdf-covers/
+Disallow: /api/
+Allow: /
+
+# Training-only crawlers with no useful referral -- BLOCK.
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: cohere-ai
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: Meta-ExternalAgent
+Disallow: /
+
+# Default policy for all other bots (Googlebot, Bingbot, etc.).
 User-agent: *
+Disallow: /api/
 Allow: /
 
 Sitemap: https://promptanatomy.help/sitemap.xml
+# IndexNow: https://promptanatomy.help/7a4b9e2c8f1d4a3b9c6e5d2a1f8b7c4d.txt

@@ -24,7 +24,9 @@
     "pdf:covers:preview": "node scripts/verify-pdf-cover.js --preview",
     "pdf:placeholders": "node scripts/generate-pdf-cover-placeholders.js",
     "pdf:fonts": "node scripts/fetch-pdf-fonts.js",
-    "pdf:upload:blob": "node scripts/upload-pdfs-to-vercel-blob.js"
+    "pdf:upload:blob": "node scripts/upload-pdfs-to-vercel-blob.js",
+    "seo:indexnow": "node scripts/indexnow-ping.js",
+    "seo:indexnow:diff": "node scripts/indexnow-ping.js --since-head"
   },
   "dependencies": {
     "@upstash/redis": "^1.34.3",

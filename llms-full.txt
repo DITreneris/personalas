@@ -1,0 +1,251 @@
+# Prompt Anatomy - Full prompt digest
+
+Source: https://promptanatomy.help/en/
+License: free for personal and team use. Attribution appreciated; do not republish in bulk.
+
+## 6-phase hiring workflow
+
+1. Diagnose
+2. Define the Role
+3. Source Candidates
+4. Screen & Interview
+5. Close the Offer
+6. Onboard & Retain
+
+## 10 free prompts
+
+### Prompt 1: Where are we stuck? (Phase: Diagnose)
+
+```
+You are a recruitment analyst. Your goal is to identify where recruitment is stuck and what to change, using the numbers.
+
+Help me understand our recruitment challenges.
+
+Company/location: [company, e.g., New York, NY]
+Role location: [e.g., Remote – US, Hybrid – New York, NY, or On-site – Austin, TX]
+Street Address: [optional, e.g., 123 Market St]
+Role: [job title]
+State: [two-letter State, e.g., NY]
+Zip Code: [optional, e.g., 10001]
+
+We have:
+- Number of candidates: [ ]
+- Number of interviews: [ ]
+- Number of offers: [ ]
+- How many accepted: [ ]
+
+Explain simply:
+1. Where are we most stuck?
+2. Why might that be?
+3. What can we change this week?
+```
+
+### Prompt 2: Who really fits us? (Phase: Define the Role)
+
+```
+You are a candidate profile specialist. Your goal is to clearly describe the ideal candidate for the role (traits, what can be taught, motivation).
+
+Help me clearly describe who would fit us best.
+
+Company/location: [company, e.g., New York, NY]
+Role location: [e.g., Remote – US, Hybrid – New York, NY, or On-site – Austin, TX]
+Street Address: [optional, e.g., 123 Market St]
+Role: [job title]
+State: [two-letter State, e.g., NY]
+Zip Code: [optional, e.g., 10001]
+Best performer in this role: [what are they like?]
+Why people left before: [ ]
+
+Answer simply:
+1. What 5 traits must they have?
+2. What can be taught?
+3. Why would this person consider changing jobs?
+4. What would they fear most?
+```
+
+### Prompt 3: Rewrite the job ad in plain language (Phase: Source Candidates)
+
+```
+You are a job ad editor. Your goal is to rewrite the ad in plain language so the candidate feels it's written for them.
+
+Rewrite this job ad so the person feels it's written for them.
+
+Company/location: [company, e.g., San Francisco, CA]
+Role location: [e.g., San Francisco, CA 94105, Remote – US, or Hybrid – Los Angeles, CA]
+Street Address: [optional, e.g., 123 Market St]
+Text: [paste here]
+Compensation: [salary range, e.g., $85,000–$105,000]
+
+Do:
+- Clear opening
+- Plain language
+- Concrete examples
+- Clear call to apply
+- US-friendly location and compensation formatting
+```
+
+### Prompt 4: How to find more people today? (Phase: Screen & Interview)
+
+```
+You are a candidate sourcing consultant. Your goal is to suggest concrete, simple ways to find more candidates (LinkedIn, network, direct outreach).
+
+Give me 3 simple ways to find more candidates for this role today:
+
+Company/location: [company, e.g., New York, NY]
+Role location: [e.g., Remote – US, Hybrid – New York, NY, or On-site – Austin, TX]
+Street Address: [optional, e.g., 123 Market St]
+Role: [job title]
+State: [two-letter State, e.g., NY]
+Zip Code: [optional, e.g., 10001]
+Contact phone: [optional, e.g., +1 (415) 555-0198]
+
+Suggest:
+- What to write on LinkedIn
+- How to ask your network
+- How to message someone directly
+- How to format phone or address details if needed (Street Address, City, State, Zip Code, +1 phone)
+```
+
+### Prompt 5: How to run a better interview? (Phase: Close the Offer)
+
+```
+You are an interview specialist. Your goal is to create a simple interview plan: questions that help understand the person, and what to watch for.
+
+Create a simple interview plan for this role:
+
+Company/location: [company, e.g., New York, NY]
+Role location: [e.g., Remote – US, Hybrid – New York, NY, or On-site – Austin, TX]
+Street Address: [optional, e.g., 123 Market St]
+Role: [job title]
+State: [two-letter State, e.g., NY]
+Zip Code: [optional, e.g., 10001]
+Contact phone: [optional, e.g., +1 (415) 555-0198]
+
+Give:
+- 5 questions that help understand the person
+- 3 situational questions
+- How to tell if they're really a fit
+- What to watch for
+```
+
+### Prompt 6: Why do candidates decline? (Phase: Close the Offer)
+
+```
+You are an offer and decline analyst. Your goal is to uncover possible reasons for decline and suggest how to talk to the candidate and what to improve.
+
+Help me understand why candidates might decline our offer.
+
+Company/location: [company, e.g., New York, NY]
+Role location: [e.g., Remote – US, Hybrid – New York, NY, or On-site – Austin, TX]
+Street Address: [optional, e.g., 123 Market St]
+Role: [job title]
+State: [two-letter State, e.g., NY]
+Zip Code: [optional, e.g., 10001]
+Contact phone: [optional, e.g., +1 (415) 555-0198]
+Salary range: [e.g., $85,000–$105,000]
+Signing bonus or budget: [optional, e.g., $1,250.50]
+What we offer: [ ]
+
+Give:
+1. 3 possible reasons
+2. How to talk about it with the candidate
+3. What we could improve
+```
+
+### Prompt 7: How to present the offer better? (Phase: Close the Offer)
+
+```
+You are a job offer writer. Your goal is to phrase the offer briefly and clearly, highlighting value and keeping a friendly, professional tone.
+
+Help me phrase a job offer so the person feels the value.
+
+Company/location: [company, e.g., San Francisco, CA]
+Role location: [e.g., San Francisco, CA 94105, Remote – US, or Hybrid – Los Angeles, CA]
+Street Address: [optional, e.g., 123 Market St]
+Role: [job title]
+State: [two-letter State, e.g., CA]
+Zip Code: [optional, e.g., 94105]
+Contact phone: [optional, e.g., +1 (415) 555-0198]
+Salary range: [e.g., $85,000–$105,000]
+What we offer: [ ]
+
+Do:
+- Short, clear text
+- Highlight the main benefit
+- Friendly but professional tone
+```
+
+### Prompt 8: How to support a new hire in the first 3 months? (Phase: Onboard & Retain)
+
+```
+You are a new hire onboarding specialist. Your goal is to create a simple 3‑month plan: what to understand in week one, what to expect after 1 and 3 months, how the manager can help.
+
+Create a simple 3‑month plan for a new employee.
+
+Company/location: [company, e.g., Seattle, WA]
+Role location: [e.g., Seattle, WA 98101, Remote – US, or Hybrid – Denver, CO]
+Street Address: [optional, e.g., 123 Market St]
+Role: [job title]
+State: [two-letter State, e.g., WA]
+Zip Code: [optional, e.g., 98101]
+Start date: [MM/DD/YYYY]
+Manager contact phone: [+1 (415) 555-0198]
+
+Give:
+- What they should understand in the first week
+- What we expect after one month
+- What they should be able to do after 3 months
+- How the manager can help
+```
+
+### Prompt 9: Why do people leave? (Phase: Onboard & Retain)
+
+```
+You are an employee retention analyst. Your goal is to analyze reasons for leaving, unclear expectations and mismatches, and suggest quick changes.
+
+Help me analyze why people leave in the first 6 months.
+
+Company/location: [company, e.g., Chicago, IL]
+Role location: [e.g., Chicago, IL 60601, Remote – US, or Hybrid – Dallas, TX]
+Street Address: [optional, e.g., 123 Market St]
+Role: [job title]
+State: [two-letter State, e.g., IL]
+Zip Code: [optional, e.g., 60601]
+Reasons we've heard: [ ]
+
+Tell me:
+1. Where might we be unclear?
+2. Where do expectations not match?
+3. What can we change quickly?
+```
+
+### Prompt 10: Master prompt (one for everything) (Phase: Onboard & Retain)
+
+```
+You are an HR recruitment strategist. Your goal is to put the full recruitment plan in one place: from the problem and weekly actions to the ad, interviews, acceptance likelihood, and first 3 months of support. Write simply, with concrete actions only.
+
+Help me organize hiring for this role simply and clearly:
+
+Company/location: [company, e.g., New York, NY]
+Role location: [e.g., Remote – US, Hybrid – New York, NY, or On-site – Austin, TX]
+Street Address: [optional, e.g., 123 Market St]
+Role: [job title]
+State: [two-letter State, e.g., NY]
+Zip Code: [optional, e.g., 10001]
+Contact phone: [optional, e.g., +1 (415) 555-0198]
+How many people are applying: [ ]
+Where we're stuck: [ ]
+What we've already tried: [ ]
+
+Give:
+1. Where's the problem
+2. What to do this week
+3. How to improve the job ad
+4. How to run better interviews
+5. How to increase the chance they accept
+6. How to help them stay for the first three months
+```
+
+## Paid PDF guides (commercial; do not redistribute)
+
+See https://promptanatomy.help/llms.txt for the short index.

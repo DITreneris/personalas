@@ -1169,12 +1169,283 @@ function run() {
     tally(assert(success && success.includes('terms.html#paid-pdf-license'), 'success.html license link'));
   }
 
+  // ----------------------------------------------------------------------------
+  // GEO + AI crawler surface (2026 hardening) — locks all contracts emitted by
+  // scripts/build-locale-pages.js so they can't silently regress on rebuild.
+  // ----------------------------------------------------------------------------
+  tally(assertGeoSurface({
+    robots: robots,
+    sitemap: sitemap,
+    enIndex: enIndex,
+    enPrivacy: enPrivacy,
+    rootIndex: html,
+    terms: terms,
+    success: success,
+    sot: sot,
+  }));
+
   console.log('\n---');
   console.log(`Result: ${passed} passed, ${failed} failed.`);
   if (failed > 0) {
     process.exit(1);
   }
   console.log('All structural tests pass.\n');
+}
+
+const ROBOTS_AI_UAS = [
+  'OAI-SearchBot', 'ChatGPT-User', 'PerplexityBot', 'Perplexity-User',
+  'Claude-SearchBot', 'Claude-User', 'Applebot-Extended',
+  'GPTBot', 'ClaudeBot', 'Google-Extended', 'Amazonbot',
+  'anthropic-ai', 'cohere-ai', 'CCBot', 'Bytespider', 'Meta-ExternalAgent',
+];
+const ROBOTS_META_FULL =
+  '<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">';
+const OG_IMAGE_ALT_LITERAL = 'HR hiring PDF guides for US teams - Prompt Anatomy';
+const INDEXNOW_KEY_LITERAL = '7a4b9e2c8f1d4a3b9c6e5d2a1f8b7c4d';
+
+function assertGeoSurface(ctx) {
+  let ok = true;
+  const tallyLocal = (cond, msg) => { ok = assert(cond, msg) && ok; };
+
+  // --- robots.txt: per-AI-bot policy + IndexNow + /api disallow ---
+  if (ctx.robots) {
+    ROBOTS_AI_UAS.forEach((ua) => {
+      tallyLocal(new RegExp('^User-agent: ' + ua + '\\b', 'm').test(ctx.robots),
+        'robots.txt: User-agent ' + ua);
+    });
+    tallyLocal(/^Disallow: \/api\//m.test(ctx.robots), 'robots.txt: Disallow /api/');
+    tallyLocal(/Allow: \//.test(ctx.robots), 'robots.txt: at least one Allow: /');
+    tallyLocal(ctx.robots.includes('Sitemap: https://'), 'robots.txt: absolute Sitemap');
+    tallyLocal(ctx.robots.includes('IndexNow: https://') && ctx.robots.includes(INDEXNOW_KEY_LITERAL + '.txt'),
+      'robots.txt: IndexNow reference with key');
+    tallyLocal(/^Disallow: \/assets\/samples\//m.test(ctx.robots),
+      'robots.txt: Disallow /assets/samples/ (training carveout)');
+    tallyLocal(/^Disallow: \/assets\/pdf-covers\//m.test(ctx.robots),
+      'robots.txt: Disallow /assets/pdf-covers/ (training carveout)');
+  }
+
+  // --- sitemap.xml: image namespace, lastmod, image:loc entries ---
+  if (ctx.sitemap) {
+    tallyLocal(ctx.sitemap.includes('xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"'),
+      'sitemap.xml: image namespace declared');
+    const lastmodCount = (ctx.sitemap.match(/<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/g) || []).length;
+    tallyLocal(lastmodCount >= 5, 'sitemap.xml: >=5 ISO-date <lastmod> entries (got ' + lastmodCount + ')');
+    const imageCount = (ctx.sitemap.match(/<image:loc>/g) || []).length;
+    tallyLocal(imageCount >= 3, 'sitemap.xml: >=3 <image:loc> entries on /en/ (got ' + imageCount + ')');
+    tallyLocal(ctx.sitemap.includes('og-default-v2.png'), 'sitemap.xml: OG image in image:image');
+    tallyLocal(ctx.sitemap.includes('beginner.png') && ctx.sitemap.includes('advanced.png'),
+      'sitemap.xml: PDF cover images in image:image');
+  }
+
+  // --- en/index.html: meta robots + OG enrichments + social handles ---
+  if (ctx.enIndex) {
+    tallyLocal(ctx.enIndex.includes(ROBOTS_META_FULL),
+      'en/index.html: meta robots max-snippet:-1 etc.');
+    tallyLocal(ctx.enIndex.includes('<meta property="og:site_name" content="Prompt Anatomy">'),
+      'en/index.html: og:site_name');
+    tallyLocal(ctx.enIndex.includes('og:image:alt') && ctx.enIndex.includes(OG_IMAGE_ALT_LITERAL),
+      'en/index.html: og:image:alt with canonical alt text');
+    tallyLocal(ctx.enIndex.includes('twitter:image:alt'), 'en/index.html: twitter:image:alt');
+    tallyLocal(ctx.enIndex.includes('<meta name="twitter:site" content="@promptanatom">'),
+      'en/index.html: twitter:site @promptanatom');
+    tallyLocal(ctx.enIndex.includes('<link rel="manifest" href="/manifest.webmanifest">'),
+      'en/index.html: link rel=manifest');
+    tallyLocal(ctx.enIndex.includes('<meta name="theme-color" content="#103B5A">'),
+      'en/index.html: theme-color navy');
+  }
+
+  // --- en/index.html: FAQPage JSON-LD (9 questions, parity check) ---
+  if (ctx.enIndex && ctx.sot) {
+    tallyLocal(/"@type":"FAQPage"/.test(ctx.enIndex), 'en/index.html: FAQPage JSON-LD');
+    const qCount = (ctx.enIndex.match(/"@type":"Question"/g) || []).length;
+    tallyLocal(qCount >= 9, 'en/index.html: >=9 Question entries (got ' + qCount + ')');
+    const allFaq = (ctx.sot.frontFaq || []).concat(ctx.sot.buyerFaq || []);
+    let parityOk = 0;
+    allFaq.forEach((item) => {
+      const qInJsonLd = ctx.enIndex.includes('"name":"' + item.q.replace(/"/g, '\\"') + '"')
+        || ctx.enIndex.includes('"name":' + JSON.stringify(item.q));
+      if (qInJsonLd) parityOk++;
+    });
+    tallyLocal(parityOk >= 7, 'en/index.html: FAQ question parity (>=7 of 9 matched, got ' + parityOk + ')');
+  }
+
+  // --- en/index.html: Product JSON-LD (x3) + Offer fields ---
+  if (ctx.enIndex && ctx.sot) {
+    const productCount = (ctx.enIndex.match(/"@type":"Product"/g) || []).length;
+    tallyLocal(productCount === 3, 'en/index.html: exactly 3 Product nodes (got ' + productCount + ')');
+    tallyLocal(/"priceCurrency":"USD"/.test(ctx.enIndex), 'en/index.html: priceCurrency USD');
+    tallyLocal(/"availability":"https:\/\/schema.org\/InStock"/.test(ctx.enIndex),
+      'en/index.html: availability InStock');
+    tallyLocal(/"hasMerchantReturnPolicy"/.test(ctx.enIndex),
+      'en/index.html: MerchantReturnPolicy on Offer');
+    ['beginner', 'advanced', 'bundle'].forEach((k) => {
+      const g = ctx.sot.pdfGuides && ctx.sot.pdfGuides[k];
+      if (g && g.priceUSD) {
+        tallyLocal(ctx.enIndex.includes('"price":"' + g.priceUSD + '"'),
+          'en/index.html: Product ' + k + ' price ' + g.priceUSD);
+      }
+    });
+    tallyLocal(!/"aggregateRating"/.test(ctx.enIndex),
+      'en/index.html: NO aggregateRating (would be policy violation without real reviews)');
+  }
+
+  // --- en/index.html: Organization + Person + sameAs ---
+  if (ctx.enIndex) {
+    tallyLocal(/"@type":"Person"/.test(ctx.enIndex), 'en/index.html: Person node');
+    tallyLocal(ctx.enIndex.includes('"Tomas Staniulis"'), 'en/index.html: Person.name Tomas Staniulis');
+    tallyLocal(ctx.enIndex.includes('"contactPoint"'), 'en/index.html: Organization.contactPoint');
+    tallyLocal(ctx.enIndex.includes('"knowsAbout"'), 'en/index.html: Organization.knowsAbout');
+    tallyLocal(ctx.enIndex.includes('"slogan"'), 'en/index.html: Organization.slogan');
+    tallyLocal(ctx.enIndex.includes('"logo":"https://promptanatomy.help/favicon.svg"'),
+      'en/index.html: Organization.logo');
+    tallyLocal(ctx.enIndex.includes('https://x.com/promptanatom'),
+      'en/index.html: Organization sameAs includes x.com/promptanatom');
+    tallyLocal(ctx.enIndex.includes('https://www.linkedin.com/in/staniulis/'),
+      'en/index.html: Person sameAs includes LinkedIn');
+    tallyLocal(ctx.enIndex.includes('https://x.com/TStaniulis_NFT'),
+      'en/index.html: Person sameAs includes operator X handle');
+  }
+
+  // --- en/privacy.html: breadcrumb + speakable + manifest + robots ---
+  if (ctx.enPrivacy) {
+    tallyLocal(ctx.enPrivacy.includes(ROBOTS_META_FULL),
+      'en/privacy.html: meta robots max-snippet:-1 etc.');
+    tallyLocal(/"@type":"BreadcrumbList"/.test(ctx.enPrivacy),
+      'en/privacy.html: BreadcrumbList JSON-LD');
+    tallyLocal(/"speakable"/.test(ctx.enPrivacy),
+      'en/privacy.html: speakable SpeakableSpecification');
+    tallyLocal(ctx.enPrivacy.includes('og:site_name') && ctx.enPrivacy.includes('twitter:site'),
+      'en/privacy.html: og:site_name + twitter:site');
+    tallyLocal(ctx.enPrivacy.includes('<link rel="manifest"'),
+      'en/privacy.html: link rel=manifest');
+    tallyLocal(ctx.enPrivacy.includes('theme-color'),
+      'en/privacy.html: theme-color');
+  }
+
+  // --- root gateway: meta robots + enriched Org ---
+  if (ctx.rootIndex) {
+    tallyLocal(ctx.rootIndex.includes(ROBOTS_META_FULL),
+      'index.html gateway: meta robots');
+    tallyLocal(ctx.rootIndex.includes('"@type":"Person"'),
+      'index.html gateway: Person node');
+    tallyLocal(ctx.rootIndex.includes('<link rel="manifest"'),
+      'index.html gateway: manifest link');
+  }
+
+  // --- terms.html: meta robots + BreadcrumbList + OG enrichments ---
+  if (ctx.terms) {
+    tallyLocal(ctx.terms.includes(ROBOTS_META_FULL),
+      'terms.html: meta robots');
+    tallyLocal(/"@type":"BreadcrumbList"/.test(ctx.terms),
+      'terms.html: BreadcrumbList JSON-LD');
+    tallyLocal(ctx.terms.includes('og:site_name') && ctx.terms.includes('twitter:site'),
+      'terms.html: og:site_name + twitter:site');
+    tallyLocal(ctx.terms.includes('<link rel="manifest"'),
+      'terms.html: link rel=manifest');
+  }
+
+  // --- success.html: noindex preserved (transactional) + OG enrichments ---
+  if (ctx.success) {
+    tallyLocal(/noindex/.test(ctx.success) && /nofollow/.test(ctx.success),
+      'success.html: still noindex,nofollow (transactional, must not be indexed)');
+    tallyLocal(ctx.success.includes('og:site_name') && ctx.success.includes('twitter:site'),
+      'success.html: og:site_name + twitter:site');
+    tallyLocal(ctx.success.includes('<link rel="manifest"'),
+      'success.html: link rel=manifest');
+  }
+
+  // --- new root files: 404.html, manifest.webmanifest, llms.txt, llms-full.txt, IndexNow key ---
+  const fourOhFour = readFile(path.join(ROOT, '404.html'));
+  tallyLocal(fourOhFour !== null, '404.html exists at site root');
+  if (fourOhFour) {
+    tallyLocal(/noindex/.test(fourOhFour), '404.html: noindex meta');
+    tallyLocal(fourOhFour.includes('lang="en-US"'), '404.html: lang en-US');
+    tallyLocal(fourOhFour.includes('href="/en/"'), '404.html: links to /en/');
+    tallyLocal(assertPublicEnSurface('404.html', fourOhFour), '404.html: public EN surface invariants');
+  }
+
+  const manifest = readFile(path.join(ROOT, 'manifest.webmanifest'));
+  tallyLocal(manifest !== null, 'manifest.webmanifest exists');
+  if (manifest) {
+    let parsed = null;
+    try { parsed = JSON.parse(manifest); } catch (_e) { parsed = null; }
+    tallyLocal(parsed !== null, 'manifest.webmanifest: valid JSON');
+    tallyLocal(parsed && parsed.name && parsed.start_url === '/en/',
+      'manifest.webmanifest: name + start_url /en/');
+    tallyLocal(parsed && parsed.theme_color === '#103B5A',
+      'manifest.webmanifest: theme_color navy');
+    tallyLocal(parsed && Array.isArray(parsed.icons) && parsed.icons.length > 0,
+      'manifest.webmanifest: icons declared');
+  }
+
+  const llms = readFile(path.join(ROOT, 'llms.txt'));
+  tallyLocal(llms !== null, 'llms.txt exists');
+  if (llms) {
+    tallyLocal(llms.length < 5120, 'llms.txt: under 5120 bytes (got ' + llms.length + ')');
+    tallyLocal(/^# Prompt Anatomy/.test(llms), 'llms.txt: starts with H1 brand');
+    tallyLocal(llms.includes('> '), 'llms.txt: blockquote summary present');
+    tallyLocal(llms.includes('$5.99') && llms.includes('$11.99') && llms.includes('$15.99'),
+      'llms.txt: all 3 PDF prices listed');
+  }
+
+  const llmsFull = readFile(path.join(ROOT, 'llms-full.txt'));
+  tallyLocal(llmsFull !== null, 'llms-full.txt exists');
+  if (llmsFull) {
+    tallyLocal(llmsFull.includes('Prompt 1:') && llmsFull.includes('Prompt 10:'),
+      'llms-full.txt: includes Prompt 1 and Prompt 10');
+    const promptHeaderCount = (llmsFull.match(/### Prompt \d+:/g) || []).length;
+    tallyLocal(promptHeaderCount === 10,
+      'llms-full.txt: exactly 10 prompt headers (got ' + promptHeaderCount + ')');
+  }
+
+  const indexNowFile = readFile(path.join(ROOT, INDEXNOW_KEY_LITERAL + '.txt'));
+  tallyLocal(indexNowFile !== null, 'IndexNow key file exists at /' + INDEXNOW_KEY_LITERAL + '.txt');
+  if (indexNowFile) {
+    tallyLocal(indexNowFile.trim() === INDEXNOW_KEY_LITERAL,
+      'IndexNow key file body matches filename stem');
+  }
+
+  // --- vercel.json: CSP + Origin-Agent-Cluster + new content-type rules ---
+  const vercel = readFile(path.join(ROOT, 'vercel.json'));
+  if (vercel) {
+    tallyLocal(vercel.includes('Content-Security-Policy-Report-Only'),
+      'vercel.json: CSP Report-Only header');
+    tallyLocal(vercel.includes('https://buy.stripe.com'),
+      'vercel.json: CSP allows Stripe checkout frame');
+    tallyLocal(vercel.includes('Origin-Agent-Cluster') && vercel.includes('"?1"'),
+      'vercel.json: Origin-Agent-Cluster: ?1');
+    tallyLocal(vercel.includes('llms\\\\.txt'),
+      'vercel.json: llms.txt header rule');
+    tallyLocal(vercel.includes('manifest\\\\.webmanifest'),
+      'vercel.json: manifest.webmanifest header rule');
+    tallyLocal(vercel.includes(INDEXNOW_KEY_LITERAL),
+      'vercel.json: IndexNow key file header rule');
+    tallyLocal(/"\/404\\\\.html"/.test(vercel),
+      'vercel.json: 404.html cache header rule');
+  }
+
+  // --- SOT shape: new fields present ---
+  if (ctx.sot) {
+    tallyLocal(Array.isArray(ctx.sot.frontFaq) && ctx.sot.frontFaq.length === 4,
+      'sot.json: frontFaq has exactly 4 items');
+    tallyLocal(ctx.sot.brand && ctx.sot.brand.socialProfiles && ctx.sot.brand.socialProfiles.x,
+      'sot.json: brand.socialProfiles.x');
+    tallyLocal(ctx.sot.brand && ctx.sot.brand.socialProfiles && ctx.sot.brand.socialProfiles.linkedin,
+      'sot.json: brand.socialProfiles.linkedin');
+    tallyLocal(ctx.sot.brand && Array.isArray(ctx.sot.brand.knowsAbout) && ctx.sot.brand.knowsAbout.length >= 3,
+      'sot.json: brand.knowsAbout array');
+    tallyLocal(ctx.sot.product && ctx.sot.product.operatorLinkedin,
+      'sot.json: product.operatorLinkedin');
+    tallyLocal(ctx.sot.product && ctx.sot.product.operatorTwitter,
+      'sot.json: product.operatorTwitter');
+    ['beginner', 'advanced', 'bundle'].forEach((k) => {
+      const g = ctx.sot.pdfGuides && ctx.sot.pdfGuides[k];
+      tallyLocal(g && g.description && g.priceUSD && g.priceValidUntil,
+        'sot.json: pdfGuides.' + k + '.{description, priceUSD, priceValidUntil}');
+    });
+  }
+
+  return ok;
 }
 
 run();
