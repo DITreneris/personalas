@@ -244,266 +244,59 @@ function run() {
     tally(assert(!enIndex.includes('Typical live workshops'), 'en/index.html: no workshop price compare strip'));
     tally(assert(!enIndex.includes('Illustrative comparison, not a specific'), 'en/index.html: no compare-strip disclaimer'));
     tally(assert(!enIndex.includes('Quote paraphrased from pilot'), 'en/index.html: no paraphrased-quote footnote'));
-    // --- PDF expert scenarios v2 (3-card sample workflows row, DS v0.3.2) ---
-    const expertCardCount = (enIndex.match(/class="pdf-expert-card /g) || []).length;
-    tally(
-      assert(
-        expertCardCount >= 3,
-        'en/index.html: 3+ pdf-expert-card articles in after-purchase block (got ' + expertCardCount + ')'
-      )
-    );
-    tally(
-      assert(
-        enIndex.includes('class="pdf-expert-cards"') && enIndex.includes('role="list"') && enIndex.includes('Sample hiring workflows'),
-        'en/index.html: pdf-expert-cards grid with role="list" + aria-label "Sample hiring workflows"'
-      )
-    );
-    tally(
-      assert(
-        enIndex.includes('pdf-expert-card--elev-soft') &&
-          enIndex.includes('pdf-expert-card--elev-medium') &&
-          enIndex.includes('pdf-expert-card--elev-raised'),
-        'en/index.html: three distinct elevation modifiers (soft / medium / raised)'
-      )
-    );
-    tally(
-      assert(
-        enIndex.includes('Joan Cole') &&
-          enIndex.includes('Lane Lincoln') &&
-          enIndex.includes('Emanuel Manolo'),
-        'en/index.html: expert scenario personas (Joan / Lane / Emanuel)'
-      )
-    );
-    tally(
-      assert(
-        enIndex.includes('Ohio') && enIndex.includes('Oregon') && enIndex.includes('Texas'),
-        'en/index.html: expert scenario US regions (Ohio / Oregon / Texas)'
-      )
-    );
-    tally(
-      assert(
-        enIndex.includes('pdf-expert-scenarios-disclaimer') &&
-          /(not paid endorsements|workflow patterns)/i.test(enIndex),
-        'en/index.html: expert scenarios disclaimer element (FTC-safe wording)'
-      )
-    );
-    tally(
-      assert(
-        !enIndex.includes('Pilot HR generalist') && !enIndex.includes('class="pdf-testimonial"'),
-        'en/index.html: legacy single pilot testimonial removed'
-      )
-    );
-    // v2: avatar circles (3x), outcome chips (3x), section badge, disclaimer-after-cards order
-    const avatarCount = (enIndex.match(/class="pdf-expert-card__avatar"/g) || []).length;
-    tally(assert(avatarCount === 3, 'en/index.html: 3 pdf-expert-card__avatar circles (got ' + avatarCount + ')'));
-    const outcomeCount = (enIndex.match(/class="pdf-expert-card__outcome"/g) || []).length;
-    tally(assert(outcomeCount === 3, 'en/index.html: 3 pdf-expert-card__outcome chips (got ' + outcomeCount + ')'));
-    tally(
-      assert(
-        enIndex.includes('class="pdf-guides-social__badge"') && enIndex.includes('Sample workflows'),
-        'en/index.html: pdf-guides-social__badge with "Sample workflows" label'
-      )
-    );
-    const cardsPos = enIndex.indexOf('class="pdf-expert-cards"');
-    const disclaimerPos = enIndex.indexOf('class="pdf-meta-muted pdf-expert-scenarios-disclaimer"');
-    tally(
-      assert(
-        cardsPos !== -1 && disclaimerPos !== -1 && cardsPos < disclaimerPos,
-        'en/index.html: expert scenarios disclaimer sits AFTER pdf-expert-cards (v2 reframe)'
-      )
-    );
-    tally(
-      assert(
-        /\.pdf-expert-cards\s*\{[\s\S]{0,400}grid-template-columns:\s*repeat\(3,\s*1fr\)/.test(landingCss || ''),
-        'landing.css: .pdf-expert-cards grid uses repeat(3, 1fr)'
-      )
-    );
-    tally(
-      assert(
-        /\.pdf-expert-card--elev-soft\s*\{[^}]*box-shadow:\s*var\(--shadow-soft\)/.test(landingCss || '') &&
-          /\.pdf-expert-card--elev-medium\s*\{[^}]*box-shadow:\s*var\(--shadow-medium\)/.test(landingCss || '') &&
-          /\.pdf-expert-card--elev-raised\s*\{[^}]*box-shadow:\s*var\(--shadow-elevated\)/.test(landingCss || ''),
-        'landing.css: three expert-card elevation modifiers map to soft / medium / elevated shadow tokens'
-      )
-    );
-    tally(
-      assert(
-        /\.pdf-expert-card__avatar\s*\{[^}]*border-radius:\s*var\(--r-pill\)/.test(landingCss || ''),
-        'landing.css: .pdf-expert-card__avatar uses --r-pill'
-      )
-    );
-    tally(
-      assert(
-        /\.pdf-expert-card__outcome\s*\{[^}]*border-left:\s*3px solid var\(--accent-gold\)/.test(landingCss || ''),
-        'landing.css: .pdf-expert-card__outcome uses gold left border'
-      )
-    );
-    tally(
-      assert(
-        /\.pdf-guides-social__badge\s*\{[^}]*border-radius:\s*var\(--r-pill\)/.test(landingCss || ''),
-        'landing.css: .pdf-guides-social__badge uses --r-pill'
-      )
-    );
-    // --- PDF proof-inside (C): hero specimen ABOVE grid (DS v0.3.3 Phase C) ---
-    // Phase C inverted the section flow: pdf-proof-inside (1 hero + collapsed
-    // rest) and pdf-guides-social (workflow scenarios) now sit BEFORE
-    // pdf-guides-grid so vartotojas mato real product page + social proof
-    // before being asked to buy. Buyer FAQ stays after grid as risk-reversal.
-    const proofPos = enIndex.indexOf('id="pdf-proof-inside"');
-    const socialPos = enIndex.indexOf('class="pdf-guides-social pdf-guides-social--above-grid"');
-    const gridPos = enIndex.indexOf('class="pdf-guides-grid"');
-    const faqPos = enIndex.indexOf('id="pdf-guides-faq"');
-    tally(
-      assert(
-        proofPos !== -1 && gridPos !== -1 && faqPos !== -1 &&
-          proofPos < gridPos && gridPos < faqPos,
-        'en/index.html: DS v0.3.3 Phase C — pdf-proof-inside BEFORE pdf-guides-grid; buyer FAQ AFTER grid'
-      )
-    );
-    tally(
-      assert(
-        socialPos !== -1 && proofPos < socialPos && socialPos < gridPos,
-        'en/index.html: DS v0.3.3 Phase C — pdf-guides-social--above-grid sits between proof and grid'
-      )
-    );
-    tally(
-      assert(
-        enIndex.includes('class="pdf-proof-inside pdf-proof-inside--with-hero"'),
-        'en/index.html: DS v0.3.3 Phase C — proofInside uses --with-hero variant'
-      )
-    );
-    const heroProofCardCount =
-      (enIndex.match(/class="pdf-proof-inside__card pdf-proof-inside__card--hero"/g) || []).length;
-    tally(
-      assert(
-        heroProofCardCount === 1,
-        'en/index.html: DS v0.3.3 Phase C — exactly one hero proof card (got ' + heroProofCardCount + ')'
-      )
-    );
-    tally(
-      assert(
-        enIndex.includes('class="pdf-proof-inside__more-details"') &&
-          enIndex.includes('class="pdf-proof-inside__more-summary"'),
-        'en/index.html: DS v0.3.3 Phase C — secondary proof items collapse into <details>'
-      )
-    );
-    const proofTriggerCount =
-      (enIndex.match(/class="pdf-proof-inside__media"[^>]*data-preview-trigger="(beginner|advanced|bundle)"/g) || []).length;
-    tally(
-      assert(
-        proofTriggerCount === 3,
-        'en/index.html: pdf-proof-inside has 3 preview-trigger buttons (got ' + proofTriggerCount + ')'
-      )
-    );
-    const proofImgs = enIndex.match(/<img[^>]*\/assets\/pdf-covers\/[^>]*>/g) || [];
-    const proofCardImgs = proofImgs.filter(function (img) {
-      return /-p\d+\.png/.test(img);
-    });
-    tally(
-      assert(
-        proofCardImgs.length >= 3 &&
-          proofCardImgs.every(function (img) {
-            return /\salt="[^"]+"/.test(img) && /loading="lazy"/.test(img) && /decoding="async"/.test(img);
-          }),
-        'en/index.html: pdf-proof-inside imgs have alt + loading=lazy + decoding=async (' + proofCardImgs.length + ' imgs)'
-      )
-    );
-    ['/assets/pdf-covers/advanced-p15.png',
-     '/assets/pdf-covers/advanced-p10.png',
-     '/assets/pdf-covers/beginner-p9.png'].forEach(function (rel) {
+    // --- DS v0.3.3 Phase D negative regression ---
+    // pdf-proof-inside (auto-rendered specimen above grid), pdf-guides-social
+    // (Joan/Lane/Emanuel testimonial cards), pdf-expert-* (DS v0.3.2 v2 row),
+    // and hero-sample-link (tertiary hero CTA) were removed per buyer feedback:
+    // no auto-loaded previews on the public landing — previews must require an
+    // explicit user click ("See inside" details on each PDF guide card or the
+    // <dialog id="pdfPreviewDialog"> modal). These checks block accidental
+    // reintroduction.
+    [
+      ['id="pdf-proof-inside"', 'pdf-proof-inside section'],
+      ['class="pdf-proof-inside', 'pdf-proof-inside class'],
+      ['class="pdf-guides-social', 'pdf-guides-social block'],
+      ['class="pdf-expert-card', 'pdf-expert-card class'],
+      ['class="pdf-expert-cards"', 'pdf-expert-cards grid'],
+      ['class="hero-sample-link"', 'hero-sample-link tertiary CTA'],
+      ['data-analytics="hero_see_sample"', 'hero_see_sample analytics hook'],
+      ['data-analytics="pdf_proof_preview_open"', 'pdf_proof_preview_open analytics hook'],
+    ].forEach(function (pair) {
       tally(
         assert(
-          fs.existsSync(path.join(ROOT, rel.replace(/^\//, ''))),
-          'pdf-proof-inside thumbnail exists: ' + rel
+          !enIndex.includes(pair[0]),
+          'en/index.html: DS v0.3.3 Phase D — ' + pair[1] + ' must not return (auto-preview pollution)'
         )
       );
     });
+    // sot.json must not contain proofInside / expertScenarios after Phase D
+    let phaseDSot = null;
+    try {
+      const sotRawPhaseD = fs.readFileSync(path.join(ROOT, 'config', 'sot.json'), 'utf8');
+      phaseDSot = JSON.parse(sotRawPhaseD);
+    } catch (_e) {
+      phaseDSot = null;
+    }
+    const phaseDPdfSection = (phaseDSot && phaseDSot.marketing && phaseDSot.marketing.pdfSection) || {};
     tally(
       assert(
-        /\.pdf-proof-inside__grid\s*\{[\s\S]{0,400}grid-template-columns:\s*repeat\(3,\s*1fr\)/.test(landingCss || ''),
-        'landing.css: .pdf-proof-inside__grid base rule keeps repeat(3, 1fr) (DS v0.2.7 baseline)'
+        phaseDPdfSection.proofInside === undefined,
+        'sot.json: DS v0.3.3 Phase D — marketing.pdfSection.proofInside removed'
       )
     );
     tally(
       assert(
-        /\.pdf-proof-inside__grid--hero\s*\{[\s\S]{0,200}grid-template-columns:\s*1fr/.test(landingCss || ''),
-        'landing.css: .pdf-proof-inside__grid--hero is single-column (DS v0.3.3 Phase C)'
+        phaseDPdfSection.expertScenarios === undefined,
+        'sot.json: DS v0.3.3 Phase D — marketing.pdfSection.expertScenarios removed'
       )
     );
-    tally(
-      assert(
-        /\.pdf-proof-inside__grid--rest\s*\{[\s\S]{0,200}grid-template-columns:\s*repeat\(2,\s*1fr\)/.test(landingCss || ''),
-        'landing.css: .pdf-proof-inside__grid--rest is 2-column for collapsed remainder (DS v0.3.3 Phase C)'
-      )
-    );
-    tally(
-      assert(
-        /\.pdf-proof-inside--with-hero\s*\{/.test(landingCss || ''),
-        'landing.css: .pdf-proof-inside--with-hero rule defined (DS v0.3.3 Phase C)'
-      )
-    );
-    tally(
-      assert(
-        /\.pdf-proof-inside__media\s*\{[\s\S]{0,400}aspect-ratio:\s*4\s*\/\s*5/.test(landingCss || ''),
-        'landing.css: .pdf-proof-inside__media uses aspect-ratio 4/5'
-      )
-    );
-    // After Phase C reorder, expert cards live ABOVE the grid (inside
-    // .pdf-guides-social--above-grid) but free-bridge still sits at the
-    // section tail; the relative ordering expert-cards -> free-bridge holds.
-    tally(
-      assert(
-        enIndex.includes('class="pdf-guides-free-bridge"') &&
-          enIndex.indexOf('class="pdf-expert-cards"') < enIndex.indexOf('class="pdf-guides-free-bridge"'),
-        'en/index.html: pdf-guides-free-bridge sits after pdf-expert-cards (Phase C: cards above grid, bridge at section tail)'
-      )
-    );
-    // Phase C: tertiary hero affordance — single-tap shortcut to specimen
-    tally(
-      assert(
-        enIndex.includes('class="hero-sample-link"') &&
-          enIndex.includes('href="#pdf-proof-inside"') &&
-          enIndex.includes('data-analytics="hero_see_sample"'),
-        'en/index.html: DS v0.3.3 Phase C — hero "See a sample page" tertiary link to #pdf-proof-inside'
-      )
-    );
-    tally(
-      assert(
-        /\.hero-sample-link\s*\{/.test(landingCss || ''),
-        'landing.css: .hero-sample-link rule defined (DS v0.3.3 Phase C)'
-      )
-    );
-    // Phase C: rename free-tier FAQ heading to disambiguate from Buyer FAQ
+    // Free prompt FAQ rename stays (clarity fix, distinct from removed previews):
+    // disambiguates the free-tier <h2> from the paid-tier <h3 id="pdf-guides-faq-title">Buyer FAQ</h3>.
     tally(
       assert(
         enIndex.includes('<h2 id="faq-title">Free prompt FAQ</h2>') &&
           !enIndex.includes('<h2 id="faq-title">Common questions before you start</h2>'),
-        'en/index.html: DS v0.3.3 Phase C — free-tier FAQ heading renamed to "Free prompt FAQ"'
-      )
-    );
-    // Phase C: SOT proofInside.items has exactly one featured: true entry
-    let phaseCSot = null;
-    try {
-      const sotRawPhaseC = fs.readFileSync(path.join(ROOT, 'config', 'sot.json'), 'utf8');
-      phaseCSot = JSON.parse(sotRawPhaseC);
-    } catch (_e) {
-      phaseCSot = null;
-    }
-    const proofInsideItems = (phaseCSot && phaseCSot.marketing && phaseCSot.marketing.pdfSection &&
-      phaseCSot.marketing.pdfSection.proofInside && phaseCSot.marketing.pdfSection.proofInside.items) || [];
-    const featuredItems = proofInsideItems.filter(function (it) { return it && it.featured === true; });
-    tally(
-      assert(
-        featuredItems.length === 1,
-        'sot.json: DS v0.3.3 Phase C — proofInside.items has exactly 1 featured entry (got ' + featuredItems.length + ')'
-      )
-    );
-    // Phase C: mobile cover cap (640px breakpoint) so each PDF card stops
-    // dominating ~1 viewport on phones.
-    tally(
-      assert(
-        /@media\s*\(max-width:\s*640px\)\s*\{[\s\S]{0,400}\.pdf-guide-card-cover\s*\{[\s\S]{0,200}max-width:\s*220px/.test(landingCss || ''),
-        'landing.css: DS v0.3.3 Phase C — .pdf-guide-card-cover capped at 220px on <=640px viewports'
+        'en/index.html: free-tier FAQ heading renamed to "Free prompt FAQ" to disambiguate from Buyer FAQ'
       )
     );
     tally(assert(enIndex.includes('id="workflow-overview"'), 'en/index.html workflow-overview section'));

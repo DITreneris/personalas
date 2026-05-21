@@ -1203,31 +1203,6 @@
             outline-offset: 2px;
         }
 
-        /* DS v0.3.3 Phase C: tertiary hero affordance — single-tap shortcut to
-         * #pdf-proof-inside specimen. Visually lighter than the secondary
-         * cta-button-outline (no border, no fill) so it reads as a hint, not
-         * a competing CTA. Inherits hero-on-dark colour palette. */
-        .hero-sample-link {
-            display: inline-flex;
-            align-items: center;
-            margin-top: var(--space-8);
-            padding: 8px 12px;
-            font-size: var(--fs-sm);
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.92);
-            text-decoration: underline;
-            text-underline-offset: 3px;
-            border-radius: var(--r-xs);
-            min-height: 44px;
-        }
-        .hero-sample-link:hover {
-            color: #ffffff;
-        }
-        .hero-sample-link:focus-visible {
-            outline: var(--ring-focus-on-dark);
-            outline-offset: 2px;
-        }
-
         .free-tier-section-title {
             font-size: var(--fs-2xl);
             font-weight: 800;
@@ -2052,24 +2027,6 @@
             outline: var(--ring-focus);
             outline-offset: 2px;
         }
-        .pdf-guides-social {
-            margin-top: var(--space-24);
-            padding-top: var(--space-20);
-            border-top: 1px solid var(--border-subtle);
-        }
-        /* DS v0.3.3 Phase C: when social proof sits ABOVE pdf-guides-grid
-         * (specimen-first journey), the top border + heavy spacing reads as a
-         * footer separator and breaks the visual flow into the buy cards.
-         * Override to a lighter rhythm + bottom border so it still functions
-         * as a section divider, but the grid below feels like a continuation. */
-        .pdf-guides-social--above-grid {
-            margin-top: var(--space-20);
-            padding-top: 0;
-            padding-bottom: var(--space-20);
-            border-top: 0;
-            border-bottom: 1px solid var(--border-subtle);
-            margin-bottom: var(--space-20);
-        }
         .pdf-guides-after-purchase {
             margin-top: var(--space-20);
             padding-top: var(--space-16);
@@ -2099,16 +2056,6 @@
         .pdf-guide-card-inner { display: flex; flex-direction: column; gap: 10px; height: 100%; }
         .pdf-guide-card-cover { margin: 0; border-radius: var(--r-sm); overflow: hidden; border: 1px solid var(--border-subtle); }
         .pdf-guide-card-cover img { display: block; width: 100%; height: auto; }
-        /* DS v0.3.3 Phase C: cap PDF cover thumbnail on small viewports so a
-         * single card stops dominating ~1 viewport on phones. Specimen +
-         * social proof now sit ABOVE the grid; we want the grid to stay
-         * compact and CTA-forward, not gallery-heavy. */
-        @media (max-width: 640px) {
-            .pdf-guide-card-cover {
-                max-width: 220px;
-                margin-inline: auto;
-            }
-        }
         .pdf-guide-specs { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: var(--fs-sm); color: var(--text-light); margin: 0; padding: 0; list-style: none; }
         .pdf-guide-specs li { margin: 0; }
         .pdf-guide-toc { font-size: var(--fs-sm); color: var(--text-light); }
@@ -2118,303 +2065,6 @@
         .pdf-guide-license, .pdf-guide-refund, .pdf-guide-promise { font-size: var(--fs-sm); color: var(--text-light); margin: 0; }
         .pdf-guide-trust { display: flex; flex-wrap: wrap; gap: 8px; font-size: var(--fs-xs); color: var(--text-light); margin: 0; }
         .pdf-guide-price-row { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
-        /* PDF expert scenarios: 3-card row replacing the single pilot blockquote.
-         * Elevation ladder (DS v0.2.1 §6.3) — soft / medium / raised — gives a
-         * subtle visual rhythm without changing copy hierarchy. Order-driven
-         * modifiers come from buildExpertCardsHtml() in scripts/build-locale-pages.js. */
-        .pdf-expert-scenarios-title {
-            margin: 0 0 var(--space-8);
-            font-size: var(--fs-lg);
-            color: var(--text);
-        }
-        .pdf-expert-scenarios-disclaimer {
-            margin: 0 0 var(--space-16);
-        }
-        .pdf-expert-cards {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: var(--space-16);
-            margin: var(--space-16) 0 0;
-            padding: 0;
-            list-style: none;
-            align-items: stretch;
-        }
-        .pdf-expert-card {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-12);
-            padding: var(--space-20);
-            background: var(--surface-1);
-            border: var(--border-width) solid var(--border-subtle);
-            border-radius: var(--r-card);
-            transition:
-                box-shadow var(--duration-normal) var(--ease-out),
-                transform var(--duration-fast) var(--ease-out);
-        }
-        .pdf-expert-card--elev-soft { box-shadow: var(--shadow-soft); }
-        .pdf-expert-card--elev-medium { box-shadow: var(--shadow-medium); }
-        .pdf-expert-card--elev-raised { box-shadow: var(--shadow-elevated); }
-        .pdf-expert-card--elev-soft:hover { box-shadow: var(--shadow-medium); }
-        .pdf-expert-card--elev-medium:hover { box-shadow: var(--shadow-elevated); }
-        .pdf-expert-card--elev-raised:hover { box-shadow: var(--shadow-elevated); }
-        .pdf-expert-card:hover {
-            transform: translateY(var(--lift-sm));
-        }
-        .pdf-expert-card__approach {
-            margin: 0;
-            font-size: var(--fs-xs);
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            color: var(--accent-dark);
-        }
-        .pdf-expert-card__quote {
-            margin: 0;
-            padding: 0;
-            border: none;
-            font-size: var(--fs-sm);
-            line-height: var(--leading-relaxed);
-            color: var(--text);
-        }
-        .pdf-expert-card__meta {
-            margin-top: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-        .pdf-expert-card__meta strong {
-            color: var(--text);
-            font-size: var(--fs-sm);
-        }
-        .pdf-expert-card__meta span {
-            color: var(--text-muted);
-            font-size: var(--fs-xs);
-        }
-        .pdf-expert-card__header {
-            display: flex;
-            align-items: center;
-            gap: var(--space-12);
-        }
-        .pdf-expert-card__avatar {
-            flex: 0 0 auto;
-            width: 36px;
-            height: 36px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: var(--r-pill);
-            background: var(--accent-dark);
-            color: var(--surface-1);
-            font-size: var(--fs-xs);
-            font-weight: 700;
-            letter-spacing: 0.04em;
-            box-shadow: var(--shadow-soft), var(--shadow-inset-hi);
-            border: 1px solid var(--accent-gold);
-        }
-        .pdf-expert-card__outcome {
-            margin: 0;
-            padding: var(--space-8) var(--space-12);
-            background: var(--surface-2);
-            border-left: 3px solid var(--accent-gold);
-            border-radius: var(--r-xs);
-            font-size: var(--fs-xs);
-            color: var(--text);
-        }
-        .pdf-expert-card__outcome strong {
-            color: var(--accent-dark);
-            margin-right: 4px;
-        }
-        .pdf-guides-social__header {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-8);
-            margin-bottom: var(--space-16);
-        }
-        .pdf-guides-social__badge {
-            align-self: flex-start;
-            padding: 2px var(--space-12);
-            background: var(--surface-2);
-            color: var(--accent-dark);
-            border-radius: var(--r-pill);
-            font-size: var(--fs-xs);
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-        }
-        .pdf-proof-inside {
-            margin-top: var(--space-32);
-            padding: var(--space-24) 0;
-            border-top: 1px solid var(--border-subtle);
-        }
-        /* DS v0.3.3 Phase C: --with-hero variant promotes proofInside above the
-         * pdf-guides-grid (specimen-first journey). Hero card renders single
-         * column at full width; the remaining items collapse into a <details>
-         * pane below so the "more samples" affordance does not steal vertical
-         * real estate from the buy cards. */
-        .pdf-proof-inside--with-hero {
-            margin-top: 0;
-            border-top: 0;
-            padding-top: var(--space-12);
-        }
-        .pdf-proof-inside__header {
-            margin: 0 0 var(--space-20);
-        }
-        .pdf-proof-inside__title {
-            margin: 0;
-            font-size: var(--fs-xl);
-            color: var(--text);
-        }
-        .pdf-proof-inside__lede {
-            margin: var(--space-8) 0 0;
-            color: var(--text-muted);
-        }
-        .pdf-proof-inside__grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: var(--space-16);
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .pdf-proof-inside__grid--hero {
-            grid-template-columns: 1fr;
-            margin-bottom: var(--space-16);
-        }
-        .pdf-proof-inside__grid--rest {
-            grid-template-columns: repeat(2, 1fr);
-            margin-top: var(--space-12);
-        }
-        .pdf-proof-inside__more-details {
-            margin-top: var(--space-8);
-            font-size: var(--fs-sm);
-            color: var(--text-light);
-        }
-        .pdf-proof-inside__more-summary {
-            cursor: pointer;
-            font-weight: 600;
-            color: var(--brand-prompt-anatomy);
-            list-style: none;
-            min-height: 44px;
-            display: inline-flex;
-            align-items: center;
-            padding: 8px 0;
-        }
-        .pdf-proof-inside__more-summary::-webkit-details-marker { display: none; }
-        .pdf-proof-inside__more-summary::before {
-            content: "▶";
-            display: inline-block;
-            margin-right: 8px;
-            transition: transform var(--duration-fast) var(--ease-out);
-            color: var(--text-light);
-            font-size: 0.7em;
-        }
-        .pdf-proof-inside__more-details[open] > .pdf-proof-inside__more-summary::before { transform: rotate(90deg); }
-        .pdf-proof-inside__more-summary:focus-visible {
-            outline: var(--ring-focus);
-            outline-offset: 2px;
-            border-radius: var(--r-xs);
-        }
-        /* Hero specimen card: full-width feature thumbnail before .pdf-guides-grid.
-         * On wide viewports (>=720px) we put media + body side-by-side so the
-         * card stays compact while reading like a real product page; on narrow
-         * viewports it stacks vertically. */
-        .pdf-proof-inside__card--hero {
-            box-shadow: var(--shadow-medium);
-        }
-        @media (min-width: 720px) {
-            .pdf-proof-inside__card--hero {
-                flex-direction: row;
-            }
-            .pdf-proof-inside__card--hero .pdf-proof-inside__media {
-                flex: 0 0 45%;
-                aspect-ratio: 4 / 5;
-                max-width: 360px;
-            }
-            .pdf-proof-inside__card--hero .pdf-proof-inside__body {
-                flex: 1 1 auto;
-                justify-content: center;
-                gap: var(--space-12);
-            }
-            .pdf-proof-inside__card--hero .pdf-proof-inside__label {
-                font-size: var(--fs-lg);
-            }
-        }
-        .pdf-proof-inside__card {
-            display: flex;
-            flex-direction: column;
-            background: var(--surface-1);
-            border: var(--border-width) solid var(--border-subtle);
-            border-radius: var(--r-card);
-            overflow: hidden;
-            box-shadow: var(--shadow-soft);
-            transition:
-                box-shadow var(--duration-normal) var(--ease-out),
-                transform var(--duration-fast) var(--ease-out);
-        }
-        .pdf-proof-inside__card:hover {
-            box-shadow: var(--shadow-medium);
-            transform: translateY(var(--lift-sm));
-        }
-        .pdf-proof-inside__media {
-            position: relative;
-            display: block;
-            width: 100%;
-            aspect-ratio: 4 / 5;
-            overflow: hidden;
-            border: 0;
-            padding: 0;
-            background: var(--surface-2);
-            cursor: pointer;
-        }
-        .pdf-proof-inside__media img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: top center;
-            transition: transform var(--duration-slow) var(--ease-out);
-        }
-        .pdf-proof-inside__media:hover img {
-            transform: scale(1.04);
-        }
-        .pdf-proof-inside__media:focus-visible {
-            outline: var(--ring-focus);
-            outline-offset: 2px;
-        }
-        .pdf-proof-inside__media-overlay {
-            position: absolute;
-            inset: auto 0 0 0;
-            padding: var(--space-12);
-            background: linear-gradient(180deg, transparent, rgba(11, 19, 32, 0.85));
-            color: var(--surface-1);
-            font-size: var(--fs-sm);
-            font-weight: 600;
-            text-align: right;
-        }
-        .pdf-proof-inside__body {
-            padding: var(--space-16);
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-8);
-        }
-        .pdf-proof-inside__guide-ref {
-            margin: 0;
-            font-size: var(--fs-xs);
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            color: var(--accent-dark);
-            font-weight: 700;
-        }
-        .pdf-proof-inside__label {
-            margin: 0;
-            font-size: var(--fs-md);
-            color: var(--text);
-        }
-        .pdf-proof-inside__blurb {
-            margin: 0;
-            font-size: var(--fs-sm);
-            color: var(--text-muted);
-            line-height: var(--leading-relaxed);
-        }
         .pdf-author-panel { margin-top: var(--space-20); padding: 16px; border-top: 1px solid var(--border-subtle); font-size: var(--fs-sm); color: var(--text-light); }
         .pdf-guides-faq { margin-top: var(--space-24); }
         .pdf-guides-faq h3 { margin: 0 0 12px; font-size: var(--fs-xl); }
@@ -2945,14 +2595,6 @@
                 right: 20px;
                 bottom: 20px;
             }
-
-            .pdf-expert-cards {
-                grid-template-columns: 1fr;
-            }
-
-            .pdf-proof-inside__grid {
-                grid-template-columns: 1fr;
-            }
         }
 
         @media (max-width: 480px) {
@@ -3036,10 +2678,6 @@
                 left: 12px;
                 right: 12px;
                 bottom: 16px;
-            }
-
-            .pdf-expert-card {
-                padding: var(--space-16);
             }
 
             .faq,
@@ -3183,9 +2821,6 @@
             }
             *:hover,
             *:focus-visible {
-                transform: none !important;
-            }
-            .pdf-proof-inside__media:hover img {
                 transform: none !important;
             }
         }
