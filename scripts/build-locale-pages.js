@@ -322,7 +322,16 @@ function validateProofInside(pdfSection) {
     if (!fs.existsSync(thumbAbs)) {
       throw new Error('config/sot.json: proofInside.items[' + idx + '].thumbnail file not found on disk: ' + item.thumbnail);
     }
+    if (item.featured !== undefined && typeof item.featured !== 'boolean') {
+      throw new Error('config/sot.json: proofInside.items[' + idx + '].featured must be boolean if present');
+    }
   });
+  // DS v0.3.3 Phase C: exactly one featured item required (rendered as hero
+  // above pdf-guides-grid; remaining items collapse into <details> below).
+  const featuredCount = pi.items.filter(function (item) { return item.featured === true; }).length;
+  if (featuredCount !== 1) {
+    throw new Error('config/sot.json: proofInside.items must contain exactly one entry with featured: true (got ' + featuredCount + ') (DS v0.3.3 Phase C: hero specimen)');
+  }
 }
 
 function getSeoMetaDescription(sot) {
@@ -483,11 +492,43 @@ function buildExpertCardsHtml(sot) {
 }
 
 /**
- * Render the "What's inside the paid PDFs" 3-card grid that sits between
- * .pdf-guides-grid and #pdf-guides-faq. Each card's <button data-preview-trigger>
- * reuses the existing pdfPreviewDialog wired in generator.js initPdfPreviewDialog
- * — no new JS needed; analytics events flow through the [data-analytics] listener.
+ * DS v0.3.3 Phase C: render "What's inside the paid PDFs" with a hero
+ * specimen + collapsed secondary specimens. The featured item (exactly one
+ * per validateProofInside) renders as a large card above .pdf-guides-grid.
+ * Remaining items collapse into <details class="pdf-proof-inside__more-details">
+ * so vartotojas immediately sees a real page without scrolling past 2 buy
+ * cards + bundle (previous structure: 3-card grid below the buy stack).
+ *
+ * Each card's <button data-preview-trigger> still reuses the existing
+ * pdfPreviewDialog wired in generator.js initPdfPreviewDialog — no new JS.
  */
+function renderProofCard(item, modifier) {
+  const label = escapeHtmlText(item.label);
+  const blurb = escapeHtmlText(item.blurb);
+  const thumb = escapeHtmlText(item.thumbnail);
+  const thumbAlt = escapeHtmlText(item.thumbnailAlt);
+  const trigger = escapeHtmlText(item.previewTrigger);
+  const guideRef = escapeHtmlText(item.guideRef);
+  const ariaLabel = escapeHtmlText('Preview ' + item.label + ' sample pages');
+  const cls = 'pdf-proof-inside__card' + (modifier ? ' ' + modifier : '');
+  return (
+    '<li class="' + cls + '">' +
+      '<button type="button" class="pdf-proof-inside__media"' +
+        ' data-preview-trigger="' + trigger + '"' +
+        ' data-analytics="pdf_proof_preview_open"' +
+        ' aria-label="' + ariaLabel + '">' +
+        '<img src="' + thumb + '" alt="' + thumbAlt + '" loading="lazy" decoding="async" />' +
+        '<span class="pdf-proof-inside__media-overlay" aria-hidden="true">Preview pages &rarr;</span>' +
+      '</button>' +
+      '<div class="pdf-proof-inside__body">' +
+        '<p class="pdf-proof-inside__guide-ref">' + guideRef + '</p>' +
+        '<h4 class="pdf-proof-inside__label">' + label + '</h4>' +
+        '<p class="pdf-proof-inside__blurb">' + blurb + '</p>' +
+      '</div>' +
+    '</li>'
+  );
+}
+
 function buildProofInsideHtml(sot) {
   const pi =
     sot && sot.marketing && sot.marketing.pdfSection &&
@@ -495,40 +536,29 @@ function buildProofInsideHtml(sot) {
   if (!pi || !Array.isArray(pi.items) || !pi.items.length) return '';
   const title = escapeHtmlText(pi.title);
   const lede = escapeHtmlText(pi.lede);
-  const cards = pi.items
-    .map(function (item) {
-      const label = escapeHtmlText(item.label);
-      const blurb = escapeHtmlText(item.blurb);
-      const thumb = escapeHtmlText(item.thumbnail);
-      const thumbAlt = escapeHtmlText(item.thumbnailAlt);
-      const trigger = escapeHtmlText(item.previewTrigger);
-      const guideRef = escapeHtmlText(item.guideRef);
-      const ariaLabel = escapeHtmlText('Preview ' + item.label + ' sample pages');
-      return (
-        '<li class="pdf-proof-inside__card">' +
-          '<button type="button" class="pdf-proof-inside__media"' +
-            ' data-preview-trigger="' + trigger + '"' +
-            ' data-analytics="pdf_proof_preview_open"' +
-            ' aria-label="' + ariaLabel + '">' +
-            '<img src="' + thumb + '" alt="' + thumbAlt + '" loading="lazy" decoding="async" />' +
-            '<span class="pdf-proof-inside__media-overlay" aria-hidden="true">Preview pages &rarr;</span>' +
-          '</button>' +
-          '<div class="pdf-proof-inside__body">' +
-            '<p class="pdf-proof-inside__guide-ref">' + guideRef + '</p>' +
-            '<h4 class="pdf-proof-inside__label">' + label + '</h4>' +
-            '<p class="pdf-proof-inside__blurb">' + blurb + '</p>' +
-          '</div>' +
-        '</li>'
-      );
-    })
-    .join('');
+  const heroItem = pi.items.find(function (it) { return it.featured === true; });
+  const restItems = pi.items.filter(function (it) { return it.featured !== true; });
+  const heroHtml = heroItem
+    ? '<ul class="pdf-proof-inside__grid pdf-proof-inside__grid--hero" role="list">' +
+        renderProofCard(heroItem, 'pdf-proof-inside__card--hero') +
+      '</ul>'
+    : '';
+  const restHtml = restItems.length
+    ? '<details class="pdf-proof-inside__more-details">' +
+        '<summary class="pdf-proof-inside__more-summary">See ' + restItems.length + ' more sample pages</summary>' +
+        '<ul class="pdf-proof-inside__grid pdf-proof-inside__grid--rest" role="list">' +
+          restItems.map(function (it) { return renderProofCard(it, ''); }).join('') +
+        '</ul>' +
+      '</details>'
+    : '';
   return (
-    '<section class="pdf-proof-inside" id="pdf-proof-inside" aria-labelledby="pdf-proof-inside-title">' +
+    '<section class="pdf-proof-inside pdf-proof-inside--with-hero" id="pdf-proof-inside" aria-labelledby="pdf-proof-inside-title">' +
       '<header class="pdf-proof-inside__header">' +
         '<h3 id="pdf-proof-inside-title" class="pdf-proof-inside__title">' + title + '</h3>' +
         '<p class="pdf-proof-inside__lede">' + lede + '</p>' +
       '</header>' +
-      '<ul class="pdf-proof-inside__grid" role="list">' + cards + '</ul>' +
+      heroHtml +
+      restHtml +
     '</section>'
   );
 }
@@ -1568,7 +1598,10 @@ const EN_REPLACEMENTS = [
     'Copy → paste → replace [brackets] with your data.',
   ],
   ['<section class="faq" lang="lt" aria-labelledby="faq-title">', '<section class="faq" lang="en" aria-labelledby="faq-title">'],
-  ['Dažni klausimai prieš pradedant', 'Common questions before you start'],
+  // DS v0.3.3 Phase C: rename free-tier FAQ heading from generic "Common questions"
+  // to scoped "Free prompt FAQ" so it doesn't collide with #pdf-guides-faq Buyer FAQ
+  // in the user's mental model.
+  ['Dažni klausimai prieš pradedant', 'Free prompt FAQ'],
   ['Trumpi atsakymai prieš kopijuojant pirmąjį promptą.', 'Short notes before you copy the first prompt.'],
   ['Ar būtina eiti visas 6 fazes iš eilės?', 'Do I have to go through all 6 phases in order?'],
   ['Ar tai klausimynas ar kandidatų valdymo sistema (ATS)?', 'Is this an ATS or recruiting tool?'],

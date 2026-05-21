@@ -344,14 +344,47 @@ function run() {
         'landing.css: .pdf-guides-social__badge uses --r-pill'
       )
     );
-    // --- PDF proof-inside (C): 3 product-proof cards between grid and FAQ ---
-    const proofPos = enIndex.indexOf('class="pdf-proof-inside"');
+    // --- PDF proof-inside (C): hero specimen ABOVE grid (DS v0.3.3 Phase C) ---
+    // Phase C inverted the section flow: pdf-proof-inside (1 hero + collapsed
+    // rest) and pdf-guides-social (workflow scenarios) now sit BEFORE
+    // pdf-guides-grid so vartotojas mato real product page + social proof
+    // before being asked to buy. Buyer FAQ stays after grid as risk-reversal.
+    const proofPos = enIndex.indexOf('id="pdf-proof-inside"');
+    const socialPos = enIndex.indexOf('class="pdf-guides-social pdf-guides-social--above-grid"');
     const gridPos = enIndex.indexOf('class="pdf-guides-grid"');
     const faqPos = enIndex.indexOf('id="pdf-guides-faq"');
     tally(
       assert(
-        proofPos !== -1 && gridPos !== -1 && faqPos !== -1 && proofPos > gridPos && proofPos < faqPos,
-        'en/index.html: pdf-proof-inside section between pdf-guides-grid and pdf-guides-faq'
+        proofPos !== -1 && gridPos !== -1 && faqPos !== -1 &&
+          proofPos < gridPos && gridPos < faqPos,
+        'en/index.html: DS v0.3.3 Phase C — pdf-proof-inside BEFORE pdf-guides-grid; buyer FAQ AFTER grid'
+      )
+    );
+    tally(
+      assert(
+        socialPos !== -1 && proofPos < socialPos && socialPos < gridPos,
+        'en/index.html: DS v0.3.3 Phase C — pdf-guides-social--above-grid sits between proof and grid'
+      )
+    );
+    tally(
+      assert(
+        enIndex.includes('class="pdf-proof-inside pdf-proof-inside--with-hero"'),
+        'en/index.html: DS v0.3.3 Phase C — proofInside uses --with-hero variant'
+      )
+    );
+    const heroProofCardCount =
+      (enIndex.match(/class="pdf-proof-inside__card pdf-proof-inside__card--hero"/g) || []).length;
+    tally(
+      assert(
+        heroProofCardCount === 1,
+        'en/index.html: DS v0.3.3 Phase C — exactly one hero proof card (got ' + heroProofCardCount + ')'
+      )
+    );
+    tally(
+      assert(
+        enIndex.includes('class="pdf-proof-inside__more-details"') &&
+          enIndex.includes('class="pdf-proof-inside__more-summary"'),
+        'en/index.html: DS v0.3.3 Phase C — secondary proof items collapse into <details>'
       )
     );
     const proofTriggerCount =
@@ -388,7 +421,25 @@ function run() {
     tally(
       assert(
         /\.pdf-proof-inside__grid\s*\{[\s\S]{0,400}grid-template-columns:\s*repeat\(3,\s*1fr\)/.test(landingCss || ''),
-        'landing.css: .pdf-proof-inside__grid uses repeat(3, 1fr)'
+        'landing.css: .pdf-proof-inside__grid base rule keeps repeat(3, 1fr) (DS v0.2.7 baseline)'
+      )
+    );
+    tally(
+      assert(
+        /\.pdf-proof-inside__grid--hero\s*\{[\s\S]{0,200}grid-template-columns:\s*1fr/.test(landingCss || ''),
+        'landing.css: .pdf-proof-inside__grid--hero is single-column (DS v0.3.3 Phase C)'
+      )
+    );
+    tally(
+      assert(
+        /\.pdf-proof-inside__grid--rest\s*\{[\s\S]{0,200}grid-template-columns:\s*repeat\(2,\s*1fr\)/.test(landingCss || ''),
+        'landing.css: .pdf-proof-inside__grid--rest is 2-column for collapsed remainder (DS v0.3.3 Phase C)'
+      )
+    );
+    tally(
+      assert(
+        /\.pdf-proof-inside--with-hero\s*\{/.test(landingCss || ''),
+        'landing.css: .pdf-proof-inside--with-hero rule defined (DS v0.3.3 Phase C)'
       )
     );
     tally(
@@ -397,11 +448,62 @@ function run() {
         'landing.css: .pdf-proof-inside__media uses aspect-ratio 4/5'
       )
     );
+    // After Phase C reorder, expert cards live ABOVE the grid (inside
+    // .pdf-guides-social--above-grid) but free-bridge still sits at the
+    // section tail; the relative ordering expert-cards -> free-bridge holds.
     tally(
       assert(
         enIndex.includes('class="pdf-guides-free-bridge"') &&
           enIndex.indexOf('class="pdf-expert-cards"') < enIndex.indexOf('class="pdf-guides-free-bridge"'),
-        'en/index.html: pdf-guides-free-bridge still sits after expert cards'
+        'en/index.html: pdf-guides-free-bridge sits after pdf-expert-cards (Phase C: cards above grid, bridge at section tail)'
+      )
+    );
+    // Phase C: tertiary hero affordance — single-tap shortcut to specimen
+    tally(
+      assert(
+        enIndex.includes('class="hero-sample-link"') &&
+          enIndex.includes('href="#pdf-proof-inside"') &&
+          enIndex.includes('data-analytics="hero_see_sample"'),
+        'en/index.html: DS v0.3.3 Phase C — hero "See a sample page" tertiary link to #pdf-proof-inside'
+      )
+    );
+    tally(
+      assert(
+        /\.hero-sample-link\s*\{/.test(landingCss || ''),
+        'landing.css: .hero-sample-link rule defined (DS v0.3.3 Phase C)'
+      )
+    );
+    // Phase C: rename free-tier FAQ heading to disambiguate from Buyer FAQ
+    tally(
+      assert(
+        enIndex.includes('<h2 id="faq-title">Free prompt FAQ</h2>') &&
+          !enIndex.includes('<h2 id="faq-title">Common questions before you start</h2>'),
+        'en/index.html: DS v0.3.3 Phase C — free-tier FAQ heading renamed to "Free prompt FAQ"'
+      )
+    );
+    // Phase C: SOT proofInside.items has exactly one featured: true entry
+    let phaseCSot = null;
+    try {
+      const sotRawPhaseC = fs.readFileSync(path.join(ROOT, 'config', 'sot.json'), 'utf8');
+      phaseCSot = JSON.parse(sotRawPhaseC);
+    } catch (_e) {
+      phaseCSot = null;
+    }
+    const proofInsideItems = (phaseCSot && phaseCSot.marketing && phaseCSot.marketing.pdfSection &&
+      phaseCSot.marketing.pdfSection.proofInside && phaseCSot.marketing.pdfSection.proofInside.items) || [];
+    const featuredItems = proofInsideItems.filter(function (it) { return it && it.featured === true; });
+    tally(
+      assert(
+        featuredItems.length === 1,
+        'sot.json: DS v0.3.3 Phase C — proofInside.items has exactly 1 featured entry (got ' + featuredItems.length + ')'
+      )
+    );
+    // Phase C: mobile cover cap (640px breakpoint) so each PDF card stops
+    // dominating ~1 viewport on phones.
+    tally(
+      assert(
+        /@media\s*\(max-width:\s*640px\)\s*\{[\s\S]{0,400}\.pdf-guide-card-cover\s*\{[\s\S]{0,200}max-width:\s*220px/.test(landingCss || ''),
+        'landing.css: DS v0.3.3 Phase C — .pdf-guide-card-cover capped at 220px on <=640px viewports'
       )
     );
     tally(assert(enIndex.includes('id="workflow-overview"'), 'en/index.html workflow-overview section'));
@@ -451,10 +553,50 @@ function run() {
         'landing.css: pdf-guide-card rest elevation shadow-soft (DS v0.2.1)'
       )
     );
+    // DS v0.3.3 Phase B: legacy <button class="pdf-guide-preview-btn"> was
+    // replaced by the merged .pdf-see-inside affordance. Validate the new
+    // structure is rendered (one details per guide card, with thumbs ul +
+    // chapters list + open-all escalation link).
     tally(
       assert(
-        enIndex.includes('class="btn btn--ghost pdf-guide-preview-btn"'),
-        'en/index.html: PDF preview buttons use btn--ghost'
+        enIndex.includes('data-see-inside="beginner"') &&
+          enIndex.includes('data-see-inside="advanced"'),
+        'en/index.html: per-card "See inside" details for both guides (DS v0.3.3 Phase B)'
+      )
+    );
+    tally(
+      assert(
+        enIndex.includes('data-see-inside-thumbs="beginner"') &&
+          enIndex.includes('data-see-inside-thumbs="advanced"') &&
+          enIndex.includes('data-toc-list="beginner"') &&
+          enIndex.includes('data-toc-list="advanced"'),
+        'en/index.html: See inside contains thumbs ul + chapter ol per guide (DS v0.3.3 Phase B)'
+      )
+    );
+    tally(
+      assert(
+        (enIndex.match(/class="pdf-see-inside__open-all"[^>]*data-preview-trigger="(beginner|advanced)"/g) || []).length === 2,
+        'en/index.html: each See inside has 1 "Open all pages" preview-trigger link (DS v0.3.3 Phase B)'
+      )
+    );
+    tally(
+      assert(
+        !enIndex.includes('pdf-guide-preview-btn'),
+        'en/index.html: legacy pdf-guide-preview-btn removed (DS v0.3.3 Phase B)'
+      )
+    );
+    // Per-card pdf-guide-highlights are removed in Phase B; bundle keeps its
+    // own highlights list (#pdf-bundle-offer). Assert exactly one occurrence
+    // remains and it is the bundle one.
+    const highlightsCount =
+      (enIndex.match(/class="pdf-guide-highlights"/g) || []).length;
+    tally(
+      assert(
+        highlightsCount === 1 &&
+          enIndex.includes('data-guide-highlights="bundle"'),
+        'en/index.html: pdf-guide-highlights only on bundle (DS v0.3.3 Phase B; got ' +
+          highlightsCount +
+          ' total)'
       )
     );
     const sharedCss = fs.readFileSync(path.join(ROOT, 'assets/styles.css'), 'utf8');

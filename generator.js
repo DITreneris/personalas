@@ -467,20 +467,53 @@
             .replace(/"/g, '&quot;');
     }
 
-    function initPdfGuideTocs(config) {
+    /**
+     * DS v0.3.3 Phase B: single "See inside" affordance per PDF guide card.
+     * Replaces the legacy split between initPdfGuideTocs (chapters) and
+     * initPdfGuideHighlights (3 bullet list). Populates, in one pass per card:
+     *   - [data-see-inside-thumbs] : N thumbnail <button>s, each one a
+     *     [data-preview-trigger] that delegates to the existing modal preview
+     *     dialog (initPdfPreviewDialog binds these via querySelectorAll, so
+     *     this function MUST run BEFORE initPdfPreviewDialog in init()).
+     *   - [data-toc-list]          : chapter <li>s
+     *   - [data-see-inside-meta]   : "{N} pages + {M} chapters" summary text
+     */
+    function initPdfSeeInside(config) {
         if (!config || !config.pdfGuides || typeof config.pdfGuides !== 'object') return;
-        Object.keys(config.pdfGuides).forEach(function(key) {
+        document.querySelectorAll('[data-see-inside]').forEach(function(root) {
+            var key = root.getAttribute('data-see-inside');
             var def = config.pdfGuides[key];
-            if (!def || !Array.isArray(def.chapters)) return;
-            var list = document.querySelector('[data-toc-list="' + key + '"]');
-            var countEl = document.querySelector('[data-toc-count="' + key + '"]');
-            if (countEl) countEl.textContent = def.chapters.length + ' sections';
-            if (!list) return;
-            var html = '';
-            for (var i = 0; i < def.chapters.length; i += 1) {
-                html += '<li>' + escapeHtmlText(def.chapters[i]) + '</li>';
+            if (!def) return;
+            var thumbsEl = root.querySelector('[data-see-inside-thumbs="' + key + '"]');
+            var pages = Array.isArray(def.previewPages) ? def.previewPages : [];
+            if (thumbsEl) {
+                var thumbsHtml = '';
+                for (var i = 0; i < pages.length; i += 1) {
+                    var pageNum = pages[i];
+                    var altText = escapeHtmlText((def.title || key) + ' sample page ' + pageNum);
+                    var ariaText = escapeHtmlText('Preview sample page ' + pageNum);
+                    thumbsHtml += '<li><button type="button" class="pdf-see-inside__thumb" data-preview-trigger="' + escapeHtmlText(key) + '" data-analytics="pdf_preview_open" aria-label="' + ariaText + '">'
+                        + '<img src="/assets/pdf-covers/' + escapeHtmlText(key) + '-p' + pageNum + '.png" alt="' + altText + '" loading="lazy" decoding="async" width="734" height="950">'
+                        + '<span class="pdf-see-inside__thumb-label" aria-hidden="true">p.' + pageNum + '</span>'
+                        + '</button></li>';
+                }
+                thumbsEl.innerHTML = thumbsHtml;
             }
-            list.innerHTML = html;
+            var chapters = Array.isArray(def.chapters) ? def.chapters : [];
+            var listEl = root.querySelector('[data-toc-list="' + key + '"]');
+            if (listEl) {
+                var chaptersHtml = '';
+                for (var j = 0; j < chapters.length; j += 1) {
+                    chaptersHtml += '<li>' + escapeHtmlText(chapters[j]) + '</li>';
+                }
+                listEl.innerHTML = chaptersHtml;
+            }
+            var metaEl = root.querySelector('[data-see-inside-meta="' + key + '"]');
+            if (metaEl) {
+                metaEl.textContent = pages.length + ' pages + ' + chapters.length + ' chapters';
+            }
+            var countEl = document.querySelector('[data-toc-count="' + key + '"]');
+            if (countEl) countEl.textContent = chapters.length + ' sections';
         });
     }
 
@@ -512,6 +545,12 @@
         }
     }
 
+    /**
+     * DS v0.3.3 Phase B legacy support: bundle highlights live in a separate
+     * <ul data-guide-highlights="bundle"> outside the per-guide card flow
+     * (see #pdf-bundle-offer). Per-guide highlights (beginner/advanced) were
+     * removed in Phase B in favour of the merged "See inside" affordance.
+     */
     function initPdfGuideHighlights(config) {
         if (!config || !config.pdfGuides) return;
         document.querySelectorAll('[data-guide-highlights]').forEach(function(list) {
@@ -684,7 +723,7 @@
         if (!document.getElementById('pdf-guides')) {
             return Promise.resolve(null);
         }
-        return fetch('config/sot.json', { cache: 'no-store' })
+        return fetch('/config/sot.json', { cache: 'no-store' })
             .then(function(res) {
                 if (!res.ok) throw new Error('sot.json');
                 return res.json();
@@ -714,8 +753,12 @@
 
         loadSotConfig().then(function(config) {
             applyPreviewPagesFromConfig(config);
+            // Phase B: render thumbnails + chapters BEFORE preview dialog binds.
+            // initPdfSeeInside creates new [data-preview-trigger] thumbnail buttons;
+            // initPdfPreviewDialog then binds click handlers via querySelectorAll
+            // on the (now complete) set of triggers.
+            initPdfSeeInside(config);
             initPdfPreviewDialog();
-            initPdfGuideTocs(config);
             initPdfGuideHighlights(config);
             initSamplePdfLinks(config);
             initStripeLinks(config);

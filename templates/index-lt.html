@@ -49,6 +49,7 @@
             <div class="header-cta">
                 <a href="{{SOT_HERO_PRIMARY_CTA_HREF}}" class="cta-button" aria-label="See the PDF guides">{{SOT_HERO_PRIMARY_CTA_LABEL}}</a>
                 <a href="{{SOT_HERO_SECONDARY_CTA_HREF}}" class="cta-button-outline">{{SOT_HERO_SECONDARY_CTA_LABEL}}</a>
+                <a href="#pdf-proof-inside" class="hero-sample-link" data-analytics="hero_see_sample">See a sample page →</a>
                 <p class="hero-lane-hint">{{SOT_HERO_LANE_HINT}}</p>
                 <div class="lt-only-qa-nav" role="navigation" aria-label="Vieša JAV versija (EN)">
                     <a href="en/" class="cta-button-outline header-us-product-link">JAV svetainė (EN)</a>
@@ -81,6 +82,21 @@
 
             <p class="pdf-guides-lede">{{SOT_PDF_SECTION_LEDE}}</p>
 
+            {{SOT_PDF_PROOF_INSIDE_HTML}}
+
+            <div class="pdf-guides-social pdf-guides-social--above-grid">
+
+                <header class="pdf-guides-social__header">
+                    <span class="pdf-guides-social__badge">{{SOT_PDF_EXPERT_SCENARIOS_BADGE}}</span>
+                    <h3 class="pdf-expert-scenarios-title">{{SOT_PDF_EXPERT_SCENARIOS_TITLE}}</h3>
+                </header>
+
+                <ul class="pdf-expert-cards" role="list" aria-label="Sample hiring workflows">{{SOT_PDF_EXPERT_CARDS_HTML}}</ul>
+
+                <p class="pdf-meta-muted pdf-expert-scenarios-disclaimer">{{SOT_PDF_EXPERT_SCENARIOS_DISCLAIMER}}</p>
+
+            </div>
+
             <div class="pdf-guides-grid">
 
                 <article class="pdf-guide-card">
@@ -99,21 +115,20 @@
 
                         <p class="pdf-guide-desc">Step-by-step walkthrough for HR generalists running their first structured US hiring loop.</p>
 
-                        <ul class="pdf-guide-highlights" data-guide-highlights="beginner" aria-label="Key contents"></ul>
-
-                        <details class="pdf-guide-toc-details">
-
-                            <summary class="pdf-guide-toc-summary"><strong>What’s inside</strong> <span data-toc-count="beginner">11 sections</span></summary>
-
-                            <ul data-toc-list="beginner"></ul>
-
+                        <details class="pdf-see-inside" data-see-inside="beginner">
+                            <summary class="pdf-see-inside__summary"><strong>See inside</strong> <span class="pdf-see-inside__meta" data-see-inside-meta="beginner"></span></summary>
+                            <div class="pdf-see-inside__body">
+                                <ul class="pdf-see-inside__thumbs" data-see-inside-thumbs="beginner" role="list" aria-label="Sample pages from inside the Beginner PDF"></ul>
+                                <p class="pdf-see-inside__open-all-row"><a class="pdf-see-inside__open-all" href="#pdf-guides" data-preview-trigger="beginner" data-analytics="pdf_preview_open">Open all pages in viewer →</a></p>
+                                <h4 class="pdf-see-inside__chapters-title">Chapters</h4>
+                                <ol class="pdf-see-inside__chapter-list" data-toc-list="beginner"></ol>
+                            </div>
                         </details>
 
                         <p class="pdf-guide-price-row"><span class="pdf-guide-price-old" aria-label="Was">$15.99</span><span class="pdf-guide-price-new">$5.99</span></p>
 
                         <div class="pdf-guide-actions-row">
                             <a class="pdf-guide-sample-link" href="/assets/samples/prompt-anatomy-hiring-kickoff-sample.pdf" data-sample-link="beginner" target="_blank" rel="noopener">Download 1-page sample (PDF)</a>
-                            <button type="button" class="btn btn--ghost pdf-guide-preview-btn" data-preview-trigger="beginner" data-analytics="pdf_preview_open">Preview sample pages</button>
                         </div>
 
                         <a class="pdf-guide-cta" href="https://buy.stripe.com/REPLACE_BEGINNER_PAYMENT_LINK" rel="noopener" data-product="beginner-pdf" data-analytics="pdf_cta_click" aria-label="Buy Beginner PDF Guide for $5.99">{{SOT_PDF_BEGINNER_CTA}}</a>
@@ -138,21 +153,20 @@
 
                         <p class="pdf-guide-desc">Senior-IC playbook with scorecards, calibration scripts, structured interview rubrics, and offer scenarios.</p>
 
-                        <ul class="pdf-guide-highlights" data-guide-highlights="advanced" aria-label="Key contents"></ul>
-
-                        <details class="pdf-guide-toc-details">
-
-                            <summary class="pdf-guide-toc-summary"><strong>What’s inside</strong> <span data-toc-count="advanced">23 sections</span></summary>
-
-                            <ul data-toc-list="advanced"></ul>
-
+                        <details class="pdf-see-inside" data-see-inside="advanced">
+                            <summary class="pdf-see-inside__summary"><strong>See inside</strong> <span class="pdf-see-inside__meta" data-see-inside-meta="advanced"></span></summary>
+                            <div class="pdf-see-inside__body">
+                                <ul class="pdf-see-inside__thumbs" data-see-inside-thumbs="advanced" role="list" aria-label="Sample pages from inside the Advanced PDF"></ul>
+                                <p class="pdf-see-inside__open-all-row"><a class="pdf-see-inside__open-all" href="#pdf-guides" data-preview-trigger="advanced" data-analytics="pdf_preview_open">Open all pages in viewer →</a></p>
+                                <h4 class="pdf-see-inside__chapters-title">Chapters</h4>
+                                <ol class="pdf-see-inside__chapter-list" data-toc-list="advanced"></ol>
+                            </div>
                         </details>
 
                         <p class="pdf-guide-price-row"><span class="pdf-guide-price-old" aria-label="Was">$22.99</span><span class="pdf-guide-price-new">$11.99</span></p>
 
                         <div class="pdf-guide-actions-row">
                             <a class="pdf-guide-sample-link" href="/assets/samples/prompt-anatomy-advanced-scorecard-sample.pdf" data-sample-link="advanced" target="_blank" rel="noopener">Download 1-page sample (PDF)</a>
-                            <button type="button" class="btn btn--ghost pdf-guide-preview-btn" data-preview-trigger="advanced" data-analytics="pdf_preview_open">Preview sample pages</button>
                         </div>
 
                         <a class="pdf-guide-cta" href="https://buy.stripe.com/REPLACE_ADVANCED_PAYMENT_LINK" rel="noopener" data-product="advanced-pdf" data-analytics="pdf_cta_click" aria-label="Buy Advanced PDF Guide for $11.99">{{SOT_PDF_ADVANCED_CTA}}</a>
@@ -179,8 +193,6 @@
 
             </article>
 
-            {{SOT_PDF_PROOF_INSIDE_HTML}}
-
             <section class="pdf-guides-faq" id="pdf-guides-faq" aria-labelledby="pdf-guides-faq-title">
 
                 <h3 id="pdf-guides-faq-title">Buyer FAQ</h3>
@@ -190,19 +202,6 @@
             </section>
 
             <div class="pdf-guides-after-purchase">
-
-                <div class="pdf-guides-social">
-
-                    <header class="pdf-guides-social__header">
-                        <span class="pdf-guides-social__badge">{{SOT_PDF_EXPERT_SCENARIOS_BADGE}}</span>
-                        <h3 class="pdf-expert-scenarios-title">{{SOT_PDF_EXPERT_SCENARIOS_TITLE}}</h3>
-                    </header>
-
-                    <ul class="pdf-expert-cards" role="list" aria-label="Sample hiring workflows">{{SOT_PDF_EXPERT_CARDS_HTML}}</ul>
-
-                    <p class="pdf-meta-muted pdf-expert-scenarios-disclaimer">{{SOT_PDF_EXPERT_SCENARIOS_DISCLAIMER}}</p>
-
-                </div>
 
                 <p class="pdf-guides-free-bridge">{{SOT_PDF_SECTION_FREE_BRIDGE}}</p>
 

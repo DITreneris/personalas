@@ -133,7 +133,8 @@
             "thumbnail": "/assets/pdf-covers/advanced-p15.png",
             "thumbnailAlt": "Filled multi-candidate scorecard sample page",
             "previewTrigger": "advanced",
-            "guideRef": "Advanced · p.15"
+            "guideRef": "Advanced · p.15",
+            "featured": true
           },
           {
             "id": "interview-kit",
