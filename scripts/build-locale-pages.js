@@ -15,6 +15,14 @@ const path = require('path');
 
 const ROOT = path.join(__dirname, '..');
 
+function getRuntimeAssetVersion() {
+  try {
+    const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
+    if (pkg && pkg.version) return String(pkg.version);
+  } catch (_e) { /* ignore */ }
+  return '0';
+}
+
 const SITE_ORIGIN = (process.env.SITE_ORIGIN || 'https://promptanatomy.help').replace(/\/+$/, '');
 const rawBase = process.env.BASE_PATH || '';
 const BASE_PATH = rawBase ? rawBase.replace(/\/*$/, '') + '/' : '';
@@ -1003,7 +1011,11 @@ function injectHead(html, basePath, sot) {
     : '';
   html = html.replace('href="assets/styles.css"', 'href="../assets/styles.css"');
   html = html.replace('href="assets/landing.css"', 'href="../assets/landing.css"');
-  html = html.replace(/<script src="generator\.js"><\/script>/, basePathScript + '<script src="../generator.js"></script>');
+  const generatorSrc = '../generator.js?v=' + encodeURIComponent(getRuntimeAssetVersion());
+  html = html.replace(
+    /<script src="generator\.js"><\/script>/,
+    basePathScript + '<script src="' + generatorSrc + '"></script>'
+  );
   html = injectFaviconLinks(html, abs);
   html = injectPlausible(html);
   html = swapGoogleFontsForSelfHosted(html, true);
@@ -1236,9 +1248,10 @@ function finalizeRootIndexHtml(sot) {
   if (BASE_PATH) {
     const basePathScript =
       '<script>window.BASE_PATH = \'' + BASE_PATH.replace(/'/g, "\\'") + '\';</script>\n    ';
+    const generatorSrc = 'generator.js?v=' + encodeURIComponent(getRuntimeAssetVersion());
     html = html.replace(
       /<script src="generator\.js"><\/script>/,
-      basePathScript + '<script src="generator.js"></script>'
+      basePathScript + '<script src="' + generatorSrc + '"></script>'
     );
   }
   html = html.replace(/privatumas\.html/g, 'privacy.html');

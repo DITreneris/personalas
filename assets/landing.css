@@ -2075,6 +2075,16 @@
         .pdf-preview-pages figure { margin: 0; }
         .pdf-preview-pages img { width: 100%; height: auto; border: 1px solid var(--border-subtle); border-radius: var(--r-xs); }
         .pdf-preview-pages figcaption { font-size: var(--fs-xs); color: var(--text-light); margin-top: 4px; }
+        .pdf-preview-error {
+            margin: 0;
+            padding: var(--space-12) var(--space-16);
+            border-left: 3px solid var(--accent-gold);
+            background: var(--surface-2);
+            border-radius: var(--r-xs);
+            font-size: var(--fs-sm);
+            color: var(--text);
+            line-height: var(--leading-relaxed);
+        }
         /* Bundle highlights (#pdf-bundle-offer ul). Per-card highlights were
          * removed in Phase B (DS v0.3.3) in favour of the merged See inside
          * affordance below. The selector is intentionally narrow. */

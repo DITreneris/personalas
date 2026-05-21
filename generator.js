@@ -433,10 +433,27 @@
     }
 
     // ===== PAID PDF GUIDES (config/sot.json) =====
-    var PDF_PREVIEW_DEFS = {
-        beginner: { title: 'Preview — Beginner HR Hiring Guide', altPrefix: 'Beginner guide', pages: [2, 3, 4] },
-        advanced: { title: 'Preview — Advanced HR Hiring Guide', altPrefix: 'Advanced guide', pages: [2, 3, 4] }
+    // Fallback pages MUST match files under /assets/pdf-covers/*-p{N}.png (see config/sot.json
+    // previewPages). Legacy [2,3,4] placeholders were removed — using them caused 404 previews.
+    var PDF_PREVIEW_FALLBACK_PAGES = {
+        beginner: [6, 8, 9],
+        advanced: [10, 15, 17]
     };
+    var PDF_PREVIEW_DEFS = {
+        beginner: {
+            title: 'Preview — Beginner HR Hiring Guide',
+            altPrefix: 'Beginner guide',
+            pages: PDF_PREVIEW_FALLBACK_PAGES.beginner.slice()
+        },
+        advanced: {
+            title: 'Preview — Advanced HR Hiring Guide',
+            altPrefix: 'Advanced guide',
+            pages: PDF_PREVIEW_FALLBACK_PAGES.advanced.slice()
+        }
+    };
+    var cachedSotConfig = null;
+    var pdfGuidesRuntimeReady = false;
+    var pdfPreviewPendingOpen = null;
 
     function trackEvent(name, props) {
         var safeProps = props || {};
@@ -575,11 +592,12 @@
     }
 
     function applyPreviewPagesFromConfig(config) {
-        if (!config || !config.pdfGuides) return;
         ['beginner', 'advanced'].forEach(function(key) {
-            var def = config.pdfGuides[key];
-            if (def && Array.isArray(def.previewPages) && def.previewPages.length) {
-                PDF_PREVIEW_DEFS[key].pages = def.previewPages.slice();
+            var guideDef = config && config.pdfGuides && config.pdfGuides[key];
+            if (guideDef && Array.isArray(guideDef.previewPages) && guideDef.previewPages.length) {
+                PDF_PREVIEW_DEFS[key].pages = guideDef.previewPages.slice();
+            } else {
+                PDF_PREVIEW_DEFS[key].pages = PDF_PREVIEW_FALLBACK_PAGES[key].slice();
             }
         });
     }
@@ -662,28 +680,35 @@
         var backLink = document.getElementById('pdfPreviewBack');
         if (!titleEl || !pagesEl || !closeBtn) return;
 
-        var triggers = document.querySelectorAll('[data-preview-trigger]');
-        if (!triggers.length) return;
-
         var lastTrigger = null;
 
         function renderPages(productKey) {
+            applyPreviewPagesFromConfig(cachedSotConfig);
             var def = PDF_PREVIEW_DEFS[productKey];
-            if (!def) return;
+            if (!def) return false;
             titleEl.textContent = def.title;
+            if (!def.pages.length) {
+                pagesEl.innerHTML =
+                    '<p class="pdf-preview-error" role="alert">Preview pages are not available right now. ' +
+                    'Try again in a moment or download the 1-page sample PDF from the card.</p>';
+                return true;
+            }
             var html = '';
             for (var i = 0; i < def.pages.length; i += 1) {
                 var pageNum = def.pages[i];
                 html += '<figure><img src="/assets/pdf-covers/' + productKey + '-p' + pageNum + '.png" width="734" height="950" alt="' +
-                    escapeHtmlText(def.altPrefix + ' sample page ' + pageNum) + '"><figcaption>Page ' + pageNum + '</figcaption></figure>';
+                    escapeHtmlText(def.altPrefix + ' sample page ' + pageNum) + '" loading="lazy" decoding="async">' +
+                    '<figcaption>Page ' + pageNum + '</figcaption></figure>';
             }
             pagesEl.innerHTML = html;
+            return true;
         }
 
         function openFor(triggerEl) {
+            if (!triggerEl) return;
             var productKey = triggerEl.getAttribute('data-preview-trigger');
             if (!PDF_PREVIEW_DEFS[productKey]) return;
-            renderPages(productKey);
+            if (!renderPages(productKey)) return;
             lastTrigger = triggerEl;
             dialog.showModal();
             window.requestAnimationFrame(function() {
@@ -695,14 +720,29 @@
             if (dialog.open) dialog.close();
         }
 
-        for (var t = 0; t < triggers.length; t += 1) {
-            (function(el) {
-                el.addEventListener('click', function(event) {
-                    event.preventDefault();
-                    openFor(el);
-                });
-            })(triggers[t]);
+        function flushPendingPreviewOpen() {
+            if (!pdfPreviewPendingOpen) return;
+            var pending = pdfPreviewPendingOpen;
+            pdfPreviewPendingOpen = null;
+            openFor(pending);
         }
+
+        // Delegation: works for static "Open all pages" links and See-inside thumbs
+        // injected after fetch; avoids race if user clicks before SOT resolves.
+        document.addEventListener('click', function(event) {
+            var triggerEl = event.target.closest('[data-preview-trigger]');
+            if (!triggerEl) return;
+            var pdfRoot = document.getElementById('pdf-guides');
+            if (!pdfRoot || !pdfRoot.contains(triggerEl)) return;
+            event.preventDefault();
+            if (!pdfGuidesRuntimeReady) {
+                pdfPreviewPendingOpen = triggerEl;
+                return;
+            }
+            openFor(triggerEl);
+        });
+
+        dialog._flushPendingPreviewOpen = flushPendingPreviewOpen;
 
         closeBtn.addEventListener('click', closeDialog);
         if (backLink) backLink.addEventListener('click', closeDialog);
@@ -725,10 +765,18 @@
         }
         return fetch('/config/sot.json', { cache: 'no-store' })
             .then(function(res) {
-                if (!res.ok) throw new Error('sot.json');
+                if (!res.ok) throw new Error('sot.json HTTP ' + res.status);
                 return res.json();
             })
-            .catch(function() { return null; });
+            .catch(function(err) {
+                if (typeof console !== 'undefined' && console.warn) {
+                    console.warn(
+                        '[Prompt Anatomy] config/sot.json failed to load; PDF preview uses on-disk fallback pages.',
+                        err && err.message ? err.message : err
+                    );
+                }
+                return null;
+            });
     }
 
     // ===== INICIALIZACIJA =====
@@ -751,19 +799,24 @@
         });
         updateProgressIndicator();
 
-        loadSotConfig().then(function(config) {
-            applyPreviewPagesFromConfig(config);
-            // Phase B: render thumbnails + chapters BEFORE preview dialog binds.
-            // initPdfSeeInside creates new [data-preview-trigger] thumbnail buttons;
-            // initPdfPreviewDialog then binds click handlers via querySelectorAll
-            // on the (now complete) set of triggers.
-            initPdfSeeInside(config);
+        if (document.getElementById('pdf-guides')) {
             initPdfPreviewDialog();
+        }
+
+        loadSotConfig().then(function(config) {
+            cachedSotConfig = config;
+            applyPreviewPagesFromConfig(config);
+            initPdfSeeInside(config);
             initPdfGuideHighlights(config);
             initSamplePdfLinks(config);
             initStripeLinks(config);
             initBuyerFaq(config);
             initPdfStickyCta();
+            pdfGuidesRuntimeReady = true;
+            var dialog = document.getElementById('pdfPreviewDialog');
+            if (dialog && typeof dialog._flushPendingPreviewOpen === 'function') {
+                dialog._flushPendingPreviewOpen();
+            }
             var pdfRoot = document.getElementById('pdf-guides');
             bindAnalyticsClickables(pdfRoot);
             bindAnalyticsClickables(document.getElementById('pdfStickyCta'));

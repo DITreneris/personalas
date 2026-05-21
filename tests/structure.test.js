@@ -114,6 +114,24 @@ function run() {
   tally(assert(template.includes('copyPrompt') || template.includes('selectText'), 'copy functions reference (generator.js)'));
   const generatorJs = readFile(GENERATOR_PATH);
   tally(assert(generatorJs && generatorJs.includes('localStorage') && generatorJs.includes('di_prompt_done_'), 'generator.js: localStorage progress'));
+  tally(
+    assert(
+      generatorJs && generatorJs.includes("fetch('/config/sot.json'") && generatorJs.includes('PDF_PREVIEW_FALLBACK_PAGES'),
+      'generator.js: absolute SOT fetch + on-disk preview fallbacks'
+    )
+  );
+  tally(
+    assert(
+      generatorJs && generatorJs.includes('beginner: [6, 8, 9]') && generatorJs.includes('advanced: [10, 15, 17]'),
+      'generator.js: preview fallbacks match sot.json previewPages (not legacy 2/3/4)'
+    )
+  );
+  tally(
+    assert(
+      !generatorJs || !/pages:\s*\[2,\s*3,\s*4\]/.test(generatorJs),
+      'generator.js: no legacy PDF_PREVIEW_DEFS pages [2,3,4]'
+    )
+  );
   tally(assert(template.includes('hiddenTextarea'), 'templates/index-lt.html: hiddenTextarea for copy fallback'));
 
   // --- Root privacy gateway ---
@@ -300,6 +318,20 @@ function run() {
       )
     );
     tally(assert(enIndex.includes('id="workflow-overview"'), 'en/index.html workflow-overview section'));
+    if (enIndex) {
+      tally(
+        assert(
+          /generator\.js\?v=/.test(enIndex),
+          'en/index.html: generator.js cache-bust query (package version)'
+        )
+      );
+      tally(
+        assert(
+          landingCss && /\.pdf-preview-error\s*\{/.test(landingCss),
+          'landing.css: .pdf-preview-error for unavailable preview state'
+        )
+      );
+    }
     tally(assert(fs.existsSync(path.join(ROOT, 'favicon.svg')), 'favicon.svg exists at site root'));
     tally(assert(fs.existsSync(path.join(ROOT, 'favicon.ico')), 'favicon.ico exists at site root'));
     tally(
@@ -1024,8 +1056,8 @@ function run() {
   const advancedCover = path.join(ROOT, 'assets', 'pdf-covers', 'advanced.png');
   tally(assert(fs.existsSync(advancedCover), 'assets/pdf-covers/advanced.png exists'));
   const previewPagesByGuide = {
-    beginner: (sot && sot.pdfGuides && sot.pdfGuides.beginner && sot.pdfGuides.beginner.previewPages) || [2, 3, 4],
-    advanced: (sot && sot.pdfGuides && sot.pdfGuides.advanced && sot.pdfGuides.advanced.previewPages) || [2, 3, 4]
+    beginner: (sot && sot.pdfGuides && sot.pdfGuides.beginner && sot.pdfGuides.beginner.previewPages) || [6, 8, 9],
+    advanced: (sot && sot.pdfGuides && sot.pdfGuides.advanced && sot.pdfGuides.advanced.previewPages) || [10, 15, 17]
   };
   Object.keys(previewPagesByGuide).forEach(function (prefix) {
     previewPagesByGuide[prefix].forEach(function (n) {

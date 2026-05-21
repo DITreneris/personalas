@@ -8,6 +8,7 @@
 const path = require('path');
 const fs = require('fs');
 const sharp = require('sharp');
+const { getPreviewPages, loadSot } = require('./pdf-preview-config');
 
 const ROOT = path.resolve(__dirname, '..');
 const OUT = path.join(ROOT, 'assets', 'pdf-covers');
@@ -38,8 +39,10 @@ async function makeCover(spec) {
 (async () => {
   if (!fs.existsSync(OUT)) fs.mkdirSync(OUT, { recursive: true });
   for (const c of COVERS) await makeCover(c);
+  const sot = loadSot();
   for (const prefix of ['beginner', 'advanced']) {
-    for (const p of [2, 3, 4]) {
+    const pages = getPreviewPages(sot, prefix);
+    for (const p of pages) {
       const src = path.join(OUT, `${prefix}.png`);
       const dest = path.join(OUT, `${prefix}-p${p}.png`);
       if (fs.existsSync(src) && !fs.existsSync(dest)) {
