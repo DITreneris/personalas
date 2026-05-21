@@ -20,6 +20,9 @@ const rawBase = process.env.BASE_PATH || '';
 const BASE_PATH = rawBase ? rawBase.replace(/\/*$/, '') + '/' : '';
 const SITE_PUBLIC_BASE = (process.env.SITE_PUBLIC_BASE || '').trim().replace(/\/+$/, '');
 
+/** Bump filename when busting Twitter/OG image cache (same URL = stale card). */
+const OG_IMAGE_REL = 'images/og-default-v2.png';
+
 /** Full public site base URL with trailing slash (canonical / OG / sitemap). */
 function absoluteBaseSlash() {
   if (SITE_PUBLIC_BASE) {
@@ -489,7 +492,7 @@ function injectHead(html, basePath, sot) {
   const title = extractTitle(html);
   const description = extractMetaDescription(html);
   const ogTitle = sot ? getSeoOgTitle(sot) : title;
-  const ogImage = abs + 'images/og-default.png';
+  const ogImage = abs + OG_IMAGE_REL;
 
   const socialBlock = [
     '<meta property="og:type" content="website">',
@@ -540,7 +543,7 @@ function injectPlausible(html) {
 function injectPrivacyHead(html, pathSuffix, title, description) {
   const abs = absoluteBaseSlash();
   const canonicalUrl = abs + pathSuffix;
-  const ogImage = abs + 'images/og-default.png';
+  const ogImage = abs + OG_IMAGE_REL;
   const block = [
     '<link rel="canonical" href="' + escapeHtmlAttr(canonicalUrl) + '">',
     '<link rel="alternate" hreflang="en-US" href="' + escapeHtmlAttr(canonicalUrl) + '">',
@@ -593,7 +596,7 @@ function writeRobotsAndSitemap() {
 
 function buildRootSeoFragment(sot) {
   const base = absoluteBaseSlash().replace(/\/+$/, '');
-  const img = base + '/images/og-default.png';
+  const img = base + '/' + OG_IMAGE_REL;
   const enLanding = base + '/en/';
   const desc = getSeoMetaDescription(sot);
   const ogTitle = getSeoOgTitle(sot);
@@ -669,7 +672,7 @@ function finalizeRootIndexHtml(sot) {
 
 function buildRootPrivacyFragment() {
   const base = absoluteBaseSlash().replace(/\/+$/, '');
-  const img = base + '/images/og-default.png';
+  const img = base + '/' + OG_IMAGE_REL;
   const enPrivacyUrl = base + '/en/privacy.html';
   const enSite = base + '/en/';
   const desc =

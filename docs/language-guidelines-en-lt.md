@@ -20,7 +20,7 @@ Viena nuosekli taisyklė visiems agentams ir PR peržiūrai:
 
 | **SEO (`<head>`)** | Kanoninis URL, **`x-default` hreflang**, vieši meta (`title`, `description`, OG, Twitter) anglų kalba kanoniniam keliui; generuoja [scripts/build-locale-pages.js](../scripts/build-locale-pages.js). |
 
-| **OG paveikslėlis** | Vienas bendras **`images/og-default.png`** – **anglų** tekstas (generuoti: `npm run generate:og`). |
+| **OG paveikslėlis** | Vienas bendras **`images/og-default-v2.png`** (`OG_IMAGE_REL` build skripte) – **anglų** tekstas (generuoti: `npm run generate:og`). Keičiant social cache – naujas failo vardas, ne tas pats URL. |
 
 | **LT turinys (authoring)** | [templates/index-lt.html](../templates/index-lt.html) – redagavimo šaltinis; **nesiunčiamas** kaip LT produktas. Privatumas: [templates/privacy.html](../templates/privacy.html) (ne `privatumas-lt.html` – deprecated). |
 

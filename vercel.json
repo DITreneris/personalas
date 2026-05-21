@@ -42,11 +42,11 @@
       ]
     },
     {
-      "source": "/images/og-default.png",
+      "source": "/images/og-default-v2.png",
       "headers": [
         { "key": "Content-Type", "value": "image/png" },
         { "key": "Cross-Origin-Resource-Policy", "value": "cross-origin" },
-        { "key": "Cache-Control", "value": "public, max-age=604800, immutable" }
+        { "key": "Cache-Control", "value": "public, max-age=86400" }
       ]
     },
     {

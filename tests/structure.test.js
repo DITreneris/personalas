@@ -150,6 +150,8 @@ function run() {
     const canonicalHttps = /<link rel="canonical" href="https:/;
     tally(assert(canonicalHttps.test(enIndex), 'en/index.html canonical uses absolute HTTPS URL'));
     tally(assert(enIndex.includes('og:image" content="https://'), 'en/index.html OG image absolute HTTPS'));
+    tally(assert(enIndex.includes('images/og-default-v2.png'), 'en/index.html OG image v2 (social cache bust)'));
+    tally(assert(!enIndex.includes('images/og-default.png'), 'en/index.html has no legacy og-default.png meta URL'));
     tally(assert(enIndex.includes('<meta name="description"'), 'en/index.html meta description'));
     tally(assert(enIndex.includes('application/ld+json'), 'en/index.html JSON-LD'));
 

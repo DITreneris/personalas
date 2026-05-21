@@ -21,7 +21,7 @@ npm test        # build + pdf:validate + structure tests + HTML/JS lint
 - **Privacy:** [templates/privacy.html](templates/privacy.html)
 - Do **not** hand-edit generated `en/*` except via rebuild
 
-**OG image:** `npm run generate:og` → [images/og-default.png](images/og-default.png)
+**OG image:** `npm run generate:og` → [images/og-default-v2.png](images/og-default-v2.png) (bump filename in [scripts/build-locale-pages.js](scripts/build-locale-pages.js) `OG_IMAGE_REL` when busting social caches)
 
 ## PDF guides (source → export → covers)
 

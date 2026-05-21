@@ -1,5 +1,5 @@
 /**
- * One-off / CI: generate images/og-default.png (1200×630) from SVG via sharp.
+ * One-off / CI: generate images/og-default-v2.png (1200×630) from SVG via sharp.
  * Run: node scripts/generate-og-image.js
  */
 'use strict';
@@ -16,7 +16,7 @@ try {
 }
 
 const ROOT = path.join(__dirname, '..');
-const OUT = path.join(ROOT, 'images', 'og-default.png');
+const OUT = path.join(ROOT, 'images', 'og-default-v2.png');
 
 const svg = `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
