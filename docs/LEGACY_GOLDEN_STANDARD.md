@@ -2,7 +2,23 @@
 
 **Paskirtis:** Vienas operacinis sąrašas — ką **ne laužyti** keičiant turinį, CSS arba build. Detalus DS implementacijos planas — [design_systemv02.md](design_systemv02.md). Keliai, deploy, brand — [AGENT_SOT.md](AGENT_SOT.md). Agentų seka — [AGENTS.md](../AGENTS.md) §9.
 
-**Paskutinis atnaujinimas:** 2026-05-20 (DS v0.3.2)
+**Paskutinis atnaujinimas:** 2026-05-21 (**DS v0.3.3** — dabartinė geriausia vieša versija)
+
+---
+
+## 0. Dabartinė produkcijos būsena (santrauka)
+
+| Aspektas | Kanonas |
+|----------|---------|
+| Viešas UI | **EN-only** `/en/`; šaltinis [templates/index-lt.html](../templates/index-lt.html) → `npm run build` |
+| Hero H1 | `marketing.hero.headline` — laikas iki naudos (**„in minutes“**), ne „6 phases“ H1'e |
+| 6 fazės | Tik **free lane**: `#workflow-overview` chip'ai + `freeTier.ctaLabel` / `workflowOverview.title` |
+| PDF proof | **Tik vartotojo trigger'is** — `<details class="pdf-see-inside">` + `#pdfPreviewDialog`; **jokio** auto-render specimen / expert testimonial |
+| Per-kortelės highlights | **Pašalinti**; likęs vienintelis `<ul class="pdf-guide-highlights">` — **bundle** `#pdf-bundle-offer` |
+| Bundle | `.pdf-bundle-body` (kairė kolona), `data-bundle-price-was`, `data-bundle-savings`; kainos iš SOT + [generator.js](../generator.js) |
+| Struktūriniai testai | **355 PASS** (`tests/structure.test.js`) |
+
+**Sąmoningai negrąžinti be produkto sprendimo:** `pdf-proof-inside`, `pdf-guides-social`, `pdf-expert-card*`, `hero-sample-link` (žr. §5.4, Phase D).
 
 ---
 
@@ -17,36 +33,49 @@
 
 **Taisyklė:** Jei sąmoningai laužote sutartį — pirmiausia atnaujinkite šį failą ir struktūrinius testus, tada CHANGELOG.
 
+**CTA klasės (AGENTS.md §10):** neįvesti naujų pavadinimų — naudoti `.btn`, `.cta-button`, `.pdf-guide-cta`, `.pdf-bundle-cta`, `.btn--ghost`, `.form-submit` ir t. t.
+
 ---
 
 ## 2. Puslapio struktūra (PDF-first funnel)
 
-Viešas EN puslapis (`en/index.html` po build) turi išlaikyti **sekos logiką** (tikrinama `structure.test.js`):
+Viešas EN puslapis (`en/index.html` po build) turi išlaikyti **sekos logiką**:
 
 ```
-hero (primary CTA → #pdf-guides)
+hero (primary CTA → #pdf-guides; H1 iš SOT — „in minutes“)
   → #page-lanes-nav (sticky: PDF guides | Free prompts)
   → page-lane--shop
       → objectives
-      → #pdf-guides (grid → trust → Buyer FAQ → 3 expert cards → free-bridge)
+      → #pdf-guides
+          → H2 + lede
+          → .pdf-guides-grid (Beginner + Advanced; Advanced = .pdf-guide-card--featured)
+          → .pdf-guide-trust (#pdf-section-trust)
+          → #pdf-bundle-offer (.pdf-bundle-offer; rodoma kai Stripe OK)
+          → #pdf-guides-faq (Buyer FAQ)
+          → .pdf-guides-after-purchase (.pdf-guides-free-bridge tik)
+  → .pdf-sticky-cta (fixed; hidden kai hero arba #pdf-guides matomas)
   → page-lane--free
-      → free-tier-band (#free-prompts-label + section title)
+      → #free-prompts-band (#free-toolkit-title, #free-prompts-label)
       → #workflow-overview (6 fazės chip'ai — ne hero viduje)
-      → instructions → FAQ → progress → jump-nav
+      → instructions → Free prompt FAQ → progress → jump-nav
   → promptai (block1…block10, prompt1…prompt10)
   → community → footer
 ```
 
 | Sutartis | Kodėl |
 |----------|--------|
-| Hero **neturi** `.header-phases` | Fazės — `#workflow-overview` free lane (šalia promptų) |
-| `#pdf-guides` **prieš** `#block1` / nemokamus promptus | Konversijos KPI: PDF virš free tier |
-| `#workflow-overview` **po** `#free-prompts-label`, **prieš** instructions | Free toolkit kelias: fazės šalia darbo |
-| Buyer FAQ **po** `.pdf-guides-grid`, ne po testimonial | Pirkimo objection'ai prie produkto (Gumroad pattern) |
+| Hero **neturi** `.header-phases` | Fazės — `#workflow-overview` free lane |
+| `#pdf-guides` **prieš** free promptus | Konversijos KPI: PDF virš free tier |
+| **Nėra** turinio tarp H2 ir grid | Phase D: jokio auto specimen / social proof virš kortelių |
+| Buyer FAQ **po** grid + bundle, **prieš** free-bridge | Pirkimo objection'ai prie produkto |
+| `.pdf-guides-after-purchase` | Tik **`pdf-guides-free-bridge`** — ne ekspertų kortelės, ne disclaimer dublius |
 | Hero secondary CTA → `#free-prompts-label` | Nemokamas kelias nepraleidžia free band |
 | `objectives` **prieš** `pdf-guides` | Problemos → produktas (shop lane) |
+| Laisvojo lygio FAQ `<h2 id="faq-title">` | **„Free prompt FAQ“** (ne „Common questions…“) — atskirta nuo Buyer FAQ |
 
-**Šaltinis turiniui:** [templates/index-lt.html](../templates/index-lt.html) (authoring). **Neredaguoti ranka:** `en/index.html` — tik per build.
+**Šaltinis turiniui:** [templates/index-lt.html](../templates/index-lt.html). **Neredaguoti ranka:** `en/index.html` — tik per build.
+
+**PDF HTML fragmentas:** sinchronizuoti su [scripts/pdf-guides-section.fragment.html](../scripts/pdf-guides-section.fragment.html).
 
 ---
 
@@ -66,12 +95,10 @@ hero (primary CTA → #pdf-guides)
 
 ### 3.2 Design System v1 — sąmoningi vizualiniai nukrypimai
 
-Struktūra **nekeičiama**; tik CSS arba minimalūs markup pašalinimai:
-
-- **`<p class="prompt-cta">`** — pašalinta iš `.prompt-footer`; instrukcija lieka `instructions` sekcijoje.
+- **`<p class="prompt-cta">`** — pašalinta iš `.prompt-footer`.
 - **`.prompt .number` (PHASE badge)** — `display: none`; fazės kontekstas — `#workflow-overview` chip'ai.
-- **`.info-box`** — CSS suplotas; markup (icon / strong / p) išsaugotas.
-- **`.prompt-footer`** — `display: flex` (Copy + Mark as done vienoje eilėje); tab eilė nepakeista.
+- **`.info-box`** — CSS suplotas; markup išsaugotas.
+- **`.prompt-footer`** — `display: flex` (Copy + Mark as done); tab eilė nepakeista.
 
 ---
 
@@ -79,115 +106,151 @@ Struktūra **nekeičiama**; tik CSS arba minimalūs markup pašalinimai:
 
 | Komponentas | Sutartis |
 |-------------|----------|
-| `#workflow-overview` | Atskira sekcija; chip'ai `.header-phase-link[data-phase="1"]` … `6` |
-| Chip CSS | **Scoped** `.workflow-overview .header-phase-link` — ne hero baltas pill stilius |
+| `#workflow-overview` | Atskira sekcija free lane; chip'ai `.header-phase-link[data-phase="1"]` … `6` |
+| Chip CSS | **Scoped** `.workflow-overview .header-phase-link` |
 | `generator.js` | Click: `is-active` + atidaro atitinkamą `.phase`, `scrollIntoView` (`prefers-reduced-motion`) |
 | Prompt fazės | `article.prompt[data-phase="N"]` — atitinka chip numerį |
+| Hero copy | **Ne** „6 phases“ H1 — struktūra žemiau (`How the 6-phase workflow works`, `Open the 6-phase workflow ↓`) |
 
 ---
 
 ## 5. PDF commerce blokas
 
+### 5.1 Guide kortelės (Beginner / Advanced)
+
 | Elementas | Sutartis |
 |-----------|----------|
-| `.pdf-guide-cta` | `--cta-primary-bg`, `--text-on-accent`, `:link/:visited/:hover/:active`, `--ring-focus` (regression testai) |
-| Preview | `class="btn btn--ghost pdf-guide-preview-btn"` + `data-preview-trigger="beginner|advanced"` |
-| Stripe | `data-product`, `data-analytics` ant CTA; URL iš SOT → build |
-| Buyer FAQ | `{{SOT_BUYER_FAQ_HTML}}` build metu; `<details class="faq-details">` **be** `open`; `initBuyerFaq()` skip jei jau užpildyta |
-| Disclaimer | Tik footer `.footer-disclaimer` + `{{SOT_DISCLAIMER}}` — **ne** dubliuoti `.pdf-guides-after-purchase` |
-| Po pirkimo blokas | `#pdf-guides-faq` po grid; `.pdf-guides-after-purchase`: **3 ekspertų kortelės** (`.pdf-expert-cards` grid) + `pdf-guides-free-bridge` |
-| Proof-inside (DS v0.3.2 / C) | `<section class="pdf-proof-inside">` **tarp** `.pdf-guides-grid` ir `#pdf-guides-faq`. Lygiai 3 `li.pdf-proof-inside__card`: `<button class="pdf-proof-inside__media" data-preview-trigger="beginner\|advanced">` (reuse `pdfPreviewDialog`) + `<img>` su `loading="lazy"` `decoding="async"` `alt`; turinys iš `marketing.pdfSection.proofInside` SOT; thumbnail'ai privalo egzistuoti `/assets/pdf-covers/` (build-time `fs.existsSync` guard) |
-| Ekspertų kortelės v2 (DS v0.3.2) | Lygiai 3 `li.pdf-expert-card[role="listitem"]` viduje `ul.pdf-expert-cards[role="list" aria-label="Sample hiring workflows"]` su elevation modifikatoriais `--elev-soft / --elev-medium / --elev-raised`; kiekvienoje kortelėje `pdf-expert-card__header` (avatar inicialai `--r-pill` navy/gold + approach), `__quote`, **`__outcome` chip** (gold left border, „Result:"), `__meta`. Section badge `.pdf-guides-social__badge` virš title; FTC-safe disclaimer (privalomi raktažodžiai „not paid endorsements" arba „workflow patterns") **PO** `pdf-expert-cards`. SOT: `marketing.pdfSection.expertScenarios` su `sectionBadgeLabel`, per-card `outcome` (privalomas) + optional `initials` (auto-derive iš `name`). |
+| Cover | `figure.pdf-guide-card-cover` + `/assets/pdf-covers/{beginner\|advanced}.png` |
+| Specs | `ul.pdf-guide-specs` (pages, PDF, English, updated) |
+| **See inside** | Vienas `<details class="pdf-see-inside" data-see-inside="beginner\|advanced">` — **collapsed by default** |
+| See inside turinys | `__thumbs` (preview mygtukai) + `__open-all` (`data-preview-trigger`) + `__chapter-list` (`data-toc-list`) |
+| **Nėra** | `.pdf-guide-highlights` ant kortelės, `.pdf-guide-toc-details`, `.pdf-guide-preview-btn` |
+| Kaina | `.pdf-guide-price-row` (was + new) |
+| Sample | `a.pdf-guide-sample-link` + `data-sample-link` |
+| CTA | `.pdf-guide-cta` + `data-product`, `data-analytics="pdf_cta_click"`; Stripe URL iš SOT |
+| Featured | Advanced: `.pdf-guide-card--featured` (gold inset + navy border) |
 
-**PDF sekcijos fragmentas:** sinchronizuoti [templates/index-lt.html](../templates/index-lt.html) su [scripts/pdf-guides-section.fragment.html](../scripts/pdf-guides-section.fragment.html) jei keičiate HTML struktūrą.
+### 5.2 Preview modal
+
+| Elementas | Sutartis |
+|-----------|----------|
+| Dialog | `#pdfPreviewDialog` |
+| Trigger | `[data-preview-trigger="beginner\|advanced"]` — thumb `<button class="pdf-see-inside__thumb">` arba `a.pdf-see-inside__open-all` |
+| Puslapiai | SOT `previewPages`: beginner `[6,8,9]`, advanced `[10,15,17]`; fallback diske — **ne** `[2,3,4]` |
+| Fetch | `loadSotConfig()` → **`/config/sot.json`** (absoliutus kelias iš `/en/`) |
+| Init eilė | `initPdfSeeInside` **prieš** `initPdfPreviewDialog`; event delegation ant `#pdf-guides` |
+| Klaida | `.pdf-preview-error` kai PNG nerastas |
+
+### 5.3 Bundle upsell (`#pdf-bundle-offer`)
+
+| Elementas | Sutartis |
+|-----------|----------|
+| Matomumas | `hidden` iki `initStripeLinks` (jei `bundle.stripePaymentLink` OK) |
+| Antraštė / lede | Centruota (`.pdf-bundle-offer { text-align: center }`) |
+| Turinys | `.pdf-bundle-body` — `max-width: 24rem`, `text-align: left` (bullets + kaina kartu) |
+| Highlights | Vienintelis `ul.pdf-guide-highlights` + `data-guide-highlights="bundle"`; turinys iš `pdfGuides.bundle.highlights` |
+| Kaina | `data-bundle-price-was`, `data-bundle-price`; JS atnaujina iš `priceWas` / `price` |
+| Sutaupymas | `p.pdf-bundle-savings` + `data-bundle-savings` — `Save $X.XX` (was − price) |
+| CTA | `.pdf-guide-cta.pdf-bundle-cta` + `data-product="bundle-pdf"` |
+
+### 5.4 Pašalinta (Phase D — negrąžinti be sąmoningo PR)
+
+Šie pattern'ai **neturi** būti `en/index.html` ar `sot.json` `marketing.pdfSection`:
+
+- `pdf-proof-inside`, `hero-sample-link`, `pdf-guides-social`, `pdf-expert-card*`
+- `marketing.pdfSection.proofInside`, `expertScenarios`
+
+Struktūriniai testai: Phase D **negative regression** (11 assert'ų).
+
+### 5.5 Kiti PDF sutarčiai
+
+| Elementas | Sutartis |
+|-----------|----------|
+| `.pdf-guide-cta` | `--cta-primary-bg`, `--text-on-accent`, `:visited`, `--ring-focus` |
+| Buyer FAQ | `{{SOT_BUYER_FAQ_HTML}}` build metu; `<details class="faq-details">` be `open` |
+| Disclaimer | Tik footer `.footer-disclaimer` + `{{SOT_DISCLAIMER}}` |
+| Bundle produktas | beginner + advanced; $15.99 / was $17.98 (SOT) |
 
 ---
 
-## 6. CSS ir Design System (v0.2 + v0.2.1)
+## 6. CSS ir Design System (v0.2 → v0.3.3)
 
 ### 6.1 Kur redaguoti
 
 | Failas | Turinys |
 |--------|---------|
 | [assets/styles.css](../assets/styles.css) | `:root` tokenai, `.btn`, `.btn--ghost` |
-| [assets/landing.css](../assets/landing.css) | Visi landing komponentai |
+| [assets/landing.css](../assets/landing.css) | Visi landing komponentai, `.pdf-see-inside`, `.pdf-bundle-*` |
 | [templates/index-lt.html](../templates/index-lt.html) | HTML; **be** inline `<style>` |
 
 Po pakeitimų: **`npm run build`** → **`npm test`**.
 
 ### 6.2 Tokenai ir draudimai
 
-- **Nenaudoti** naujame CSS: `--orange-light`, `--orange`, `--blue-light`, `--community-cta-green*`, `--shadow-card*` (deprecated; v0.3.0 PR-4 strukturinis guard'as blokuoja `var(--token)` naudojimą `templates/index-lt.html` ir `assets/landing.css`; **REMOVED IN v0.3.1**).
-- **Focus** ant šviesaus fono: `outline: var(--ring-focus); outline-offset: 2px`.
-- **Focus ant tamsaus fono (v0.2.4):** `outline: var(--ring-focus-on-dark); outline-offset: 2px` (hero, `.header-phase-link`, `.cta-button*`, `.hero-lane-hint`).
-- **Jokių literal'ių `outline: Npx solid …`** landing.css — visos `outline` deklaracijos privalo naudoti vieną iš dviejų token'ų.
-- **Border-radius (v0.2.4):** literal'ai `999px / 8px / 4px / 12px` neleistini — naudoti `--r-pill / --r-sm / --r-xs / --r-md`.
-- **State feedback per `:has()` (v0.2.5):** CSS-only būsenų grįžtamasis ryšys (pvz. `.prompt:has(.prompt-done:checked)`) **privalo** būti gate'intas `@supports selector(:has(*))` blokuose — Safari <15.4 / senesni Firefox išlieka su native checkbox tick'u kaip pagrindinis signalas.
-- **`.btn` deduplikacija (v0.2.5):** vienintelė autoritetinė `.btn { ... }` deklaracija — [assets/styles.css](../assets/styles.css). [assets/landing.css](../assets/landing.css) neturi top-level `.btn { }` blokų, tik scoped override'us (`.prompt-footer .btn`) ir `.btn.success` state'ą.
-- **Šešėliai:** `--shadow-soft` / `--medium` / `--elevated` / `--shadow-cta` / `--shadow-toast` / `--shadow-modal` / `--shadow-sticky`. **DS v0.3.0:** prie jų prisideda `--shadow-cta-press` (`:active` sunken), `--shadow-glow-success` (`.btn.success`), `--shadow-glow-gold` / `-hover` (`.objectives li::before`).
-- **Inset highlights (v0.3.0):** vienintelis kanoninis token'as — `--shadow-inset-hi` (canonical, 0.6 opacity); hero CTA naudoja `--shadow-inset-hi-strong` (0.95). Jokių literal'ių `inset 0 1px 0 rgba(255, 255, 255, 0.x)` landing.css.
-- **Hover ladder (v0.3.0):** `rest != hover`. Primary CTA hover'as privalo elevuoti šešėlį (`var(--shadow-medium), var(--shadow-cta)`), ne tik translateY. **`:active` press feedback**: kiekvienas primary mygtukas (`translateY(0) scale(0.98)` + `var(--shadow-cta-press)`).
-- **Gradients (v0.3.0):** `--gradient-hero` / `--gradient-card-tint` / `--gradient-jump-nav` / `--gradient-gold-pearl` / `--gradient-soft` / `--gradient-cta-hover`. Code-block kairiojo krašto akcentas — dokumentuotas page-specific exception.
-- **Borders (v0.3.0):** navy-tinted border'ams naudoti `--border-navy-soft` / `--border-navy` / `--border-navy-strong`; jokių literal'ių `rgba(16, 59, 90, X)` border'iuose.
-- **Tipografija:** `--fs-*`; hero H1 — `clamp(28px, 6vw + 8px, 52px)` (DS v0.3.0 PR-2; replaces 4 media-query overrides). **Globals (v0.3.0):** body privalo turėti `-webkit-font-smoothing: antialiased`, `-moz-osx-font-smoothing: grayscale`, `text-rendering: optimizeLegibility`; `:root` privalo turėti `color-scheme: light`, `accent-color: var(--accent-primary)`. Numeric komponentams (`.pdf-guide-price-new`, `.progress-wrap p`, `.prompt-time`, `.phase-meta`, `.phase-badge`) — `font-variant-numeric: tabular-nums`.
-- **Motion (v0.2.3):** `transition` deklaracijos naudoja `var(--duration-fast|normal|slow) var(--ease-out)`; jokių literal'ių `0.2s ease` / `0.3s ease`.
-- **Hover lift (v0.2.3):** primary CTA = `translateY(var(--lift-md))`; hero / secondary / dense / sticky = `var(--lift-sm)`; ghost / info — be lift.
-- **Reduced motion:** `@media (prefers-reduced-motion: reduce)` blokas privalo turėti `*:hover, *:focus-visible { transform: none !important; }` (vestibulinė apsauga).
-- **Sticky bars (v0.3.0):** `.page-lanes-nav` ir `.pdf-sticky-cta` privalo turėti glass treatment'ą (`backdrop-filter: saturate(180%) blur(12px)` + `@supports not` solid fallback). Bottom sticky == top sticky.
-- **Hero sentence case:** `h1`, subhead, `.hero-price-teaser`, hero CTA labels — `text-transform: none` (turinys iš [config/sot.json](../config/sot.json)); uppercase tik `.badge`. Headline naudoja **U.S.** (ne izoliuotas `US` su forced caps). Kaina hero: tik `priceTeaser`, ne subhead. Žr. [design_systemv02.md](design_systemv02.md) §4.3.1; testai `structure.test.js`.
+- **Nenaudoti** deprecated alias'ų: `--orange-light`, `--shadow-card*`, ir t. t. (v0.3.1+ guard'ai).
+- **Focus** šviesus fonas: `var(--ring-focus)`; tamsus hero: `var(--ring-focus-on-dark)`.
+- **Radius / motion / lift / reduced-motion** — kaip DS v0.2.2–v0.2.5 (žr. [design_systemv02.md](design_systemv02.md)).
+- **Hero sentence case:** `text-transform: none` ant H1, subhead, price teaser; **U.S.** headline'e; kaina tik `priceTeaser`, ne subhead.
+- **Šešėliai / gradients / navy borders / sticky glass** — v0.3.0 taisyklės galioja.
 
-### 6.3 Surface ladder (v0.2.1 — elevation)
-
-Ant šviesaus fono **vengti** `surface-1` ant `surface-1` be šešėlio arba tarpinio `surface-2`:
+### 6.3 Surface ladder (v0.2.1)
 
 | Komponentas | Fonas / elevation |
 |-------------|-------------------|
 | `.pdf-guides` | `--surface-2` |
-| `.pdf-guide-card` | `--surface-1` + `--shadow-soft` (hover `--shadow-medium`) |
-| `.pdf-guide-card--featured` | Navy border + `--shadow-medium` (hover `--shadow-elevated`) |
-| `.pdf-bundle-offer` | `--surface-1` + `--shadow-soft` ant tinted sekcijos |
-| `.workflow-overview` chip default | `--surface-2`, `border-subtle-dark` |
-| Chip active | `--surface-1`, navy border, `--shadow-soft` |
-
-Pilna lentelė: [design_systemv02.md](design_systemv02.md) §17.
+| `.pdf-guide-card` | `--surface-1` + `--shadow-soft` |
+| `.pdf-guide-card--featured` | Navy + gold inset; hover `--shadow-elevated` |
+| `.pdf-bundle-offer` | `--surface-1` + `--shadow-soft` + accent border |
+| `.pdf-see-inside__body` | `--surface-2` + `border-subtle` |
+| Workflow chip default | `--surface-2` |
+| Chip active | `--surface-1`, navy border |
 
 ### 6.4 Sticky overlap & anchor clearance (v0.2.2)
 
-- Visi sticky-perdengti anchor target'ai (`#pdf-guides`, `#free-prompts-label`, `#workflow-overview`, `.prompt[id^="prompt"]`, `[id^="block"]`) **privalo** turėti `scroll-margin-top: clamp(72px, 12vh, 96px)` (deklaruota globaliu `:where()` rule'u landing.css; specificity 0).
-- `.page-lanes-nav` glass: `backdrop-filter: saturate(180%) blur(12px)` + `@supports not` solid fallback'as.
-- `.pdf-sticky-cta` iOS safe-area: `padding-bottom: max(14px, env(safe-area-inset-bottom))`.
+- Anchor target'ai: `scroll-margin-top: clamp(72px, 12vh, 96px)`.
+- `.page-lanes-nav` ir `.pdf-sticky-cta`: glass + `@supports` fallback; sticky CTA `env(safe-area-inset-bottom)`.
 
 ---
 
-## 7. Runtime (generator.js)
+## 7. Runtime ([generator.js](../generator.js))
 
 Nelaužyti be QA:
 
-- `window.copyPrompt` (debounced)
-- Phase accordion API (`.phase`, `.phase-header`, `.is-open` jei naudojama)
-- `.header-phase-link` ↔ fazės scroll
-- PDF preview: `#pdfPreviewDialog`, `[data-preview-trigger]`
-- Analytics: `data-analytics` + `trackEvent()` (Plausible / Vercel)
+| Funkcija | Paskirtis |
+|----------|-----------|
+| `window.copyPrompt` | Debounced kopijavimas |
+| Phase accordion | `.phase`, `.phase-header`, `.is-open` |
+| `.header-phase-link` | Scroll į fazę |
+| `initPdfSeeInside` | Thumbs, chapters, meta „See inside · N pages + M chapters“ |
+| `initPdfGuideHighlights` | **Tik** `data-guide-highlights="bundle"` |
+| `initPdfPreviewDialog` | Modal + `[data-preview-trigger]` |
+| `initStripeLinks` | Stripe URL + bundle `hidden` + kainos + savings |
+| `loadSotConfig` | `fetch('/config/sot.json')` |
+| `initPdfStickyCta` | IntersectionObserver hero + pdf-guides |
+| Analytics | `data-analytics` + `trackEvent()` |
 
 ---
 
 ## 8. QA prieš merge
 
-1. **`npm test`** — 240+ structure assert'ų, HTML/JS lint.
-2. **Prompt audit:** visi `prompt1`…`prompt10`, `block1`…`block10`, `aria-label`, `onclick` argumentai.
-3. **Viešas brand:** `rg -i "personalas|series no"` šaknyje (išskyrus `node_modules`, vidinę doc).
-4. **Rankinis smoke `/en/`:** hero → PDF, workflow chip'ai, preview ghost mygtukas, pirmo prompto kopijavimas.
-5. **Release:** pa11y pagal [AGENT_SOT.md](AGENT_SOT.md) §6; DS v0.2.1 checklist [MUST_TODO.md](../MUST_TODO.md).
+1. **`npm test`** — 355+ structure assert'ų, HTML/JS lint, `pdf:validate`.
+2. **Prompt audit:** `prompt1`…`prompt10`, `block1`…`block10`, `aria-label`, `onclick` argumentai.
+3. **Viešas brand:** `rg -i "personalas|series no"` (išskyrus `node_modules`, vidinę doc).
+4. **Rankinis smoke `/en/`:**
+   - Hero → PDF grid; bundle bullets/kaina suderinti
+   - **See inside ▶** → thumbs → modal; **Open all pages**
+   - 1-page sample PDF atsisiuntimas
+   - Workflow chip'ai → fazė
+   - Pirmo prompto kopijavimas
+5. **Phase D regression:** puslapyje nėra `pdf-proof-inside` / `pdf-expert-card`.
+6. **Release:** pa11y pagal [AGENT_SOT.md](AGENT_SOT.md) §6.
 
-### Struktūriniai testai (DS v0.2.1)
+### Struktūriniai testai (žymūs guard'ai)
 
-`tests/structure.test.js` fiksuoja tarp alia:
-
-- `landing.css`: `.pdf-guides` → `surface-2`, `.pdf-guide-card` → `shadow-soft`
-- Workflow chip default `surface-2`
-- `btn--ghost` + `assets/styles.css` komponentas
-- `--ring-focus` ≥8× `landing.css`
-- Nėra `legal-disclaimer` PDF after-purchase bloke
+- DS v0.3.3 Phase B: `pdf-see-inside` ×2, `pdf-guide-preview-btn` absent, `pdf-guide-highlights` count **1** (bundle)
+- DS v0.3.3 Phase D: removed DOM/SOT patterns absent
+- GEO: robots, sitemap, JSON-LD, llms.txt, manifest
+- PDF preview: fallbacks `6/8/9` ir `10/15/17`, absolute SOT fetch
 
 ---
 
@@ -195,10 +258,11 @@ Nelaužyti be QA:
 
 | Dokumentas | Kada skaityti |
 |------------|----------------|
-| [design_systemv02.md](design_systemv02.md) | DS PR, token migracija, §18 v0.3 backlog |
-| [AGENT_SOT.md](AGENT_SOT.md) | Keliai, build, deploy, Stripe |
+| [design_systemv02.md](design_systemv02.md) | DS PR, token migracija |
+| [AGENT_SOT.md](AGENT_SOT.md) | Keliai, build, deploy, Stripe, GEO |
 | [language-guidelines-en-lt.md](language-guidelines-en-lt.md) | EN viešas copy, brand |
 | [DOCUMENTATION.md](DOCUMENTATION.md) | Doc atnaujinimai prieš merge |
+| [CHANGELOG.md](../CHANGELOG.md) | Kas išleista / Unreleased |
 
 ---
 
@@ -208,11 +272,13 @@ Nelaužyti be QA:
 |------|---------|----------|
 | 2026-05 | v1 | Prompt kompresija, PDF CTA visited fix |
 | 2026-05-19 | v0.2 | `landing.css`, tokenai, inline CSS pašalintas |
-| 2026-05-20 | v0.2.1 | Surface ladder, `btn--ghost`, išplėstas golden standard (šis failas) |
-| 2026-05-20 | v0.2.2 | Sticky & anchor polish (scroll-margin, glass nav, safe-area, skip-link token) |
-| 2026-05-20 | v0.2.3 | Motion ritmu & lift token sistema (--lift-sm/-md, transition tokens, reduced-motion transform reset) |
-| 2026-05-20 | v0.2.4 | Focus + radius + form consolidation (--ring-focus-on-dark, --r-xs, gold form ring, code-block 3px) |
-| 2026-05-20 | v0.2.5 | Affordance & state polish (:has done state, selected check marker, prompt hover lift, featured gold inset, scrollbar styling, .btn deduplication) |
-| 2026-05-20 | v0.2.6 | PDF expert scenarios row (3 illustrative cards: Joan/Ohio, Lane/Oregon, Emanuel/Texas) replaces single pilot blockquote; new `.pdf-expert-cards` grid + soft/medium/raised elevation modifiers; SOT-driven via `marketing.pdfSection.expertScenarios` |
-| 2026-05-20 | v0.3.0 | Token harmonization & premium polish: shadow inset system (`--shadow-inset-hi`, `--shadow-cta-press`, `--shadow-glow-*`), gradient + navy border tokens, hover ladders rise (rest != hover), `:active` press feedback on every primary, font smoothing + tabular-nums + fluid hero H1, `.pdf-sticky-cta` glass parity, deprecation guard for v0.3.1 hard removal |
-| 2026-05-20 | v0.3.2 | PDF social proof v2: (B) expert scenarios v2 — `pdf-expert-card__avatar` (--r-pill navy/gold initials), `__outcome` chip (gold left border „Result:"), `pdf-guides-social__badge` virš title, FTC-safe disclaimer („not paid endorsements") perkeltas PO kortelių; (C) NAUJAS `.pdf-proof-inside` 3-card grid tarp `.pdf-guides-grid` ir `#pdf-guides-faq`, `__media` button (aspect-ratio 4/5) reuse'ina `pdfPreviewDialog` per `data-preview-trigger`, thumbnails iš `/assets/pdf-covers/*-p*.png` (build-time `fs.existsSync` guard); SOT-driven via `marketing.pdfSection.expertScenarios` (extended) + `proofInside` (new) |
+| 2026-05-20 | v0.2.1–v0.2.5 | Surface, sticky, motion, focus, `:has` done state |
+| 2026-05-20 | v0.2.6–v0.3.2 | Expert scenarios + proof-inside (vėliau **pašalinta** Phase D) |
+| 2026-05-20 | v0.3.0 | Token harmonization, glass sticky, fluid H1 |
+| 2026-05-20 | v0.3.3 Phase B | `pdf-see-inside`; per-card highlights/toc/preview-btn removed |
+| 2026-05-20 | v0.3.3 Phase C | Specimen-first ( **revert** Phase D) |
+| 2026-05-20 | v0.3.3 Phase D | **Dabartinė PDF sekcijos seka**; no auto specimen/social proof |
+| 2026-05-21 | v0.3.3+ | Bundle `.pdf-bundle-body` + savings; hero H1 „in minutes“; 355 tests |
+| 2026-05-21 | **Golden standard sync** | Šis failas suderintas su geriausia veikiančia `/en/` versija |
+
+**Istoriniai komponentai (archyvas, ne golden):** `.pdf-expert-cards`, `.pdf-proof-inside`, `.pdf-guide-preview-btn`, per-card `.pdf-guide-highlights` — aprašyti CHANGELOG, negrąžinti be naujo ADR/PR.

@@ -558,7 +558,15 @@
         if (bundleOffer && bundleDef && bundleDef.stripePaymentLink && bundleDef.stripePaymentLink.indexOf('REPLACE_') === -1) {
             bundleOffer.hidden = false;
             var priceEl = bundleOffer.querySelector('[data-bundle-price]');
-            if (priceEl && bundleDef.price != null) priceEl.textContent = '$' + Number(bundleDef.price).toFixed(2);
+            var wasEl = bundleOffer.querySelector('[data-bundle-price-was]');
+            var savingsEl = bundleOffer.querySelector('[data-bundle-savings]');
+            var price = bundleDef.price != null ? Number(bundleDef.price) : NaN;
+            var was = bundleDef.priceWas != null ? Number(bundleDef.priceWas) : NaN;
+            if (priceEl && !isNaN(price)) priceEl.textContent = '$' + price.toFixed(2);
+            if (wasEl && !isNaN(was)) wasEl.textContent = '$' + was.toFixed(2);
+            if (savingsEl && !isNaN(price) && !isNaN(was) && was > price) {
+                savingsEl.textContent = 'Save $' + (was - price).toFixed(2);
+            }
         }
     }
 
