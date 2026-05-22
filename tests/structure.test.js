@@ -448,6 +448,14 @@ function run() {
     );
     tally(
       assert(
+        /@media\s*\(\s*max-width:\s*768px\s*\)[\s\S]*\.page-lanes-nav\s*\{[^}]*display:\s*none/.test(
+          landingCss
+        ),
+        'landing.css: .page-lanes-nav hidden at max-width 768px (mobile lane UX)'
+      )
+    );
+    tally(
+      assert(
         /env\(safe-area-inset-bottom\)/.test(landingCss),
         'landing.css: .pdf-sticky-cta safe-area inset for iOS (DS v0.2.2)'
       )
@@ -1123,8 +1131,14 @@ function run() {
     );
     tally(
       assert(
-        enIndex.includes('../assets/landing.css'),
-        'en/index.html links shared landing.css'
+        enIndex.includes('../assets/landing.css?v='),
+        'en/index.html: versioned landing.css cache bust'
+      )
+    );
+    tally(
+      assert(
+        enIndex.includes('../assets/styles.css?v='),
+        'en/index.html: versioned styles.css cache bust'
       )
     );
     tally(

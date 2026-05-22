@@ -6,6 +6,10 @@ Visi reikšmingi pakeitimai projekte dokumentuojami čia. Formatas pagal [Keep a
 
 ## [Unreleased]
 
+### Pataisyta
+
+- **[UI][QA] Mobile lane nav „nuogi“ linkai + CSS cache:** [scripts/build-locale-pages.js](scripts/build-locale-pages.js) — `versionedStylesheetHref()` injektuoja `?v={package.version}` į `styles.css` ir `landing.css` (`en/index.html`, `en/privacy.html`, `404.html`), kaip jau daroma `generator.js` (apeina [vercel.json](vercel.json) `immutable` 1y CSS cache su senais taisyklėmis be `.page-lanes-nav`). [assets/landing.css](assets/landing.css) — `@media (max-width: 768px)` `.page-lanes-nav { display: none }` + mažesnis `scroll-margin-top` anchor'ams; mobile navigacija tik hero CTA + hint. [tests/structure.test.js](tests/structure.test.js) — 3 nauji assert'ai. Dokumentacija: [docs/LEGACY_GOLDEN_STANDARD.md](docs/LEGACY_GOLDEN_STANDARD.md) §2, [docs/TESTAVIMAS.md](docs/TESTAVIMAS.md), [docs/design_systemv02.md](docs/design_systemv02.md) §2.2.
+
 ### Pakeista
 
 - **[Orchestrator] Golden standard sync (DS v0.3.3+):** [docs/LEGACY_GOLDEN_STANDARD.md](docs/LEGACY_GOLDEN_STANDARD.md) — atnaujinta su dabartine `/en/` versija: PDF seka (grid → trust → bundle → Buyer FAQ → free-bridge), `pdf-see-inside`, Phase D pašalinti pattern'ai, bundle `.pdf-bundle-body`, hero „in minutes“, runtime/init, 355 testų.

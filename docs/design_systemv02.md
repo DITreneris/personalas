@@ -45,6 +45,7 @@ Do **not** rename or remove:
 - Prompt IDs: `prompt1` … `prompt10`, anchors `block1` … `block10`
 - Classes: `.prompt`, `.prompt-header`, `.prompt-body`, `.prompt-footer`, `.code-block`, `.btn`, `.prompt-done`
 - Section order enforced by `tests/structure.test.js`: hero → `#page-lanes-nav` → shop lane (objectives → `#pdf-guides`) → free lane (free band → `#workflow-overview` → instructions → FAQ → progress → jump-nav) → prompts → community → footer
+- **Mobile (max-width 768px):** `#page-lanes-nav` hidden (`display: none`); hero CTAs are the lane switch. Desktop keeps sticky pill nav. Built pages link `assets/*.css?v={package.version}` (pairs with `vercel.json` immutable CSS cache).
 - `.pdf-guide-cta` must keep `:link/:visited/:hover/:active` + `--text-on-accent` + `--ring-focus` (regression tested)
 
 ### 2.3 Brand (public EN)

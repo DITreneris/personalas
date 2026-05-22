@@ -72,6 +72,8 @@ hero (primary CTA → #pdf-guides; H1 iš SOT — „in minutes“)
 | Hero secondary CTA → `#free-prompts-label` | Nemokamas kelias nepraleidžia free band |
 | `objectives` **prieš** `pdf-guides` | Problemos → produktas (shop lane) |
 | Laisvojo lygio FAQ `<h2 id="faq-title">` | **„Free prompt FAQ“** (ne „Common questions…“) — atskirta nuo Buyer FAQ |
+| `#page-lanes-nav` **≤768px** | `display: none` — mobile navigacija tik hero CTA + `hero-lane-hint`; DOM lieka (desktop sticky pills) |
+| Built CSS URL | `../assets/styles.css?v=` ir `../assets/landing.css?v=` iš `package.json` versijos (immutable cache) |
 
 **Šaltinis turiniui:** [templates/index-lt.html](../templates/index-lt.html). **Neredaguoti ranka:** `en/index.html` — tik per build.
 

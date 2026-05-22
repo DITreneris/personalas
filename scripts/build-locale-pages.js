@@ -23,6 +23,12 @@ function getRuntimeAssetVersion() {
   return '0';
 }
 
+/** Cache-bust stylesheets (vercel.json immutable CSS; HTML must-revalidate). */
+function versionedStylesheetHref(href) {
+  const sep = href.indexOf('?') >= 0 ? '&' : '?';
+  return href + sep + 'v=' + encodeURIComponent(getRuntimeAssetVersion());
+}
+
 const SITE_ORIGIN = (process.env.SITE_ORIGIN || 'https://promptanatomy.help').replace(/\/+$/, '');
 const rawBase = process.env.BASE_PATH || '';
 const BASE_PATH = rawBase ? rawBase.replace(/\/*$/, '') + '/' : '';
@@ -895,7 +901,7 @@ function write404Html(sot) {
     '    <link rel="icon" type="image/svg+xml" href="/favicon.svg">\n' +
     '    <link rel="apple-touch-icon" href="/apple-touch-icon.png">\n' +
     '    <link rel="manifest" href="/manifest.webmanifest">\n' +
-    '    <link rel="stylesheet" href="/assets/styles.css">\n' +
+    '    <link rel="stylesheet" href="' + versionedStylesheetHref('/assets/styles.css') + '">\n' +
     '    <style>\n' +
     '        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg, #F7F8FA); color: var(--text, #1A202C); padding: 48px 20px; line-height: 1.55; }\n' +
     '        main { max-width: 36rem; margin: 0 auto; }\n' +
@@ -1009,8 +1015,14 @@ function injectHead(html, basePath, sot) {
   const basePathScript = basePath
     ? '<script>window.BASE_PATH = \'' + basePath.replace(/'/g, "\\'") + '\';</script>\n    '
     : '';
-  html = html.replace('href="assets/styles.css"', 'href="../assets/styles.css"');
-  html = html.replace('href="assets/landing.css"', 'href="../assets/landing.css"');
+  html = html.replace(
+    'href="assets/styles.css"',
+    'href="' + versionedStylesheetHref('../assets/styles.css') + '"'
+  );
+  html = html.replace(
+    'href="assets/landing.css"',
+    'href="' + versionedStylesheetHref('../assets/landing.css') + '"'
+  );
   const generatorSrc = '../generator.js?v=' + encodeURIComponent(getRuntimeAssetVersion());
   html = html.replace(
     /<script src="generator\.js"><\/script>/,
@@ -1781,7 +1793,10 @@ const PRIVACY_PAGE_TITLE = 'Privacy Policy – Prompt Anatomy';
 
 function buildPrivacyEn(html, sot) {
   const abs = absoluteBaseSlash();
-  let out = html.replace('href="assets/styles.css"', 'href="../assets/styles.css"');
+  let out = html.replace(
+    'href="assets/styles.css"',
+    'href="' + versionedStylesheetHref('../assets/styles.css') + '"'
+  );
   out = injectFaviconLinks(out, abs);
   if (sot && sot.product && sot.product.contactEmail) {
     out = replaceAllGlobal(out, '{{SOT_CONTACT_EMAIL}}', sot.product.contactEmail);

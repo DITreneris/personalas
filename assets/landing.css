@@ -2579,6 +2579,22 @@
                 padding: 40px 20px;
             }
 
+            /* Mobile: hero CTAs only — lane nav hidden (no duplicate bullets/links). */
+            .page-lanes-nav {
+                display: none;
+            }
+
+            /* Sticky lane bar absent — tighter anchor clearance. */
+            :where(
+                #pdf-guides,
+                #free-prompts-label,
+                #workflow-overview,
+                .prompt[id^="prompt"],
+                [id^="block"]
+            ) {
+                scroll-margin-top: clamp(16px, 4vh, 32px);
+            }
+
             .header {
                 padding: 40px 28px;
                 border-radius: var(--r-hero);
