@@ -1183,6 +1183,8 @@ const ROBOTS_META_FULL =
   '<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">';
 const OG_IMAGE_ALT_LITERAL = 'HR hiring PDF guides for US teams - Prompt Anatomy';
 const INDEXNOW_KEY_LITERAL = '7a4b9e2c8f1d4a3b9c6e5d2a1f8b7c4d';
+const GOOGLE_SITE_VERIFICATION_HTML = 'google7305663b2567346e.html';
+const GOOGLE_SITE_VERIFICATION_BODY = 'google-site-verification: google7305663b2567346e.html';
 
 function assertGeoSurface(ctx) {
   let ok = true;
@@ -1386,6 +1388,13 @@ function assertGeoSurface(ctx) {
       'IndexNow key file body matches filename stem');
   }
 
+  const gscFile = readFile(path.join(ROOT, GOOGLE_SITE_VERIFICATION_HTML));
+  tallyLocal(gscFile !== null, 'Google Search Console verification file exists at /' + GOOGLE_SITE_VERIFICATION_HTML);
+  if (gscFile) {
+    tallyLocal(gscFile.trim() === GOOGLE_SITE_VERIFICATION_BODY,
+      'Google Search Console verification file body matches Google HTML-tag method');
+  }
+
   // --- vercel.json: CSP + Origin-Agent-Cluster + new content-type rules ---
   const vercel = readFile(path.join(ROOT, 'vercel.json'));
   if (vercel) {
@@ -1401,6 +1410,8 @@ function assertGeoSurface(ctx) {
       'vercel.json: manifest.webmanifest header rule');
     tallyLocal(vercel.includes(INDEXNOW_KEY_LITERAL),
       'vercel.json: IndexNow key file header rule');
+    tallyLocal(vercel.includes('google7305663b2567346e'),
+      'vercel.json: Google Search Console verification file header rule');
     tallyLocal(/"\/404\\\\.html"/.test(vercel),
       'vercel.json: 404.html cache header rule');
   }

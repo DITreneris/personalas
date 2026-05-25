@@ -116,6 +116,7 @@ Vercel Project → Settings → Environment Variables. **Niekada necommitinti sl
 
 - Statinių `robots.txt` ir `sitemap.xml` generavimas: `npm run build` ([scripts/build-locale-pages.js](scripts/build-locale-pages.js)).
 - Jei reikia pakeisti jau sugeneruotą bazinį URL (retas atvejis): [scripts/patch-published-base.js](scripts/patch-published-base.js) – `PATCH_FROM_PREFIX` (numatytai `https://promptanatomy.help`) ir `PUBLISHED_SITE_BASE` (tikslas).
+- **Google Search Console (nuosavybės patvirtinimas):** repo šaknyje laikomas [google7305663b2567346e.html](google7305663b2567346e.html) (HTML failo metodas). Po deploy patikrinkite `https://promptanatomy.help/google7305663b2567346e.html` — turinys turi būti viena eilutė `google-site-verification: google7305663b2567346e.html` (be redirect į `/en/`). Alternatyva — meta žyma per [config/sot.json](config/sot.json) → `brand.verification.google` + `npm run build` (tuščia = meta neįterpiama).
 
 ---
 
@@ -146,6 +147,7 @@ npx pa11y http://127.0.0.1:3000/terms.html --config .pa11yrc.json
 - Atlikti gyvą testavimą pagal [docs/TESTAVIMAS.md](docs/TESTAVIMAS.md).
 - Rezultatus įrašyti į testavimo žurnalą (tame pačiame faile arba susietame).
 - **Favicon:** `https://promptanatomy.help/favicon.svg` (ir `.ico`) grąžina 200; `/en/` skirtuke matoma ikona (ne 404 į `/en/favicon.svg`). Po SVG keitimo: `npm run generate:favicon` ir redeploy.
+- **Google Search Console:** `https://promptanatomy.help/google7305663b2567346e.html` → 200, body kaip repo faile; tada GSC → Verify ownership.
 
 ---
 
