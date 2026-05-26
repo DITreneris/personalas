@@ -35,10 +35,16 @@ const BASE_PATH = rawBase ? rawBase.replace(/\/*$/, '') + '/' : '';
 const SITE_PUBLIC_BASE = (process.env.SITE_PUBLIC_BASE || '').trim().replace(/\/+$/, '');
 
 /** Bump filename when busting Twitter/OG image cache (same URL = stale card). */
-const OG_IMAGE_REL = 'images/og-default-v2.png';
+const OG_IMAGE_REL = 'images/og-default-v3.png';
 
-/** Static alt text reused on og:image:alt, twitter:image:alt across all public pages. */
-const OG_IMAGE_ALT = 'HR hiring PDF guides for US teams - Prompt Anatomy';
+/** Alt text from config/sot.json → marketing.seo.ogImage.alt */
+function getOgImageAlt(sot) {
+  const alt = sot && sot.marketing && sot.marketing.seo && sot.marketing.seo.ogImage && sot.marketing.seo.ogImage.alt;
+  if (!alt || !String(alt).trim()) {
+    throw new Error('config/sot.json: marketing.seo.ogImage.alt is required');
+  }
+  return String(alt).trim();
+}
 
 /** Browser chrome theme color (navy --accent-primary). Mirrored in manifest.webmanifest. */
 const THEME_COLOR = '#103B5A';
@@ -179,6 +185,10 @@ function validateSot(sot) {
   const m = sot.marketing;
   if (!m || !m.seo || !m.seo.title || !m.seo.metaDescription || !m.seo.ogTitle) {
     throw new Error('config/sot.json: marketing.seo.title, metaDescription, ogTitle are required');
+  }
+  const ogImg = m.seo.ogImage;
+  if (!ogImg || !ogImg.line1 || !ogImg.line2 || !ogImg.subline || !ogImg.alt) {
+    throw new Error('config/sot.json: marketing.seo.ogImage line1, line2, subline, alt are required');
   }
   const h = m.hero;
   if (!h || !h.headline || !h.subhead || !h.primaryCtaLabel || !h.primaryCtaHref) {
@@ -979,13 +989,13 @@ function injectHead(html, basePath, sot) {
     '<meta property="og:image:width" content="1200">',
     '<meta property="og:image:height" content="630">',
     '<meta property="og:image:type" content="image/png">',
-    '<meta property="og:image:alt" content="' + escapeHtmlAttr(OG_IMAGE_ALT) + '">',
+    '<meta property="og:image:alt" content="' + escapeHtmlAttr(getOgImageAlt(sot)) + '">',
     '<meta name="twitter:card" content="summary_large_image">',
     '<meta name="twitter:site" content="@promptanatom">',
     '<meta name="twitter:title" content="' + escapeHtmlAttr(ogTitle) + '">',
     '<meta name="twitter:description" content="' + escapeHtmlAttr(description) + '">',
     '<meta name="twitter:image" content="' + escapeHtmlAttr(ogImage) + '">',
-    '<meta name="twitter:image:alt" content="' + escapeHtmlAttr(OG_IMAGE_ALT) + '">',
+    '<meta name="twitter:image:alt" content="' + escapeHtmlAttr(getOgImageAlt(sot)) + '">',
   ].join('\n    ');
 
   const jsonLd = buildJsonLdWebsiteGraph(sot);
@@ -1070,13 +1080,13 @@ function injectPrivacyHead(html, pathSuffix, title, description, opts) {
     '<meta property="og:image:width" content="1200">',
     '<meta property="og:image:height" content="630">',
     '<meta property="og:image:type" content="image/png">',
-    '<meta property="og:image:alt" content="' + escapeHtmlAttr(OG_IMAGE_ALT) + '">',
+    '<meta property="og:image:alt" content="' + escapeHtmlAttr(getOgImageAlt(opts.sot)) + '">',
     '<meta name="twitter:card" content="summary_large_image">',
     '<meta name="twitter:site" content="@promptanatom">',
     '<meta name="twitter:title" content="' + escapeHtmlAttr(title) + '">',
     '<meta name="twitter:description" content="' + escapeHtmlAttr(description) + '">',
     '<meta name="twitter:image" content="' + escapeHtmlAttr(ogImage) + '">',
-    '<meta name="twitter:image:alt" content="' + escapeHtmlAttr(OG_IMAGE_ALT) + '">',
+    '<meta name="twitter:image:alt" content="' + escapeHtmlAttr(getOgImageAlt(opts.sot)) + '">',
     buildJsonLdWebPage(canonicalUrl, title, description, { breadcrumbLabel: opts.breadcrumbLabel }),
     buildVerificationMeta(opts.sot),
   ]
@@ -1151,7 +1161,7 @@ function buildRobotsTxt(absRoot) {
 function buildSitemapXml(absRoot, sot) {
   const entries = [
     { loc: absRoot + '/en/', lastmodSrc: 'templates/index-lt.html', images: [
-      { loc: absRoot + '/' + OG_IMAGE_REL, caption: 'HR hiring PDF guides for US teams - Prompt Anatomy' },
+      { loc: absRoot + '/' + OG_IMAGE_REL, caption: getOgImageAlt(sot) },
       { loc: absRoot + '/assets/pdf-covers/beginner.png', caption: 'Cover of Beginner HR Hiring Guide PDF' },
       { loc: absRoot + '/assets/pdf-covers/advanced.png', caption: 'Cover of Advanced HR Hiring Guide PDF' },
     ] },
@@ -1232,13 +1242,13 @@ function buildRootSeoFragment(sot) {
     '<meta property="og:image:width" content="1200">',
     '<meta property="og:image:height" content="630">',
     '<meta property="og:image:type" content="image/png">',
-    '<meta property="og:image:alt" content="' + escapeHtmlAttr(OG_IMAGE_ALT) + '">',
+    '<meta property="og:image:alt" content="' + escapeHtmlAttr(getOgImageAlt(sot)) + '">',
     '<meta name="twitter:card" content="summary_large_image">',
     '<meta name="twitter:site" content="@promptanatom">',
     '<meta name="twitter:title" content="' + escapeHtmlAttr(ogTitle) + '">',
     '<meta name="twitter:description" content="' + escapeHtmlAttr(desc) + '">',
     '<meta name="twitter:image" content="' + img + '">',
-    '<meta name="twitter:image:alt" content="' + escapeHtmlAttr(OG_IMAGE_ALT) + '">',
+    '<meta name="twitter:image:alt" content="' + escapeHtmlAttr(getOgImageAlt(sot)) + '">',
     '<script type="application/ld+json">' +
       JSON.stringify({ '@context': 'https://schema.org', '@graph': graph }).replace(/</g, '\\u003c') +
       '</script>',
@@ -1298,13 +1308,13 @@ function buildRootPrivacyFragment(sot) {
     '<meta property="og:image:width" content="1200">',
     '<meta property="og:image:height" content="630">',
     '<meta property="og:image:type" content="image/png">',
-    '<meta property="og:image:alt" content="' + escapeHtmlAttr(OG_IMAGE_ALT) + '">',
+    '<meta property="og:image:alt" content="' + escapeHtmlAttr(getOgImageAlt(sot)) + '">',
     '<meta name="twitter:card" content="summary_large_image">',
     '<meta name="twitter:site" content="@promptanatom">',
     '<meta name="twitter:title" content="Privacy Policy – Prompt Anatomy">',
     '<meta name="twitter:description" content="' + escapeHtmlAttr(desc) + '">',
     '<meta name="twitter:image" content="' + img + '">',
-    '<meta name="twitter:image:alt" content="' + escapeHtmlAttr(OG_IMAGE_ALT) + '">',
+    '<meta name="twitter:image:alt" content="' + escapeHtmlAttr(getOgImageAlt(sot)) + '">',
     buildJsonLdWebPage(enPrivacyUrl, 'Privacy Policy – ' + brandName, desc, { breadcrumbLabel: 'Privacy' }),
   ];
   if (verification) lines.push(verification);

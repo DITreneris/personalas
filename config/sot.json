@@ -51,18 +51,24 @@
     "seo": {
       "title": "US HR hiring PDF guides + free AI prompts",
       "metaDescription": "US HR hiring playbooks from $5.99—checklists, rubrics, and 10 free copy-paste prompts on the page. Instant PDF download.",
-      "ogTitle": "HR hiring PDF guides for US teams"
+      "ogTitle": "U.S. hiring loop with AI prompts",
+      "ogImage": {
+        "line1": "U.S. hiring loop in minutes",
+        "line2": "AI prompts for HR teams",
+        "subline": "Free copy-paste prompts · HR playbooks",
+        "alt": "U.S. hiring loop in minutes with AI prompts - Prompt Anatomy"
+      }
     },
     "hero": {
       "headline": "Run a repeatable U.S. hiring loop in minutes — with AI prompts.",
-      "subhead": "10 free copy-paste prompts on this page. Paid PDF playbooks with instant download.",
+      "subhead": "10 free copy-paste prompts on this page. Paid PDF playbooks for US HR teams.",
       "priceTeaser": "Beginner $5.99 · Advanced $11.99 · Instant download",
       "primaryCtaLabel": "See the PDF guides",
       "primaryCtaHref": "#pdf-guides",
-      "secondaryCtaLabel": "Start free prompts",
+      "secondaryCtaLabel": "Start with prompts",
       "secondaryCtaHref": "#free-prompts-label",
       "stickyCtaLabel": "Get PDF guides — from $5.99",
-      "laneHintHtml": "<a href=\"#free-prompts-band\">Free prompts are in the section below ↓</a>"
+      "laneHintHtml": "<a href=\"#free-prompts-band\">Prompts are in the section below ↓</a>"
     },
     "lanes": {
       "navAria": "On this page",

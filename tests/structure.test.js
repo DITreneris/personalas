@@ -168,8 +168,11 @@ function run() {
     const canonicalHttps = /<link rel="canonical" href="https:/;
     tally(assert(canonicalHttps.test(enIndex), 'en/index.html canonical uses absolute HTTPS URL'));
     tally(assert(enIndex.includes('og:image" content="https://'), 'en/index.html OG image absolute HTTPS'));
-    tally(assert(enIndex.includes('images/og-default-v2.png'), 'en/index.html OG image v2 (social cache bust)'));
+    tally(assert(enIndex.includes('images/og-default-v3.png'), 'en/index.html OG image v3 (social cache bust)'));
     tally(assert(!enIndex.includes('images/og-default.png'), 'en/index.html has no legacy og-default.png meta URL'));
+    tally(assert(!enIndex.includes('images/og-default-v2.png'), 'en/index.html has no stale og-default-v2.png meta URL'));
+    tally(assert(enIndex.includes('property="og:title" content="U.S. hiring loop with AI prompts"'),
+      'en/index.html og:title outcome-led (no PDF/price headline)'));
     tally(assert(enIndex.includes('<meta name="description"'), 'en/index.html meta description'));
     tally(assert(enIndex.includes('application/ld+json'), 'en/index.html JSON-LD'));
 
@@ -1181,7 +1184,7 @@ const ROBOTS_AI_UAS = [
 ];
 const ROBOTS_META_FULL =
   '<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">';
-const OG_IMAGE_ALT_LITERAL = 'HR hiring PDF guides for US teams - Prompt Anatomy';
+const OG_IMAGE_ALT_LITERAL = 'U.S. hiring loop in minutes with AI prompts - Prompt Anatomy';
 const INDEXNOW_KEY_LITERAL = '7a4b9e2c8f1d4a3b9c6e5d2a1f8b7c4d';
 const GOOGLE_SITE_VERIFICATION_HTML = 'google7305663b2567346e.html';
 const GOOGLE_SITE_VERIFICATION_BODY = 'google-site-verification: google7305663b2567346e.html';
@@ -1215,7 +1218,7 @@ function assertGeoSurface(ctx) {
     tallyLocal(lastmodCount >= 5, 'sitemap.xml: >=5 ISO-date <lastmod> entries (got ' + lastmodCount + ')');
     const imageCount = (ctx.sitemap.match(/<image:loc>/g) || []).length;
     tallyLocal(imageCount >= 3, 'sitemap.xml: >=3 <image:loc> entries on /en/ (got ' + imageCount + ')');
-    tallyLocal(ctx.sitemap.includes('og-default-v2.png'), 'sitemap.xml: OG image in image:image');
+    tallyLocal(ctx.sitemap.includes('og-default-v3.png'), 'sitemap.xml: OG image in image:image');
     tallyLocal(ctx.sitemap.includes('beginner.png') && ctx.sitemap.includes('advanced.png'),
       'sitemap.xml: PDF cover images in image:image');
   }

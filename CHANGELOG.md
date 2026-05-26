@@ -6,6 +6,10 @@ Visi reikšmingi pakeitimai projekte dokumentuojami čia. Formatas pagal [Keep a
 
 ## [Unreleased]
 
+### Pakeista
+
+- **[UI][Content] OG social card v3:** [config/sot.json](config/sot.json) `marketing.seo.ogImage` (outcome copy, be kainos ant PNG) + `ogTitle`; [scripts/generate-og-image.js](scripts/generate-og-image.js) skaito SOT → [images/og-default-v3.png](images/og-default-v3.png); [scripts/build-locale-pages.js](scripts/build-locale-pages.js) `OG_IMAGE_REL` v3, `getOgImageAlt()`; [vercel.json](vercel.json) cache headers v3; testai atnaujinti.
+
 ### Pataisyta
 
 - **[UI][QA] Mobile lane nav „nuogi“ linkai + CSS cache:** [scripts/build-locale-pages.js](scripts/build-locale-pages.js) — `versionedStylesheetHref()` injektuoja `?v={package.version}` į `styles.css` ir `landing.css` (`en/index.html`, `en/privacy.html`, `404.html`), kaip jau daroma `generator.js` (apeina [vercel.json](vercel.json) `immutable` 1y CSS cache su senais taisyklėmis be `.page-lanes-nav`). [assets/landing.css](assets/landing.css) — `@media (max-width: 768px)` `.page-lanes-nav { display: none }` + mažesnis `scroll-margin-top` anchor'ams; mobile navigacija tik hero CTA + hint. [tests/structure.test.js](tests/structure.test.js) — 3 nauji assert'ai. Dokumentacija: [docs/LEGACY_GOLDEN_STANDARD.md](docs/LEGACY_GOLDEN_STANDARD.md) §2, [docs/TESTAVIMAS.md](docs/TESTAVIMAS.md), [docs/design_systemv02.md](docs/design_systemv02.md) §2.2.
