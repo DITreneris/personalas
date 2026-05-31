@@ -8,6 +8,10 @@ Visi reikšmingi pakeitimai projekte dokumentuojami čia. Formatas pagal [Keep a
 
 ### Pakeista
 
+- **[UI] Design System v2.0 — release polish:** PDF preview dialog footer (`.pdf-preview-actions`, `.btn.btn--ghost` close, `--shadow-modal`); SOT-driven bundle CTA + sample preview labels; trust line clarifies Personal license scope; Advanced card copy „Senior HR playbook"; `--text-muted` darkened for AA on `--surface-2`. **Token hygiene:** removed 7 deprecated `:root` aliases; added `--btn-pad-*` / `--btn-min-h-*` on 7 CTA selectors; line-heights → `--leading-*`; ledes `max-width: 65ch`. **Satellite parity:** new [assets/satellite.css](assets/satellite.css); [success.html](success.html) + [terms.html](terms.html) use Inter + shared `.btn`. **Content/SEO:** FAQPage JSON-LD dedupes overlapping phase/subset question; preview error adds „Back to guides" link. Docs: [docs/design_system_v2.md](docs/design_system_v2.md), [docs/qa/screenshots/v2.0-baseline/README.md](docs/qa/screenshots/v2.0-baseline/README.md). Tests: DS v2.0 structural asserts.
+
+### Pakeista
+
 - **[UI][Content] OG social card v3:** [config/sot.json](config/sot.json) `marketing.seo.ogImage` (outcome copy, be kainos ant PNG) + `ogTitle`; [scripts/generate-og-image.js](scripts/generate-og-image.js) skaito SOT → [images/og-default-v3.png](images/og-default-v3.png); [scripts/build-locale-pages.js](scripts/build-locale-pages.js) `OG_IMAGE_REL` v3, `getOgImageAlt()`; [vercel.json](vercel.json) cache headers v3; testai atnaujinti.
 
 ### Pataisyta

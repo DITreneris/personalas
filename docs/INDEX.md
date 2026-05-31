@@ -10,7 +10,8 @@
 | [QA_STANDARTAS.md](QA_STANDARTAS.md) | QA standartas |
 | [TESTAVIMAS.md](TESTAVIMAS.md) | Gyvas testavimas po deploy |
 | [LEGACY_GOLDEN_STANDARD.md](LEGACY_GOLDEN_STANDARD.md) | Golden standard: DOM, PDF-first seka, DS sutartys, QA (ne tik turinys) |
-| [design_systemv02.md](design_systemv02.md) | Design System v0.2 įgyvendinimo planas (tokenai, PR seka, QA) |
+| [design_system_v2.md](design_system_v2.md) | **Design System v2.0** — canonical token/CTA/a11y reference + release checklist |
+| [design_systemv02.md](design_systemv02.md) | Design System v0.2–v0.3 įgyvendinimo planas (istorinis PR log) |
 
 ## Aktyvus PDF authoring
 

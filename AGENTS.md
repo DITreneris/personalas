@@ -118,9 +118,9 @@ Prieš PR įsitikinti, kad `npm test` praeina. PDF: `pdf:validate`, `pdf:export`
 
 ## 10. UI / CTA sutartys (Design System)
 
-- Po DS v0.2 **neįvesti naujų CTA klasės pavadinimų** — naudoti esamus (`.btn`, `.cta-button`, `.pdf-guide-cta`, `.community-cta-primary`, `.pdf-sticky-cta-btn`, `.form-submit`, `.btn--ghost`).
-- Dydžių harmonizacija (v0.3.1 backlog): `--btn-pad-*` / `--btn-min-h-*` token'ai pritaikomi **tiems patiems** selectoriams, ne naujiems komponentams.
-- Detaliau: [docs/design_systemv02.md](docs/design_systemv02.md) §18, [docs/LEGACY_GOLDEN_STANDARD.md](docs/LEGACY_GOLDEN_STANDARD.md).
+- Po DS v2.0 **neįvesti naujų CTA klasės pavadinimų** — naudoti esamus (`.btn`, `.cta-button`, `.pdf-guide-cta`, `.community-cta-primary`, `.pdf-sticky-cta-btn`, `.form-submit`, `.btn--ghost`).
+- CTA dydžiai: `--btn-pad-*` / `--btn-min-h-*` token'ai pritaikyti **tiems patiems** 7 selectoriams (AGENTS.md §10).
+- Detaliau: [docs/design_system_v2.md](docs/design_system_v2.md) (kanonas), [docs/design_systemv02.md](docs/design_systemv02.md) (istorija), [docs/LEGACY_GOLDEN_STANDARD.md](docs/LEGACY_GOLDEN_STANDARD.md).
 
 ---
 

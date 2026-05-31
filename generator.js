@@ -441,12 +441,12 @@
     };
     var PDF_PREVIEW_DEFS = {
         beginner: {
-            title: 'Preview — Beginner HR Hiring Guide',
+            title: 'Sample pages — Beginner HR Hiring Guide',
             altPrefix: 'Beginner guide',
             pages: PDF_PREVIEW_FALLBACK_PAGES.beginner.slice()
         },
         advanced: {
-            title: 'Preview — Advanced HR Hiring Guide',
+            title: 'Sample pages — Advanced HR Hiring Guide',
             altPrefix: 'Advanced guide',
             pages: PDF_PREVIEW_FALLBACK_PAGES.advanced.slice()
         }
@@ -698,7 +698,8 @@
             if (!def.pages.length) {
                 pagesEl.innerHTML =
                     '<p class="pdf-preview-error" role="alert">Preview pages are not available right now. ' +
-                    'Try again in a moment or download the 1-page sample PDF from the card.</p>';
+                    'Try again in a moment or download the 1-page sample PDF from the card. ' +
+                    '<a href="#pdf-guides" class="pdf-preview-back">Back to guides</a></p>';
                 return true;
             }
             var html = '';

@@ -103,7 +103,7 @@
                             <summary class="pdf-see-inside__summary"><strong>See inside</strong> <span class="pdf-see-inside__meta" data-see-inside-meta="beginner"></span></summary>
                             <div class="pdf-see-inside__body">
                                 <ul class="pdf-see-inside__thumbs" data-see-inside-thumbs="beginner" role="list" aria-label="Sample pages from inside the Beginner PDF"></ul>
-                                <p class="pdf-see-inside__open-all-row"><a class="pdf-see-inside__open-all" href="#pdf-guides" data-preview-trigger="beginner" data-analytics="pdf_preview_open">Open all pages in viewer →</a></p>
+                                <p class="pdf-see-inside__open-all-row"><a class="pdf-see-inside__open-all" href="#pdf-guides" data-preview-trigger="beginner" data-analytics="pdf_preview_open">{{SOT_PDF_OPEN_ALL_PREVIEW}}</a></p>
                                 <h4 class="pdf-see-inside__chapters-title">Chapters</h4>
                                 <ol class="pdf-see-inside__chapter-list" data-toc-list="beginner"></ol>
                             </div>
@@ -135,13 +135,13 @@
 
                         <ul class="pdf-guide-specs"><li>32 pages</li><li>PDF</li><li>English</li><li>Updated May 2026</li></ul>
 
-                        <p class="pdf-guide-desc">Senior-IC playbook with scorecards, calibration scripts, structured interview rubrics, and offer scenarios.</p>
+                        <p class="pdf-guide-desc">Senior HR playbook with scorecards, calibration scripts, structured interview rubrics, and offer scenarios.</p>
 
                         <details class="pdf-see-inside" data-see-inside="advanced">
                             <summary class="pdf-see-inside__summary"><strong>See inside</strong> <span class="pdf-see-inside__meta" data-see-inside-meta="advanced"></span></summary>
                             <div class="pdf-see-inside__body">
                                 <ul class="pdf-see-inside__thumbs" data-see-inside-thumbs="advanced" role="list" aria-label="Sample pages from inside the Advanced PDF"></ul>
-                                <p class="pdf-see-inside__open-all-row"><a class="pdf-see-inside__open-all" href="#pdf-guides" data-preview-trigger="advanced" data-analytics="pdf_preview_open">Open all pages in viewer →</a></p>
+                                <p class="pdf-see-inside__open-all-row"><a class="pdf-see-inside__open-all" href="#pdf-guides" data-preview-trigger="advanced" data-analytics="pdf_preview_open">{{SOT_PDF_OPEN_ALL_PREVIEW}}</a></p>
                                 <h4 class="pdf-see-inside__chapters-title">Chapters</h4>
                                 <ol class="pdf-see-inside__chapter-list" data-toc-list="advanced"></ol>
                             </div>
@@ -177,7 +177,7 @@
                     <p class="pdf-bundle-savings" data-bundle-savings>Save $1.99</p>
                 </div>
 
-                <a class="pdf-guide-cta pdf-bundle-cta" href="https://buy.stripe.com/5kQ6oH660ebz29m39CfjG08" rel="noopener" data-product="bundle-pdf" data-analytics="pdf_cta_click">Get both PDFs</a>
+                <a class="pdf-guide-cta pdf-bundle-cta" href="https://buy.stripe.com/5kQ6oH660ebz29m39CfjG08" rel="noopener" data-product="bundle-pdf" data-analytics="pdf_cta_click">{{SOT_PDF_BUNDLE_CTA}}</a>
 
             </article>
 
@@ -204,13 +204,16 @@
 
             <div class="pdf-preview-inner">
 
-                <h2 id="pdfPreviewTitle">Preview pages</h2>
+                <h2 id="pdfPreviewTitle">Sample pages</h2>
 
                 <p>Sample checklist and rubric pages from the paid guide. Watermarked. Full PDF delivered after purchase.</p>
 
                 <div id="pdfPreviewPages" class="pdf-preview-pages"></div>
 
-                <p><button type="button" id="pdfPreviewClose">Close</button> · <a href="#pdf-guides" id="pdfPreviewBack">Back to guides</a></p>
+                <div class="pdf-preview-actions">
+                    <button type="button" id="pdfPreviewClose" class="btn btn--ghost pdf-preview-close">Close</button>
+                    <a href="#pdf-guides" id="pdfPreviewBack" class="pdf-preview-back">Back to guides</a>
+                </div>
 
             </div>
 

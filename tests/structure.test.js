@@ -427,6 +427,21 @@ function run() {
           ' total)'
       )
     );
+    tally(
+      assert(
+        enIndex.includes('class="pdf-preview-actions"') &&
+          /id="pdfPreviewClose"[^>]*class="[^"]*\bbtn\b/.test(enIndex),
+        'en/index.html: PDF preview dialog footer uses pdf-preview-actions + btn (DS v2.0 PR-0A)'
+      )
+    );
+    tally(
+      assert(
+        landingCss.includes('.pdf-preview-actions') &&
+          landingCss.includes('box-shadow: var(--shadow-modal)') &&
+          landingCss.includes('.pdf-preview-back:focus-visible'),
+        'assets/landing.css: PDF preview dialog actions styled (DS v2.0 PR-0A)'
+      )
+    );
     const sharedCss = fs.readFileSync(path.join(ROOT, 'assets/styles.css'), 'utf8');
     tally(
       assert(/\.btn\.btn--ghost\s*\{/.test(sharedCss), 'assets/styles.css: btn--ghost component (DS v0.2.1)')
@@ -810,8 +825,26 @@ function run() {
     }
     tally(
       assert(
-        /DEPRECATED ALIASES — REMOVED IN v0\.3\.1/.test(sharedCss),
-        'styles.css: consolidated deprecation block declares v0.3.1 hard removal (DS v0.3.0 PR-4)'
+        !DEPRECATED_TOKENS.some(function (tok) {
+          const re = new RegExp('--' + tok.replace(/^--/, '').replace(/-/g, '\\-') + '\\s*:');
+          return re.test(sharedCss);
+        }),
+        'styles.css: deprecated alias declarations removed (DS v2.0 PR-1)'
+      )
+    );
+    tally(
+      assert(
+        /--btn-pad-sm:/.test(sharedCss) &&
+          /--btn-min-h-lg:/.test(sharedCss) &&
+          /--btn-pad-sm/.test(landingCss),
+        'assets/styles.css + landing.css: v2.0 CTA size tokens declared and consumed (DS v2.0 PR-2)'
+      )
+    );
+    const adhocLeading = (landingCss.match(/line-height:\s*1\.(45|55|65)/g) || []).length;
+    tally(
+      assert(
+        adhocLeading <= 2,
+        'landing.css: ad-hoc line-height 1.45/1.55/1.65 <= 2 (DS v2.0 PR-3); found ' + adhocLeading
       )
     );
     const afterPurchaseBlock = enIndex.match(
@@ -937,6 +970,21 @@ function run() {
   tally(assert(terms && terms.includes('lang="en-US"'), 'terms.html lang="en-US"'));
   tally(assert(terms && terms.includes('Not professional advice'), 'terms.html HR advisory section'));
   tally(assert(terms && terms.includes('/en/privacy.html'), 'terms.html links to privacy policy'));
+
+  const satelliteCss = readFile(path.join(ROOT, 'assets', 'satellite.css'));
+  tally(assert(satelliteCss && satelliteCss.includes('.satellite-card'), 'assets/satellite.css exists (DS v2.0 PR-4)'));
+  tally(
+    assert(
+      success && success.includes('assets/satellite.css') && !/\.btn\s*\{[^}]*background:\s*var\(--accent\)/.test(success),
+      'success.html: uses satellite.css + shared .btn (DS v2.0 PR-4)'
+    )
+  );
+  tally(
+    assert(
+      terms && terms.includes('assets/satellite.css') && terms.includes('satellite-card'),
+      'terms.html: uses satellite.css + satellite-card (DS v2.0 PR-4)'
+    )
+  );
 
   tally(assert(success && success.includes('terms.html#refunds'), 'success.html links to refunds'));
 
@@ -1097,7 +1145,8 @@ function run() {
     tally(assert(enIndex.includes('class="pdf-guide-specs"') && enIndex.includes('16 pages') && enIndex.includes('32 pages'), 'PDF specs row'));
     tally(assert(enIndex.includes('data-sample-link="beginner"') && enIndex.includes('data-sample-link="advanced"'), 'PDF sample links: both beginner + advanced'));
     tally(assert(enIndex.includes('prompt-anatomy-advanced-scorecard-sample.pdf'), 'en/index.html links advanced sample PDF'));
-    tally(assert(enIndex.includes('Personal license') && enIndex.includes('terms.html#paid-pdf-license'), 'PDF personal license line'));
+    tally(assert(enIndex.includes('Get both guides — $15.99'), 'en/index.html bundle CTA shows price (DS v2.0)'));
+    tally(assert(enIndex.includes('Open sample pages in viewer'), 'en/index.html sample preview label (DS v2.0)'));
     tally(
       assert(
         enIndex.includes('id="pdf-section-trust"') && enIndex.includes('Stripe checkout') && enIndex.includes('14-day refund'),
@@ -1240,19 +1289,26 @@ function assertGeoSurface(ctx) {
       'en/index.html: theme-color navy');
   }
 
-  // --- en/index.html: FAQPage JSON-LD (9 questions, parity check) ---
+  // --- en/index.html: FAQPage JSON-LD (8 questions; faq-subset-prompts omitted as duplicate of phase-order) ---
   if (ctx.enIndex && ctx.sot) {
     tallyLocal(/"@type":"FAQPage"/.test(ctx.enIndex), 'en/index.html: FAQPage JSON-LD');
     const qCount = (ctx.enIndex.match(/"@type":"Question"/g) || []).length;
-    tallyLocal(qCount >= 9, 'en/index.html: >=9 Question entries (got ' + qCount + ')');
-    const allFaq = (ctx.sot.frontFaq || []).concat(ctx.sot.buyerFaq || []);
+    tallyLocal(qCount === 8, 'en/index.html: 8 Question entries in FAQPage JSON-LD (got ' + qCount + ')');
+    const frontForLd = (ctx.sot.frontFaq || []).filter(function (item) {
+      return item && item.id !== 'faq-subset-prompts';
+    });
+    const allFaq = frontForLd.concat(ctx.sot.buyerFaq || []);
     let parityOk = 0;
     allFaq.forEach((item) => {
       const qInJsonLd = ctx.enIndex.includes('"name":"' + item.q.replace(/"/g, '\\"') + '"')
         || ctx.enIndex.includes('"name":' + JSON.stringify(item.q));
       if (qInJsonLd) parityOk++;
     });
-    tallyLocal(parityOk >= 7, 'en/index.html: FAQ question parity (>=7 of 9 matched, got ' + parityOk + ')');
+    tallyLocal(parityOk >= allFaq.length, 'en/index.html: FAQ question parity (' + parityOk + ' of ' + allFaq.length + ' matched)');
+    tallyLocal(
+      !ctx.enIndex.includes('"Can I use just one or a few prompts?"'),
+      'en/index.html: duplicate subset FAQ omitted from JSON-LD (DS v2.0 PR-8)'
+    );
   }
 
   // --- en/index.html: Product JSON-LD (x3) + Offer fields ---

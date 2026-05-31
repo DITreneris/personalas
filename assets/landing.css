@@ -60,7 +60,7 @@
             font-family: 'Inter', -apple-system, sans-serif;
             background: var(--bg);
             color: var(--text);
-            line-height: 1.6;
+            line-height: var(--leading-relaxed);
             font-size: var(--fs-lg);
             /* DS v0.3.0 PR-2: premium SaaS text rendering */
             -webkit-font-smoothing: antialiased;
@@ -182,7 +182,7 @@
             position: relative;
             z-index: 1;
             font-size: var(--fs-xl);
-            line-height: 1.5;
+            line-height: var(--leading-normal);
             opacity: 0.95;
             font-weight: 500;
             margin-bottom: var(--space-8);
@@ -194,7 +194,7 @@
             z-index: 1;
             font-size: var(--fs-sm);
             font-weight: 600;
-            line-height: 1.45;
+            line-height: var(--leading-relaxed);
             letter-spacing: 0.01em;
             opacity: 0.82;
             margin-top: 0;
@@ -315,8 +315,8 @@
             gap: var(--space-12);
             background: var(--cta-bg);
             color: var(--cta-text);
-            padding: 20px var(--space-32);
-            min-height: 44px;
+            padding: var(--btn-pad-md);
+            min-height: var(--btn-min-h-sm);
             min-width: 44px;
             border-radius: var(--r-btn);
             border: none;
@@ -335,8 +335,8 @@
             color: var(--cta-hero-text);
             box-shadow: var(--shadow-cta), var(--shadow-inset-hi-strong);
             border: 1px solid rgba(0, 0, 0, 0.08);
-            min-height: 56px;
-            padding: 28px 48px;
+            min-height: var(--btn-min-h-lg);
+            padding: var(--btn-pad-xl);
             font-size: var(--fs-lg);
             font-weight: 800;
             transition: transform var(--duration-fast) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out), background var(--duration-normal) var(--ease-out);
@@ -407,8 +407,8 @@
             gap: var(--space-12);
             background: rgba(255, 255, 255, 0.06);
             color: rgba(255, 255, 255, 0.95);
-            padding: 20px var(--space-32);
-            min-height: 44px;
+            padding: var(--btn-pad-md);
+            min-height: var(--btn-min-h-sm);
             min-width: 44px;
             border-radius: var(--r-btn);
             border: var(--border-width) solid rgba(255, 255, 255, 0.6);
@@ -538,7 +538,7 @@
             font-size: var(--fs-md);
             color: var(--text-light);
             margin-bottom: 28px;
-            line-height: 1.6;
+            line-height: var(--leading-relaxed);
         }
 
         .modal-privacy {
@@ -599,8 +599,8 @@
 
         .form-submit {
             width: 100%;
-            padding: 20px 16px;
-            min-height: 44px;
+            padding: var(--btn-pad-md);
+            min-height: var(--btn-min-h-sm);
             background: var(--accent-primary);
             color: white;
             border: none;
@@ -690,7 +690,7 @@
         .form-success p {
             font-size: var(--fs-md);
             color: var(--text-light);
-            line-height: 1.6;
+            line-height: var(--leading-relaxed);
         }
 
         /* ===== INSTRUCTIONS BOX – vizualinis svoris, sisteminis kbd ===== */
@@ -737,7 +737,7 @@
         .instructions li {
             font-size: var(--fs-lg);
             margin-bottom: var(--space-16);
-            line-height: 1.65;
+            line-height: var(--leading-relaxed);
             color: var(--text);
             position: relative;
             padding-left: var(--space-12);
@@ -767,7 +767,7 @@
 
         .instructions-subrow {
             font-size: var(--fs-md);
-            line-height: 1.6;
+            line-height: var(--leading-relaxed);
             color: var(--text);
             margin: 0 0 var(--space-12) 0;
         }
@@ -802,7 +802,7 @@
             font-size: var(--fs-xs);
             font-weight: 600;
             color: var(--accent-dark);
-            line-height: 1.45;
+            line-height: var(--leading-relaxed);
             box-shadow: none;
             vertical-align: baseline;
         }
@@ -831,7 +831,7 @@
             font-size: var(--fs-md);
             color: var(--text-light);
             margin-bottom: var(--space-20);
-            line-height: 1.55;
+            line-height: var(--leading-relaxed);
         }
 
         .faq-details {
@@ -895,7 +895,7 @@
             border-left: 3px solid var(--tertiary);
             margin-left: var(--space-20);
             font-size: var(--fs-md);
-            line-height: 1.6;
+            line-height: var(--leading-relaxed);
             color: var(--text-light);
         }
 
@@ -969,14 +969,14 @@
         .jump-nav-summary-hint {
             font-size: var(--fs-sm);
             color: var(--text-light);
-            line-height: 1.5;
+            line-height: var(--leading-normal);
         }
 
         .jump-nav-intro {
             font-size: var(--fs-sm);
             color: var(--text-light);
             margin-bottom: var(--space-16);
-            line-height: 1.5;
+            line-height: var(--leading-normal);
         }
 
         .jump-nav ul {
@@ -1043,7 +1043,7 @@
             padding-left: 44px;
             margin-bottom: var(--space-20);
             font-size: var(--fs-lg);
-            line-height: 1.6;
+            line-height: var(--leading-relaxed);
             color: var(--text);
             transition: color var(--duration-fast) var(--ease-out);
         }
@@ -1099,7 +1099,7 @@
         .objectives-intro {
             margin-bottom: var(--space-20);
             font-size: var(--fs-lg);
-            line-height: 1.6;
+            line-height: var(--leading-relaxed);
             color: var(--text);
         }
 
@@ -1239,8 +1239,9 @@
         .workflow-overview-lede {
             margin-bottom: var(--space-20);
             font-size: var(--fs-md);
-            line-height: 1.6;
+            line-height: var(--leading-relaxed);
             color: var(--text);
+            max-width: 65ch;
         }
 
         .workflow-overview .header-phases {
@@ -1407,13 +1408,13 @@
             font-weight: 700;
             color: var(--text);
             margin-bottom: 12px;
-            line-height: 1.2;
+            line-height: var(--leading-tight);
         }
 
         .prompt-desc {
             font-size: var(--fs-lg);
             color: var(--text-light);
-            line-height: 1.5;
+            line-height: var(--leading-normal);
             font-weight: 400;
         }
 
@@ -1518,7 +1519,7 @@
         .code-text {
             font-family: 'JetBrains Mono', monospace;
             font-size: var(--fs-sm);
-            line-height: 1.65;
+            line-height: var(--leading-relaxed);
             color: var(--text);
             white-space: pre-wrap;
             font-weight: 500;
@@ -1545,7 +1546,7 @@
             display: block;
             font-style: italic;
             color: var(--text-light);
-            line-height: 1.5;
+            line-height: var(--leading-normal);
         }
 
         .info-item + .info-item {
@@ -1580,7 +1581,7 @@
         .info-content p {
             display: inline;
             font-size: var(--fs-sm);
-            line-height: 1.5;
+            line-height: var(--leading-normal);
             color: var(--text-light);
             font-weight: 400;
         }
@@ -1630,7 +1631,7 @@
             font-size: var(--fs-sm);
             color: var(--text-light);
             margin-bottom: 16px;
-            line-height: 1.5;
+            line-height: var(--leading-normal);
         }
 
         .prompt-done-wrap {
@@ -1822,7 +1823,7 @@
             font-size: var(--fs-md);
             color: var(--text);
             margin-bottom: 16px;
-            line-height: 1.6;
+            line-height: var(--leading-relaxed);
         }
 
         .next-steps-links {
@@ -1834,9 +1835,9 @@
         .next-steps-links a {
             display: inline-flex;
             align-items: center;
-            padding: 16px 18px;
-            min-height: 44px;
-            line-height: 24px;
+            padding: var(--btn-pad-sm);
+            min-height: var(--btn-min-h-sm);
+            line-height: var(--icon-size-md);
             background: var(--cta-primary-bg);
             color: white;
             text-decoration: none;
@@ -1934,13 +1935,14 @@
             color: rgba(255, 255, 255, 0.88);
             margin: 0 0 var(--space-16);
             max-width: 42rem;
-            line-height: 1.5;
+            line-height: var(--leading-normal);
         }
         .footer-legal { font-size: var(--fs-sm); margin: 0 0 var(--space-12); }
         .footer-legal a { color: var(--accent-primary); font-weight: 600; }
         .pdf-guides-lede {
             margin: 0 0 var(--space-20);
             color: var(--text-light);
+            max-width: 65ch;
         }
         .pdf-guides-grid {
             display: grid;
@@ -2001,12 +2003,12 @@
             justify-content: center;
             width: 100%;
             margin-top: auto;
-            padding: 12px 18px;
+            padding: var(--btn-pad-sm);
+            min-height: var(--btn-min-h-sm);
             background: var(--cta-primary-bg);
             text-decoration: none;
             border-radius: var(--r-btn);
             font-weight: 600;
-            min-height: 44px;
             box-shadow: var(--shadow-cta);
             transition: box-shadow var(--duration-normal) var(--ease-out), transform var(--duration-fast) var(--ease-out), background var(--duration-normal) var(--ease-out);
         }
@@ -2053,7 +2055,7 @@
         .pdf-guides-meta a { font-weight: 600; }
         .pdf-guides-intro { margin: 0 0 var(--space-16); color: var(--text-light); font-size: var(--fs-sm); }
         .pdf-guides-grid { align-items: stretch; }
-        .pdf-guide-card-inner { display: flex; flex-direction: column; gap: 10px; height: 100%; }
+        .pdf-guide-card-inner { display: flex; flex-direction: column; gap: var(--space-12); height: 100%; }
         .pdf-guide-card-cover { margin: 0; border-radius: var(--r-sm); overflow: hidden; border: 1px solid var(--border-subtle); }
         .pdf-guide-card-cover img { display: block; width: 100%; height: auto; }
         .pdf-guide-specs { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: var(--fs-sm); color: var(--text-light); margin: 0; padding: 0; list-style: none; }
@@ -2068,9 +2070,43 @@
         .pdf-author-panel { margin-top: var(--space-20); padding: 16px; border-top: 1px solid var(--border-subtle); font-size: var(--fs-sm); color: var(--text-light); }
         .pdf-guides-faq { margin-top: var(--space-24); }
         .pdf-guides-faq h3 { margin: 0 0 12px; font-size: var(--fs-xl); }
-        #pdfPreviewDialog { border: none; border-radius: var(--r-md); padding: 0; max-width: min(96vw, 920px); width: 100%; }
+        #pdfPreviewDialog {
+            border: none;
+            border-radius: var(--r-md);
+            padding: 0;
+            max-width: min(96vw, 920px);
+            width: 100%;
+            box-shadow: var(--shadow-modal);
+        }
         #pdfPreviewDialog::backdrop { background: rgba(11, 19, 32, 0.55); }
         .pdf-preview-inner { padding: 20px; }
+        .pdf-preview-actions {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: var(--space-12);
+            margin-top: var(--space-16);
+        }
+        .pdf-preview-close {
+            min-height: 44px;
+        }
+        .pdf-preview-back,
+        #pdfPreviewBack {
+            font-size: var(--fs-sm);
+            font-weight: 600;
+            color: var(--accent-primary);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+        }
+        .pdf-preview-back:focus-visible,
+        #pdfPreviewBack:focus-visible {
+            outline: var(--ring-focus);
+            outline-offset: 2px;
+            border-radius: var(--r-xs);
+        }
         .pdf-preview-pages { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 16px 0; }
         .pdf-preview-pages figure { margin: 0; }
         .pdf-preview-pages img { width: 100%; height: auto; border: 1px solid var(--border-subtle); border-radius: var(--r-xs); }
@@ -2268,14 +2304,14 @@
         .pdf-sticky-cta-btn {
             display: inline-block;
             width: min(100%, 22rem);
-            padding: 12px 20px;
+            padding: var(--btn-pad-sm);
             background: var(--cta-primary-bg);
-            color: #fff;
+            color: white;
             font-weight: 700;
             text-decoration: none;
             border-radius: var(--r-btn);
-            min-height: 44px;
-            line-height: 1.3;
+            min-height: var(--btn-min-h-sm);
+            line-height: var(--leading-tight);
             box-shadow: var(--shadow-cta);
             transition: background var(--duration-normal) var(--ease-out), transform var(--duration-fast) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out);
         }
@@ -2313,7 +2349,7 @@
             font-size: var(--fs-sm);
             color: var(--text-muted);
             margin: 0 auto;
-            line-height: 1.5;
+            line-height: var(--leading-normal);
             max-width: 48ch;
         }
         .free-tier-cta-row {
@@ -2323,7 +2359,7 @@
             padding: 12px 22px;
             font-size: var(--fs-sm);
         }
-        .pdf-meta-muted { font-size: var(--fs-sm); color: var(--text-light); line-height: 1.5; }
+        .pdf-meta-muted { font-size: var(--fs-sm); color: var(--text-light); line-height: var(--leading-normal); }
         .pdf-section-trust { margin: var(--space-16) 0; }
         .instructions-format-tips { margin-top: var(--space-16); }
         .instructions-format-tips summary {
@@ -2349,14 +2385,14 @@
             font-weight: 800;
             color: var(--text);
             margin-bottom: 16px;
-            line-height: 1.3;
+            line-height: var(--leading-tight);
         }
 
         .community p {
             font-size: var(--fs-lg);
             color: var(--text-light);
             margin-bottom: 24px;
-            line-height: 1.5;
+            line-height: var(--leading-normal);
         }
 
         /* Pagrindinis CTA – vienas brand green, be glow, subtilus shadow */
@@ -2367,8 +2403,8 @@
             gap: 10px;
             background: var(--cta-primary-bg);
             color: var(--white);
-            padding: 20px 32px;
-            min-height: 48px;
+            padding: var(--btn-pad-lg);
+            min-height: var(--btn-min-h-md);
             border-radius: var(--r-btn);
             font-size: var(--fs-lg);
             font-weight: 600;
@@ -2465,7 +2501,7 @@
         .footer p {
             font-size: var(--fs-lg);
             color: var(--text-light);
-            line-height: 1.6;
+            line-height: var(--leading-relaxed);
             margin-bottom: 28px;
         }
 
@@ -2490,7 +2526,7 @@
         .business-address {
             font-style: normal;
             font-size: var(--fs-sm);
-            line-height: 1.55;
+            line-height: var(--leading-relaxed);
             color: var(--text-light);
             margin: 0 auto 24px;
             padding: 12px 16px;
@@ -2605,8 +2641,8 @@
             }
 
             .cta-button {
-                min-height: 48px;
-                padding: 14px 28px;
+                min-height: var(--btn-min-h-md);
+                padding: var(--btn-pad-md);
                 font-size: var(--fs-md);
             }
 
@@ -2621,7 +2657,7 @@
             }
 
             .prompt-title {
-                font-size: 26px;
+                font-size: var(--fs-3xl);
             }
 
             .code-text {
@@ -2767,7 +2803,7 @@
 
             .header h1 {
                 /* DS v0.3.0 PR-2: font-size handled by clamp() at base rule. */
-                line-height: 1.2;
+                line-height: var(--leading-tight);
             }
 
             .phase-meta {

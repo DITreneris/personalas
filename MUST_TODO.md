@@ -67,15 +67,24 @@ Pilnas sąrašas – [DEPLOYMENT.md](DEPLOYMENT.md). Privalomi:
 - [ ] Pakartotinis to paties webhook’o pristatymas – fulfillment lieka `already_fulfilled` (Redis idempotency)
 - [ ] [terms.html](terms.html) `#paid-pdf-license` pasiekiamas iš laiško ir iš `success.html`
 
-## Design System v0.3.1 (po v0.3.0 release'o)
+## Design System v2.0 release gate (P0 ops — Stripe Dashboard)
 
-Plan: [docs/design_systemv02.md](docs/design_systemv02.md) §18 v0.3.1 backlog.
+**Repo cannot change Stripe product metadata.** Before v2.0 tag, complete manually (see Pass 3 hand-off above):
 
-- [ ] Hard removal of 7 deprecated `:root` aliases (`--orange`, `--orange-light`, `--blue-light`, `--community-cta-green`, `--community-cta-green-hover`, `--shadow-card`, `--shadow-card-hover`) iš [assets/styles.css](assets/styles.css). Pre-flight `rg "var\(\s*--(orange|blue-light|community-cta-green|shadow-card)" templates/ assets/landing.css` privalo grąžinti zero. Strukturinis test'as `tests/structure.test.js` (DS v0.3.0 PR-4 deprecation guard) jau saugo, kad nebūtų regresijos.
-- [ ] PR-5 — CTA size-token harmonization: pridėti `--btn-pad-sm/md/lg/xl` ir `--btn-min-h-sm/md/lg` token'us [assets/styles.css](assets/styles.css) `:root`; pritaikyti **esamoms** 7 selectoriams (`.btn`, `.cta-button` (hero), `.community-cta-primary`, `.pdf-guide-cta`, `.next-steps-links a`, `.pdf-sticky-cta-btn`, `.form-submit`) be naujų klasių pavadinimų (AGENTS.md §10 — "no new CTA class names after v0.2"). Reikia screenshot baseline 1440 / 768 / 375 prieš ir po.
-- [ ] Line-height token consolidation: 7 ad-hoc literal'ai (`1.2`, `1.3`, `1.45`, `1.5`, `1.55`, `1.6`, `1.65`) → 3 `--leading-tight/normal/relaxed` token'ai (jau deklaruoti `assets/styles.css` `:root`).
-- [ ] Deduplicate `:root` blokus `success.html` / `terms.html` → linkuoti tik shared [assets/styles.css](assets/styles.css).
-- [ ] (Optional) Playwright arba manual screenshot baseline (1440 / 768 / 375) per [docs/design_systemv02.md](docs/design_systemv02.md) §9.4.
+- [ ] **Advanced HR Hiring Guide ($11.99):** description **32 pages**; cover image = `assets/pdf-covers/advanced.png`
+- [ ] **Bundle ($15.99):** description **16 + 32 pages**
+- [ ] (Optional) Advanced tagline: debrief transcript + comp worksheet
+- [ ] Verify checkout copy matches [config/sot.json](config/sot.json) `pdfGuides.*.pages` and `/en/#pdf-guides`
+
+## Design System v2.0 / v0.3.1 (token hygiene — in repo)
+
+Plan: [docs/design_system_v2.md](docs/design_system_v2.md) (canonical) · historical: [docs/design_systemv02.md](docs/design_systemv02.md) §18
+
+- [x] Hard removal of 7 deprecated `:root` aliases from [assets/styles.css](assets/styles.css)
+- [x] CTA size tokens (`--btn-pad-*`, `--btn-min-h-*`) on 7 existing selectors (AGENTS.md §10)
+- [x] Line-height token consolidation → `--leading-tight/normal/relaxed`
+- [x] [success.html](success.html) / [terms.html](terms.html) → shared [assets/styles.css](assets/styles.css) + [assets/satellite.css](assets/satellite.css)
+- [x] Screenshot baseline procedure: [docs/qa/screenshots/v2.0-baseline/README.md](docs/qa/screenshots/v2.0-baseline/README.md)
 
 ## Saugumas
 

@@ -175,22 +175,25 @@ Struktūriniai testai: Phase D **negative regression** (11 assert'ų).
 
 ---
 
-## 6. CSS ir Design System (v0.2 → v0.3.3)
+## 6. CSS ir Design System (v2.0)
 
 ### 6.1 Kur redaguoti
 
 | Failas | Turinys |
 |--------|---------|
-| [assets/styles.css](../assets/styles.css) | `:root` tokenai, `.btn`, `.btn--ghost` |
-| [assets/landing.css](../assets/landing.css) | Visi landing komponentai, `.pdf-see-inside`, `.pdf-bundle-*` |
+| [assets/styles.css](../assets/styles.css) | `:root` tokenai (įsk. `--btn-pad-*`, `--btn-min-h-*`), `.btn`, `.btn--ghost` |
+| [assets/landing.css](../assets/landing.css) | Visi landing komponentai, `.pdf-see-inside`, `.pdf-bundle-*`, `.pdf-preview-actions` |
+| [assets/satellite.css](../assets/satellite.css) | `success.html`, `terms.html` |
 | [templates/index-lt.html](../templates/index-lt.html) | HTML; **be** inline `<style>` |
 
 Po pakeitimų: **`npm run build`** → **`npm test`**.
 
 ### 6.2 Tokenai ir draudimai
 
-- **Nenaudoti** deprecated alias'ų: `--orange-light`, `--shadow-card*`, ir t. t. (v0.3.1+ guard'ai).
+- **Deprecated alias'ai pašalinti v2.0** (`--orange*`, `--blue-light`, `--community-cta-green*`, `--shadow-card*`).
 - **Focus** šviesus fonas: `var(--ring-focus)`; tamsus hero: `var(--ring-focus-on-dark)`.
+- **CTA sizes:** `--btn-pad-sm/md/lg/xl`, `--btn-min-h-sm/md/lg` — žr. [design_system_v2.md](design_system_v2.md).
+- **Line-height:** `--leading-tight/normal/relaxed` (ne ad-hoc `1.45`/`1.55`/`1.65`).
 - **Radius / motion / lift / reduced-motion** — kaip DS v0.2.2–v0.2.5 (žr. [design_systemv02.md](design_systemv02.md)).
 - **Hero sentence case:** `text-transform: none` ant H1, subhead, price teaser; **U.S.** headline'e; kaina tik `priceTeaser`, ne subhead.
 - **Šešėliai / gradients / navy borders / sticky glass** — v0.3.0 taisyklės galioja.
@@ -282,5 +285,6 @@ Nelaužyti be QA:
 | 2026-05-20 | v0.3.3 Phase D | **Dabartinė PDF sekcijos seka**; no auto specimen/social proof |
 | 2026-05-21 | v0.3.3+ | Bundle `.pdf-bundle-body` + savings; hero H1 „in minutes“; 355 tests |
 | 2026-05-21 | **Golden standard sync** | Šis failas suderintas su geriausia veikiančia `/en/` versija |
+| 2026-05-31 | **v2.0** | Deprecated alias removal, CTA/leading tokens, satellite.css, preview dialog polish, DS v2.0 docs; 367 tests |
 
 **Istoriniai komponentai (archyvas, ne golden):** `.pdf-expert-cards`, `.pdf-proof-inside`, `.pdf-guide-preview-btn`, per-card `.pdf-guide-highlights` — aprašyti CHANGELOG, negrąžinti be naujo ADR/PR.

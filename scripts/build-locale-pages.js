@@ -549,7 +549,11 @@ function stripFaqHtml(html) {
 function buildJsonLdFaqPage(sot) {
   const front = (sot && Array.isArray(sot.frontFaq)) ? sot.frontFaq : [];
   const buyer = (sot && Array.isArray(sot.buyerFaq)) ? sot.buyerFaq : [];
-  const all = front.concat(buyer);
+  // DS v2.0: faq-subset-prompts overlaps faq-phase-order in JSON-LD (on-page FAQ keeps both).
+  const frontForLd = front.filter(function (item) {
+    return item && item.id !== 'faq-subset-prompts';
+  });
+  const all = frontForLd.concat(buyer);
   if (!all.length) return '';
   const questions = all.map(function (item) {
     return {
@@ -1874,6 +1878,8 @@ function applySot(html, sot) {
     '{{SOT_PDF_SECTION_TRUST}}': p.sectionTrustHtml || '',
     '{{SOT_PDF_BEGINNER_CTA}}': p.beginnerCtaLabel || 'Buy Beginner — $5.99',
     '{{SOT_PDF_ADVANCED_CTA}}': p.advancedCtaLabel || 'Buy Advanced — $11.99',
+    '{{SOT_PDF_BUNDLE_CTA}}': p.bundleCtaLabel || 'Get both guides — $15.99',
+    '{{SOT_PDF_OPEN_ALL_PREVIEW}}': p.openAllPreviewLabel || 'Open sample pages in viewer →',
     '{{SOT_PDF_SECTION_FREE_BRIDGE}}': p.freeBridge || '',
     '{{SOT_FREE_TIER_LABEL}}': (m.freeTier && m.freeTier.label) || 'Free copy-paste prompts on this page',
     '{{SOT_FREE_TIER_HINT}}': (m.freeTier && m.freeTier.hint) || '',

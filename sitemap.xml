@@ -3,7 +3,7 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://promptanatomy.help/en/</loc>
-    <lastmod>2026-05-21</lastmod>
+    <lastmod>2026-05-26</lastmod>
     <image:image>
       <image:loc>https://promptanatomy.help/images/og-default-v3.png</image:loc>
       <image:caption>U.S. hiring loop in minutes with AI prompts - Prompt Anatomy</image:caption>
@@ -19,7 +19,7 @@
   </url>
   <url>
     <loc>https://promptanatomy.help/</loc>
-    <lastmod>2026-05-21</lastmod>
+    <lastmod>2026-05-26</lastmod>
   </url>
   <url>
     <loc>https://promptanatomy.help/privacy.html</loc>
@@ -31,10 +31,10 @@
   </url>
   <url>
     <loc>https://promptanatomy.help/terms.html</loc>
-    <lastmod>2026-05-21</lastmod>
+    <lastmod>2026-05-26</lastmod>
   </url>
   <url>
     <loc>https://promptanatomy.help/success.html</loc>
-    <lastmod>2026-05-21</lastmod>
+    <lastmod>2026-05-26</lastmod>
   </url>
 </urlset>

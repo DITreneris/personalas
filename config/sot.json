@@ -50,7 +50,7 @@
   "marketing": {
     "seo": {
       "title": "US HR hiring PDF guides + free AI prompts",
-      "metaDescription": "US HR hiring playbooks from $5.99—checklists, rubrics, and 10 free copy-paste prompts on the page. Instant PDF download.",
+      "metaDescription": "US HR hiring playbooks from $5.99 — checklists, rubrics, and 10 free copy-paste prompts on the page. Instant PDF download.",
       "ogTitle": "U.S. hiring loop with AI prompts",
       "ogImage": {
         "line1": "U.S. hiring loop in minutes",
@@ -91,9 +91,11 @@
       "lede": "Print-ready checklists and rubrics for US HR teams using ChatGPT, Claude, or Gemini.",
       "audienceLine": "Built for US HR teams using ChatGPT, Claude, or Gemini.",
       "freeBridge": "Not ready to buy? <a href=\"#free-prompts-label\">Jump to free prompts</a>—or start with Prompt 1.",
-      "sectionTrustHtml": "Stripe checkout · 14-day refund · Instant email delivery · Personal license — <a href=\"/terms.html#paid-pdf-license\">terms</a>",
+      "sectionTrustHtml": "Stripe checkout · 14-day refund · Instant email delivery · Personal license (team use inside your company) — <a href=\"/terms.html#paid-pdf-license\">terms</a>",
       "beginnerCtaLabel": "Buy Beginner — $5.99",
-      "advancedCtaLabel": "Buy Advanced — $11.99"
+      "advancedCtaLabel": "Buy Advanced — $11.99",
+      "bundleCtaLabel": "Get both guides — $15.99",
+      "openAllPreviewLabel": "Open sample pages in viewer →"
     },
     "community": {
       "title": "Want the full Prompt Anatomy training?",
@@ -102,7 +104,7 @@
     }
   },
   "legal": {
-    "metaDescription": "US HR hiring playbooks from $5.99—checklists, rubrics, and 10 free copy-paste prompts on the page. Instant PDF download.",
+    "metaDescription": "US HR hiring playbooks from $5.99 — checklists, rubrics, and 10 free copy-paste prompts on the page. Instant PDF download.",
     "disclaimerShort": "Educational workflow. Not legal or HR advice. Human review required."
   },
   "colors": {
@@ -164,7 +166,7 @@
       "sku": "advanced-pdf",
       "title": "Advanced HR Hiring Guide",
       "subtitle": "Scorecards, rubrics & calibration",
-      "description": "Senior-IC playbook with scorecards, calibration scripts, structured interview rubrics, and offer scenarios. 32 pages including STAR question bank, multi-candidate scorecard, sample debrief transcript, and a 4-week team pilot rollout.",
+      "description": "Senior HR playbook with scorecards, calibration scripts, structured interview rubrics, and offer scenarios. 32 pages including STAR question bank, multi-candidate scorecard, sample debrief transcript, and a 4-week team pilot rollout.",
       "pages": 32,
       "price": 11.99,
       "priceUSD": "11.99",
