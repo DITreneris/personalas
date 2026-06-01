@@ -2,39 +2,39 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
-    <loc>https://promptanatomy.help/en/</loc>
-    <lastmod>2026-05-26</lastmod>
+    <loc>https://www.promptanatomy.help/en/</loc>
+    <lastmod>2026-05-31</lastmod>
     <image:image>
-      <image:loc>https://promptanatomy.help/images/og-default-v3.png</image:loc>
+      <image:loc>https://www.promptanatomy.help/images/og-default-v3.png</image:loc>
       <image:caption>U.S. hiring loop in minutes with AI prompts - Prompt Anatomy</image:caption>
     </image:image>
     <image:image>
-      <image:loc>https://promptanatomy.help/assets/pdf-covers/beginner.png</image:loc>
+      <image:loc>https://www.promptanatomy.help/assets/pdf-covers/beginner.png</image:loc>
       <image:caption>Cover of Beginner HR Hiring Guide PDF</image:caption>
     </image:image>
     <image:image>
-      <image:loc>https://promptanatomy.help/assets/pdf-covers/advanced.png</image:loc>
+      <image:loc>https://www.promptanatomy.help/assets/pdf-covers/advanced.png</image:loc>
       <image:caption>Cover of Advanced HR Hiring Guide PDF</image:caption>
     </image:image>
   </url>
   <url>
-    <loc>https://promptanatomy.help/</loc>
-    <lastmod>2026-05-26</lastmod>
+    <loc>https://www.promptanatomy.help/</loc>
+    <lastmod>2026-05-31</lastmod>
   </url>
   <url>
-    <loc>https://promptanatomy.help/privacy.html</loc>
+    <loc>https://www.promptanatomy.help/privacy.html</loc>
     <lastmod>2026-05-19</lastmod>
   </url>
   <url>
-    <loc>https://promptanatomy.help/en/privacy.html</loc>
+    <loc>https://www.promptanatomy.help/en/privacy.html</loc>
     <lastmod>2026-05-20</lastmod>
   </url>
   <url>
-    <loc>https://promptanatomy.help/terms.html</loc>
-    <lastmod>2026-05-26</lastmod>
+    <loc>https://www.promptanatomy.help/terms.html</loc>
+    <lastmod>2026-05-31</lastmod>
   </url>
   <url>
-    <loc>https://promptanatomy.help/success.html</loc>
-    <lastmod>2026-05-26</lastmod>
+    <loc>https://www.promptanatomy.help/success.html</loc>
+    <lastmod>2026-05-31</lastmod>
   </url>
 </urlset>

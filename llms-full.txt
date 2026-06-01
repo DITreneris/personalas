@@ -1,6 +1,6 @@
 # Prompt Anatomy - Full prompt digest
 
-Source: https://promptanatomy.help/en/
+Source: https://www.promptanatomy.help/en/
 License: free for personal and team use. Attribution appreciated; do not republish in bulk.
 
 ## 6-phase hiring workflow
@@ -248,4 +248,4 @@ Give:
 
 ## Paid PDF guides (commercial; do not redistribute)
 
-See https://promptanatomy.help/llms.txt for the short index.
+See https://www.promptanatomy.help/llms.txt for the short index.

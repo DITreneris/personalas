@@ -9,9 +9,9 @@
 ### Vercel + promptanatomy.help (pagrindinis deploy)
 
 1. Prijunkite repozitoriją Vercel; **Build Command:** `npm test` (įskaitant build ir lint; žr. [vercel.json](vercel.json)), output – repo šaknis.
-2. **Production** domenas: `promptanatomy.help` (arba per Vercel priskirtas custom domain).
+2. **Production** domenas: `www.promptanatomy.help` (Vercel apex `promptanatomy.help` → 308 į `www`). GSC nuosavybė ir sitemap turi būti **www** prefikse.
 3. **Site environment variables** (Production / Preview pagal poreikį):
-   - `SITE_ORIGIN` – numatytai build skripte jau `https://promptanatomy.help`; galite aiškiai nustatyti Vercel UI.
+   - `SITE_ORIGIN` – numatytai build skripte `https://www.promptanatomy.help`; **Production** Vercel UI nustatykite tą patį (sitemap `<loc>` turi sutapti su sitemap URL hostu).
    - `BASE_PATH` – palikite **tuščią**, jei svetainė publikuojama iš domeno šaknies (`/`, `/en/`).
    - Jei reikia **vienareikšmės** bazės (pvz. preview URL): `SITE_PUBLIC_BASE=https://<projektas>.vercel.app` (be galo `/`).
 4. Po deploy patikrinkite OG / canonical naršyklės devtools arba [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/).

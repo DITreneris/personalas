@@ -74,4 +74,4 @@ jobs:
         continue-on-error: true
         run: npm run seo:indexnow:diff
         env:
-          SITE_ORIGIN: https://promptanatomy.help
+          SITE_ORIGIN: https://www.promptanatomy.help

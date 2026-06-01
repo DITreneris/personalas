@@ -3,17 +3,17 @@
 > Prompt Anatomy publishes free copy-paste AI prompts and paid PDF playbooks that help US HR teams run a repeatable hiring loop (Diagnose, Define, Source, Screen, Offer, Onboard). Operated by Tomas Staniulis from Alameda, CA. Site is English-only; paid PDFs delivered via Stripe with 14-day refund.
 
 ## Free resources
-- [Landing - 10 free prompts and 6-phase workflow](https://promptanatomy.help/en/)
-- [Full prompt digest (markdown)](https://promptanatomy.help/llms-full.txt)
+- [Landing - 10 free prompts and 6-phase workflow](https://www.promptanatomy.help/en/)
+- [Full prompt digest (markdown)](https://www.promptanatomy.help/llms-full.txt)
 
 ## Paid PDF guides
-- [Beginner HR Hiring Guide - $5.99 - 16 pages](https://promptanatomy.help/en/#pdf-guides)
-- [Advanced HR Hiring Guide - $11.99 - 32 pages](https://promptanatomy.help/en/#pdf-guides)
-- [Both HR Hiring Guides (Beginner + Advanced) - $15.99](https://promptanatomy.help/en/#pdf-guides)
+- [Beginner HR Hiring Guide - $5.99 - 16 pages](https://www.promptanatomy.help/en/#pdf-guides)
+- [Advanced HR Hiring Guide - $11.99 - 32 pages](https://www.promptanatomy.help/en/#pdf-guides)
+- [Both HR Hiring Guides (Beginner + Advanced) - $15.99](https://www.promptanatomy.help/en/#pdf-guides)
 
 ## Policies
-- [Privacy](https://promptanatomy.help/en/privacy.html)
-- [Terms - Personal license, 14-day refund](https://promptanatomy.help/terms.html)
+- [Privacy](https://www.promptanatomy.help/en/privacy.html)
+- [Terms - Personal license, 14-day refund](https://www.promptanatomy.help/terms.html)
 
 ## Contact
 - Email: info@promptanatomy.app

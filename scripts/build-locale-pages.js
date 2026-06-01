@@ -3,7 +3,7 @@
  * The site is English-only; templates/*-lt.html files are kept as the build pipeline
  * source from which English output is generated via translation replacements.
  * Usage (GitHub Pages subpath): BASE_PATH=/personalas/ SITE_ORIGIN=https://ditreneris.github.io node scripts/build-locale-pages.js
- * Usage (Vercel / custom domain root): SITE_ORIGIN=https://promptanatomy.help node scripts/build-locale-pages.js
+ * Usage (Vercel / custom domain root): SITE_ORIGIN=https://www.promptanatomy.help node scripts/build-locale-pages.js
  * Optional override: SITE_PUBLIC_BASE=https://preview.vercel.app (full public origin, no trailing slash)
  * Source: templates/index-lt.html, templates/privacy.html, templates/privacy-gateway.html
  * Output: en/index.html, en/privacy.html, privacy.html (gateway), robots.txt, sitemap.xml
@@ -29,7 +29,7 @@ function versionedStylesheetHref(href) {
   return href + sep + 'v=' + encodeURIComponent(getRuntimeAssetVersion());
 }
 
-const SITE_ORIGIN = (process.env.SITE_ORIGIN || 'https://promptanatomy.help').replace(/\/+$/, '');
+const SITE_ORIGIN = (process.env.SITE_ORIGIN || 'https://www.promptanatomy.help').replace(/\/+$/, '');
 const rawBase = process.env.BASE_PATH || '';
 const BASE_PATH = rawBase ? rawBase.replace(/\/*$/, '') + '/' : '';
 const SITE_PUBLIC_BASE = (process.env.SITE_PUBLIC_BASE || '').trim().replace(/\/+$/, '');

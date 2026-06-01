@@ -66,5 +66,5 @@ User-agent: *
 Disallow: /api/
 Allow: /
 
-Sitemap: https://promptanatomy.help/sitemap.xml
-# IndexNow: https://promptanatomy.help/7a4b9e2c8f1d4a3b9c6e5d2a1f8b7c4d.txt
+Sitemap: https://www.promptanatomy.help/sitemap.xml
+# IndexNow: https://www.promptanatomy.help/7a4b9e2c8f1d4a3b9c6e5d2a1f8b7c4d.txt
