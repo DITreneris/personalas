@@ -195,7 +195,13 @@
 
             <div class="pdf-guides-after-purchase">
 
-                <p class="pdf-guides-free-bridge">{{SOT_PDF_SECTION_FREE_BRIDGE}}</p>
+                <div class="pdf-guides-free-bridge" role="group" aria-label="Try free prompts">
+                    <p class="pdf-guides-free-bridge__lead">{{SOT_PDF_FREE_BRIDGE_LEAD}}</p>
+                    <div class="pdf-guides-free-bridge__actions">
+                        <a class="btn btn--ghost" href="{{SOT_PDF_FREE_BRIDGE_FREE_HREF}}">{{SOT_PDF_FREE_BRIDGE_FREE_LABEL}}</a>
+                        <a class="btn btn--ghost" href="{{SOT_PDF_FREE_BRIDGE_PROMPT_HREF}}">{{SOT_PDF_FREE_BRIDGE_PROMPT_LABEL}}</a>
+                    </div>
+                </div>
 
             </div>
 
@@ -892,7 +898,22 @@ Be sudėtingų terminų.</pre>
 
         <section class="community" id="community" aria-labelledby="community-title">
             <h2 id="community-title">{{SOT_COMMUNITY_TITLE}}</h2>
-            <a href="https://www.promptanatomy.app/" class="community-cta-primary" target="_blank" rel="noopener noreferrer" aria-label="Pilna Promptų anatomija – interaktyvus mokymas (atidaroma naujame lange)">{{SOT_COMMUNITY_APP}}</a>
+            <a href="{{SOT_MOTHER_BRAND_URL}}" class="community-illustration" target="_blank" rel="noopener noreferrer" aria-label="Pilna Promptų anatomija – interaktyvus mokymas (atidaroma naujame lange)">
+                <picture>
+                    <source
+                        type="image/webp"
+                        srcset="/assets/community/copy-paste-workflow-800w.webp 800w, /assets/community/copy-paste-workflow-1200w.webp 1200w, /assets/community/copy-paste-workflow.webp 1672w"
+                        sizes="(max-width: 720px) 100vw, 680px">
+                    <img
+                        src="/assets/community/copy-paste-workflow.png"
+                        width="1200"
+                        height="675"
+                        alt="{{SOT_COMMUNITY_ILLUSTRATION_ALT}}"
+                        loading="lazy"
+                        decoding="async">
+                </picture>
+            </a>
+            <a href="{{SOT_MOTHER_BRAND_URL}}" class="community-cta-primary" target="_blank" rel="noopener noreferrer" aria-label="Pilna Promptų anatomija – interaktyvus mokymas (atidaroma naujame lange)">{{SOT_COMMUNITY_APP}}</a>
             <p class="community-secondary-link">Arba <a href="https://t.me/prompt_anatomy" target="_blank" rel="noopener noreferrer" aria-label="Atidaryti „Promptų anatomijos“ Telegram kanalą naujame lange">{{SOT_COMMUNITY_TELEGRAM}} →</a></p>
         </section>
 

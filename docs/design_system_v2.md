@@ -2,7 +2,7 @@
 
 **Status:** Release (2026-05)  
 **Audience:** UI/UX, Frontend, Content, QA  
-**Historical plan:** [design_systemv02.md](design_systemv02.md) (v0.2–v0.3 PR log)  
+**Historical plan:** [archive/design_systemv02.md](archive/design_systemv02.md) (v0.2–v0.3 PR log)  
 **Golden standard:** [LEGACY_GOLDEN_STANDARD.md](LEGACY_GOLDEN_STANDARD.md)
 
 ---
@@ -40,7 +40,7 @@
 | `--btn-pad-md` | 14px 28px | Baseline `.cta-button`, mobile hero |
 | `--btn-pad-lg` | 20px 32px | `.community-cta-primary` |
 | `--btn-pad-xl` | 28px 48px | Hero primary desktop |
-| `--btn-min-h-sm` | 44px | Default touch target |
+| `--btn-min-h-sm` | **48px** | Default touch target (Lighthouse / Material; clears Apple 44pt) |
 | `--btn-min-h-md` | 48px | Mobile hero CTAs |
 | `--btn-min-h-lg` | 56px | Hero primary desktop |
 
@@ -126,7 +126,7 @@ US English, practical, premium SaaS — see [language-guidelines-en-lt.md](langu
 ### Visual QA
 
 - [x] Typography uses `--fs-*` and `--leading-*`
-- [x] Commerce CTAs ≥44px touch targets
+- [x] Commerce CTAs ≥48px touch targets (`--btn-min-h-sm`)
 - [x] PDF featured card gold inset visible
 - [x] Preview dialog footer uses `.btn.btn--ghost`
 
@@ -135,6 +135,7 @@ US English, practical, premium SaaS — see [language-guidelines-en-lt.md](langu
 - [x] Hero → PDF → See inside → preview → close (structure + production visual checks)
 - [x] Bundle unhides after Stripe init
 - [x] Copy prompt + toast + mark-as-done (delegated listeners in generator.js)
+- [x] Sticky CTA visible → toast/footer cleared (`body.has-pdf-sticky-cta` / `--pdf-sticky-offset`)
 
 ### Content QA
 
@@ -157,8 +158,10 @@ US English, practical, premium SaaS — see [language-guidelines-en-lt.md](langu
 
 ## 11. Visual regression
 
-See [qa/screenshots/v2.0-baseline/README.md](qa/screenshots/v2.0-baseline/README.md).
+Baselines are **not** committed (gitignore). Regenerate locally:
+
+See [qa/screenshots/v2.0-baseline/README.md](qa/screenshots/v2.0-baseline/README.md) — `scripts/capture-ds-baseline.js`.
 
 ---
 
-**Last updated:** 2026-05-31
+**Last updated:** 2026-07-29

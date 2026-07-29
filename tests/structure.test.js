@@ -485,8 +485,47 @@ function run() {
     );
     tally(
       assert(
-        /env\(safe-area-inset-bottom\)/.test(landingCss),
+        /env\(safe-area-inset-bottom(?:,\s*0px)?\)/.test(landingCss),
         'landing.css: .pdf-sticky-cta safe-area inset for iOS (DS v0.2.2)'
+      )
+    );
+    tally(
+      assert(
+        /body\.has-pdf-sticky-cta/.test(landingCss) &&
+          /--pdf-sticky-offset/.test(landingCss) &&
+          /\.toast\s*\{[\s\S]{0,400}var\(--pdf-sticky-offset\)/.test(landingCss),
+        'landing.css: sticky CTA clearance via body.has-pdf-sticky-cta + --pdf-sticky-offset on toast'
+      )
+    );
+    tally(
+      assert(
+        /\.pdf-sticky-cta\s*\{[\s\S]{0,500}env\(safe-area-inset-left/.test(landingCss),
+        'landing.css: .pdf-sticky-cta landscape safe-area-inset-left'
+      )
+    );
+    tally(
+      assert(
+        /\.modal\s*\{[\s\S]{0,400}100dvh/.test(landingCss) &&
+          /@supports not \(height:\s*100dvh\)/.test(landingCss),
+        'landing.css: .modal max-height uses 100dvh + vh fallback'
+      )
+    );
+    tally(
+      assert(
+        /\.page-lanes-nav\s*\{[\s\S]{0,400}safe-area-inset-top/.test(landingCss),
+        'landing.css: .page-lanes-nav safe-area-inset-top'
+      )
+    );
+    tally(
+      assert(
+        /--btn-min-h-sm:\s*48px/.test(sharedCss),
+        'styles.css: --btn-min-h-sm is 48px (Lighthouse / Material tap target)'
+      )
+    );
+    tally(
+      assert(
+        generatorJs && generatorJs.includes('has-pdf-sticky-cta'),
+        'generator.js: toggles body.has-pdf-sticky-cta for sticky clearance'
       )
     );
     tally(
@@ -952,7 +991,11 @@ function run() {
   tally(assert(sitemap && !/\/lt\//.test(sitemap), 'sitemap.xml: no /lt/ entries'));
   tally(assert(sitemap && sitemap.includes('/en/'), 'sitemap.xml: includes /en/ entry'));
   tally(assert(sitemap && sitemap.includes('/en/privacy.html'), 'sitemap.xml: includes /en/privacy.html'));
-  tally(assert(sitemap && sitemap.includes('/privacy.html'), 'sitemap.xml: includes /privacy.html gateway'));
+  tally(assert(sitemap && sitemap.includes('/terms.html'), 'sitemap.xml: includes /terms.html'));
+  tally(assert(sitemap && !/<loc>https:\/\/www\.promptanatomy\.help\/<\/loc>/.test(sitemap),
+    'sitemap.xml: excludes gateway / (redirect)'));
+  tally(assert(sitemap && !/<loc>https:\/\/www\.promptanatomy\.help\/privacy\.html<\/loc>/.test(sitemap),
+    'sitemap.xml: excludes gateway /privacy.html (redirect)'));
   tally(assert(sitemap && !sitemap.includes('privatumas.html'), 'sitemap.xml: no privatumas.html entries'));
   tally(assert(sitemap && !sitemap.includes('/success.html'), 'sitemap.xml: excludes transactional success.html'));
   tally(assert(sitemap && sitemap.includes('https://www.promptanatomy.help/'), 'sitemap.xml: www host'));
@@ -1135,6 +1178,68 @@ function run() {
   tally(assert(fs.existsSync(beginnerCover), 'assets/pdf-covers/beginner.png exists'));
   const advancedCover = path.join(ROOT, 'assets', 'pdf-covers', 'advanced.png');
   tally(assert(fs.existsSync(advancedCover), 'assets/pdf-covers/advanced.png exists'));
+  const communityAssets = [
+    'copy-paste-workflow.png',
+    'copy-paste-workflow.webp',
+    'copy-paste-workflow-800w.webp',
+    'copy-paste-workflow-1200w.webp'
+  ];
+  communityAssets.forEach(function (name) {
+    tally(
+      assert(
+        fs.existsSync(path.join(ROOT, 'assets', 'community', name)),
+        'assets/community/' + name + ' exists'
+      )
+    );
+  });
+  if (enIndex) {
+    tally(
+      assert(
+        enIndex.includes('class="community-illustration"') &&
+          enIndex.includes('/assets/community/copy-paste-workflow.png') &&
+          enIndex.includes('type="image/webp"'),
+        'en/index.html community illustration picture/img'
+      )
+    );
+    const communityBlockMatch = enIndex.match(
+      /id="community"[\s\S]*?<\/section>/
+    );
+    const communityBlock = communityBlockMatch ? communityBlockMatch[0] : '';
+    tally(
+      assert(
+        communityBlock.includes('loading="lazy"') &&
+          communityBlock.includes('copy-paste-workflow') &&
+          !/copy-paste-workflow[^"]*fetchpriority="high"/.test(communityBlock) &&
+          !communityBlock.includes('fetchpriority="high"'),
+        'en/index.html community illustration lazy (not LCP high)'
+      )
+    );
+    const communityIllustrationOpenTag = (
+      communityBlock.match(/<a\b[^>]*class="community-illustration"[^>]*>/) || []
+    )[0] || '';
+    tally(
+      assert(
+        /href="https:\/\/www\.promptanatomy\.app\/?"/.test(communityIllustrationOpenTag),
+        'en/index.html community illustration links to mother brand'
+      )
+    );
+    tally(
+      assert(
+        sot.marketing &&
+          sot.marketing.community &&
+          typeof sot.marketing.community.illustrationAlt === 'string' &&
+          sot.marketing.community.illustrationAlt.length > 20 &&
+          enIndex.includes(sot.marketing.community.illustrationAlt),
+        'en/index.html community illustrationAlt from SOT'
+      )
+    );
+    tally(
+      assert(
+        /\.community-illustration\s*\{/.test(landingCss),
+        'landing.css: .community-illustration styles'
+      )
+    );
+  }
   const previewPagesByGuide = {
     beginner: (sot && sot.pdfGuides && sot.pdfGuides.beginner && sot.pdfGuides.beginner.previewPages) || [6, 8, 9],
     advanced: (sot && sot.pdfGuides && sot.pdfGuides.advanced && sot.pdfGuides.advanced.previewPages) || [10, 15, 17]
@@ -1194,6 +1299,15 @@ function run() {
       assert(
         enIndex.includes('class="pdf-guides-after-purchase"'),
         'PDF after-purchase block (FAQ + free-bridge)'
+      )
+    );
+    tally(
+      assert(
+        enIndex.includes('class="pdf-guides-free-bridge"') &&
+          enIndex.includes('href="#free-prompts-label"') &&
+          enIndex.includes('href="#prompt1"') &&
+          (enIndex.match(/class="btn btn--ghost"/g) || []).length >= 2,
+        'PDF free-bridge: lead + dual ghost CTAs (#free-prompts-label, #prompt1)'
       )
     );
     tally(
@@ -1285,7 +1399,7 @@ function assertGeoSurface(ctx) {
     tallyLocal(ctx.sitemap.includes('xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"'),
       'sitemap.xml: image namespace declared');
     const lastmodCount = (ctx.sitemap.match(/<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/g) || []).length;
-    tallyLocal(lastmodCount >= 5, 'sitemap.xml: >=5 ISO-date <lastmod> entries (got ' + lastmodCount + ')');
+    tallyLocal(lastmodCount >= 3, 'sitemap.xml: >=3 ISO-date <lastmod> entries (got ' + lastmodCount + ')');
     const imageCount = (ctx.sitemap.match(/<image:loc>/g) || []).length;
     tallyLocal(imageCount >= 3, 'sitemap.xml: >=3 <image:loc> entries on /en/ (got ' + imageCount + ')');
     tallyLocal(ctx.sitemap.includes('og-default-v3.png'), 'sitemap.xml: OG image in image:image');
@@ -1349,7 +1463,7 @@ function assertGeoSurface(ctx) {
       'en/index.html: NO aggregateRating (would be policy violation without real reviews)');
   }
 
-  // --- en/index.html: Organization + Person + sameAs ---
+  // --- en/index.html: Organization + Person + sameAs (HQ = .app) ---
   if (ctx.enIndex) {
     tallyLocal(/"@type":"Person"/.test(ctx.enIndex), 'en/index.html: Person node');
     tallyLocal(ctx.enIndex.includes('"Tomas Staniulis"'), 'en/index.html: Person.name Tomas Staniulis');
@@ -1358,6 +1472,15 @@ function assertGeoSurface(ctx) {
     tallyLocal(ctx.enIndex.includes('"slogan"'), 'en/index.html: Organization.slogan');
     tallyLocal(ctx.enIndex.includes('"logo":"https://www.promptanatomy.help/favicon.svg"'),
       'en/index.html: Organization.logo uses www');
+    tallyLocal(/"@type":"Organization"[^}]*"url":"https:\/\/www\.promptanatomy\.app\/?"/.test(ctx.enIndex) ||
+      ctx.enIndex.includes('"url":"https://www.promptanatomy.app"'),
+      'en/index.html: Organization.url is mother brand .app');
+    tallyLocal(ctx.enIndex.includes('https://www.promptanatomy.app'),
+      'en/index.html: Organization sameAs/url includes promptanatomy.app');
+    tallyLocal(ctx.enIndex.includes('https://promptanatomy.blog'),
+      'en/index.html: Organization sameAs includes promptanatomy.blog');
+    tallyLocal(ctx.enIndex.includes('https://promptanatomy.site'),
+      'en/index.html: Organization sameAs includes promptanatomy.site');
     tallyLocal(ctx.enIndex.includes('https://x.com/promptanatom'),
       'en/index.html: Organization sameAs includes x.com/promptanatom');
     tallyLocal(ctx.enIndex.includes('https://www.linkedin.com/in/staniulis/'),
@@ -1366,7 +1489,7 @@ function assertGeoSurface(ctx) {
       'en/index.html: Person sameAs includes operator X handle');
   }
 
-  // --- en/privacy.html: breadcrumb + speakable + manifest + robots ---
+  // --- en/privacy.html: breadcrumb + speakable + dateModified + manifest + robots ---
   if (ctx.enPrivacy) {
     tallyLocal(ctx.enPrivacy.includes(ROBOTS_META_FULL),
       'en/privacy.html: meta robots max-snippet:-1 etc.');
@@ -1374,12 +1497,16 @@ function assertGeoSurface(ctx) {
       'en/privacy.html: BreadcrumbList JSON-LD');
     tallyLocal(/"speakable"/.test(ctx.enPrivacy),
       'en/privacy.html: speakable SpeakableSpecification');
+    tallyLocal(/"dateModified":"\d{4}-\d{2}-\d{2}"/.test(ctx.enPrivacy),
+      'en/privacy.html: WebPage dateModified ISO date');
     tallyLocal(ctx.enPrivacy.includes('og:site_name') && ctx.enPrivacy.includes('twitter:site'),
       'en/privacy.html: og:site_name + twitter:site');
     tallyLocal(ctx.enPrivacy.includes('<link rel="manifest"'),
       'en/privacy.html: link rel=manifest');
     tallyLocal(ctx.enPrivacy.includes('theme-color'),
       'en/privacy.html: theme-color');
+    tallyLocal(ctx.enPrivacy.includes('viewport-fit=cover'),
+      'en/privacy.html: viewport-fit=cover for safe-area');
   }
 
   // --- root gateway: meta robots + enriched Org ---
@@ -1392,12 +1519,14 @@ function assertGeoSurface(ctx) {
       'index.html gateway: manifest link');
   }
 
-  // --- terms.html: meta robots + BreadcrumbList + OG enrichments ---
+  // --- terms.html: meta robots + BreadcrumbList + dateModified + OG enrichments ---
   if (ctx.terms) {
     tallyLocal(ctx.terms.includes(ROBOTS_META_FULL),
       'terms.html: meta robots');
     tallyLocal(/"@type":"BreadcrumbList"/.test(ctx.terms),
       'terms.html: BreadcrumbList JSON-LD');
+    tallyLocal(/"dateModified":"\d{4}-\d{2}-\d{2}"/.test(ctx.terms),
+      'terms.html: WebPage dateModified ISO date');
     tallyLocal(ctx.terms.includes('og:site_name') && ctx.terms.includes('twitter:site'),
       'terms.html: og:site_name + twitter:site');
     tallyLocal(ctx.terms.includes('<link rel="manifest"'),
@@ -1444,8 +1573,14 @@ function assertGeoSurface(ctx) {
     tallyLocal(llms.length < 5120, 'llms.txt: under 5120 bytes (got ' + llms.length + ')');
     tallyLocal(/^# Prompt Anatomy/.test(llms), 'llms.txt: starts with H1 brand');
     tallyLocal(llms.includes('> '), 'llms.txt: blockquote summary present');
+    tallyLocal(/## Training hub/.test(llms) && llms.includes('promptanatomy.app'),
+      'llms.txt: Training hub section points to promptanatomy.app');
+    tallyLocal(/## Optional/.test(llms) && llms.includes('Privacy'),
+      'llms.txt: Optional section includes Privacy');
     tallyLocal(llms.includes('$5.99') && llms.includes('$11.99') && llms.includes('$15.99'),
       'llms.txt: all 3 PDF prices listed');
+    tallyLocal(llms.includes('): '),
+      'llms.txt: link lines include colon descriptions');
   }
 
   const llmsFull = readFile(path.join(ROOT, 'llms-full.txt'));

@@ -38,6 +38,10 @@
       "x": "https://x.com/promptanatom",
       "linkedin": "https://www.linkedin.com/in/staniulis/"
     },
+    "ecosystemUrls": {
+      "blog": "https://promptanatomy.blog",
+      "site": "https://promptanatomy.site"
+    },
     "verification": {
       "google": "",
       "bing": ""
@@ -90,7 +94,13 @@
       "title": "HR hiring PDF guides",
       "lede": "Print-ready checklists and rubrics for US HR teams using ChatGPT, Claude, or Gemini.",
       "audienceLine": "Built for US HR teams using ChatGPT, Claude, or Gemini.",
-      "freeBridge": "Not ready to buy? <a href=\"#free-prompts-label\">Jump to free prompts</a>—or start with Prompt 1.",
+      "freeBridge": {
+        "lead": "Not ready to buy?",
+        "freeCtaLabel": "Free prompts →",
+        "freeCtaHref": "#free-prompts-label",
+        "promptCtaLabel": "Start with Prompt 1 →",
+        "promptCtaHref": "#prompt1"
+      },
       "sectionTrustHtml": "Stripe checkout · 14-day refund · Instant email delivery · Personal license (team use inside your company) — <a href=\"/terms.html#paid-pdf-license\">terms</a>",
       "beginnerCtaLabel": "Buy Beginner — $5.99",
       "advancedCtaLabel": "Buy Advanced — $11.99",
@@ -100,7 +110,8 @@
     "community": {
       "title": "Want the full Prompt Anatomy training?",
       "telegramCta": "Join the Telegram community",
-      "appCta": "Open Prompt Anatomy course →"
+      "appCta": "Open Prompt Anatomy course →",
+      "illustrationAlt": "The copy-paste workflow: pick prompt, copy, paste into AI, get answer — unstructured copy-paste is the problem. Prompt Anatomy."
     }
   },
   "legal": {

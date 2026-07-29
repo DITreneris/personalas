@@ -1,325 +1,118 @@
 # Cursor Rules – Personalas
 
 ## Projekto apžvalga
-**Personalas** (repo) – Prompt Anatomy viešai: EN-only HR hiring prompts + mokami PDF (Stripe per Vercel `api/`). Saugumas: jokių secretų repo.
 
-**Agentams — privaloma:** [docs/AGENT_SOT.md](docs/AGENT_SOT.md) (keliai, build, deploy, brand). Rolės – [AGENTS.md](AGENTS.md). Kalba – [docs/language-guidelines-en-lt.md](docs/language-guidelines-en-lt.md). Doc valdymas – [docs/DOCUMENTATION.md](docs/DOCUMENTATION.md).
+**Personalas** (repo) – Hire spoke of **Prompt Anatomy** (`promptanatomy.help`): EN-only HR prompts + mokami PDF (Stripe / Vercel `api/`). Saugumas: jokių secretų repo.
 
----
+**Brand / locale / build / deploy:** vienas kanonas — [docs/AGENT_SOT.md](docs/AGENT_SOT.md) (§1, §3, §6a).  
+**Rolės / workflow:** [AGENTS.md](AGENTS.md).  
+**Kalba / viešas brand:** [docs/language-guidelines-en-lt.md](docs/language-guidelines-en-lt.md).  
+**Doc DMS (tieriai, lifecycle):** [docs/DOCUMENTATION.md](docs/DOCUMENTATION.md) · hub [docs/INDEX.md](docs/INDEX.md).
 
-## Kalba – SOT (trumpai)
-
-- **Viešas produktas:** `en-US`, kanonas **`/en/`**; šaknies `/` ir `/privacy.html` – EN vartai.
-- **LT authoring:** `templates/index-lt.html` → `npm run build` → **`en/` only**; produkcijoje `/lt/*` redirect į `/en/*`.
-- **Agentų dokumentacija** – LT, nebent aiškiai kitaip.
+Trumpai: viešas UI = **Prompt Anatomy**, `en-US`, kanonas `/en/`; LT tik authoring (`templates/index-lt.html` → `npm run build` → `en/` only). Po turinio: `npm run build` + `npm test`.
 
 ---
 
-## 🔒 SAUGUMAS (Security)
+## SAUGUMAS (Security)
 
-### API Keys ir Konfidencialūs Duomenys
+### API Keys ir konfidencialūs duomenys
 - ❌ **NIEKADA** nekomituokite API keys, slaptažodžių ar jautrių duomenų į Git
-- ✅ Naudokite `.env` failus arba konfigūracijos failus, kurie yra `.gitignore`
-- ✅ Jei reikia, naudokite environment variables arba konfigūracijos failus (Stripe, Resend – žr. DEPLOYMENT.md)
+- ✅ Naudokite `.env` / environment variables (Stripe, Resend – [DEPLOYMENT.md](DEPLOYMENT.md)); `.env` – `.gitignore`
 
-### Input Validacija
-- ✅ **VISADA** validuokite visus vartotojo įvestus duomenis (email, tekstas)
-- ✅ Naudokite HTML5 validaciją (`required`, `type="email"`) + JavaScript validaciją
-- ✅ Sanitizuokite visus duomenis prieš siuntimą į backend
-- ✅ Apsaugokite nuo XSS atakų - naudokite `textContent` vietoj `innerHTML` kai įmanoma
-- ✅ Validuokite email formatą su regex: `/^[^\s@]+@[^\s@]+\.[^\s@]+$/`
+### Input validacija
+- ✅ **VISADA** validuokite vartotojo įvestį (email, tekstas)
+- ✅ HTML5 (`required`, `type="email"`) + JS; sanitizuokite prieš backend
+- ✅ XSS: preferuokite `textContent` vietoj `innerHTML` su vartotojo duomenimis
+- ✅ Email: `/^[^\s@]+@[^\s@]+\.[^\s@]+$/`
 
 ### Stripe / API (mokami PDF)
-- ✅ Webhook ir fulfillment secrets tik per Vercel env / `.env` (gitignore)
+- ✅ Webhook ir fulfillment secrets tik per Vercel env / `.env`
 - ✅ Niekada neloginkite `DOWNLOAD_TOKEN_SECRET`, Stripe keys
-- ✅ Fulfillment klaidos vartotojui – bendros (žr. `api/_lib/fulfillment.js`)
+- ✅ Fulfillment klaidos vartotojui – bendros (`api/_lib/fulfillment.js`)
 
 ---
 
-## 🔐 KONFIDENCIALUMAS (Confidentiality)
+## KONFIDENCIALUMAS
 
-### GDPR ir Duomenų Apsauga
 - ✅ Mokami PDF: el. paštas Stripe checkout; politika – [templates/privacy.html](templates/privacy.html)
-- ✅ Kontaktų forma **neįjungta** — žr. [INTEGRACIJA.md](INTEGRACIJA.md); jei įjungiate vėliau, atnaujinkite privatumą
-
-### Jautrių Duomenų Valdymas
-- ❌ **NIEKADA** neloginkite jautrių duomenų į browser console production aplinkoje
-- ✅ Naudokite `console.warn` arba `console.error` tik development režime
-- ✅ Pašalinkite visus debug log'us prieš production deployment
-
-### Verslo Informacijos Apsauga
-- ⚠️ Projekte yra verslo logika ir promptų šablonai - saugokite kaip verslo paslaptį
-- ✅ Naudokite `.gitignore` tam, kad neatsitiktinai nekomituotumėte jautrių failų
-- ✅ Jei dalijatės kodu, patikrinkite, kad nėra hardcoded verslo duomenų
-
-### Trečiųjų Šalių Integracijos
-- ✅ Stripe, Resend, Upstash, Vercel Blob — aprašyta privatumo politikoje
-- ✅ Informuokite vartotojus apie trečiųjų šalių paslaugas, kai keičiate duomenų srautą
+- ✅ Kontaktų forma **neįjungta** — [INTEGRACIJA.md](INTEGRACIJA.md); įjungiant – atnaujinti privatumą
+- ❌ Neloginkite jautrių duomenų į browser console production
+- ✅ Stripe, Resend, Upstash, Vercel Blob — privatumo politikoje
 
 ---
 
-## ✨ KOKYBĖ (Quality)
+## KOKYBĖ (Quality)
 
-### Viešas brand ir locale
-- ✅ **Viešame UI** tik **Prompt Anatomy** (EN-only: `/en/`, gateways, terms, privacy, success, PDF, el. laiškai) — ne „Personalas“, ne „Series No. 3“, ne LT diakritikos; žr. [docs/language-guidelines-en-lt.md](docs/language-guidelines-en-lt.md) (*Viešas prekės ženklas ir locale*).
-- ✅ Po turinio pakeitimų: `npm run build` ir `npm test`.
-
-### Kodas Standartai
-- ✅ **Kodas turi būti skaitomas ir suprantamas** - naudokite aiškius kintamųjų vardus
-- ✅ Funkcijos turi turėti vieną atsakomybę (Single Responsibility Principle)
-- ✅ Naudokite `'use strict'` JavaScript failuose
-- ✅ Komentuokite sudėtingą logiką, bet ne akivaizdžius dalykus
-- ✅ Naudokite consistent code style (indentacija, kabliataškiai, etc.)
-
-### Error Handling
-- ✅ **VISADA** naudokite try-catch blokus asinchroninėms operacijoms
-- ✅ Rodykite vartotojui suprantamus klaidos pranešimus
-- ✅ Loginkite detales klaidas development režime
-- ✅ Turėkite fallback mechanizmus (pvz., fallbackCopy funkcija)
-
-### Performance
-- ✅ Minimizuokite DOM manipuliacijas - naudokite batch updates
-- ✅ Naudokite debounce funkcijas, kai reikia (pvz., input validacija)
-- ✅ Optimizuokite CSS - naudokite CSS kintamuosius, kad būtų lengviau valdyti
-- ✅ Minimizuokite JavaScript failų dydį - pašalinkite nenaudojamą kodą
-- ✅ Naudokite `async/await` vietoj callback hell
-
-### Accessibility (Prieinamumas)
-- ✅ **PRIVALOMA** naudoti semantinius HTML elementus (`<header>`, `<nav>`, `<main>`, `<footer>`)
-- ✅ Pridėkite `aria-label`, `aria-describedby`, `role` atributus, kur reikia
-- ✅ Formos turi turėti `<label>` elementus su `for` atributais
-- ✅ Klaviatūros navigacija - visi interaktyvūs elementai turi būti pasiekiami per Tab
-- ✅ Pridėkite `tabindex` atributus, kur reikia
-- ✅ Palaikykite `prefers-reduced-motion` media query
-- ✅ Naudokite kontrastingas spalvas (WCAG AA standartas minimum)
-
-### Browser Compatibility
-- ✅ Testuokite visose pagrindinėse naršyklėse (Chrome, Firefox, Safari, Edge)
-- ✅ Naudokite fallback sprendimus senesnėms naršyklėms (pvz., `execCommand('copy')`)
-- ✅ Patikrinkite, ar veikia mobile naršyklėse
-- ✅ Naudokite feature detection, ne browser detection
-
-### Testing
-- ⚠️ **Rekomenduojama** pridėti unit testus kritinėms funkcijoms
-- ✅ Testuokite visus user flows rankiniu būdu prieš commit
-- ✅ Testuokite error scenarijus (pvz., network klaidos, invalid input)
-- ✅ Patikrinkite, ar veikia su JavaScript išjungtu (graceful degradation)
+- ✅ Viešame UI tik **Prompt Anatomy** (EN-only) — žr. language-guidelines
+- ✅ Skaitomas kodas, SRP, `'use strict'`, consistent style
+- ✅ try-catch asinchroninėms operacijoms; aiškūs klaidos pranešimai vartotojui
+- ✅ Debounce / batch DOM; `async/await`; pašalinti nenaudojamą kodą
+- ✅ Semantinis HTML, ARIA, labels, Tab navigacija, `prefers-reduced-motion`, WCAG AA
+- ✅ Feature detection; mobile + pagrindinės naršyklės; graceful degradation be JS
 
 ---
 
-## 📚 DOKUMENTACIJOS VALDYMAS (Documentation)
+## DOKUMENTACIJA
 
-### Dokumentacijos Standartai
-- ✅ **VISI** failai turi turėti aiškų paskirtį ir struktūrą
-- ✅ README.md turi aprašyti projektą, kaip jį paleisti ir naudoti
-- ✅ Kodo komentarai – aiškūs ir glausti; kalba **LT ar EN**, nuosekliai tame pačiame faile/modulyje (viešas UI vis tiek generuojamas į EN per build).
-- ✅ Funkcijos turi turėti JSDoc komentarus su parametrais ir return tipais
-
-### Dokumentacijos Atnaujinimas
-- ⚠️ **PRIVALOMA** atnaujinti dokumentaciją, kai keičiamas kodas
-- ✅ Jei pridedate naują funkciją, atnaujinkite README.md
-- ✅ Jei keičiate API arba konfigūraciją, atnaujinkite INTEGRACIJA.md
-- ✅ **Release** – būtina atnaujinti CHANGELOG.md (sekciją „Nereleisuota“ perkelti į naują versiją su data). Versijavimas – Semantic Versioning.
-- ✅ Dokumentų atsakomybės ir kada ką atnaujinti – žr. docs/DOCUMENTATION.md
-- ✅ Dokumentuokite breaking changes
-
-### Dokumentacijos Struktūra
-- ✅ README.md - projekto apžvalga, instaliacija, naudojimas
-- ✅ CHANGELOG.md - versijų pakeitimų istorija (Keep a Changelog, SemVer). **Release** = atnaujinti CHANGELOG („Nereleisuota“ → nauja versija su data).
-- ✅ docs/DOCUMENTATION.md - dokumentų inventorius, atsakomybės, archyvavimo taisyklės (žr. kada ką atnaujinti).
-- ✅ INTEGRACIJA.md - detali integracijos instrukcija
-- ✅ AGENTS.md - agentų rolės, workflow, commit prefiksai
-- ✅ feedback-schema.md - Feedback Store duomenų schema
-- ✅ Kodo komentarai - inline dokumentacija sudėtingoms vietoms
-
-### Verslo Dokumentacija
-- ⚠️ Jei yra verslo logika arba procesai, dokumentuokite juos
-- ✅ Promptų šablonai turi būti aiškiai aprašyti
-- ✅ Verslo taisyklės ir apribojimai turi būti dokumentuoti
+- ✅ Keičiant kodą – atnaujinti susijusius Tier 1–2 doc ([docs/DOCUMENTATION.md](docs/DOCUMENTATION.md))
+- ✅ Release → [CHANGELOG.md](CHANGELOG.md) („Nereleisuota“ → versija + data, SemVer)
+- ✅ Inventorizacija / archive – [docs/INDEX.md](docs/INDEX.md), ne dubliuoti čia
 
 ---
 
-## 📋 DARBO PLANAVIMAS (Work Planning)
+## VERSION CONTROL
 
-### Task Breakdown
-- ✅ **VISADA** suskaidykite dideles užduotis į mažesnes, valdomas dalis
-- ✅ Kiekviena užduotis turi turėti aiškų tikslą ir rezultatą
-- ✅ Prioritizuokite užduotis pagal verslo reikšmę ir riziką
-- ✅ Įvertinkite užduočių sudėtingumą prieš pradedant
-
-### Version Control
-- ✅ **PRIVALOMA** naudoti Git su prasmingais commit pranešimais
-- ✅ Commit pranešimai turi būti aiškūs ir aprašantys, ką keičiate
-- ✅ Formatas: `[Tipas] Trumpas aprašymas` (pvz., `[Fix] Pataisyta email validacija`)
-- ✅ Commit tipai: `[Feature]`, `[Fix]`, `[Docs]`, `[Refactor]`, `[Security]`, `[Style]`
-- ✅ Agentų prefiksai (žr. AGENTS.md): `[Content]`, `[Curriculum]`, `[UI]`, `[QA]`, `[Orchestrator]`
-- ✅ **NIEKADA** nekomituokite jautrių duomenų arba laikinų failų
-
-### Branch Strategy
-- ⚠️ **Rekomenduojama** naudoti feature branches didesnėms funkcijoms
-- ✅ `main` branch turi būti stabilus ir veikiantis
-- ✅ Testuokite pakeitimus prieš merge į main
-
-### Code Review
-- ⚠️ Jei dirbate komandoje, **PRIVALOMA** code review prieš merge
-- ✅ Patikrinkite saugumą, kokybę ir dokumentaciją
-- ✅ Įsitikinkite, kad nėra hardcoded duomenų
-
-### Deployment
-- ✅ **PRIVALOMA** testuoti pakeitimus local aplinkoje prieš deployment
-- ✅ Patikrinkite, ar visos funkcijos veikia po pakeitimų
-- ✅ Įsitikinkite, kad nėra console.error arba warning production kode
-- ✅ **Numatytoji vieša patirtis – `/en/`:** po deploy patikrinkite kanoną, OG ir a11y pagal [DEPLOYMENT.md](DEPLOYMENT.md) ir [docs/language-guidelines-en-lt.md](docs/language-guidelines-en-lt.md) (SOT).
-
----
-
-## 🤖 AGENTŲ SISTEMA (Agent System)
-
-### Agentų rolės
-- **Content** – promptai, tekstai, aprašymai
-- **Curriculum** – turinio struktūra, seka, mokymosi logika
-- **UI/UX** – dizainas, prieinamumas, vartotojo patirtis
-- **QA** – kokybės tikrinimas (kodas + turinys)
-- **Orchestrator** – koordinacija, prioritetai, užduočių valdymas
-
-### Workflow
-- Prieš pakeitimus: [docs/AGENT_SOT.md](docs/AGENT_SOT.md) + AGENTS.md workflow
-- Prieš PR: `npm test`; CI – `.github/workflows/ci.yml`
-
-### Feedback Store
-- Grįžtamasis ryšys ir metrikos: žr. feedback-schema.md (rezervuota būsimai)
-- Šaltiniai: analytics, QA rezultatai
-
----
-
-## 🎨 GERIAUSIOS PRAKTIKOS (Best Practices)
-
-### HTML Struktūra
-- ✅ Naudokite semantinius HTML5 elementus
-- ✅ Pridėkite `lang` atributą (`lang="lt"` lietuvių kalbai)
-- ✅ Meta tags turi būti teisingi (charset, viewport, etc.)
-- ✅ Naudokite descriptive ID ir class vardus
-
-### CSS Organizacija
-- ✅ Naudokite CSS kintamuosius (`:root`) spalvoms ir dydžiams
-- ✅ Organizuokite CSS logiškai (reset, variables, components, utilities)
-- ✅ Naudokite BEM arba panašią metodologiją, jei reikia
-- ✅ Responsive design - mobile-first approach
-- ✅ Naudokite `prefers-reduced-motion` accessibility
-
-### JavaScript Organizacija
-- ✅ Organizuokite kodą logiškai (config, helpers, main functions)
-- ✅ Naudokite IIFE (Immediately Invoked Function Expression) arba modules
-- ✅ Atskirkite concerns (UI, business logic, API calls)
-- ✅ Naudokite const/let, ne var
-- ✅ Avoid global variables - naudokite namespaces arba modules
-
-### Naming Conventions
-- ✅ Kintamieji ir funkcijos: `camelCase`
-- ✅ Konstantos: `UPPER_SNAKE_CASE`
-- ✅ CSS klasės: `kebab-case` arba `BEM`
-- ✅ Failai: `kebab-case` (pvz., `google-apps-script.js`)
-
-### Code Reusability
-- ✅ **DRY** (Don't Repeat Yourself) - nenaudokite kopijuoto kodo
-- ✅ Sukurkite reusable funkcijas
-- ✅ Naudokite helper funkcijas bendroms operacijoms
-
-### Maintainability
-- ✅ Kodas turi būti lengvai suprantamas po 6 mėnesių
-- ✅ Naudokite aiškius kintamųjų ir funkcijų vardus
-- ✅ Komentuokite "kodėl", ne "ką" (kodas turi būti aiškus be komentarų)
-- ✅ Refactoring - nuolat tobulinkite kodą
-
----
-
-## 🚨 KONKRETŪS PROJEKTO REIKALAVIMAI
-
-### Mokami PDF / Stripe
-- ✅ Payment Links ir viešos kainos – [config/sot.json](config/sot.json); po pakeitimo `npm run build`
-- ✅ Price ID – env (žr. [DEPLOYMENT.md](DEPLOYMENT.md), [.env.example](.env.example))
-- ✅ Gyvas testas prieš release – [MUST_TODO.md](MUST_TODO.md) QA
-
-### Kontaktų forma (rezervuota)
-- ⚠️ **Neįjungta** — žr. [INTEGRACIJA.md](INTEGRACIJA.md). Būsimam GAS – placeholder URL, privatumo atnaujinimas.
-
-### Promptų Funkcionalumas
-- ✅ Kopijavimo funkcija turi veikti visose naršyklėse (fallback)
-- ✅ Rodykite visual feedback (toast, button state)
-- ✅ Klaviatūros navigacija turi veikti (Tab, Enter, Space)
-- ✅ Accessibility - code blocks turi būti pasiekiami per klaviatūrą
-
-### Responsive Design
-- ✅ **PRIVALOMA** testuoti mobile, tablet, desktop
-- ✅ Naudokite mobile-first approach
-- ✅ Testuokite skirtingus ekranų dydžius (320px, 768px, 1024px, 1920px)
-
----
-
-## 📝 COMMIT MESSAGE FORMAT
+- ✅ Commit: `[Tipas] Trumpas aprašymas` — `[Feature]`, `[Fix]`, `[Docs]`, `[Refactor]`, `[Security]`, `[Style]`, `[Test]`, `[Chore]`
+- ✅ Agentų prefiksai: `[Content]`, `[Curriculum]`, `[UI]`, `[QA]`, `[Orchestrator]` ([AGENTS.md](AGENTS.md))
+- ❌ Nekomituoti secretų / laikinų failų; `main` stabilus; prieš merge – `npm test`
 
 ```
 [Tipas] Trumpas aprašymas (iki 50 simbolių)
 
 Detalesnis aprašymas, jei reikia (iki 72 simbolių per eilutę)
-
-Tipai:
-- [Feature] - nauja funkcija
-- [Fix] - klaidos taisymas
-- [Docs] - dokumentacijos pakeitimai (pvz. [Docs] CHANGELOG: 1.1.0 – pridėta X)
-- [Refactor] - kodo refactoring
-- [Security] - saugumo pakeitimai
-- [Style] - stiliaus pakeitimai (formatavimas, CSS)
-- [Test] - testų pridėjimas arba pakeitimai
-- [Chore] - build, config, dependencies
 ```
 
 ---
 
-## ⚠️ RIBOJIMAI IR ĮSPĖJIMAI
+## AGENTAI
 
-### Ką NIEKADA nedaryti:
-- ❌ Nekomituokite jautrių duomenų (API keys, passwords, real URLs)
-- ❌ Nenaudokite `eval()` arba `innerHTML` su vartotojo duomenimis
-- ❌ Nerodykite detalių klaidų pranešimų vartotojams (saugumo rizika)
-- ❌ Nenaudokite hardcoded verslo duomenų kode
-- ❌ Nekomituokite `.env` failų arba konfigūracijos su realiais duomenimis
-
-### Ką VISADA daryti:
-- ✅ Validuokite visus vartotojo įvestus duomenis
-- ✅ Naudokite try-catch blokus asinchroninėms operacijoms
-- ✅ Testuokite pakeitimus prieš commit
-- ✅ Atnaujinkite dokumentaciją, kai keičiate kodą
-- ✅ Naudokite semantinius HTML elementus
-- ✅ Pridėkite accessibility atributus
+- Prieš pakeitimus: [docs/AGENT_SOT.md](docs/AGENT_SOT.md) + [AGENTS.md](AGENTS.md) workflow
+- Prieš PR: `npm test`; CI – `.github/workflows/ci.yml`
+- Feedback Store – rezervuota; žr. [INTEGRACIJA.md](INTEGRACIJA.md)
 
 ---
 
-## 🔍 CODE REVIEW CHECKLIST
+## PROJEKTO REIKALAVIMAI
 
-Prieš commit, patikrinkite:
-- [ ] Ar nėra hardcoded jautrių duomenų?
-- [ ] Ar visi vartotojo input'ai yra validuojami?
-- [ ] Ar yra error handling kritinėse vietose?
-- [ ] Ar dokumentacija atnaujinta pagal pakeitimus? (žr. docs/DOCUMENTATION.md)
-- [ ] Jei release – ar CHANGELOG.md atnaujintas ir versija atitinka SemVer?
-- [ ] Ar kodas veikia visose naršyklėse?
-- [ ] Ar accessibility reikalavimai įvykdyti?
-- [ ] Ar nėra console.log production kode?
-- [ ] Ar commit pranešimas aiškus ir aprašantis?
+- ✅ Payment Links / kainos – [config/sot.json](config/sot.json); po pakeitimo `npm run build`
+- ✅ Price ID – env ([DEPLOYMENT.md](DEPLOYMENT.md), [.env.example](.env.example))
+- ✅ Gyvas purchase QA – [MUST_TODO.md](MUST_TODO.md)
+- ✅ Kopijavimas: fallback + toast; code blocks klaviatūra
+- ✅ Responsive: mobile-first; 320 / 768 / 1024 / 1920
+- ✅ Post-deploy patirtis – `/en/` ([DEPLOYMENT.md](DEPLOYMENT.md))
 
----
-
-## 📞 PAGALBA
-
-Jei kyla klausimų dėl šių taisyklių:
-1. Perskaitykite atitinkamą sekciją dar kartą
-2. Patikrinkite dokumentaciją: README.md, INTEGRACIJA.md, [docs/DOCUMENTATION.md](docs/DOCUMENTATION.md), [CHANGELOG.md](CHANGELOG.md)
-3. Agentų rolės ir workflow – [AGENTS.md](AGENTS.md)
-4. Jei reikia, konsultuokitės su komandos nariais
+### Naming / praktikos
+- JS: `camelCase` / `UPPER_SNAKE_CASE`; CSS: `kebab-case` / BEM; failai: `kebab-case`
+- DRY; komentuoti „kodėl“; CSS kintamieji; IIFE arba modules
 
 ---
 
-**Paskutinis atnaujinimas:** 2026-05-19  
+## RIBOJIMAI
+
+**Niekada:** secrets į git; `eval()` / `innerHTML` su vartotojo duomenimis; detalūs klaidos pranešimai vartotojui; hardcoded jautrūs verslo duomenys; `.env` commit.
+
+**Visada:** validuoti input; try-catch async; testuoti prieš commit; atnaujinti doc; semantinis HTML + a11y.
+
+### Code review (prieš commit)
+- [ ] Nėra hardcoded jautrių duomenų?
+- [ ] Input validacija + error handling?
+- [ ] Doc atnaujinta ([docs/DOCUMENTATION.md](docs/DOCUMENTATION.md))?
+- [ ] Release → CHANGELOG + SemVer?
+- [ ] A11y; nėra `console.log` production?
+- [ ] Commit pranešimas aiškus?
+
+---
+
+**Paskutinis atnaujinimas:** 2026-07-29  
 **Agentų SOT:** [docs/AGENT_SOT.md](docs/AGENT_SOT.md)  
-**Projekto tipas:** statinė HTML + Vercel `api/` (Stripe PDF fulfillment); build → **`en/`** EN-only
+**Projekto tipas:** statinė HTML + Vercel `api/`; build → **`en/`** EN-only

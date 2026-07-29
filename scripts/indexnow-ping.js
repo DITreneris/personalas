@@ -47,17 +47,15 @@ function readSitemapUrls() {
  * the entry table in buildSitemapXml so we only ping URLs whose content shifted.
  */
 function fileToUrls(file, origin) {
+  // Only sitemap-canonical URLs (no gateway redirects, no noindex success).
   const map = {
     'templates/index-lt.html': [origin + '/en/'],
     'templates/privacy.html': [origin + '/en/privacy.html'],
-    'templates/privacy-gateway.html': [origin + '/privacy.html'],
-    'index.html': [origin + '/'],
     'terms.html': [origin + '/terms.html'],
-    'success.html': [origin + '/success.html'],
     'en/index.html': [origin + '/en/'],
     'en/privacy.html': [origin + '/en/privacy.html'],
-    'privacy.html': [origin + '/privacy.html'],
-    'config/sot.json': [origin + '/en/', origin + '/en/privacy.html'],
+    'config/sot.json': [origin + '/en/', origin + '/en/privacy.html', origin + '/terms.html'],
+    'scripts/build-locale-pages.js': [origin + '/en/', origin + '/en/privacy.html', origin + '/terms.html'],
   };
   return map[file] || [];
 }

@@ -19,8 +19,9 @@ Seka: `build` → `pdf:validate` → `tests/structure.test.js` → HTML lint (va
 ## Prieš release (rankinis)
 
 - [MUST_TODO.md](../MUST_TODO.md) – Stripe webhook, Vercel env, gyvas testinis pirkimas, `success.html` poll, el. laiškas su PDF.
-- [docs/TESTAVIMAS.md](TESTAVIMAS.md) – post-deploy scenarijai.
+- [docs/TESTAVIMAS.md](TESTAVIMAS.md) – post-deploy scenarijai + **Mobile matrix (iOS + Android)** (sticky/toast, Copy, safe-area, Stripe path).
 - CHANGELOG [Unreleased] → versija su data (SemVer).
+- Mobile sticky/CSS pakeitimai – sutartys [AGENT_SOT.md](AGENT_SOT.md) §6b.
 
 ## Turinio / struktūros taisyklės
 

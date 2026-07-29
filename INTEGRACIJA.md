@@ -19,3 +19,7 @@ Jei įjungsite formą vėliau:
 1. Modal arba forma ant landing (žr. CSS komentarą „MODAL / KONTAKTŲ FORMA“).
 2. Backend: Google Apps Script arba kita serverless forma — ne commitinti secretų.
 3. Atnaujinti [templates/privacy.html](templates/privacy.html) + `npm run build`, ir šį failą.
+
+## Feedback Store (rezervuota)
+
+Grįžtamojo ryšio schema / metrikos — **dar neįjungta**. Kol forma ir store neaktyvūs, nėra atskiros `feedback-schema` bylos; būsimą schemą pridėti čia arba `docs/` (Tier 1) pagal [docs/DOCUMENTATION.md](docs/DOCUMENTATION.md).

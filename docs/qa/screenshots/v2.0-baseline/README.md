@@ -16,6 +16,6 @@ Capture before/after token PRs at **1440px**, **768px**, and **375px** width.
    or browser devtools → responsive mode → save full-page PNGs here
 3. Name files: `{page}-{width}.png` (e.g. `en-1440.png`)
 
-Captured baseline (2026-07-29): `en|success|terms` × `1440|768|375`.
+PNG baselines are **gitignored** — regenerate locally before visual review; do not commit.
 
 Optional: add Playwright screenshot compare in CI (backlog).

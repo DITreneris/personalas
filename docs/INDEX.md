@@ -1,26 +1,46 @@
 # Dokumentacijos indeksas – Personalas
 
+Tier žemėlapis. Lifecycle ir ownership — [DOCUMENTATION.md](DOCUMENTATION.md).  
+**Ops kanonas:** [AGENT_SOT.md](AGENT_SOT.md). Archive (Tier 3) **nėra** agentų hot-path.
+
+---
+
+## Tier 0 – Entry
+
 | Dokumentas | Paskirtis |
 |------------|-----------|
-| [AGENT_SOT.md](AGENT_SOT.md) | **Agentų operacinis SOT** — keliai, build, deploy, brand |
-| [DOCUMENTATION.md](DOCUMENTATION.md) | Dokumentų valdymas ir atsakomybės |
-| [process/development.md](process/development.md) | PR ir lokalaus kūrimo procesas |
-| [security.md](security.md) | npm audit, priklausomybės |
-| [language-guidelines-en-lt.md](language-guidelines-en-lt.md) | LT authoring / EN viešas produktas; viešas brand **Prompt Anatomy**, vidinis repo **Personalas** |
-| [QA_STANDARTAS.md](QA_STANDARTAS.md) | QA standartas |
-| [TESTAVIMAS.md](TESTAVIMAS.md) | Gyvas testavimas po deploy |
-| [LEGACY_GOLDEN_STANDARD.md](LEGACY_GOLDEN_STANDARD.md) | Golden standard: DOM, PDF-first seka, DS sutartys, QA (ne tik turinys) |
-| [design_system_v2.md](design_system_v2.md) | **Design System v2.0** — canonical token/CTA/a11y reference + release checklist |
-| [design_systemv02.md](design_systemv02.md) | Design System v0.2–v0.3 įgyvendinimo planas (istorinis PR log) |
+| [AGENT_SOT.md](AGENT_SOT.md) | Keliai, build, deploy, brand, mobile, pamokos |
+| [DOCUMENTATION.md](DOCUMENTATION.md) | DMS: tieriai, lifecycle, sync matrix, ownership |
+| [INDEX.md](INDEX.md) | Šis žemėlapis |
 
-## Aktyvus PDF authoring
+## Tier 1 – Ops
 
-- [pdf-source/README.md](pdf-source/README.md) — HTML šaltinis, eksporto SOP, prekės ženklo taisyklės (`www.promptanatomy.app` footer; `promptanatomy.help` viršuje / apačioje).
-- [pdf-source/beginner-personalas-hr.html](pdf-source/beginner-personalas-hr.html) — **16 psl.** Beginner guide (EN).
-- [pdf-source/advanced-personalas-hr.html](pdf-source/advanced-personalas-hr.html) — **32 psl.** Advanced guide (EN).
-- [../config/sot.json](../config/sot.json) — PDF kortelių TOC ir buyer FAQ.
-- Build: [../scripts/build-locale-pages.js](../scripts/build-locale-pages.js). Runtime PDF UI: [../generator.js](../generator.js).
+| Dokumentas | Paskirtis |
+|------------|-----------|
+| [../README.md](../README.md) | Produkto apžvalga, build, GEO santrauka |
+| [../AGENTS.md](../AGENTS.md) | Rolės, workflow, commit prefiksai, CTA §10 |
+| [../DEPLOYMENT.md](../DEPLOYMENT.md) | Vercel env, post-deploy |
+| [../INTEGRACIJA.md](../INTEGRACIJA.md) | Stripe / forma / Feedback Store statusas |
+| [../CHANGELOG.md](../CHANGELOG.md) | SemVer (recent); senesni → archive |
+| [../MUST_TODO.md](../MUST_TODO.md) | Atviri promo / purchase QA |
+| [security.md](security.md) | npm audit, CSP, GEO blurb |
+| [TESTAVIMAS.md](TESTAVIMAS.md) | Post-deploy + Mobile matrix |
 
-Šaknis: [README.md](../README.md), [AGENTS.md](../AGENTS.md), [DEPLOYMENT.md](../DEPLOYMENT.md), [CHANGELOG.md](../CHANGELOG.md). Papildomai šaknyje: [MUST_TODO.md](../MUST_TODO.md), [MVP_ROADMAP.md](../MVP_ROADMAP.md), [INTEGRACIJA.md](../INTEGRACIJA.md), [feedback-schema.md](../feedback-schema.md).
+## Tier 2 – Design / QA
 
-Pasenusios UX/UI auditų ataskaitos laikomos git istorijoje; repozitorijoje palaikomas tik šis kanoninis sąrašas ir [CHANGELOG.md](../CHANGELOG.md).
+| Dokumentas | Paskirtis |
+|------------|-----------|
+| [design_system_v2.md](design_system_v2.md) | Token / CTA / a11y kanonas |
+| [LEGACY_GOLDEN_STANDARD.md](LEGACY_GOLDEN_STANDARD.md) | DOM / funnel / sticky sutartys |
+| [language-guidelines-en-lt.md](language-guidelines-en-lt.md) | EN viešas / LT authoring; brand HQ vs spoke |
+| [QA_STANDARTAS.md](QA_STANDARTAS.md) | Merge / release checklist |
+| [pdf-source/README.md](pdf-source/README.md) | PDF HTML šaltinis ir eksportas |
+
+## Tier 3 – Archive (ne hot-path)
+
+| Dokumentas | Paskirtis |
+|------------|-----------|
+| [archive/design_systemv02.md](archive/design_systemv02.md) | DS v0.2–v0.3 PR log (istorija) |
+| [archive/CHANGELOG-HISTORY.md](archive/CHANGELOG-HISTORY.md) | CHANGELOG prieš 1.3.0 |
+
+PDF authoring HTML: [pdf-source/](pdf-source/). Root agent entry: [.cursorrules](../.cursorrules) → AGENT_SOT.

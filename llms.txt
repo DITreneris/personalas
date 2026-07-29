@@ -2,18 +2,23 @@
 
 > Prompt Anatomy publishes free copy-paste AI prompts and paid PDF playbooks that help US HR teams run a repeatable hiring loop (Diagnose, Define, Source, Screen, Offer, Onboard). Operated by Tomas Staniulis from Alameda, CA. Site is English-only; paid PDFs delivered via Stripe with 14-day refund.
 
+This page is the Hire kit (US HR prompts + PDF guides). The full Prompt Anatomy AI operating system and interactive training live at the training hub.
+
+## Training hub
+- [Prompt Anatomy course (promptanatomy.app)](https://www.promptanatomy.app/): Primary brand destination — 6-module interactive training, tool catalog, and certificates.
+
 ## Free resources
-- [Landing - 10 free prompts and 6-phase workflow](https://www.promptanatomy.help/en/)
-- [Full prompt digest (markdown)](https://www.promptanatomy.help/llms-full.txt)
+- [Landing - 10 free prompts and 6-phase workflow](https://www.promptanatomy.help/en/): Copy-paste US hiring prompts on this Hire kit site.
+- [Full prompt digest (markdown)](https://www.promptanatomy.help/llms-full.txt): All 10 free prompts in plain markdown for assistants.
 
 ## Paid PDF guides
-- [Beginner HR Hiring Guide - $5.99 - 16 pages](https://www.promptanatomy.help/en/#pdf-guides)
-- [Advanced HR Hiring Guide - $11.99 - 32 pages](https://www.promptanatomy.help/en/#pdf-guides)
-- [Both HR Hiring Guides (Beginner + Advanced) - $15.99](https://www.promptanatomy.help/en/#pdf-guides)
-
-## Policies
-- [Privacy](https://www.promptanatomy.help/en/privacy.html)
-- [Terms - Personal license, 14-day refund](https://www.promptanatomy.help/terms.html)
+- [Beginner HR Hiring Guide - $5.99 - 16 pages](https://www.promptanatomy.help/en/#pdf-guides): Starter US hiring playbook PDF.
+- [Advanced HR Hiring Guide - $11.99 - 32 pages](https://www.promptanatomy.help/en/#pdf-guides): Scorecards, rubrics, and calibration PDF.
+- [Both HR Hiring Guides (Beginner + Advanced) - $15.99](https://www.promptanatomy.help/en/#pdf-guides): Both PDFs in one Stripe checkout.
 
 ## Contact
 - Email: info@promptanatomy.app
+
+## Optional
+- [Privacy](https://www.promptanatomy.help/en/privacy.html): Stripe checkout, Resend delivery, and data practices.
+- [Terms - Personal license, 14-day refund](https://www.promptanatomy.help/terms.html): Paid PDF license and refund policy.

@@ -512,10 +512,11 @@ Each PR is CSS/build-only. Rollback = revert commit + `npm run build`. No data m
 | Sticky-overlapped anchors (`#pdf-guides`, `#free-prompts-label`, `#workflow-overview`, `.prompt[id^="prompt"]`, `[id^="block"]`) | `scroll-margin-top: clamp(72px, 12vh, 96px)` via `:where()` (specificity 0) |
 | `.page-lanes-nav` | `background: rgba(255, 255, 255, 0.85); backdrop-filter: saturate(180%) blur(12px)` |
 | `.page-lanes-nav` (Firefox / older Safari fallback) | `@supports not (backdrop-filter: blur(12px))` → solid `var(--surface-1)` |
-| `.pdf-sticky-cta` | `padding-bottom: max(14px, env(safe-area-inset-bottom))` (iOS home indicator) |
+| `.pdf-sticky-cta` | Bottom + landscape L/R `env(safe-area-inset-*)`; when visible `body.has-pdf-sticky-cta` sets `--pdf-sticky-offset` for toast/footer clearance |
+| `--btn-min-h-sm` | **48px** (Chrome/Lighthouse + Apple HIG 44pt) |
 | `.skip-link:focus` | `outline: var(--ring-focus)` (token, replaces literal `3px solid var(--text)`) |
 
-**Tests:** [`tests/structure.test.js`](../tests/structure.test.js) — `scroll-margin-top` clamp, `backdrop-filter` + `@supports` fallback, `env(safe-area-inset-bottom)`, `.skip-link:focus` token.
+**Tests:** [`tests/structure.test.js`](../tests/structure.test.js) — `scroll-margin-top` clamp, `backdrop-filter` + `@supports` fallback, `env(safe-area-inset-*)`, sticky offset / `has-pdf-sticky-cta`, `.skip-link:focus` token.
 
 ---
 

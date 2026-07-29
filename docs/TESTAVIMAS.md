@@ -14,4 +14,23 @@ Po deploy (žr. [DEPLOYMENT.md](../DEPLOYMENT.md)) patikrinkite:
 
 **Pastaba:** `/lt/*` URL produkcijoje nukreipia į `/en/*` — nėra atskiro LT puslapio.
 
+---
+
+## Mobile matrix (iOS + Android)
+
+Po UI / sticky / CSS pakeitimų (ir po deploy) patikrinkite realiuose įrenginiuose arba bent Chrome DevTools + viename fiziniame telefone.
+
+| # | Patikra | iOS Safari | Android Chrome |
+|---|---------|------------|----------------|
+| M1 | 360–430px: nėra horizontalaus scroll visame puslapyje | | |
+| M2 | Scroll po hero → `.pdf-sticky-cta` matomas; toast po **Copy** lieka **virš** sticky juostos | | |
+| M3 | Sticky matomas: footer / community CTA nėra po juosta (`body.has-pdf-sticky-cta`) | | |
+| M4 | Landscape: sticky CTA neįstringa į notch / home indicator (L/R/bottom safe-area) | | |
+| M5 | Copy bent 1 promptą (clipboard + toast) | | |
+| M6 | Pinch-zoom **veikia** (nėra `user-scalable=no` / `maximum-scale=1`) | | |
+| M7 | Modal / PDF preview (jei atidaromas): turinys netrūkinėja po Safari URL bar (`dvh`) | | |
+| M8 | Stripe Buy → checkout → success kelias (gyvas) — žr. [MUST_TODO.md](../MUST_TODO.md) QA | | |
+
+**Minimalus įrenginių rinkinys:** 1× iPhone Safari, 1× Android Chrome; pageidautina + mažas ekranas (SE klasė) ir lėtesnis tinklas Checkout’ui.
+
 Žurnalas: įrašykite datą, aplinką (Vercel / GitHub Pages), rezultatą.

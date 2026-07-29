@@ -2,7 +2,7 @@
 
 **Vienas šaltinis** Cursor agentams ir PR peržiūrai: keliai, build, deploy, brand. Rolės ir workflow diagrama – [AGENTS.md](../AGENTS.md). Kalbos ir prekės ženklo detalės – [language-guidelines-en-lt.md](language-guidelines-en-lt.md). Deploy operacijos – [DEPLOYMENT.md](../DEPLOYMENT.md).
 
-**Paskutinis atnaujinimas:** 2026-05-19
+**Paskutinis atnaujinimas:** 2026-07-29
 
 ---
 
@@ -10,10 +10,11 @@
 
 | Aspektas | Kanonas |
 |----------|---------|
-| Viešas produktas | **EN-only** (`en-US`), kanoninis URL **`/en/`** |
+| **Brand north star** | **`https://www.promptanatomy.app`** — entity HQ; community / footer / `Organization.url` / `llms.txt` Training hub |
+| Viešas produktas (šis repo) | **Hire spoke** ant **`promptanatomy.help`**: **EN-only** (`en-US`), kanoninis URL **`/en/`** |
 | LT turinys | Tik **authoring** šablonuose (`templates/index-lt.html`); **nesiunčiamas** kaip atskira LT svetainė |
 | `/lt/*` produkcijoje | **308 redirect** į `/en/*` ([vercel.json](../vercel.json)) — nėra atskiro LT QA puslapio |
-| Konversija | **Mokami PDF** (Stripe) + 10 nemokamų promptų įsitraukimui |
+| **Local KPI (spoke)** | **Mokami PDF** (Stripe) + 10 nemokamų promptų; `primaryKpi: pdf` (hero → `#pdf-guides`) — **neperrašo** brand HQ |
 | Fulfillment | Vercel serverless `api/` + Upstash Redis + Resend + Blob (arba `api/_private/pdfs/` lokaliai) |
 | GitHub Pages | Tik statika — **be** mokamų PDF fulfillment |
 
@@ -92,6 +93,7 @@ Env šablonas: [.env.example](../.env.example). Pilna lentelė: [DEPLOYMENT.md](
 ## 5. Kalba ir prekės ženklas (santrauka)
 
 - **Viešai:** tik **Prompt Anatomy** — `/en/`, PDF, terms, privacy, success, el. laiškai.
+- **Mother brand / entity:** community, footer, `Organization.url`, `llms.txt` Training hub → **`promptanatomy.app`** (ne tik `.help`).
 - **Draudžiama viešame UI:** „Personalas“, „Series No. 3“, „Spin-off“, lietuviškos raidės išsiunčiamuose HTML.
 - **Vidinis repo pavadinimas:** Personalas (`product.name` SOT) — ne rodyti lankytojui.
 - **Privacy URL:** `/privacy.html` → `/en/privacy.html` (ne `privatumas`).
@@ -115,7 +117,7 @@ Detaliau: [language-guidelines-en-lt.md](language-guidelines-en-lt.md).
 - `http://127.0.0.1:3000/success.html`
 - `http://127.0.0.1:3000/terms.html`
 
-Scenarijai: [TESTAVIMAS.md](TESTAVIMAS.md). Stripe gyvas testas: [MUST_TODO.md](../MUST_TODO.md) QA skyrius.
+Scenarijai: [TESTAVIMAS.md](TESTAVIMAS.md) (įsk. **Mobile matrix**). Stripe gyvas testas: [MUST_TODO.md](../MUST_TODO.md) QA skyrius.
 
 ---
 
@@ -123,11 +125,13 @@ Scenarijai: [TESTAVIMAS.md](TESTAVIMAS.md). Stripe gyvas testas: [MUST_TODO.md](
 
 Visi GEO / structured-data / robots / IndexNow artefaktai emit'inami iš vienos vietos — [scripts/build-locale-pages.js](../scripts/build-locale-pages.js) — naudojant SOT lauks iš [config/sot.json](../config/sot.json). Build laiko guardrail'as — [tests/structure.test.js](../tests/structure.test.js) `assertGeoSurface()` (80+ assert'ų).
 
+**GEO north star:** brand destination = **`https://www.promptanatomy.app`**. Šis repo (`.help`) = Hire spoke (PDF + free prompts). `Organization.url` = `brand.motherBrandUrl` (`.app`); `WebSite.url` lieka ant `.help`. CTA / `llms.txt` Training hub → `.app`.
+
 ### Robots.txt kontraktas
 
 | Klasė | UA pavyzdžiai | Politika |
 |-------|---------------|----------|
-| **ALLOW search/citation** | `OAI-SearchBot`, `ChatGPT-User`, `PerplexityBot`, `Perplexity-User`, `Claude-SearchBot`, `Claude-User`, `Applebot-Extended` | `Allow: /` (varo referral traffic'ą į PDF) |
+| **ALLOW search/citation** | `OAI-SearchBot`, `ChatGPT-User`, `PerplexityBot`, `Perplexity-User`, `Claude-SearchBot`, `Claude-User`, `Applebot-Extended` | `Allow: /` (referral į PDF **ir** brand discovery → `.app`) |
 | **ALLOW landing, DISALLOW PDF assets + /api/** | `GPTBot`, `ClaudeBot`, `Google-Extended`, `Amazonbot` | Brand'as matomas AI answers'uose, bet sample turinys neteka į training set'us |
 | **BLOCK** | `anthropic-ai`, `cohere-ai`, `CCBot`, `Bytespider`, `Meta-ExternalAgent` | Training-only, no referral |
 | **Default `*`** | (Googlebot, Bingbot, kiti) | `Disallow: /api/`, `Allow: /` |
@@ -136,14 +140,14 @@ Visi GEO / structured-data / robots / IndexNow artefaktai emit'inami iš vienos 
 
 ### JSON-LD @graph
 
-Vienas `@graph` su `WebSite` (`@id` `/#website`, `publisher` ref), `Organization` (`@id` `/#organization`, `logo`, `slogan`, `knowsAbout`, `contactPoint`, `sameAs` ×4, `founder` ref), `Person` (`@id` `/#tomas`, `worksFor` ref, `sameAs` LinkedIn + operator X). Atskiri `<script type="application/ld+json">` block'ai: `FAQPage` (9 entries iš `sot.frontFaq` + `sot.buyerFaq`, parity su visible text), 3× `Product` (`Offer` su `priceCurrency: USD`, `priceValidUntil`, `MerchantReturnPolicy` 14d/US/free), `BreadcrumbList` (privacy/terms), `speakable` SpeakableSpecification (visi WebPage node'ai).
+Vienas `@graph` su `WebSite` (`@id` `/#website`, `publisher` ref), `Organization` (`@id` `/#organization`, `url` = mother brand `.app`, `logo`, `slogan`, `knowsAbout`, `contactPoint`, `sameAs` = `.app` + blog + site + social, `founder` ref), `Person` (`@id` `/#tomas`, `worksFor` ref, `sameAs` LinkedIn + operator X). Atskiri `<script type="application/ld+json">` block'ai: `FAQPage` (8 entries iš `sot.frontFaq` + `sot.buyerFaq`, parity su visible text), 3× `Product` (`Offer` su `priceCurrency: USD`, `priceValidUntil`, `MerchantReturnPolicy` 14d/US/free), `BreadcrumbList` (privacy/terms), `speakable` + `dateModified` (WebPage node'ai).
 
 **Draudžiama:** `aggregateRating` / `Review` schema be realių klientų review'ų (Google policy violation).
 
 ### SOT laukai (privalomi)
 
-- `sot.frontFaq[4]` — mirror'ina visible front FAQ (Q+A parity FAQPage'ui).
-- `sot.brand.{slogan, logoUrl, knowsAbout[], socialProfiles{telegram, x, linkedin}, verification{google, bing}}`.
+- `sot.frontFaq[3]` — mirror'ina visible front FAQ (Q+A parity FAQPage'ui).
+- `sot.brand.{slogan, logoUrl, motherBrandUrl, knowsAbout[], socialProfiles{telegram, x, linkedin}, ecosystemUrls{blog, site}, verification{google, bing}}`.
 - `sot.product.{operatorLinkedin, operatorTwitter}` (Person.sameAs).
 - `sot.pdfGuides.{beginner|advanced|bundle}.{description, sku, priceUSD, priceValidUntil, pages}` (Product + Offer).
 - Validacija — `validateGeoFields()` throw'ina jei trūksta privalomų laukų arba URL ne HTTPS.
@@ -151,7 +155,7 @@ Vienas `@graph` su `WebSite` (`@id` `/#website`, `publisher` ref), `Organization
 ### IndexNow
 
 - Key konstanta — [scripts/build-locale-pages.js](../scripts/build-locale-pages.js) `INDEXNOW_KEY` (kartojama [scripts/indexnow-ping.js](../scripts/indexnow-ping.js); rotacija — abi vietos sinchronu).
-- Hosted `https://promptanatomy.help/{INDEXNOW_KEY}.txt` (vercel.json — `immutable` cache).
+- Hosted `https://www.promptanatomy.help/{INDEXNOW_KEY}.txt` (vercel.json — `immutable` cache).
 - Ping per `npm run seo:indexnow:diff` (`--since-head`), automatiškai wired į [.github/workflows/deploy.yml](../.github/workflows/deploy.yml) post-deploy step'ą tik ant `main`; `continue-on-error: true` (non-blocking).
 - Diff mapping `fileToUrls()` mappina template → public URL (laukia priežiūros kai keičiasi sitemap struktūra).
 
@@ -164,6 +168,7 @@ Vienas `@graph` su `WebSite` (`@id` `/#website`, `publisher` ref), `Organization
 ### Sitemap.xml
 
 - `xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"`.
+- Kanoniniai loc'ai tik: `/en/`, `/en/privacy.html`, `/terms.html` (be gateway `/` ir `/privacy.html`).
 - Kiekvienas URL — `<lastmod>` iš `git log -1 --format=%cs <source-file>` (fallback'as — today UTC).
 - `/en/` — 3 `<image:image>` (OG default + 2 PDF covers).
 
@@ -171,17 +176,32 @@ Vienas `@graph` su `WebSite` (`@id` `/#website`, `publisher` ref), `Organization
 
 | Failas | Paskirtis | Cache |
 |--------|-----------|-------|
-| [llms.txt](../llms.txt) | <5 KB AI-friendly site map (H1 + blockquote + Free/Paid/Policies/Contact) | 24h |
+| [llms.txt](../llms.txt) | <5 KB AI-friendly site map (H1 + blockquote + Training hub → `.app` + Free/Paid/Contact + Optional) | 24h |
 | [llms-full.txt](../llms-full.txt) | Full markdown digest (10 promptų + 6-phase workflow) | 24h |
 | [manifest.webmanifest](../manifest.webmanifest) | PWA-lite (`start_url: /en/`, theme_color navy) | 24h |
 | [404.html](../404.html) | EN-only noindex,follow, canonical → /en/ | 5min |
 | `{INDEXNOW_KEY}.txt` | IndexNow protocol key file | immutable |
 
-### Promotion path (CSP Report-Only → enforce)
+### CSP
 
-- CSP yra `Content-Security-Policy-Report-Only` ([vercel.json](../vercel.json) `/(.*)`).
-- **NE PERLEISTI į enforce** kol [en/index.html](../en/index.html) yra inline `onclick=` / `onkeydown=` handler'iai (refactor'inti į `addEventListener` per [generator.js](../generator.js)).
+- Produkcijoje **`Content-Security-Policy` enforce** ([vercel.json](../vercel.json) `/(.*)`); inline `onclick` / `onkeydown` pašalinti (delegacija [generator.js](../generator.js)).
 - Detaliau — [docs/security.md](security.md).
+
+---
+
+## 6b. Mobile / sticky sutartys (2026-07-29)
+
+| Sutartis | Kanonas |
+|----------|---------|
+| Sticky PDF CTA | `initPdfStickyCta` → `body.has-pdf-sticky-cta` kai juosta matoma |
+| Clearance | `--pdf-sticky-offset` → `html` scroll-padding, `body` padding-bottom, `.toast` bottom |
+| Safe-area | `.pdf-sticky-cta`: bottom + L/R; `.page-lanes-nav`: top (`env(safe-area-inset-*)`) |
+| Viewport | Vieši HTML: `viewport-fit=cover` (įsk. privacy/terms/success/404) |
+| Modal height | `100dvh` / `90dvh` + `@supports not (height: 100dvh)` → `vh` |
+| Tap target | `--btn-min-h-sm: 48px` ([design_system_v2.md](design_system_v2.md)) |
+| Draudžiama | `user-scalable=no`, `maximum-scale=1`, `position: fixed` ant `body` (iOS clip) |
+
+Rankinis QA: [TESTAVIMAS.md](TESTAVIMAS.md) Mobile matrix. Pamokos agentams: §10.
 
 ---
 
@@ -227,10 +247,25 @@ Prieš merge: **`npm test`** privalo praeiti.
 
 ---
 
+## 10. Pamokos (lessons) – agentams
+
+Šiame repo **nėra** `.cursor/skills/*/lessons.md` (skills framework neįdiegtas). Trumpas kaupimas čia; plėsti tik kai kartojasi klaida.
+
+| Data | Pamoka | Kodėl |
+|------|--------|-------|
+| 2026-07-29 | Sticky bottom CTA **privalo** kelti toast/footer per `--pdf-sticky-offset` + `body.has-pdf-sticky-cta` | Kitaip Copy toast ir community CTA lieka po juosta |
+| 2026-07-29 | `env(safe-area-inset-*)` veikia tik su `viewport-fit=cover` | Be cover inset = 0 (privacy/terms/404 anksčiau be cover) |
+| 2026-07-29 | Modal / full-height: preferuok `dvh`, ne tik `100vh` | iOS Safari URL bar „suvalgo“ `vh` |
+| 2026-07-29 | Primary tap = **48px** (`--btn-min-h-sm`), ne 44 | Lighthouse/Material; Apple 44 vis tiek tenkinamas |
+| 2026-07-29 | Nenaudok `user-scalable=no` „mobile polish“ | WCAG / a11y pažeidimas |
+| 2026-07-29 | Emuliatorius ≠ realus iPhone Safari + Android Chrome | Keyboard, clipboard, safe-area, Stripe — tik device / TESTAVIMAS matrix |
+
+---
+
 ## Susiję dokumentai
 
-- [AGENTS.md](../AGENTS.md) — rolės, workflow, release
+- [INDEX.md](INDEX.md) — tier žemėlapis (hub)
+- [DOCUMENTATION.md](DOCUMENTATION.md) — DMS lifecycle
+- [AGENTS.md](../AGENTS.md) — rolės, workflow, CTA §10
 - [.cursorrules](../.cursorrules) — saugumas, a11y, merge vartai
-- [docs/INDEX.md](INDEX.md) — dokumentacijos indeksas
-- [docs/DOCUMENTATION.md](DOCUMENTATION.md) — doc valdymas
-- [docs/QA_STANDARTAS.md](QA_STANDARTAS.md) — QA checklist
+- Tier 1–2 detalės — [INDEX.md](INDEX.md)

@@ -55,8 +55,11 @@ html {
     --btn-pad-md: 14px 28px;
     --btn-pad-lg: 20px 32px;
     --btn-pad-xl: 28px 48px;
-    --btn-min-h-sm: 44px;
+    /* 48px clears Chrome/Lighthouse tap targets and Apple HIG 44pt */
+    --btn-min-h-sm: 48px;
     --btn-min-h-md: 48px;
+    /* Mobile: clearance when .pdf-sticky-cta is visible (body.has-pdf-sticky-cta) */
+    --pdf-sticky-offset: 0px;
     --btn-min-h-lg: 56px;
 
     /* Pagrindinis akcentas – PA navy; WCAG2AA 11.5:1 ant balto */

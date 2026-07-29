@@ -26,7 +26,7 @@ Viena nuosekli taisyklė visiems agentams ir PR peržiūrai:
 
 | **Viešas prekės ženklas** | **`Prompt Anatomy`** (`config/sot.json` → `brand.publicName`). Žr. sekciją *Viešas prekės ženklas ir locale* žemiau. |
 
-| **Pozicionavimas / KPI** | [config/sot.json](../config/sot.json) – `positioning.primaryKpi` = **`pdf`**; **mokami PDF** – pagrindinis konversijos tikslas; hero primary CTA → `#pdf-guides`. |
+| **Pozicionavimas / KPI** | **Brand north star** → `https://www.promptanatomy.app` (community, footer, `Organization.url`, `llms.txt` Training hub). **Local spoke KPI** → [config/sot.json](../config/sot.json) `positioning.primaryKpi` = **`pdf`**; hero primary CTA → `#pdf-guides`. Local PDF KPI **neperrašo** brand HQ. |
 
 
 
@@ -75,6 +75,8 @@ Viena nuosekli taisyklė visiems agentams ir PR peržiūrai:
 |----------|--------|
 
 | **Viešas brand** | **Prompt Anatomy** — `/en/`, PDF, terms, privacy, success, el. laiškai |
+
+| **Mother brand HQ** | `brand.motherBrandUrl` = **`https://www.promptanatomy.app`**. Šis site (`.help`) = Hire spoke — **ne** vaizduoti kaip vienintelį Prompt Anatomy produktą. |
 
 | **Draudžiama viešame UI** | „Personalas“, „Series No. 3“, „Spin-off“, „Promptų anatomija“, lietuviškos raidės (ąčę…) |
 

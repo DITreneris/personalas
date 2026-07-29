@@ -1,8 +1,8 @@
 # Golden standard (legacy atskaita)
 
-**Paskirtis:** Vienas operacinis sąrašas — ką **ne laužyti** keičiant turinį, CSS arba build. Detalus DS implementacijos planas — [design_systemv02.md](design_systemv02.md). Keliai, deploy, brand — [AGENT_SOT.md](AGENT_SOT.md). Agentų seka — [AGENTS.md](../AGENTS.md) §9.
+**Paskirtis:** Vienas operacinis sąrašas — ką **ne laužyti** keičiant turinį, CSS arba build. DS istorija — [archive/design_systemv02.md](archive/design_systemv02.md). Keliai, deploy, brand — [AGENT_SOT.md](AGENT_SOT.md). Agentų seka — [AGENTS.md](../AGENTS.md) §9.
 
-**Paskutinis atnaujinimas:** 2026-07-29 (**audit remediation** — www kanonas + text highlights)
+**Paskutinis atnaujinimas:** 2026-07-29 (**mobile P0/P1** — sticky clearance + safe-area; anksčiau audit remediation)
 
 ---
 
@@ -40,6 +40,8 @@
 
 ## 2. Puslapio struktūra (PDF-first funnel)
 
+PDF-first = **local spoke** konversija (`primaryKpi: pdf`). Brand upsell lieka `#community` → **`promptanatomy.app`** (mother brand); PDF-first **neperrašo** brand HQ.
+
 Viešas EN puslapis (`en/index.html` po build) turi išlaikyti **sekos logiką**:
 
 ```
@@ -61,16 +63,19 @@ hero (primary CTA → #pdf-guides; H1 iš SOT — „in minutes“)
       → #workflow-overview (6 fazės chip'ai — ne hero viduje)
       → instructions → Free prompt FAQ → progress → jump-nav
   → promptai (block1…block10, prompt1…prompt10)
-  → community → footer
+  → community (H2 + optional `.community-illustration` → mother brand + `.community-cta-primary`)
+  → footer
 ```
 
 | Sutartis | Kodėl |
 |----------|--------|
+| Hero **neturi** dekoratyvaus illustration / `02` promo | LCP + PDF-first; mother-brand visual tik `#community` |
+| `#community` illustration | Viena linked `<picture>` (lazy, WebP+PNG); **ne** tarp `#workflow-overview` ir `.instructions` |
 | Hero **neturi** `.header-phases` | Fazės — `#workflow-overview` free lane |
 | `#pdf-guides` **prieš** free promptus | Konversijos KPI: PDF virš free tier |
 | **Nėra** turinio tarp H2 ir grid | Phase D: jokio auto specimen / social proof virš kortelių |
 | Buyer FAQ **po** grid + bundle, **prieš** free-bridge | Pirkimo objection'ai prie produkto |
-| `.pdf-guides-after-purchase` | Tik **`pdf-guides-free-bridge`** — ne ekspertų kortelės, ne disclaimer dublius |
+| `.pdf-guides-after-purchase` | Tik **`pdf-guides-free-bridge`** (lead + dual `.btn.btn--ghost` → `#free-prompts-label` / `#prompt1`; be gold callout) — ne ekspertų kortelės, ne disclaimer dublius |
 | Hero secondary CTA → `#free-prompts-label` | Nemokamas kelias nepraleidžia free band |
 | `objectives` **prieš** `pdf-guides` | Problemos → produktas (shop lane) |
 | Laisvojo lygio FAQ `<h2 id="faq-title">` | **„Free prompt FAQ“** (ne „Common questions…“) — atskirta nuo Buyer FAQ |
@@ -196,7 +201,7 @@ Po pakeitimų: **`npm run build`** → **`npm test`**.
 - **Focus** šviesus fonas: `var(--ring-focus)`; tamsus hero: `var(--ring-focus-on-dark)`.
 - **CTA sizes:** `--btn-pad-sm/md/lg/xl`, `--btn-min-h-sm/md/lg` — žr. [design_system_v2.md](design_system_v2.md).
 - **Line-height:** `--leading-tight/normal/relaxed` (ne ad-hoc `1.45`/`1.55`/`1.65`).
-- **Radius / motion / lift / reduced-motion** — kaip DS v0.2.2–v0.2.5 (žr. [design_systemv02.md](design_systemv02.md)).
+- **Radius / motion / lift / reduced-motion** — kaip DS v0.2.2–v0.2.5 (žr. [archive/design_systemv02.md](archive/design_systemv02.md)).
 - **Hero sentence case:** `text-transform: none` ant H1, subhead, price teaser; **U.S.** headline'e; kaina tik `priceTeaser`, ne subhead.
 - **Šešėliai / gradients / navy borders / sticky glass** — v0.3.0 taisyklės galioja.
 
@@ -212,10 +217,11 @@ Po pakeitimų: **`npm run build`** → **`npm test`**.
 | Workflow chip default | `--surface-2` |
 | Chip active | `--surface-1`, navy border |
 
-### 6.4 Sticky overlap & anchor clearance (v0.2.2)
+### 6.4 Sticky overlap & anchor clearance (v0.2.2+)
 
 - Anchor target'ai: `scroll-margin-top: clamp(72px, 12vh, 96px)`.
-- `.page-lanes-nav` ir `.pdf-sticky-cta`: glass + `@supports` fallback; sticky CTA `env(safe-area-inset-bottom)`.
+- `.page-lanes-nav` ir `.pdf-sticky-cta`: glass + `@supports` fallback; sticky CTA `env(safe-area-inset-*)` (bottom + landscape L/R); nav top `safe-area-inset-top`.
+- Kai sticky matomas: `body.has-pdf-sticky-cta` + `--pdf-sticky-offset` — `padding-bottom` / `scroll-padding-bottom` / toast `bottom` (kad juosta neuždengtų toast / footer).
 
 ---
 
@@ -232,8 +238,8 @@ Nelaužyti be QA:
 | `initPdfGuideHighlights` | **Tik** `data-guide-highlights="bundle"` |
 | `initPdfPreviewDialog` | Modal + `[data-preview-trigger]` |
 | `initStripeLinks` | Stripe URL + bundle `hidden` + kainos + savings |
+| `initPdfStickyCta` | IntersectionObserver hero + pdf-guides + `body.has-pdf-sticky-cta` clearance |
 | `loadSotConfig` | `fetch('/config/sot.json')` |
-| `initPdfStickyCta` | IntersectionObserver hero + pdf-guides |
 | Analytics | `data-analytics` + `trackEvent()` |
 
 ---
@@ -256,7 +262,7 @@ Nelaužyti be QA:
 
 - DS v0.3.3 Phase B: `pdf-see-inside` ×2, `pdf-guide-preview-btn` absent, `pdf-guide-highlights` count **1** (bundle)
 - DS v0.3.3 Phase D: removed DOM/SOT patterns absent
-- GEO: robots, sitemap, JSON-LD, llms.txt, manifest
+- GEO: robots, sitemap, JSON-LD, llms.txt, manifest — `Organization.url` + `llms.txt` Training hub → `.app`
 - PDF preview: fallbacks `6/8/9` ir `10/15/17`, absolute SOT fetch
 
 ---
@@ -265,7 +271,7 @@ Nelaužyti be QA:
 
 | Dokumentas | Kada skaityti |
 |------------|----------------|
-| [design_systemv02.md](design_systemv02.md) | DS PR, token migracija |
+| [archive/design_systemv02.md](archive/design_systemv02.md) | DS PR log (istorija) |
 | [AGENT_SOT.md](AGENT_SOT.md) | Keliai, build, deploy, Stripe, GEO |
 | [language-guidelines-en-lt.md](language-guidelines-en-lt.md) | EN viešas copy, brand |
 | [DOCUMENTATION.md](DOCUMENTATION.md) | Doc atnaujinimai prieš merge |
@@ -288,5 +294,6 @@ Nelaužyti be QA:
 | 2026-05-21 | v0.3.3+ | Bundle `.pdf-bundle-body` + savings; hero H1 „in minutes“; 355 tests |
 | 2026-05-21 | **Golden standard sync** | Šis failas suderintas su geriausia veikiančia `/en/` versija |
 | 2026-05-31 | **v2.0** | Deprecated alias removal, CTA/leading tokens, satellite.css, preview dialog polish, DS v2.0 docs; 367 tests |
+| 2026-07-29 | Community illustration | `#community` linked `.community-illustration` (lazy WebP/PNG); not in page hero |
 
 **Istoriniai komponentai (archyvas, ne golden):** `.pdf-expert-cards`, `.pdf-proof-inside`, `.pdf-guide-preview-btn`, per-card `.pdf-guide-highlights` — aprašyti CHANGELOG, negrąžinti be naujo ADR/PR.

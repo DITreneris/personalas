@@ -1,6 +1,6 @@
 # Prompt Anatomy – US HR hiring (repo: Personalas)
 
-Static site: **10 free hiring prompts** + **paid PDF guides** (Beginner $5.99, Advanced $11.99 via Stripe). Public brand: **Prompt Anatomy** only on customer-facing pages.
+**Hire spoke** of Prompt Anatomy on [promptanatomy.help](https://www.promptanatomy.help/en/): **10 free hiring prompts** + **paid PDF guides** (Beginner $5.99, Advanced $11.99 via Stripe). **Brand north star / HQ:** [promptanatomy.app](https://www.promptanatomy.app/). **Local spoke KPI:** PDF (`primaryKpi: pdf`). Public brand name: **Prompt Anatomy** only on customer-facing pages.
 
 **Live site:** [https://www.promptanatomy.help/en/](https://www.promptanatomy.help/en/) (EN-only). Root `/` and `/privacy.html` are EN gateways → `/en/`. Legacy `/lt/*` URLs redirect to `/en/*` ([vercel.json](vercel.json)). Canonical host: **www**.
 
@@ -25,18 +25,20 @@ npm test        # build + pdf:validate + structure tests + HTML/JS lint
 
 ## SEO + GEO + AI crawlers (2026)
 
+**Brand north star:** entity HQ and Training hub → [promptanatomy.app](https://www.promptanatomy.app/). **This site:** Hire spoke on `.help` (`WebSite.url`); local PDF KPI unchanged.
+
 The build script emits every SEO / GEO / AI-crawler surface from `config/sot.json` — never hand-edit the outputs:
 
 - [robots.txt](robots.txt) — per-AI-bot policy (allow citation bots like `OAI-SearchBot`, `PerplexityBot`; carve out `/assets/samples/` + `/assets/pdf-covers/` + `/api/` from training bots like `GPTBot`, `Google-Extended`; block training-only crawlers like `CCBot`, `Bytespider`).
-- [sitemap.xml](sitemap.xml) — `xmlns:image`, per-URL `<lastmod>` from git history, image entries for `/en/`.
-- [llms.txt](llms.txt) + [llms-full.txt](llms-full.txt) — AI-friendly site map (`H1 + blockquote summary` + sections) and full prompt digest.
+- [sitemap.xml](sitemap.xml) — canonical locs only: `/en/`, `/en/privacy.html`, `/terms.html`; `xmlns:image`, per-URL `<lastmod>` from git, image entries on `/en/`.
+- [llms.txt](llms.txt) + [llms-full.txt](llms-full.txt) — AI site map (`H1` + blockquote + **Training hub → `.app`** + Free/Paid/Contact + `## Optional` legal) and full prompt digest.
 - [manifest.webmanifest](manifest.webmanifest) — PWA-lite manifest (`start_url: /en/`, theme_color navy).
 - [404.html](404.html) — EN-only, `noindex, follow`, canonical to `/en/`.
-- `7a4b...4d.txt` — IndexNow protocol key. Post-deploy ping wired into [.github/workflows/deploy.yml](.github/workflows/deploy.yml) via `npm run seo:indexnow:diff` (non-blocking).
-- JSON-LD on every page: `WebSite` + `Organization` (logo, slogan, knowsAbout, contactPoint, sameAs ×4) + `Person` Tomas Staniulis + `FAQPage` (9 Q+A) + 3× `Product` with `Offer` and `MerchantReturnPolicy` + `BreadcrumbList` + `speakable`.
-- Headers ([vercel.json](vercel.json)): `Content-Security-Policy-Report-Only` baseline, `Origin-Agent-Cluster: ?1`, content-type rules for `llms.txt` / `manifest.webmanifest` / IndexNow key.
+- `7a4b...4d.txt` — IndexNow protocol key (www host). Post-deploy ping: [.github/workflows/deploy.yml](.github/workflows/deploy.yml) via `npm run seo:indexnow:diff` (non-blocking); only sitemap-canonical URLs.
+- JSON-LD: `WebSite` (`.help`) + `Organization` (`url` = `.app`; `sameAs` = app, blog, site, telegram, X, LinkedIn) + `Person` Tomas Staniulis + `FAQPage` (**8** Q+A = 3 front + 5 buyer) + 3× `Product`/`Offer`/`MerchantReturnPolicy` + `BreadcrumbList` + `speakable` + WebPage `dateModified`.
+- Headers ([vercel.json](vercel.json)): `Content-Security-Policy` **enforce**, `Origin-Agent-Cluster: ?1`, content-type rules for `llms.txt` / `manifest.webmanifest` / IndexNow key.
 
-**Full contract + promotion path:** [docs/AGENT_SOT.md](docs/AGENT_SOT.md) §6a, [docs/security.md](docs/security.md).
+**Full contract:** [docs/AGENT_SOT.md](docs/AGENT_SOT.md) §1 + §6a, [docs/security.md](docs/security.md).
 
 ## PDF guides (source → export → covers)
 
@@ -53,11 +55,12 @@ See [docs/pdf-source/README.md](docs/pdf-source/README.md).
 
 ## Documentation
 
-- [docs/INDEX.md](docs/INDEX.md) — doc index  
+- [docs/INDEX.md](docs/INDEX.md) — tiered doc hub  
 - [docs/AGENT_SOT.md](docs/AGENT_SOT.md) — **agent operational SOT** (paths, build, deploy)  
-- [AGENTS.md](AGENTS.md) — agent workflow  
-- [docs/language-guidelines-en-lt.md](docs/language-guidelines-en-lt.md) — **public brand + EN-only rules**  
-- [docs/process/development.md](docs/process/development.md) · [DEPLOYMENT.md](DEPLOYMENT.md)
+- [docs/DOCUMENTATION.md](docs/DOCUMENTATION.md) — DMS (tiers, lifecycle)  
+- [AGENTS.md](AGENTS.md) — agent roles / workflow  
+- [docs/language-guidelines-en-lt.md](docs/language-guidelines-en-lt.md) — public brand + EN-only  
+- [DEPLOYMENT.md](DEPLOYMENT.md) — Vercel / env
 
 ## GitHub Pages (optional)
 

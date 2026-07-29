@@ -21,29 +21,24 @@ Desktop.ini
 # ─── Cursor / plans (development) ───
 .cursor/
 
-# ─── Markdown: ignoruoti pagal nutylėjimą, išimtys – versijuojami doc ───
+# ─── Markdown: ignoruoti pagal nutylėjimą; versijuojami doc ───
 *.md
 !README.md
 !CHANGELOG.md
 !INTEGRACIJA.md
 !DEPLOYMENT.md
 !AGENTS.md
-!docs/AGENT_SOT.md
-!docs/INDEX.md
-!docs/DOCUMENTATION.md
-!docs/LEGACY_GOLDEN_STANDARD.md
-!docs/design_systemv02.md
-!docs/design_system_v2.md
-!docs/language-guidelines-en-lt.md
-!docs/QA_STANDARTAS.md
-!docs/TESTAVIMAS.md
-!docs/security.md
-!docs/process/development.md
-!docs/pdf-source/README.md
 !MUST_TODO.md
-!MVP_ROADMAP.md
-!feedback-schema.md
-!scripts/archive/README.md
+!docs/
+!docs/**/*.md
+
+# ─── Scratch / local illustration masters ───
+/01.png
+/02.png
+
+# ─── QA visual baselines (regenerate via scripts/capture-ds-baseline.js) ───
+docs/qa/screenshots/**/*.png
+docs/qa/screenshots/**/*.webp
 
 # ─── Temporary & build ───
 *.tmp
@@ -70,6 +65,3 @@ npm-debug.log*
 # ─── Local-only PDF assets for paid fulfillment dev ───
 api/_private/pdfs/*.pdf
 scripts/pdf-cover-*.png
-
-# ─── Optional: jei nori laikyti repo dar minimalesnį ───
-# google-apps-script.js

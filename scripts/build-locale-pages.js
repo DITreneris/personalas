@@ -204,7 +204,8 @@ function validateSot(sot) {
 /**
  * Validate the GEO/AI-optimization fields introduced in 2026 hardening:
  *   - sot.brand.socialProfiles (X + LinkedIn + Telegram for Organization.sameAs)
- *   - sot.brand.knowsAbout, brand.slogan, brand.logoUrl
+ *   - sot.brand.ecosystemUrls (blog + site spokes; motherBrandUrl = HQ)
+ *   - sot.brand.knowsAbout, brand.slogan, brand.logoUrl, brand.motherBrandUrl
  *   - sot.product.operatorLinkedin / operatorTwitter (Person.sameAs)
  *   - sot.pdfGuides.{beginner|advanced|bundle} description / priceUSD / priceValidUntil (Product/Offer)
  *   - sot.frontFaq (3 items, mirrors visible front FAQ for FAQPage parity)
@@ -218,6 +219,9 @@ function validateGeoFields(sot) {
   if (!brand.logoUrl || typeof brand.logoUrl !== 'string') {
     throw new Error('config/sot.json: brand.logoUrl is required (Organization.logo)');
   }
+  if (!brand.motherBrandUrl || typeof brand.motherBrandUrl !== 'string' || !/^https:\/\//.test(brand.motherBrandUrl)) {
+    throw new Error('config/sot.json: brand.motherBrandUrl must be an https URL (Organization.url HQ)');
+  }
   if (!Array.isArray(brand.knowsAbout) || brand.knowsAbout.length < 3) {
     throw new Error('config/sot.json: brand.knowsAbout must be a string array of >=3 topics');
   }
@@ -228,6 +232,15 @@ function validateGeoFields(sot) {
   ['telegram', 'x', 'linkedin'].forEach(function (k) {
     if (!social[k] || typeof social[k] !== 'string' || !/^https:\/\//.test(social[k])) {
       throw new Error('config/sot.json: brand.socialProfiles.' + k + ' must be an https URL');
+    }
+  });
+  const eco = brand.ecosystemUrls;
+  if (!eco || typeof eco !== 'object') {
+    throw new Error('config/sot.json: brand.ecosystemUrls object is required');
+  }
+  ['blog', 'site'].forEach(function (k) {
+    if (!eco[k] || typeof eco[k] !== 'string' || !/^https:\/\//.test(eco[k])) {
+      throw new Error('config/sot.json: brand.ecosystemUrls.' + k + ' must be an https URL');
     }
   });
   if (!brand.verification || typeof brand.verification !== 'object') {
@@ -396,18 +409,28 @@ function buildOrganizationAndPersonNodes(sot, base) {
   const product = (sot && sot.product) || {};
   const contactEmail = product.contactEmail || '';
   const social = brand.socialProfiles || {};
-  const sameAsRaw = [social.telegram, brand.motherBrandUrl, social.x, social.linkedin].filter(Boolean);
+  const eco = brand.ecosystemUrls || {};
+  // HQ first (promptanatomy.app), then ecosystem spokes, then social — GEO north star.
+  const sameAsRaw = [
+    brand.motherBrandUrl,
+    eco.blog,
+    eco.site,
+    social.telegram,
+    social.x,
+    social.linkedin,
+  ].filter(Boolean);
   const sameAs = Array.from(new Set(sameAsRaw));
   const personSameAs = Array.from(
     new Set([product.operatorLinkedin, product.operatorTwitter].filter(Boolean))
   );
+  const orgUrl = brand.motherBrandUrl || base + '/';
 
   const org = {
     '@type': 'Organization',
     '@id': organizationId(base),
     name: brand.publicName || 'Prompt Anatomy',
-    url: base + '/',
-    sameAs: sameAs.length ? sameAs : ['https://t.me/prompt_anatomy'],
+    url: orgUrl,
+    sameAs: sameAs.length ? sameAs : ['https://www.promptanatomy.app'],
   };
   if (brand.logoUrl) org.logo = brand.logoUrl;
   if (brand.slogan) org.slogan = brand.slogan;
@@ -477,16 +500,22 @@ function buildJsonLdWebsiteGraph(sot) {
  * @param {string} description   Meta description (matches <meta name="description">).
  * @param {object} [opts]
  * @param {string} [opts.breadcrumbLabel]  If set, emits a BreadcrumbList Home -> {label}.
+ * @param {string} [opts.dateModifiedSrc] Relative repo path for git lastmod (dateModified).
+ * @param {string} [opts.dateModified]    ISO YYYY-MM-DD override (wins over dateModifiedSrc).
  */
 function buildJsonLdWebPage(pageUrl, name, description, opts) {
   opts = opts || {};
   const siteBase = absoluteBaseSlash().replace(/\/+$/, '');
+  const dateModified =
+    opts.dateModified ||
+    gitLastModified(opts.dateModifiedSrc || 'templates/index-lt.html');
   const webPage = {
     '@type': 'WebPage',
     name: name,
     description: description,
     url: pageUrl,
     inLanguage: 'en-US',
+    dateModified: dateModified,
     isPartOf: { '@type': 'WebSite', url: siteBase + '/' },
     speakable: {
       '@type': 'SpeakableSpecification',
@@ -683,6 +712,7 @@ function buildLlmsTxt(sot) {
   const beginner = guides.beginner || {};
   const advanced = guides.advanced || {};
   const bundle = guides.bundle || {};
+  const hubUrl = (brand.motherBrandUrl || 'https://www.promptanatomy.app').replace(/\/+$/, '') + '/';
   const summary =
     (brand.publicName || 'Prompt Anatomy') +
     ' publishes free copy-paste AI prompts and paid PDF playbooks that help US HR teams run a repeatable hiring loop (Diagnose, Define, Source, Screen, Offer, Onboard). ' +
@@ -694,24 +724,29 @@ function buildLlmsTxt(sot) {
     '',
     '> ' + summary,
     '',
+    'This page is the Hire kit (US HR prompts + PDF guides). The full Prompt Anatomy AI operating system and interactive training live at the training hub.',
+    '',
+    '## Training hub',
+    '- [Prompt Anatomy course (promptanatomy.app)](' + hubUrl + '): Primary brand destination — 6-module interactive training, tool catalog, and certificates.',
+    '',
     '## Free resources',
-    '- [Landing - 10 free prompts and 6-phase workflow](' + base + '/en/)',
-    '- [Full prompt digest (markdown)](' + base + '/llms-full.txt)',
+    '- [Landing - 10 free prompts and 6-phase workflow](' + base + '/en/): Copy-paste US hiring prompts on this Hire kit site.',
+    '- [Full prompt digest (markdown)](' + base + '/llms-full.txt): All 10 free prompts in plain markdown for assistants.',
     '',
     '## Paid PDF guides',
     '- [' + (beginner.title || 'Beginner HR Hiring Guide') + ' - $' + (beginner.priceUSD || '5.99') +
-      ' - ' + (beginner.pages || 16) + ' pages](' + base + '/en/#pdf-guides)',
+      ' - ' + (beginner.pages || 16) + ' pages](' + base + '/en/#pdf-guides): Starter US hiring playbook PDF.',
     '- [' + (advanced.title || 'Advanced HR Hiring Guide') + ' - $' + (advanced.priceUSD || '11.99') +
-      ' - ' + (advanced.pages || 32) + ' pages](' + base + '/en/#pdf-guides)',
+      ' - ' + (advanced.pages || 32) + ' pages](' + base + '/en/#pdf-guides): Scorecards, rubrics, and calibration PDF.',
     '- [' + (bundle.title || 'Both HR Hiring Guides') + ' (Beginner + Advanced) - $' +
-      (bundle.priceUSD || '15.99') + '](' + base + '/en/#pdf-guides)',
-    '',
-    '## Policies',
-    '- [Privacy](' + base + '/en/privacy.html)',
-    '- [Terms - Personal license, 14-day refund](' + base + '/terms.html)',
+      (bundle.priceUSD || '15.99') + '](' + base + '/en/#pdf-guides): Both PDFs in one Stripe checkout.',
     '',
     '## Contact',
     '- Email: ' + (product.contactEmail || 'info@promptanatomy.app'),
+    '',
+    '## Optional',
+    '- [Privacy](' + base + '/en/privacy.html): Stripe checkout, Resend delivery, and data practices.',
+    '- [Terms - Personal license, 14-day refund](' + base + '/terms.html): Paid PDF license and refund policy.',
     '',
   ];
   return lines.join('\n');
@@ -899,7 +934,7 @@ function write404Html(sot) {
     '<html lang="en-US">\n' +
     '<head>\n' +
     '    <meta charset="UTF-8">\n' +
-    '    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
+    '    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">\n' +
     '    <meta name="robots" content="noindex, follow">\n' +
     '    <link rel="canonical" href="' + escapeHtmlAttr(base + '/en/') + '">\n' +
     '    <meta name="description" content="Page not found. Continue to the Prompt Anatomy English landing.">\n' +
@@ -1079,7 +1114,10 @@ function injectPrivacyHead(html, pathSuffix, title, description, opts) {
     '<meta name="twitter:description" content="' + escapeHtmlAttr(description) + '">',
     '<meta name="twitter:image" content="' + escapeHtmlAttr(ogImage) + '">',
     '<meta name="twitter:image:alt" content="' + escapeHtmlAttr(getOgImageAlt(opts.sot)) + '">',
-    buildJsonLdWebPage(canonicalUrl, title, description, { breadcrumbLabel: opts.breadcrumbLabel }),
+    buildJsonLdWebPage(canonicalUrl, title, description, {
+      breadcrumbLabel: opts.breadcrumbLabel,
+      dateModifiedSrc: opts.dateModifiedSrc || 'templates/privacy.html',
+    }),
     buildVerificationMeta(opts.sot),
   ]
     .filter(Boolean)
@@ -1151,14 +1189,13 @@ function buildRobotsTxt(absRoot) {
  * built outputs both flow into Google's freshness signal.
  */
 function buildSitemapXml(absRoot, sot) {
+  // Canonical indexable URLs only (gateways / and /privacy.html 308 → /en/*).
   const entries = [
     { loc: absRoot + '/en/', lastmodSrc: 'templates/index-lt.html', images: [
       { loc: absRoot + '/' + OG_IMAGE_REL, caption: getOgImageAlt(sot) },
       { loc: absRoot + '/assets/pdf-covers/beginner.png', caption: 'Cover of Beginner HR Hiring Guide PDF' },
       { loc: absRoot + '/assets/pdf-covers/advanced.png', caption: 'Cover of Advanced HR Hiring Guide PDF' },
     ] },
-    { loc: absRoot + '/', lastmodSrc: 'index.html' },
-    { loc: absRoot + '/privacy.html', lastmodSrc: 'templates/privacy-gateway.html' },
     { loc: absRoot + '/en/privacy.html', lastmodSrc: 'templates/privacy.html' },
     { loc: absRoot + '/terms.html', lastmodSrc: 'terms.html' },
   ];
@@ -1306,7 +1343,10 @@ function buildRootPrivacyFragment(sot) {
     '<meta name="twitter:description" content="' + escapeHtmlAttr(desc) + '">',
     '<meta name="twitter:image" content="' + img + '">',
     '<meta name="twitter:image:alt" content="' + escapeHtmlAttr(getOgImageAlt(sot)) + '">',
-    buildJsonLdWebPage(enPrivacyUrl, 'Privacy Policy – ' + brandName, desc, { breadcrumbLabel: 'Privacy' }),
+    buildJsonLdWebPage(enPrivacyUrl, 'Privacy Policy – ' + brandName, desc, {
+      breadcrumbLabel: 'Privacy',
+      dateModifiedSrc: 'templates/privacy.html',
+    }),
   ];
   if (verification) lines.push(verification);
   return lines.join('\n    ') + '\n    ';
@@ -1358,7 +1398,11 @@ const EN_REPLACEMENTS = [
   ['{{SOT_WORKFLOW_LEDE}}', '{{SOT_WORKFLOW_LEDE}}'],
   ['{{SOT_PDF_SECTION_TITLE}}', '{{SOT_PDF_SECTION_TITLE}}'],
   ['{{SOT_PDF_SECTION_LEDE}}', '{{SOT_PDF_SECTION_LEDE}}'],
-  ['{{SOT_PDF_SECTION_FREE_BRIDGE}}', '{{SOT_PDF_SECTION_FREE_BRIDGE}}'],
+  ['{{SOT_PDF_FREE_BRIDGE_LEAD}}', '{{SOT_PDF_FREE_BRIDGE_LEAD}}'],
+  ['{{SOT_PDF_FREE_BRIDGE_FREE_LABEL}}', '{{SOT_PDF_FREE_BRIDGE_FREE_LABEL}}'],
+  ['{{SOT_PDF_FREE_BRIDGE_FREE_HREF}}', '{{SOT_PDF_FREE_BRIDGE_FREE_HREF}}'],
+  ['{{SOT_PDF_FREE_BRIDGE_PROMPT_LABEL}}', '{{SOT_PDF_FREE_BRIDGE_PROMPT_LABEL}}'],
+  ['{{SOT_PDF_FREE_BRIDGE_PROMPT_HREF}}', '{{SOT_PDF_FREE_BRIDGE_PROMPT_HREF}}'],
   ['{{SOT_BUYER_FAQ_HTML}}', '{{SOT_BUYER_FAQ_HTML}}'],
   ['Nulinis srautas?', 'Zero pipeline?'],
   ['Sugeneruokite pritraukiančius skelbimus ir paieškos žinutes.', 'Generate clear job posts and outreach messages.'],
@@ -1825,6 +1869,7 @@ function applySot(html, sot) {
   const h = m.hero;
   const w = m.workflowOverview;
   const p = m.pdfSection;
+  const freeBridge = p.freeBridge && typeof p.freeBridge === 'object' ? p.freeBridge : {};
 
   html = applySotMetaDescription(html, getSeoMetaDescription(sot));
   html = html.replace(/<title>[^<]*<\/title>/i, '<title>' + escapeHtmlAttr(getSeoTitle(sot)) + '</title>');
@@ -1865,7 +1910,11 @@ function applySot(html, sot) {
     '{{SOT_PDF_ADVANCED_CTA}}': p.advancedCtaLabel || 'Buy Advanced — $11.99',
     '{{SOT_PDF_BUNDLE_CTA}}': p.bundleCtaLabel || 'Get both guides — $15.99',
     '{{SOT_PDF_OPEN_ALL_PREVIEW}}': p.openAllPreviewLabel || 'Open sample pages in viewer →',
-    '{{SOT_PDF_SECTION_FREE_BRIDGE}}': p.freeBridge || '',
+    '{{SOT_PDF_FREE_BRIDGE_LEAD}}': freeBridge.lead || 'Not ready to buy?',
+    '{{SOT_PDF_FREE_BRIDGE_FREE_LABEL}}': freeBridge.freeCtaLabel || 'Free prompts →',
+    '{{SOT_PDF_FREE_BRIDGE_FREE_HREF}}': freeBridge.freeCtaHref || '#free-prompts-label',
+    '{{SOT_PDF_FREE_BRIDGE_PROMPT_LABEL}}': freeBridge.promptCtaLabel || 'Start with Prompt 1 →',
+    '{{SOT_PDF_FREE_BRIDGE_PROMPT_HREF}}': freeBridge.promptCtaHref || '#prompt1',
     '{{SOT_FREE_TIER_LABEL}}': (m.freeTier && m.freeTier.label) || 'Free copy-paste prompts on this page',
     '{{SOT_FREE_TIER_HINT}}': (m.freeTier && m.freeTier.hint) || '',
     '{{SOT_FREE_TIER_CTA_LABEL}}': (m.freeTier && m.freeTier.ctaLabel) || '',
@@ -1873,6 +1922,8 @@ function applySot(html, sot) {
     '{{SOT_COMMUNITY_TITLE}}': (m.community && m.community.title) || 'Want more?',
     '{{SOT_COMMUNITY_TELEGRAM}}': (m.community && m.community.telegramCta) || 'Join on Telegram',
     '{{SOT_COMMUNITY_APP}}': (m.community && m.community.appCta) || 'Prompt Anatomy →',
+    '{{SOT_COMMUNITY_ILLUSTRATION_ALT}}': (m.community && m.community.illustrationAlt) ||
+      'The copy-paste workflow: pick prompt, copy, paste into AI, get answer. Prompt Anatomy.',
     '{{SOT_DISCLAIMER}}': sot.legal.disclaimerShort,
     '{{SOT_BUSINESS_ADDRESS}}': renderAddressBlock(sot),
     '{{SOT_BUYER_FAQ_HTML}}': buildBuyerFaqHtml(sot),
@@ -1942,6 +1993,7 @@ function main() {
   enPrivacy = injectPrivacyHead(enPrivacy, 'en/privacy.html', PRIVACY_PAGE_TITLE, privacyEnDesc, {
     sot: sot,
     breadcrumbLabel: 'Privacy',
+    dateModifiedSrc: 'templates/privacy.html',
   });
   write('en/privacy.html', enPrivacy);
 

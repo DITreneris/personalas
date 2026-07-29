@@ -639,8 +639,13 @@
         var heroVisible = true;
         var pdfSectionVisible = false;
 
+        function syncStickyBodyClass() {
+            document.body.classList.toggle('has-pdf-sticky-cta', !bar.hidden);
+        }
+
         function updateBar() {
             bar.hidden = heroVisible || pdfSectionVisible;
+            syncStickyBodyClass();
         }
 
         if (typeof window.IntersectionObserver === 'function') {
@@ -669,6 +674,7 @@
             var pdfTop = pdfSection.getBoundingClientRect().top;
             var show = heroBottom < 0 && pdfTop > window.innerHeight * 0.35;
             bar.hidden = !show;
+            syncStickyBodyClass();
         }
 
         updateBarFallback();
