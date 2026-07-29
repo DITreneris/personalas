@@ -45,9 +45,10 @@ upgrade-insecure-requests
 ### Migration sequence
 
 1. **Phase 0 (DONE):** CSP-Report-Only deploy'intas; monitor Vercel logs 7+ dienų. Jei reports clean — pereinama prie Phase 1.
-2. **Phase 1:** refactor'inti inline `onclick`/`onkeydown` → `addEventListener`. Test'as: `npm test` + manual prompt copy-paste.
+2. **Phase 1:** refactor'inti inline `onclick`/`onkeydown` → `addEventListener`. Test'as: `npm test` + manual prompt copy-paste. **Own PR — not bundled with content releases.**
 3. **Phase 2:** flip Report-Only → enforce (`Content-Security-Policy` header'is). Stripe checkout testas privalo praeiti (frame-src / form-action turi white'list'inti `buy.stripe.com`).
 4. **Phase 3:** ištrinti `'unsafe-inline'` iš `script-src` ir `style-src` po Phase 1+2 stabilizavimo. Pridėti nonce'us jei reikia.
+5. **Fonts (parallel, own PR):** opt-in `BUILD_SELFHOST_FONTS=1` — flip tik po privacy copy atnaujinimo (Google Fonts mention).
 
 ### Stebėjimas
 

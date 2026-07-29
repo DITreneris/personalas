@@ -224,7 +224,7 @@ function ensureEnv(keys) {
   };
 
   const { fulfillCheckoutSession } = require('../api/_lib/fulfillment');
-  const origin = (process.env.SITE_URL || 'https://promptanatomy.help').replace(/\/$/, '');
+  const origin = (process.env.SITE_URL || 'https://www.promptanatomy.help').replace(/\/$/, '');
   let result;
   try {
     result = await fulfillCheckoutSession(stripeForLib, session.id, origin);

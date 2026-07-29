@@ -2,7 +2,7 @@
   "product": {
     "name": "Personalas",
     "series": "Prompt Anatomy Series No. 3",
-    "siteUrl": "https://promptanatomy.help",
+    "siteUrl": "https://www.promptanatomy.help",
     "motherBrandUrl": "https://www.promptanatomy.app",
     "contactEmail": "info@promptanatomy.app",
     "operatorName": "Tomas Staniulis",
@@ -23,9 +23,9 @@
   "brand": {
     "publicName": "Prompt Anatomy",
     "motherBrandUrl": "https://www.promptanatomy.app",
-    "productSiteUrl": "https://promptanatomy.help/en/",
+    "productSiteUrl": "https://www.promptanatomy.help/en/",
     "slogan": "Hire better, one prompt at a time.",
-    "logoUrl": "https://promptanatomy.help/favicon.svg",
+    "logoUrl": "https://www.promptanatomy.help/favicon.svg",
     "knowsAbout": [
       "US HR hiring",
       "AI prompts for HR",
@@ -246,12 +246,7 @@
     {
       "id": "faq-phase-order",
       "q": "Do I have to go through all 6 phases in order?",
-      "a": "No. Start with the problem that hurts today (e.g. job ad or interview), then return to other prompts later."
-    },
-    {
-      "id": "faq-subset-prompts",
-      "q": "Can I use just one or a few prompts?",
-      "a": "Yes. Start with one problem (e.g. job ad or interview) and come back to the others later."
+      "a": "No. Use one prompt or a few for the problem that hurts today (e.g. job ad or interview), then return to other phases later."
     },
     {
       "id": "faq-prompt-time",

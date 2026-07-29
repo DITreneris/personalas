@@ -1,48 +1,36 @@
 /**
- * Google Apps Script – pavyzdinis kodas būsimai kontaktų formai.
- * Statinei GitHub Pages svetainei neprivaloma: forma čia nėra įjungta.
+ * Google Apps Script – sample backend for a future contact form.
+ * Not wired: the contact form is disabled (see INTEGRACIJA.md).
  *
- * Jei įjungsite formą:
+ * If you enable the form later:
  * 1. Google Sheets → Extensions → Apps Script
- * 2. Įklijuokite šį kodą, išsaugokite, publikuokite kaip Web App
- * 3. Web App URL įdėkite į formos `action` ar fetch iš index.html
- * Žr. taip pat [INTEGRACIJA.md](INTEGRACIJA.md).
+ * 2. Paste this code, save, deploy as Web App
+ * 3. Put the Web App URL into the form `action` or fetch from the landing page
+ * 4. Update privacy policy + INTEGRACIJA.md
  */
 
 function doPost(e) {
   try {
-    // Gauti duomenis iš POST užklausos
     const data = JSON.parse(e.postData.contents);
-    
-    // Gauti aktyvų lapą
     const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-    
-    // Pridėti naują eilutę su duomenimis (F stulpelis: Tipas – Feedback Store)
+
     sheet.appendRow([
-      new Date(),                    // A: Data/Laikas
-      data.email || '',              // B: El. paštas
-      data.name || 'Nenurodytas',    // C: Vardas
-      data.question || 'Nėra',       // D: Klausimas
-      data.source || 'Promptų anatomija', // E: Šaltinis
-      data.tipas || 'feedback'       // F: Tipas (bug | feature | feedback)
+      new Date(),
+      data.email || '',
+      data.name || 'Not provided',
+      data.question || 'None',
+      data.source || 'Prompt Anatomy',
+      data.tipas || 'feedback'
     ]);
-    
-    // OPTIONAL: Siųsti automatinį email pranešimą
-    // sendEmailNotification(data);
-    
-    // Grąžinti sėkmės atsakymą
+
     return ContentService
       .createTextOutput(JSON.stringify({
         success: true,
-        message: 'Duomenys sėkmingai įrašyti'
+        message: 'Saved'
       }))
       .setMimeType(ContentService.MimeType.JSON);
-      
   } catch (error) {
-    // Log klaidą (matoma Apps Script Execution log)
-    console.error('Klaida:', error);
-    
-    // Grąžinti klaidos atsakymą
+    console.error('Error:', error);
     return ContentService
       .createTextOutput(JSON.stringify({
         success: false,
@@ -53,21 +41,19 @@ function doPost(e) {
 }
 
 /**
- * OPTIONAL: Automatinis email pranešimas
- * Atkomentuokite, jei norite gauti email kiekvieną kartą, kai kas nors užpildo formą
+ * OPTIONAL: email notification on each submission.
+ * Uncomment the call in doPost if needed.
  */
 function sendEmailNotification(data) {
-  const recipientEmail = 'your-email@example.com'; // Pakeiskite į savo email
-  const subject = 'Nauja užklausa iš Personalas';
-  const body = `
-Nauja užklausa iš Personalas:
+  const recipientEmail = 'your-email@example.com';
+  const subject = 'New inquiry from Prompt Anatomy';
+  const body =
+    'New inquiry from Prompt Anatomy:\n\n' +
+    'Email: ' + (data.email || '') + '\n' +
+    'Name: ' + (data.name || 'Not provided') + '\n' +
+    'Question: ' + (data.question || 'None') + '\n' +
+    'Date: ' + new Date().toISOString() + '\n';
 
-El. paštas: ${data.email}
-Vardas: ${data.name || 'Nenurodytas'}
-Klausimas: ${data.question || 'Nėra'}
-Data: ${new Date().toLocaleString('lt-LT')}
-  `;
-  
   try {
     MailApp.sendEmail({
       to: recipientEmail,
@@ -75,29 +61,6 @@ Data: ${new Date().toLocaleString('lt-LT')}
       body: body
     });
   } catch (error) {
-    console.error('Nepavyko išsiųsti email:', error);
+    console.error('Failed to send email:', error);
   }
-}
-
-/**
- * Testavimo funkcija
- * Paleiskite Apps Script redaktoriuje, kad patikrintumėte, ar viskas veikia
- */
-function test() {
-  const testData = {
-    email: 'test@example.com',
-    name: 'Testas Testauskas',
-    question: 'Ar veikia integracija?',
-    source: 'Test'
-  };
-  
-  const mockEvent = {
-    postData: {
-      contents: JSON.stringify(testData)
-    }
-  };
-  
-  const result = doPost(mockEvent);
-  Logger.log('Rezultatas:');
-  Logger.log(result.getContent());
 }

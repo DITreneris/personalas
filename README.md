@@ -2,9 +2,9 @@
 
 Static site: **10 free hiring prompts** + **paid PDF guides** (Beginner $5.99, Advanced $11.99 via Stripe). Public brand: **Prompt Anatomy** only on customer-facing pages.
 
-**Live site:** [https://promptanatomy.help/en/](https://promptanatomy.help/en/) (EN-only). Root `/` and `/privacy.html` are EN gateways → `/en/`. Legacy `/lt/*` URLs redirect to `/en/*` ([vercel.json](vercel.json)).
+**Live site:** [https://www.promptanatomy.help/en/](https://www.promptanatomy.help/en/) (EN-only). Root `/` and `/privacy.html` are EN gateways → `/en/`. Legacy `/lt/*` URLs redirect to `/en/*` ([vercel.json](vercel.json)). Canonical host: **www**.
 
-**Production:** [Vercel](https://promptanatomy.help) — paid PDFs need serverless `api/` + Stripe, Upstash, Resend ([DEPLOYMENT.md](DEPLOYMENT.md)). GitHub Pages is static-only (no paid PDF fulfillment).
+**Production:** [Vercel](https://www.promptanatomy.help) — paid PDFs need serverless `api/` + Stripe, Upstash, Resend ([DEPLOYMENT.md](DEPLOYMENT.md)). GitHub Pages is static-only (no paid PDF fulfillment).
 
 ## Build
 

@@ -1,11 +1,21 @@
-# Integracija (rezervuota)
+# Integracija
 
-Šiame projekte **kontaktų forma dar neįjungta**. Statinė GitHub Pages svetainė šiuo metu nesiunčia duomenų į serverį.
+**Production:** Vercel (`promptanatomy.help` / `www`) — static site + serverless `api/` for Stripe PDF fulfillment (webhook, download tokens, Resend email). See [DEPLOYMENT.md](DEPLOYMENT.md).
 
-## Būsimas planas
+GitHub Pages remains optional for static-only preview (no paid PDF fulfillment).
 
-1. Modal arba forma `index.html` (žr. CSS komentarą „MODAL / KONTAKTŲ FORMA“).
-2. Galimas backend: [Google Apps Script](https://developers.google.com/apps-script) – pavyzdinis kodas repozitorijoje: `google-apps-script.js` (įkelti į Apps Script projektą, ne į statinį HTML).
-3. Atnaujinti [templates/privacy.html](templates/privacy.html) ir per `npm run build` – `en/privacy.html`, jei pradėsite rinkti asmens duomenis.
+## Paid PDF (live)
 
-Kai forma bus įjungta, atnaujinkite šį failą ir privatumo politiką.
+- Stripe Payment Links from [config/sot.json](config/sot.json)
+- Webhook → [api/stripe-webhook.js](api/stripe-webhook.js) → [api/_lib/fulfillment.js](api/_lib/fulfillment.js)
+- Sub-processors: Stripe, Resend, Upstash Redis, Vercel Blob — disclosed in [templates/privacy.html](templates/privacy.html)
+
+## Kontaktų forma (rezervuota)
+
+Šiame projekte **kontaktų forma dar neįjungta**. Pavyzdinis backend stub: [google-apps-script.js](google-apps-script.js) (Prompt Anatomy EN placeholders; not wired).
+
+Jei įjungsite formą vėliau:
+
+1. Modal arba forma ant landing (žr. CSS komentarą „MODAL / KONTAKTŲ FORMA“).
+2. Backend: Google Apps Script arba kita serverless forma — ne commitinti secretų.
+3. Atnaujinti [templates/privacy.html](templates/privacy.html) + `npm run build`, ir šį failą.

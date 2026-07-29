@@ -209,7 +209,7 @@ function validateSot(sot) {
  *   - sot.brand.knowsAbout, brand.slogan, brand.logoUrl
  *   - sot.product.operatorLinkedin / operatorTwitter (Person.sameAs)
  *   - sot.pdfGuides.{beginner|advanced|bundle} description / priceUSD / priceValidUntil (Product/Offer)
- *   - sot.frontFaq (4 items, mirrors visible front FAQ for FAQPage parity)
+ *   - sot.frontFaq (3 items, mirrors visible front FAQ for FAQPage parity)
  *   - sot.buyerFaq (5 items) — already required elsewhere; we re-check shape here for FAQPage parity.
  */
 function validateGeoFields(sot) {
@@ -258,8 +258,8 @@ function validateGeoFields(sot) {
       throw new Error('config/sot.json: pdfGuides.' + key + '.sku is required');
     }
   });
-  if (!Array.isArray(sot.frontFaq) || sot.frontFaq.length !== 4) {
-    throw new Error('config/sot.json: frontFaq must contain exactly 4 items (mirrors visible front FAQ)');
+  if (!Array.isArray(sot.frontFaq) || sot.frontFaq.length !== 3) {
+    throw new Error('config/sot.json: frontFaq must contain exactly 3 items (mirrors visible front FAQ)');
   }
   if (!Array.isArray(sot.buyerFaq) || sot.buyerFaq.length !== 5) {
     throw new Error('config/sot.json: buyerFaq must contain exactly 5 items');
@@ -542,18 +542,14 @@ function stripFaqHtml(html) {
 }
 
 /**
- * FAQPage JSON-LD aggregating frontFaq (4) + buyerFaq (5) so visible FAQ text
+ * FAQPage JSON-LD aggregating frontFaq (3) + buyerFaq (5) so visible FAQ text
  * has an entity-linked structured equivalent. Per 2026 GEO research, FAQPage
  * markup yields 3.2x AI Overview citations vs. plain text.
  */
 function buildJsonLdFaqPage(sot) {
   const front = (sot && Array.isArray(sot.frontFaq)) ? sot.frontFaq : [];
   const buyer = (sot && Array.isArray(sot.buyerFaq)) ? sot.buyerFaq : [];
-  // DS v2.0: faq-subset-prompts overlaps faq-phase-order in JSON-LD (on-page FAQ keeps both).
-  const frontForLd = front.filter(function (item) {
-    return item && item.id !== 'faq-subset-prompts';
-  });
-  const all = frontForLd.concat(buyer);
+  const all = front.concat(buyer);
   if (!all.length) return '';
   const questions = all.map(function (item) {
     return {
@@ -1173,7 +1169,6 @@ function buildSitemapXml(absRoot, sot) {
     { loc: absRoot + '/privacy.html', lastmodSrc: 'templates/privacy-gateway.html' },
     { loc: absRoot + '/en/privacy.html', lastmodSrc: 'templates/privacy.html' },
     { loc: absRoot + '/terms.html', lastmodSrc: 'terms.html' },
-    { loc: absRoot + '/success.html', lastmodSrc: 'success.html' },
   ];
 
   const lines = [
@@ -1414,8 +1409,8 @@ const EN_REPLACEMENTS = [
     '<strong>Note:</strong> You can leave the &quot;You are…&quot; line as-is.',
   ],
   [
-    'Ne. Pradėkite nuo problemos, kuri skauda šiandien (pvz. skelbimas ar pokalbis), ir grįžkite prie kitų promptų vėliau.',
-    'No. Start with the problem that hurts today (e.g. job ad or interview), then return to other prompts later.',
+    'Ne. Naudokite vieną ar kelis promptus problemai, kuri skauda šiandien (pvz. skelbimas ar pokalbis), ir grįžkite prie kitų fazių vėliau.',
+    'No. Use one prompt or a few for the problem that hurts today (e.g. job ad or interview), then return to other phases later.',
   ],
   [
     'Kopijuok → įklijuok → pakeisk [vietininkus] savo duomenimis.',
@@ -1432,8 +1427,6 @@ const EN_REPLACEMENTS = [
   ['Ne. Tai tekstai, kuriuos kopijuojate ir įklijuojate į savo DI įrankį – joks serveris neatlieka atrankos už jus.', 'No. These are prompts you copy into ChatGPT, Claude, or Gemini. Nothing runs on our servers.'],
   ['Kiek laiko užtrunka vienas žingsnis?', 'How long does each prompt take?'],
   ['Maždaug 3–5 minutes pasiruošti ir nukopijuoti; pats pokalbis su DI priklauso nuo jūsų klausimų ir atsakymų.', 'About 3–5 minutes to prepare and copy; the AI chat itself depends on your questions and answers.'],
-  ['Ar galiu naudoti tik vieną ar kelis promptus?', 'Can I use just one or a few prompts?'],
-  ['Taip. Galite pradėti nuo vienos problemos (pvz., skelbimo ar pokalbio) ir vėliau grįžti prie kitų.', 'Yes. Start with one problem (e.g. job ad or interview) and come back to the others later.'],
   ['Geriausia eiti iš eilės nuo 1 iki 10. Paspaudus nuorodą pereisite prie atitinkamo prompto.', 'Best in order 1–10.'],
   ['Kas toliau?', 'Jump to a prompt'],
   ['1. Kur stringame?', '1. Where are we stuck?'],
@@ -1516,30 +1509,30 @@ const EN_REPLACEMENTS = [
   ['mobilėje:', 'on mobile:'],
   ['mažiausias viewport', 'minimum viewport'],
   // Info box and prompt-cta content
-  ['Nori greitai suprasti, kur stringa atranka. Kai matome skaičius, lengviau nuspręsti, kur dėti pastangas.', 'You want to quickly see where recruitment is stuck. Numbers make it easier to decide where to focus.'],
+  ['Reikia greitai rasti, kur stringa US atrankos piltuvėlis (kandidatai → pokalbiai → pasiūlymai) ir kur šią savaitę kelti greitį.', 'You need to spot the US hiring funnel bottleneck (candidates → interviews → offers) and decide where to accelerate pipeline this week.'],
   ['<strong>Tai nėra klausimynas.</strong> Nukopijuok šį tekstą ir įklijuok į ChatGPT arba Claude.', '<strong>This is not a survey.</strong> Copy this text and paste into ChatGPT or Claude.'],
   ['Skaičius (kandidatų, pokalbių, pasiūlymų, priėmė) – įrašyk savo skaičius į laukus [ ].', 'Numbers (candidates, interviews, offers, accepted) – put your numbers in the [ ] fields.'],
   ['Nukopijuok ir įklijuok į ChatGPT arba Claude – tai šio žingsnio tikslas.', 'Copy and paste into ChatGPT or Claude – that\'s the goal of this step.'],
-  ['Aprašai idealų kandidatą pozicijai. Kai žinome, ko ieškome, lengviau atpažinti tinkamą žmogų.', 'You\'re describing the ideal candidate. When we know what we want, it\'s easier to spot the right person.'],
+  ['Rašai idealaus kandidato profilį prieš skelbimą – kad atranka ir hiring manager’iai vertintų tą patį tinkamumą.', 'You\'re writing the ideal-candidate profile before the job ad so screening and hiring managers score the same fit.'],
   ['[įmonė] → įmonės pavadinimas arba sritis (pvz. IT startupas, mažmeninė prekyba); [pozicija] → pareigos; geriausias darbuotojas – trumpas aprašymas; kodėl išeidavo – priežastis arba „–“.', '[company] → company and US location (e.g., New York, NY); [location] → Street Address, City, State, optional Zip Code, or Remote – US; [role] → job title; best performer – short description; why they left – reason or “–”.'],
   ['Įklijuok į ChatGPT arba Claude ir pakeisk laukus savo duomenimis.', 'Paste into ChatGPT or Claude and replace the fields with your data.'],
-  ['Perrašai skelbimą paprasta kalba. Paprastas ir aiškus tekstas pritraukia tinkamus kandidatus.', 'You\'re rewriting the ad in plain language. Clear, simple text attracts the right candidates.'],
+  ['Skelbimas nepritraukia kvalifikuotų US kandidatų – reikia paprastos kalbos JD, kuris kelia paraiškų skaičių.', 'Your job ad is not attracting qualified US candidates — rewrite it in plain language to lift apply rate.'],
   ['[įmonė] → įmonės pavadinimas arba sritis (nebūtina, bet padeda pritaikyti toną); [įklijuok] → įklijuok savo darbo skelbimo tekstą.', '[company] → company and US location (e.g., San Francisco, CA); [location] → Street Address, City, State, optional Zip Code, or Remote – US; [salary range] → use $, commas as thousands separators, and decimal points where needed (e.g., $85,000–$105,000 or $1,250.50); [paste] → paste your job ad text.'],
-  ['Reikia daugiau kandidatų – LinkedIn, pažįstami, tiesioginis parašas. Paprasti žingsniai, ne tik skelbimai.', 'You need more candidates – LinkedIn, network, direct message. Simple steps, not just job boards.'],
+  ['Kandidatų srautas tuščias – reikia konkretaus paieškos plano (LinkedIn, tinklas, outreach), ne tik skelbimo.', 'Your pipeline is empty — build a concrete sourcing plan (LinkedIn, network, outreach), not just another job post.'],
   ['[įmonė] → įmonės pavadinimas arba sritis; [pozicija] → tavo pozicija (pvz. Pardavimų vadovas).', '[company] → company and US location (e.g., Austin, TX); [location] → Street Address, City, State, optional Zip Code, or Remote – US; [role] → your role (e.g., Sales Manager); phone numbers, if used, should follow +1 (XXX) XXX-XXXX; use Street Address, City, State, Zip Code for addresses.'],
   ['Nukopijuok, įklijuok į DI įrankį ir pakeisk [įmonė], [pozicija] savo duomenimis.', 'Copy, paste into your AI tool and replace [company], [role] with your data.'],
-  ['Ruoši pokalbį ar nori geresnių klausimų. Struktūra padeda išgirsti tai, kas iš tikrųjų svarbu.', 'You\'re preparing for an interview or want better questions. Structure helps you hear what really matters.'],
+  ['Ruoši struktūruotą pokalbį – klausimai ir signalai, kad sutrumpėtų kelias iki screen’o ir panelė vertintų vienodai.', 'You\'re building a structured interview — questions and signals that shorten time-to-screen and keep the panel aligned.'],
   ['[įmonė] → įmonės pavadinimas arba sritis; [pozicija] → tavo pozicija.', '[company] → company and US location (e.g., Chicago, IL); [location] → Street Address, City, State, optional Zip Code, or Remote – US; [role] → your role; dates should use MM/DD/YYYY.'],
-  ['Kandidatai dažnai atsisako – nori suprasti kodėl. Supratus priežastis, galime koreguoti pasiūlymą arba komunikaciją.', 'Candidates often decline – you want to understand why. Knowing reasons helps you adjust the offer or communication.'],
+  ['Dažni pasiūlymų atsisakymai – reikia priežasčių ir pokalbio gijų, kad keltumėte sutikimo rodiklį.', 'Offer declines are high — surface reasons and talk tracks that lift accept rate.'],
   ['[įmonė], [pozicija], [atlygis], [ką siūlome] – įrašyk savo duomenis.', '[company], [role], [location], [salary range], [what we offer] – use US formats such as New York, NY, Remote – US, and $85,000–$105,000.'],
   ['Įklijuok į ChatGPT arba Claude – pakeisk įmonę, poziciją, atlygį ir ką siūlote.', 'Paste into ChatGPT or Claude – replace company, role, location, salary range, and what you offer.'],
-  ['Formuluoji pasiūlymą kandidatui. Kai žmogus mato vertę, lengviau priimti sprendimą.', 'You\'re wording an offer. When they see the value, the decision is easier.'],
+  ['Rašai aiškų US pasiūlymo tekstą – vertė, atlygio kontekstas, kiti žingsniai – kad kandidatas greičiau apsispręstų.', 'You\'re drafting a clear US offer message — value, pay context, next steps — so the candidate can decide faster.'],
   ['[įmonė], [pozicija], [ką siūlome] – įrašyk savo duomenis.', '[company], [role], [location], [salary range], [what we offer] – use City, State, optional Zip Code, or Remote – US for location and fill in financial details using US currency formatting.'],
-  ['Planuoji naujo darbuotojo pirmus mėnesius. Aiškūs lūkesčiai ir pagalba mažina išeitį per bandymo laikotarpį.', 'You\'re planning a new hire\'s first months. Clear expectations and support reduce early turnover.'],
+  ['Kuriamas 30–60–90 onboarding planas – aiškūs lūkesčiai mažina ankstyvą išeitį per bandomąjį laikotarpį.', 'You\'re building a 30–60–90 onboarding plan — clear expectations that cut early attrition in the probation window.'],
   ['Nukopijuok ir įklijuok – įrašyk įmonę, poziciją ir gauk planą.', 'Copy and paste – enter company and role and get the plan.'],
-  ['Žmonės išeina per pirmus mėnesius – nori suprasti kodėl. Supratus priežastis, galime veikti proaktyviai.', 'People leave in the first months – you want to understand why. Knowing reasons helps you act proactively.'],
+  ['Ankstyvos išeitys per pirmus mėnesius – reikia išlaikymo signalų ir greitų pataisų prieš kitą samdymą.', 'Early exits in the first months — find retention signals and quick fixes before your next hire.'],
   ['[priežastys] – įrašyk, ką girdėjote, kodėl žmonės išeina (arba „dar nežinome“).', '[reasons] – enter what you\'ve heard about why people left (or “we don\'t know yet”).'],
-  ['Norėtum vieną integruotą atrankos planą. Viskas vienoje vietoje: problema, savaitė, skelbimas, pokalbiai, sutikimas, pirmi mėnesiai.', 'You want one integrated plan. Everything in one place: problem, week, ad, interviews, acceptance, first months.'],
+  ['Reikia vieno end-to-end atrankos plano: piltuvėlis → skelbimas → pokalbiai → pasiūlymas → pirmos 90 dienų.', 'You need one end-to-end hiring plan: funnel → job ad → interviews → offer → first 90 days.'],
   ['[įmonė], [pozicija], kandidatų skaičius, kur stringame, ką bandėme – įrašyk savo duomenis.', '[company], [role], [location], candidate count, where we\'re stuck, what we tried – fill in your data using Street Address, City, State, optional Zip Code, or Remote – US.'],
   ['Šis promptas apima viską – nukopijuok, įklijuok ir pildyk savo duomenimis.', 'This prompt covers everything – copy, paste and fill in your data.'],
 ];
@@ -1762,16 +1755,16 @@ function applyEnReplacements(html) {
 
 // Prompt-specific EN UI (titles, descriptions, info boxes) – applied after main replacements
 const EN_PROMPT_UI = [
-  { title: 'Where are we stuck?', desc: 'Help understand our recruitment challenges', infoUse: 'You want to quickly see where recruitment is stuck. Numbers make it easier to decide where to focus.', infoReplace: 'Numbers (candidates, interviews, offers, accepted) – put your numbers in the [ ] fields.', cta: 'Copy and paste into ChatGPT or Claude – that\'s the goal of this step.' },
-  { title: 'Who really fits us?', desc: 'Help describe the ideal candidate for the role', infoUse: 'You\'re describing the ideal candidate. When we know what we want, it\'s easier to spot the right person.', infoReplace: '[company] → company and US location (e.g., New York, NY); [location] → Street Address, City, State, optional Zip Code, or Remote – US; [role] → job title; best performer – short description; why they left – reason or “–”.', cta: 'Paste into ChatGPT or Claude and replace the fields with your data.' },
-  { title: 'Rewrite the job ad in plain language', desc: 'So the person feels the ad is for them', infoUse: 'You\'re rewriting the ad in plain language. Clear, simple text attracts the right candidates.', infoReplace: '[company] → company and US location (e.g., San Francisco, CA); [location] → Street Address, City, State, optional Zip Code, or Remote – US; [salary range] → use $, commas as thousands separators, and decimal points where needed (e.g., $85,000–$105,000 or $1,250.50); [paste] → paste your job ad text.', cta: 'Copy and paste into ChatGPT or Claude – that\'s the goal of this step.' },
-  { title: 'How to find more people today?', desc: '3 simple ways – LinkedIn, network, direct message', infoUse: 'You need more candidates – LinkedIn, network, direct message. Simple steps, not just job boards.', infoReplace: '[company] → company and US location (e.g., Austin, TX); [location] → Street Address, City, State, optional Zip Code, or Remote – US; [role] → your role (e.g., Sales Manager); phone numbers, if used, should follow +1 (XXX) XXX-XXXX; use Street Address, City, State, Zip Code for addresses.', cta: 'Copy, paste into your AI tool and replace [company], [role] with your data.' },
-  { title: 'How to run a better interview?', desc: 'Simple interview plan – questions and what to watch for', infoUse: 'You\'re preparing for an interview or want better questions. Structure helps you hear what really matters.', infoReplace: '[company] → company and US location (e.g., Chicago, IL); [location] → Street Address, City, State, optional Zip Code, or Remote – US; [role] → your role; dates should use MM/DD/YYYY.', cta: 'Copy and paste into ChatGPT or Claude – that\'s the goal of this step.' },
-  { title: 'Why do candidates decline?', desc: 'Understand reasons and how to talk about it', infoUse: 'Candidates often decline – you want to understand why. Knowing reasons helps you adjust the offer or communication.', infoReplace: '[company], [role], [location], [salary range], [what we offer] – use US formats such as New York, NY, Remote – US, and $85,000–$105,000.', cta: 'Paste into ChatGPT or Claude – replace company, role, location, salary range, and what you offer.' },
-  { title: 'How to present the offer better?', desc: 'Phrase the offer so the person feels the value', infoUse: 'You\'re wording an offer. When they see the value, the decision is easier.', infoReplace: '[company], [role], [location], [salary range], [what we offer] – use City, State, optional Zip Code, or Remote – US for location and fill in financial details using US currency formatting.', cta: 'Copy and paste into ChatGPT or Claude – that\'s the goal of this step.' },
-  { title: 'How to help the new person in the first 3 months?', desc: 'Simple 3‑month plan – week one, month one, 3 months, manager support', infoUse: 'You\'re planning a new hire\'s first months. Clear expectations and support reduce early turnover.', infoReplace: '[company] → company and US location (e.g., Chicago, IL); [location] → Street Address, City, State, optional Zip Code, or Remote – US; [role] → your role; dates should use MM/DD/YYYY.', cta: 'Copy and paste – enter company and role and get the plan.' },
-  { title: 'Why do people leave?', desc: 'Analyze reasons and what we can change quickly', infoUse: 'People leave in the first months – you want to understand why. Knowing reasons helps you act proactively.', infoReplace: '[reasons] – enter what you\'ve heard about why people left (or “we don\'t know yet”).', cta: 'Copy and paste into ChatGPT or Claude – that\'s the goal of this step.' },
-  { title: 'Master prompt (one for everything)', desc: 'One integrated recruitment plan – from problem to first months', infoUse: 'You want one integrated plan. Everything in one place: problem, week, ad, interviews, acceptance, first months.', infoReplace: '[company], [role], [location], candidate count, where we\'re stuck, what we tried – fill in your data using Street Address, City, State, optional Zip Code, or Remote – US.', cta: 'This prompt covers everything – copy, paste and fill in your data.' },
+  { title: 'Where are we stuck?', desc: 'Help understand our recruitment challenges', infoUse: 'You need to spot the US hiring funnel bottleneck (candidates → interviews → offers) and decide where to accelerate pipeline this week.', infoReplace: 'Numbers (candidates, interviews, offers, accepted) – put your numbers in the [ ] fields.', cta: 'Copy and paste into ChatGPT or Claude – that\'s the goal of this step.' },
+  { title: 'Who really fits us?', desc: 'Help describe the ideal candidate for the role', infoUse: 'You\'re writing the ideal-candidate profile before the job ad so screening and hiring managers score the same fit.', infoReplace: '[company] → company and US location (e.g., New York, NY); [location] → Street Address, City, State, optional Zip Code, or Remote – US; [role] → job title; best performer – short description; why they left – reason or “–”.', cta: 'Paste into ChatGPT or Claude and replace the fields with your data.' },
+  { title: 'Rewrite the job ad in plain language', desc: 'So the person feels the ad is for them', infoUse: 'Your job ad is not attracting qualified US candidates — rewrite it in plain language to lift apply rate.', infoReplace: '[company] → company and US location (e.g., San Francisco, CA); [location] → Street Address, City, State, optional Zip Code, or Remote – US; [salary range] → use $, commas as thousands separators, and decimal points where needed (e.g., $85,000–$105,000 or $1,250.50); [paste] → paste your job ad text.', cta: 'Copy and paste into ChatGPT or Claude – that\'s the goal of this step.' },
+  { title: 'How to find more people today?', desc: '3 simple ways – LinkedIn, network, direct message', infoUse: 'Your pipeline is empty — build a concrete sourcing plan (LinkedIn, network, outreach), not just another job post.', infoReplace: '[company] → company and US location (e.g., Austin, TX); [location] → Street Address, City, State, optional Zip Code, or Remote – US; [role] → your role (e.g., Sales Manager); phone numbers, if used, should follow +1 (XXX) XXX-XXXX; use Street Address, City, State, Zip Code for addresses.', cta: 'Copy, paste into your AI tool and replace [company], [role] with your data.' },
+  { title: 'How to run a better interview?', desc: 'Simple interview plan – questions and what to watch for', infoUse: 'You\'re building a structured interview — questions and signals that shorten time-to-screen and keep the panel aligned.', infoReplace: '[company] → company and US location (e.g., Chicago, IL); [location] → Street Address, City, State, optional Zip Code, or Remote – US; [role] → your role; dates should use MM/DD/YYYY.', cta: 'Copy and paste into ChatGPT or Claude – that\'s the goal of this step.' },
+  { title: 'Why do candidates decline?', desc: 'Understand reasons and how to talk about it', infoUse: 'Offer declines are high — surface reasons and talk tracks that lift accept rate.', infoReplace: '[company], [role], [location], [salary range], [what we offer] – use US formats such as New York, NY, Remote – US, and $85,000–$105,000.', cta: 'Paste into ChatGPT or Claude – replace company, role, location, salary range, and what you offer.' },
+  { title: 'How to present the offer better?', desc: 'Phrase the offer so the person feels the value', infoUse: 'You\'re drafting a clear US offer message — value, pay context, next steps — so the candidate can decide faster.', infoReplace: '[company], [role], [location], [salary range], [what we offer] – use City, State, optional Zip Code, or Remote – US for location and fill in financial details using US currency formatting.', cta: 'Copy and paste into ChatGPT or Claude – that\'s the goal of this step.' },
+  { title: 'How to help the new person in the first 3 months?', desc: 'Simple 3‑month plan – week one, month one, 3 months, manager support', infoUse: 'You\'re building a 30–60–90 onboarding plan — clear expectations that cut early attrition in the probation window.', infoReplace: '[company] → company and US location (e.g., Chicago, IL); [location] → Street Address, City, State, optional Zip Code, or Remote – US; [role] → your role; dates should use MM/DD/YYYY.', cta: 'Copy and paste – enter company and role and get the plan.' },
+  { title: 'Why do people leave?', desc: 'Analyze reasons and what we can change quickly', infoUse: 'Early exits in the first months — find retention signals and quick fixes before your next hire.', infoReplace: '[reasons] – enter what you\'ve heard about why people left (or “we don\'t know yet”).', cta: 'Copy and paste into ChatGPT or Claude – that\'s the goal of this step.' },
+  { title: 'Master prompt (one for everything)', desc: 'One integrated recruitment plan – from problem to first months', infoUse: 'You need one end-to-end hiring plan: funnel → job ad → interviews → offer → first 90 days.', infoReplace: '[company], [role], [location], candidate count, where we\'re stuck, what we tried – fill in your data using Street Address, City, State, optional Zip Code, or Remote – US.', cta: 'This prompt covers everything – copy, paste and fill in your data.' },
 ];
 
 function applyEnPromptUi(html) {

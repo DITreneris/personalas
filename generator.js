@@ -571,10 +571,9 @@
     }
 
     /**
-     * DS v0.3.3 Phase B legacy support: bundle highlights live in a separate
-     * <ul data-guide-highlights="bundle"> outside the per-guide card flow
-     * (see #pdf-bundle-offer). Per-guide highlights (beginner/advanced) were
-     * removed in Phase B in favour of the merged "See inside" affordance.
+     * Fill text-only highlight lists from SOT (`pdfGuides.*.highlights`).
+     * Per-guide cards (beginner/advanced) + bundle (#pdf-bundle-offer).
+     * Image proof stays behind See inside / sample PDF triggers (Phase D).
      */
     function initPdfGuideHighlights(config) {
         if (!config || !config.pdfGuides) return;

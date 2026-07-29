@@ -29,7 +29,7 @@
       "files": ["google-apps-script.js"],
       "env": { "browser": false },
       "rules": {
-        "no-unused-vars": ["warn", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^(sendEmailNotification|test)$" }]
+        "no-unused-vars": ["warn", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^(doPost|sendEmailNotification|test)$" }]
       }
     },
     {

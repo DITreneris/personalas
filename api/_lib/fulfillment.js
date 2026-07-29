@@ -260,7 +260,7 @@ function getSiteUrl(origin) {
   if (process.env.SITE_URL) return process.env.SITE_URL.replace(/\/$/, '');
   if (origin) return origin.replace(/\/$/, '');
   if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
-  return 'https://promptanatomy.help';
+  return 'https://www.promptanatomy.help';
 }
 
 function getLocalPdfPath(product) {
@@ -339,7 +339,7 @@ function buildEmailText(product, downloadUrl) {
     'You also received a Stripe receipt under separate cover.',
     '',
     'Personal license: use this guide within your own HR team. Do not redistribute as-is.',
-    'Full terms: https://promptanatomy.help/terms.html#paid-pdf-license',
+    'Full terms: https://www.promptanatomy.help/terms.html#paid-pdf-license',
     '',
     '14-day no-questions refund: just reply to this email or to your Stripe receipt.',
     'Need help? Contact info@promptanatomy.app.',
@@ -367,7 +367,7 @@ function buildEmailHtml(product, downloadUrl) {
     `<p><a href="${downloadUrl}" style="display:inline-block;padding:12px 18px;background:#2B6CB0;color:#fff;text-decoration:none;border-radius:8px;font-weight:600;">Download PDF</a></p>`,
     `<p style="color:#4A5568;font-size:0.95rem;">This secure link expires in ${days} days. You also received a Stripe receipt under separate cover.</p>`,
     '<hr style="border:none;border-top:1px solid #E2E8F0;margin:1.25rem 0;">',
-    '<p style="color:#4A5568;font-size:0.9rem;">Personal license. Use this guide within your own HR team. Do not redistribute as-is. <a href="https://promptanatomy.help/terms.html#paid-pdf-license">Full terms.</a></p>',
+    '<p style="color:#4A5568;font-size:0.9rem;">Personal license. Use this guide within your own HR team. Do not redistribute as-is. <a href="https://www.promptanatomy.help/terms.html#paid-pdf-license">Full terms.</a></p>',
     '<p style="color:#4A5568;font-size:0.9rem;">14-day no-questions refund. Reply to this email or to your Stripe receipt and we will revoke this link.</p>',
     '<p style="color:#4A5568;font-size:0.9rem;">Need help? Contact <a href="mailto:info@promptanatomy.app">info@promptanatomy.app</a>.</p>',
     '<p style="color:#718096;font-size:0.8rem;margin-top:1rem;">This email was sent to fulfill your purchase. Our mailing address is below.</p>',
@@ -389,7 +389,7 @@ function buildBundleEmailText(downloads) {
     '',
     `Each secure link expires in ${Math.round(DOWNLOAD_TOKEN_TTL_SECONDS / 86400)} days.`,
     'Personal license: use within your HR team. Do not redistribute as-is.',
-    'Full terms: https://promptanatomy.help/terms.html#paid-pdf-license',
+    'Full terms: https://www.promptanatomy.help/terms.html#paid-pdf-license',
     '',
     'This email was sent to fulfill your purchase. Our mailing address is below.',
     ''
@@ -417,7 +417,7 @@ function buildBundleEmailHtml(downloads) {
     '<p>Thank you for your purchase.</p>',
     buttons,
     `<p style="color:#4A5568;font-size:0.95rem;">Links expire in ${days} days.</p>`,
-    '<p style="color:#4A5568;font-size:0.9rem;">Personal license. Use within your HR team. Do not redistribute as-is. <a href="https://promptanatomy.help/terms.html#paid-pdf-license">Full terms.</a></p>',
+    '<p style="color:#4A5568;font-size:0.9rem;">Personal license. Use within your HR team. Do not redistribute as-is. <a href="https://www.promptanatomy.help/terms.html#paid-pdf-license">Full terms.</a></p>',
     '<p style="color:#4A5568;font-size:0.9rem;">Need help? Contact <a href="mailto:info@promptanatomy.app">info@promptanatomy.app</a>.</p>',
     '<p style="color:#718096;font-size:0.8rem;margin-top:1rem;">This email was sent to fulfill your purchase. Our mailing address is below.</p>',
     addressBlock,

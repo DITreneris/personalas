@@ -33,7 +33,7 @@ Vercel Project → Settings → Environment Variables. **Niekada necommitinti sl
 | `UPSTASH_REDIS_REST_URL` | Taip | Upstash Redis REST URL fulfillment būsenai ir token jti. |
 | `UPSTASH_REDIS_REST_TOKEN` | Taip | Upstash Redis REST token (palaikomi ir `KV_REST_API_*`, `VERCEL_KV_REST_API_*` vardai). |
 | `REDIS_KEY_PREFIX` | Pasirinkt. | Prefiksas bendram Upstash DB (pvz. `personalas:` → raktai `personalas:fulfillment:cs_...`). |
-| `SITE_URL` | Rekomenduojama | Kanoninis URL emailed download nuorodoms. Pvz. `https://promptanatomy.help`. |
+| `SITE_URL` | Rekomenduojama | Kanoninis URL emailed download nuorodoms. Prefer `https://www.promptanatomy.help` (matches sitemap / SOT). |
 | `BLOB_READ_WRITE_TOKEN` | Taip (Blob) | Auto, kai Vercel projekte sukurtas **Private** Blob store. Naudojamas fulfillment `fetch` į `*.private.blob.vercel-storage.com` (žr. [api/_lib/fulfillment.js](api/_lib/fulfillment.js)). |
 | `PDF_BEGINNER_SOURCE_URL` | Production | Private Blob URL Beginner PDF (žr. žemiau `npm run pdf:upload:blob`). |
 | `PDF_ADVANCED_SOURCE_URL` | Production | Private Blob URL Advanced PDF. |
@@ -56,7 +56,7 @@ Vercel Project → Settings → Environment Variables. **Niekada necommitinti sl
 2. Sukurkite po vieną Payment Link kiekvienam produktui (ir pasirinktinai bundle) ir įklijuokite URL’us į [config/sot.json](config/sot.json) → `pdfGuides.beginner.stripePaymentLink`, `pdfGuides.advanced.stripePaymentLink`, `pdfGuides.bundle.stripePaymentLink`, tada `npm run build`.
 3. **Success URL** (Stripe Dashboard → Payment Link → After payment → Don’t show confirmation page → Redirect to your website):
    ```
-   https://promptanatomy.help/success.html?session_id={CHECKOUT_SESSION_ID}
+   https://www.promptanatomy.help/success.html?session_id={CHECKOUT_SESSION_ID}
    ```
    Stripe pakeičia `{CHECKOUT_SESSION_ID}` realiu session id, kurį `success.html` perduoda `/api/download-link`.
 4. **Stripe receipts** ON (Stripe Dashboard → Settings → Customer emails → Successful payments).
@@ -116,7 +116,7 @@ Vercel Project → Settings → Environment Variables. **Niekada necommitinti sl
 
 - Statinių `robots.txt` ir `sitemap.xml` generavimas: `npm run build` ([scripts/build-locale-pages.js](scripts/build-locale-pages.js)).
 - Jei reikia pakeisti jau sugeneruotą bazinį URL (retas atvejis): [scripts/patch-published-base.js](scripts/patch-published-base.js) – `PATCH_FROM_PREFIX` (numatytai `https://promptanatomy.help`) ir `PUBLISHED_SITE_BASE` (tikslas).
-- **Google Search Console (nuosavybės patvirtinimas):** repo šaknyje laikomas [google7305663b2567346e.html](google7305663b2567346e.html) (HTML failo metodas). Po deploy patikrinkite `https://promptanatomy.help/google7305663b2567346e.html` — turinys turi būti viena eilutė `google-site-verification: google7305663b2567346e.html` (be redirect į `/en/`). Alternatyva — meta žyma per [config/sot.json](config/sot.json) → `brand.verification.google` + `npm run build` (tuščia = meta neįterpiama).
+- **Google Search Console (nuosavybės patvirtinimas):** primary metodas — HTML failas [google7305663b2567346e.html](google7305663b2567346e.html). Po deploy patikrinkite `https://www.promptanatomy.help/google7305663b2567346e.html` — turinys turi būti viena eilutė `google-site-verification: google7305663b2567346e.html` (be redirect į `/en/`). `config/sot.json` → `brand.verification.google` / `bing` lieka **tušti** kai naudojamas HTML failas (tuščia = meta neįterpiama). Meta tokens — tik jei GSC/Bing duoda atskirą meta stringą.
 
 ---
 

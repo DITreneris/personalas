@@ -1,92 +1,45 @@
 # MUST_TODO (MVP)
 
-Kritinės užduotys – papildykite pagal projekto poreikį. Prieš release peržiūrėkite kartu su [MVP_ROADMAP.md](MVP_ROADMAP.md).
+Kritinės užduotys prieš promo. Detalės – [DEPLOYMENT.md](DEPLOYMENT.md), [docs/TESTAVIMAS.md](docs/TESTAVIMAS.md).
 
 ## Bendra
 
-- [ ] `npm test` praeina `main` šakoje
-- [ ] [CHANGELOG.md](CHANGELOG.md) atnaujintas
+- [x] `npm test` praeina lokaliai prieš 1.4.0 ship (**375 PASS**, 0 FAIL) — re-confirm on `main` after push
+- [x] [CHANGELOG.md](CHANGELOG.md) atnaujintas (release cut → **1.4.0** / **1.3.0** catch-up)
 
-## Stripe + paid PDF (EN-only, Vercel)
+## Stripe Dashboard — before promo (manual, not in git)
 
-Kontekstas: [DEPLOYMENT.md](DEPLOYMENT.md) sekcija „Paid PDF environment variables“ ir [api/_lib/fulfillment.js](api/_lib/fulfillment.js) `PRODUCTS`.
+Repo cannot change Stripe product metadata. Complete in Stripe Dashboard:
 
-### Stripe Dashboard
-
-- [x] Sukurti **Beginner PDF Guide** Product + Price `$5.99` (Stripe Price ID → `STRIPE_PRICE_BEGINNER_PDF`)
-- [x] Sukurti **Advanced PDF Guide** Product + Price `$11.99` (Stripe Price ID → `STRIPE_PRICE_ADVANCED_PDF`)
-- [x] Sukurti **Bundle (Both guides)** Product + Price `$15.99` (Stripe Price ID → `STRIPE_PRICE_BUNDLE_PDF`); Payment Link → [config/sot.json](config/sot.json) → `pdfGuides.bundle.stripePaymentLink`
-
-#### Pass 3 hand-off — product description sync (Advanced v2.0, May 2026)
-
-Stripe Dashboard product metadata yra Stripe pusėje, **ne repo**. Po Advanced v2.0 (32 pages) release'o reikia atnaujinti, kad pirkėjai checkout'e matytų tą pačią value proposition kaip PDF'e:
-
-- [ ] **Advanced HR Hiring Guide ($11.99)** product description: „24 pages" → **„32 pages"**; refresh cover image į `assets/pdf-covers/advanced.png` (naujas Pass 2 + 3 hook).
-- [ ] **Bundle ($15.99)** product description: „12 + 24 pages" → **„16 + 32 pages"**.
-- [ ] (Optional) Pridėti tagline „Includes sample debrief transcript + comp/pay-transparency worksheet" prie Advanced description.
-- [x] Sukurti **Payment Link** kiekvienam Price; success URL: `https://promptanatomy.help/success.html?session_id={CHECKOUT_SESSION_ID}` (repo: visi 3 linkai [config/sot.json](config/sot.json) `pdfGuides.*.stripePaymentLink`)
-- [ ] (Pasirinktinai) Payment Link → metadata: `product=beginner` arba `product=advanced` (alternatyva – Price ID mapping)
-- [ ] Įjungti **Stripe receipts** ON (Settings → Customer emails → Successful payments)
-- [ ] Pridėti **webhook endpoint** `https://promptanatomy.help/api/stripe-webhook`, įvykiai: `checkout.session.completed`, `checkout.session.async_payment_succeeded`
-- [ ] Webhook secret → Vercel env `STRIPE_WEBHOOK_SECRET`
-
-### Repo darbas
-
-- [x] [config/sot.json](config/sot.json): įrašyti realias `pdfGuides.beginner.stripePaymentLink`, `advanced` ir `bundle` (`https://buy.stripe.com/...`); po pakeitimo – `npm run build`
-- [x] Sugeneruoti / atnaujinti Beginner ir Advanced PDF turinį (EN) — žr. [docs/pdf-source/](docs/pdf-source/README.md); `npm run pdf:export`
-- [x] Įkelti PDF į **Vercel Blob** (private): `npm run pdf:upload:blob` → Blob path `prompt-anatomy/pdfs/*.pdf`
-- [x] Vercel env: `PDF_BEGINNER_SOURCE_URL`, `PDF_ADVANCED_SOURCE_URL` (iš upload output) + `BLOB_READ_WRITE_TOKEN` (auto iš Blob store) → **Redeploy**
-- [x] Lokalus dev: `api/_private/pdfs/beginner-guide.pdf` ir `advanced-guide.pdf` (gitignore; generuojami `npm run pdf:export`)
-
-### Vercel env (Production / Preview)
-
-Pilnas sąrašas – [DEPLOYMENT.md](DEPLOYMENT.md). Privalomi:
-
-- [x] `STRIPE_SECRET_KEY`
-- [x] `STRIPE_WEBHOOK_SECRET`
-- [x] `STRIPE_PRICE_BEGINNER_PDF`
-- [x] `STRIPE_PRICE_ADVANCED_PDF`
-- [x] `STRIPE_PRICE_BUNDLE_PDF`
-- [x] `DOWNLOAD_TOKEN_SECRET` (>= 32 atsitiktinių baitų; pvz. `openssl rand -base64 48`)
-- [x] `RESEND_API_KEY`
-- [x] `FULFILLMENT_FROM_EMAIL` (verified Resend sender)
-- [x] `UPSTASH_REDIS_REST_URL`
-- [x] `UPSTASH_REDIS_REST_TOKEN`
-- [x] `SITE_URL=https://promptanatomy.help`
-- [x] `PDF_BEGINNER_SOURCE_URL` (iš `npm run pdf:upload:blob` output)
-- [x] `PDF_ADVANCED_SOURCE_URL`
-- [x] `BLOB_READ_WRITE_TOKEN` (Vercel Blob store → auto; lokaliai `.env`)
-
-### QA prieš release
-
-- [ ] DS v0.2.1 elevation: `/en/` — PDF sekcija pilkas fonas, kortelės su šešėliu, workflow chip'ai skaitomi; preview mygtukas ne „tuščias“ ant baltos
-- [ ] Hero/PDF funnel: `/en/` – primary CTA scroll į `#pdf-guides`; secondary → Prompt 1; PDF blokas virš nemokamų promptų; hero sentence case + U.S. + kaina tik `priceTeaser` (žr. CHANGELOG Unreleased)
-- [ ] Stripe **test mode**: pirkti Beginner ir Advanced → patikrinti, kad atvyksta el. laiškas iš Resend su veikiančia download nuoroda
-- [ ] [success.html](success.html) parodo „Download PDF“ mygtuką per ~5 s po `Stripe redirect` (poll į `/api/download-link`)
-- [ ] Pasibaigus 15 min in-page tokenui – senas mygtukas grąžina 403; el. laiško nuoroda dar veikia (7 d.)
-- [ ] Pakartotinis to paties webhook’o pristatymas – fulfillment lieka `already_fulfilled` (Redis idempotency)
-- [ ] [terms.html](terms.html) `#paid-pdf-license` pasiekiamas iš laiško ir iš `success.html`
-
-## Design System v2.0 release gate (P0 ops — Stripe Dashboard)
-
-**Repo cannot change Stripe product metadata.** Before v2.0 tag, complete manually (see Pass 3 hand-off above):
-
-- [ ] **Advanced HR Hiring Guide ($11.99):** description **32 pages**; cover image = `assets/pdf-covers/advanced.png`
-- [ ] **Bundle ($15.99):** description **16 + 32 pages**
-- [ ] (Optional) Advanced tagline: debrief transcript + comp worksheet
+- [ ] **Advanced HR Hiring Guide ($11.99):** description **32 pages** (not 24); cover = `assets/pdf-covers/advanced.png`
+- [ ] **Bundle ($15.99):** description **16 + 32 pages** (not 12 + 24)
+- [ ] (Optional) Advanced tagline: debrief transcript + comp/pay-transparency worksheet
 - [ ] Verify checkout copy matches [config/sot.json](config/sot.json) `pdfGuides.*.pages` and `/en/#pdf-guides`
 
-## Design System v2.0 / v0.3.1 (token hygiene — in repo)
+### Already done (do not re-open)
 
-Plan: [docs/design_system_v2.md](docs/design_system_v2.md) (canonical) · historical: [docs/design_systemv02.md](docs/design_systemv02.md) §18
+- [x] Beginner / Advanced / Bundle Products + Prices ($5.99 / $11.99 / $15.99)
+- [x] Payment Links → [config/sot.json](config/sot.json) `pdfGuides.*.stripePaymentLink`; success URL → `/success.html?session_id={CHECKOUT_SESSION_ID}`
+- [x] Webhook endpoint `https://www.promptanatomy.help/api/stripe-webhook` (`checkout.session.completed`, `checkout.session.async_payment_succeeded`) → `STRIPE_WEBHOOK_SECRET` on Vercel
+- [x] Vercel env: Stripe keys/prices, `DOWNLOAD_TOKEN_SECRET`, Resend, Upstash, `SITE_URL`, Blob PDF URLs (`PDF_*_SOURCE_URL`, `BLOB_READ_WRITE_TOKEN`)
+- [x] PDF content export + private Blob upload (`npm run pdf:upload:blob`)
 
-- [x] Hard removal of 7 deprecated `:root` aliases from [assets/styles.css](assets/styles.css)
-- [x] CTA size tokens (`--btn-pad-*`, `--btn-min-h-*`) on 7 existing selectors (AGENTS.md §10)
-- [x] Line-height token consolidation → `--leading-tight/normal/relaxed`
-- [x] [success.html](success.html) / [terms.html](terms.html) → shared [assets/styles.css](assets/styles.css) + [assets/satellite.css](assets/satellite.css)
-- [x] Screenshot baseline procedure: [docs/qa/screenshots/v2.0-baseline/README.md](docs/qa/screenshots/v2.0-baseline/README.md)
+## Purchase QA runbook (manual)
+
+Ordered sign-off before promo. Recovery: `node scripts/check-fulfillment.js --session=cs_… --resend` (or `--payment_intent=pi_…`).
+
+1. [ ] Stripe **test mode**: buy Beginner → Resend email with working download link
+2. [ ] Stripe **test mode**: buy Advanced → same
+3. [ ] [success.html](success.html): “Download PDF” within ~5 s after Stripe redirect (`/api/download-link` poll)
+4. [ ] In-page token (~15 min) expired → 403; email link still works (7 d)
+5. [ ] Webhook replay of same event → Redis `already_fulfilled` (idempotent)
+6. [ ] [terms.html](terms.html)`#paid-pdf-license` reachable from email + success page
+7. [ ] Visual: `/en/` PDF section (cards, See inside thumbs, trust line) + hero funnel CTAs
+
+## Design System / in-repo (done)
+
+- [x] DS v2.0 token hygiene, CTA size tokens, satellite parity, screenshot baseline procedure
 
 ## Saugumas
 
-- [ ] **Niekada** necommitinti `.env` ar `.env.local` – patikrinti `.gitignore` prieš push
-- [ ] Naudoti `.env.example` kaip vienintelį versijuojamą template (be realių verčių)
+- [x] `.env` / `.env.local` in `.gitignore`; use `.env.example` as template only

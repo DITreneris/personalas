@@ -413,18 +413,25 @@ function run() {
         'en/index.html: legacy pdf-guide-preview-btn removed (DS v0.3.3 Phase B)'
       )
     );
-    // Per-card pdf-guide-highlights are removed in Phase B; bundle keeps its
-    // own highlights list (#pdf-bundle-offer). Assert exactly one occurrence
-    // remains and it is the bundle one.
+    // Text-only highlights on beginner + advanced cards + bundle (Phase D safe).
     const highlightsCount =
       (enIndex.match(/class="pdf-guide-highlights"/g) || []).length;
     tally(
       assert(
-        highlightsCount === 1 &&
+        highlightsCount === 3 &&
+          enIndex.includes('data-guide-highlights="beginner"') &&
+          enIndex.includes('data-guide-highlights="advanced"') &&
           enIndex.includes('data-guide-highlights="bundle"'),
-        'en/index.html: pdf-guide-highlights only on bundle (DS v0.3.3 Phase B; got ' +
+        'en/index.html: pdf-guide-highlights on beginner + advanced + bundle (got ' +
           highlightsCount +
           ' total)'
+      )
+    );
+    tally(
+      assert(
+        enIndex.includes('kickoff worksheet') &&
+          enIndex.includes('multi-candidate scorecard'),
+        'en/index.html: sample CTA labels name artifacts (kickoff / scorecard)'
       )
     );
     tally(
@@ -940,6 +947,9 @@ function run() {
   tally(assert(sitemap && sitemap.includes('/en/privacy.html'), 'sitemap.xml: includes /en/privacy.html'));
   tally(assert(sitemap && sitemap.includes('/privacy.html'), 'sitemap.xml: includes /privacy.html gateway'));
   tally(assert(sitemap && !sitemap.includes('privatumas.html'), 'sitemap.xml: no privatumas.html entries'));
+  tally(assert(sitemap && !sitemap.includes('/success.html'), 'sitemap.xml: excludes transactional success.html'));
+  tally(assert(sitemap && sitemap.includes('https://www.promptanatomy.help/'), 'sitemap.xml: www host'));
+  tally(assert(sitemap && !/<loc>https:\/\/promptanatomy\.help\//.test(sitemap), 'sitemap.xml: no apex (non-www) loc'));
 
   // --- Paid PDF API skeleton ---
   const apiDir = path.join(ROOT, 'api');
@@ -961,6 +971,8 @@ function run() {
   tally(assert(success && success.includes('session_id'), 'success.html reads session_id'));
   tally(assert(success && success.includes('/api/download-link'), 'success.html polls /api/download-link'));
   tally(assert(success && success.includes('lang="en-US"'), 'success.html lang="en-US"'));
+  tally(assert(success && success.includes('https://www.promptanatomy.help/success.html'), 'success.html canonical uses www'));
+  tally(assert(success && !success.includes('href="https://promptanatomy.help/'), 'success.html: no apex canonical/OG'));
 
   // --- Terms page ---
   const termsPath = path.join(ROOT, 'terms.html');
@@ -970,6 +982,8 @@ function run() {
   tally(assert(terms && terms.includes('lang="en-US"'), 'terms.html lang="en-US"'));
   tally(assert(terms && terms.includes('Not professional advice'), 'terms.html HR advisory section'));
   tally(assert(terms && terms.includes('/en/privacy.html'), 'terms.html links to privacy policy'));
+  tally(assert(terms && terms.includes('https://www.promptanatomy.help/terms.html'), 'terms.html canonical uses www'));
+  tally(assert(terms && !terms.includes('href="https://promptanatomy.help/'), 'terms.html: no apex canonical/OG'));
 
   const satelliteCss = readFile(path.join(ROOT, 'assets', 'satellite.css'));
   tally(assert(satelliteCss && satelliteCss.includes('.satellite-card'), 'assets/satellite.css exists (DS v2.0 PR-4)'));
@@ -1289,15 +1303,12 @@ function assertGeoSurface(ctx) {
       'en/index.html: theme-color navy');
   }
 
-  // --- en/index.html: FAQPage JSON-LD (8 questions; faq-subset-prompts omitted as duplicate of phase-order) ---
+  // --- en/index.html: FAQPage JSON-LD (8 = frontFaq 3 + buyerFaq 5) ---
   if (ctx.enIndex && ctx.sot) {
     tallyLocal(/"@type":"FAQPage"/.test(ctx.enIndex), 'en/index.html: FAQPage JSON-LD');
     const qCount = (ctx.enIndex.match(/"@type":"Question"/g) || []).length;
     tallyLocal(qCount === 8, 'en/index.html: 8 Question entries in FAQPage JSON-LD (got ' + qCount + ')');
-    const frontForLd = (ctx.sot.frontFaq || []).filter(function (item) {
-      return item && item.id !== 'faq-subset-prompts';
-    });
-    const allFaq = frontForLd.concat(ctx.sot.buyerFaq || []);
+    const allFaq = (ctx.sot.frontFaq || []).concat(ctx.sot.buyerFaq || []);
     let parityOk = 0;
     allFaq.forEach((item) => {
       const qInJsonLd = ctx.enIndex.includes('"name":"' + item.q.replace(/"/g, '\\"') + '"')
@@ -1306,8 +1317,8 @@ function assertGeoSurface(ctx) {
     });
     tallyLocal(parityOk >= allFaq.length, 'en/index.html: FAQ question parity (' + parityOk + ' of ' + allFaq.length + ' matched)');
     tallyLocal(
-      !ctx.enIndex.includes('"Can I use just one or a few prompts?"'),
-      'en/index.html: duplicate subset FAQ omitted from JSON-LD (DS v2.0 PR-8)'
+      !ctx.enIndex.includes('Can I use just one or a few prompts?'),
+      'en/index.html: duplicate subset FAQ removed from page + JSON-LD'
     );
   }
 
@@ -1338,8 +1349,8 @@ function assertGeoSurface(ctx) {
     tallyLocal(ctx.enIndex.includes('"contactPoint"'), 'en/index.html: Organization.contactPoint');
     tallyLocal(ctx.enIndex.includes('"knowsAbout"'), 'en/index.html: Organization.knowsAbout');
     tallyLocal(ctx.enIndex.includes('"slogan"'), 'en/index.html: Organization.slogan');
-    tallyLocal(ctx.enIndex.includes('"logo":"https://promptanatomy.help/favicon.svg"'),
-      'en/index.html: Organization.logo');
+    tallyLocal(ctx.enIndex.includes('"logo":"https://www.promptanatomy.help/favicon.svg"'),
+      'en/index.html: Organization.logo uses www');
     tallyLocal(ctx.enIndex.includes('https://x.com/promptanatom'),
       'en/index.html: Organization sameAs includes x.com/promptanatom');
     tallyLocal(ctx.enIndex.includes('https://www.linkedin.com/in/staniulis/'),
@@ -1477,8 +1488,8 @@ function assertGeoSurface(ctx) {
 
   // --- SOT shape: new fields present ---
   if (ctx.sot) {
-    tallyLocal(Array.isArray(ctx.sot.frontFaq) && ctx.sot.frontFaq.length === 4,
-      'sot.json: frontFaq has exactly 4 items');
+    tallyLocal(Array.isArray(ctx.sot.frontFaq) && ctx.sot.frontFaq.length === 3,
+      'sot.json: frontFaq has exactly 3 items');
     tallyLocal(ctx.sot.brand && ctx.sot.brand.socialProfiles && ctx.sot.brand.socialProfiles.x,
       'sot.json: brand.socialProfiles.x');
     tallyLocal(ctx.sot.brand && ctx.sot.brand.socialProfiles && ctx.sot.brand.socialProfiles.linkedin,
@@ -1489,6 +1500,12 @@ function assertGeoSurface(ctx) {
       'sot.json: product.operatorLinkedin');
     tallyLocal(ctx.sot.product && ctx.sot.product.operatorTwitter,
       'sot.json: product.operatorTwitter');
+    tallyLocal(ctx.sot.product && ctx.sot.product.siteUrl === 'https://www.promptanatomy.help',
+      'sot.json: product.siteUrl is www');
+    tallyLocal(ctx.sot.brand && ctx.sot.brand.logoUrl === 'https://www.promptanatomy.help/favicon.svg',
+      'sot.json: brand.logoUrl is www');
+    tallyLocal(ctx.sot.brand && ctx.sot.brand.productSiteUrl === 'https://www.promptanatomy.help/en/',
+      'sot.json: brand.productSiteUrl is www');
     ['beginner', 'advanced', 'bundle'].forEach((k) => {
       const g = ctx.sot.pdfGuides && ctx.sot.pdfGuides[k];
       tallyLocal(g && g.description && g.priceUSD && g.priceValidUntil,

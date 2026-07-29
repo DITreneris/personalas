@@ -2,7 +2,7 @@
 
 **Paskirtis:** Vienas operacinis sąrašas — ką **ne laužyti** keičiant turinį, CSS arba build. Detalus DS implementacijos planas — [design_systemv02.md](design_systemv02.md). Keliai, deploy, brand — [AGENT_SOT.md](AGENT_SOT.md). Agentų seka — [AGENTS.md](../AGENTS.md) §9.
 
-**Paskutinis atnaujinimas:** 2026-05-21 (**DS v0.3.3** — dabartinė geriausia vieša versija)
+**Paskutinis atnaujinimas:** 2026-07-29 (**audit remediation** — www kanonas + text highlights)
 
 ---
 
@@ -11,12 +11,13 @@
 | Aspektas | Kanonas |
 |----------|---------|
 | Viešas UI | **EN-only** `/en/`; šaltinis [templates/index-lt.html](../templates/index-lt.html) → `npm run build` |
+| Canonical host | **`https://www.promptanatomy.help`** (SOT `siteUrl` / `logoUrl`, sitemap, satellites) |
 | Hero H1 | `marketing.hero.headline` — laikas iki naudos (**„in minutes“**), ne „6 phases“ H1'e |
 | 6 fazės | Tik **free lane**: `#workflow-overview` chip'ai + `freeTier.ctaLabel` / `workflowOverview.title` |
-| PDF proof | **Tik vartotojo trigger'is** — `<details class="pdf-see-inside">` + `#pdfPreviewDialog`; **jokio** auto-render specimen / expert testimonial |
-| Per-kortelės highlights | **Pašalinti**; likęs vienintelis `<ul class="pdf-guide-highlights">` — **bundle** `#pdf-bundle-offer` |
+| PDF proof (images) | **Tik vartotojo trigger'is** — `<details class="pdf-see-inside">` + `#pdfPreviewDialog` + sample PDF; **jokio** auto-render specimen / expert testimonial |
+| Highlights (text) | `data-guide-highlights="beginner|advanced|bundle"` — 3 text-only bullet lists iš SOT (ne images) |
 | Bundle | `.pdf-bundle-body` (kairė kolona), `data-bundle-price-was`, `data-bundle-savings`; kainos iš SOT + [generator.js](../generator.js) |
-| Struktūriniai testai | **355 PASS** (`tests/structure.test.js`) |
+| Sitemap | Indexuojami URL; **be** `success.html` (`noindex`) |
 
 **Sąmoningai negrąžinti be produkto sprendimo:** `pdf-proof-inside`, `pdf-guides-social`, `pdf-expert-card*`, `hero-sample-link` (žr. §5.4, Phase D).
 
@@ -48,7 +49,8 @@ hero (primary CTA → #pdf-guides; H1 iš SOT — „in minutes“)
       → objectives
       → #pdf-guides
           → H2 + lede
-          → .pdf-guides-grid (Beginner + Advanced; Advanced = .pdf-guide-card--featured)
+          → .pdf-guides-grid (Beginner + Advanced; Advanced = .pdf-guide-card--featured;
+               each card: text highlights → See inside → sample PDF → Buy CTA)
           → .pdf-guide-trust (#pdf-section-trust)
           → #pdf-bundle-offer (.pdf-bundle-offer; rodoma kai Stripe OK)
           → #pdf-guides-faq (Buyer FAQ)

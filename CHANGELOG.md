@@ -6,11 +6,37 @@ Visi reikšmingi pakeitimai projekte dokumentuojami čia. Formatas pagal [Keep a
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-07-29
+
+Audit remediation release (www canonical, sitemap/FAQ hygiene, Phase-D-safe proof, docs). Package **1.4.0**. Manual remaining: Stripe Dashboard page counts + purchase QA — [MUST_TODO.md](MUST_TODO.md). Fonts self-host + CSP enforce stay follow-up PRs — [docs/security.md](docs/security.md).
+
+### Pridėta
+
+- **[Orchestrator]** Proprietary [LICENSE](LICENSE) (all rights reserved).
+- **[QA]** Structure guards: www host on SOT / sitemap / `terms.html` / `success.html`; sitemap must not list `success.html`; sample CTA artifact labels; three `pdf-guide-highlights` lists (beginner + advanced + bundle).
+
+### Pakeista
+
+- **[Orchestrator][QA] Canonical host → www:** [config/sot.json](config/sot.json) `product.siteUrl`, `brand.productSiteUrl`, `brand.logoUrl`; [terms.html](terms.html) / [success.html](success.html) canonical + OG; [api/_lib/fulfillment.js](api/_lib/fulfillment.js) + [scripts/check-fulfillment.js](scripts/check-fulfillment.js) defaults; [README.md](README.md) / [DEPLOYMENT.md](DEPLOYMENT.md) (`SITE_URL` prefer www; GSC HTML file = primary verification, empty SOT meta stubs intentional).
+- **[QA] Sitemap:** [scripts/build-locale-pages.js](scripts/build-locale-pages.js) `buildSitemapXml` — drop transactional `/success.html` (page stays `noindex`).
+- **[UI][Content] Phase-D-safe proof:** restore **text-only** per-guide `data-guide-highlights` (beginner/advanced) + clearer sample links („15-min kickoff worksheet“ / „multi-candidate scorecard“); [generator.js](generator.js) fills all highlight lists; no auto specimen / expert cards.
+- **[Content] Free FAQ:** `frontFaq` 4 → **3** — merge phase-order + subset into one answer; visible FAQ + FAQPage JSON-LD parity (8 Q = 3 front + 5 buyer).
+- **[Content] Use when:** all 10 free prompts — US HR outcome voice (funnel bottleneck, apply rate, time-to-screen, accept rate, retention).
+- **[Docs]** [MUST_TODO.md](MUST_TODO.md) reconciled (webhook/env marked done) + purchase QA runbook; [INTEGRACIJA.md](INTEGRACIJA.md) Vercel/Stripe reality; [MVP_ROADMAP.md](MVP_ROADMAP.md) next bets; [docs/DOCUMENTATION.md](docs/DOCUMENTATION.md) ownership table; [docs/LEGACY_GOLDEN_STANDARD.md](docs/LEGACY_GOLDEN_STANDARD.md) www + text highlights; [google-apps-script.js](google-apps-script.js) Prompt Anatomy EN stub.
+
+### Pataisyta
+
+- **[QA]** ESLint allowlist for GAS `doPost` ([.eslintrc.json](.eslintrc.json)).
+
+**Tests:** `npm test` — **375 PASS**, 0 FAIL.
+
+## [1.3.0] - 2026-05-31
+
+Prior package version catch-up: DS v2.0 / v0.3.x, SEO–GEO hardening, PDF preview/runtime fixes, and funnel polish that shipped while `package.json` was already **1.3.0** (no dated section before).
+
 ### Pakeista
 
 - **[UI] Design System v2.0 — release polish:** PDF preview dialog footer (`.pdf-preview-actions`, `.btn.btn--ghost` close, `--shadow-modal`); SOT-driven bundle CTA + sample preview labels; trust line clarifies Personal license scope; Advanced card copy „Senior HR playbook"; `--text-muted` darkened for AA on `--surface-2`. **Token hygiene:** removed 7 deprecated `:root` aliases; added `--btn-pad-*` / `--btn-min-h-*` on 7 CTA selectors; line-heights → `--leading-*`; ledes `max-width: 65ch`. **Satellite parity:** new [assets/satellite.css](assets/satellite.css); [success.html](success.html) + [terms.html](terms.html) use Inter + shared `.btn`. **Content/SEO:** FAQPage JSON-LD dedupes overlapping phase/subset question; preview error adds „Back to guides" link. Docs: [docs/design_system_v2.md](docs/design_system_v2.md), [docs/qa/screenshots/v2.0-baseline/README.md](docs/qa/screenshots/v2.0-baseline/README.md). Tests: DS v2.0 structural asserts.
-
-### Pakeista
 
 - **[UI][Content] OG social card v3:** [config/sot.json](config/sot.json) `marketing.seo.ogImage` (outcome copy, be kainos ant PNG) + `ogTitle`; [scripts/generate-og-image.js](scripts/generate-og-image.js) skaito SOT → [images/og-default-v3.png](images/og-default-v3.png); [scripts/build-locale-pages.js](scripts/build-locale-pages.js) `OG_IMAGE_REL` v3, `getOgImageAlt()`; [vercel.json](vercel.json) cache headers v3; testai atnaujinti.
 
