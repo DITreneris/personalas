@@ -30,8 +30,10 @@ jobs:
           retry_wait_seconds: 40
           command: npm test
         env:
-          BASE_PATH: /${{ github.event.repository.name }}/
-          SITE_ORIGIN: https://ditreneris.github.io
+          # Canonical product surface (Vercel / www). Do not use GitHub Pages
+          # SITE_ORIGIN here — that rewrites sitemap away from www and fails
+          # structure.test.js "sitemap.xml: www host".
+          SITE_ORIGIN: https://www.promptanatomy.help
           REQUIRE_STRIPE_LINKS: '1'
 
       - name: Accessibility check (pa11y)

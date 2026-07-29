@@ -36,8 +36,10 @@ jobs:
           retry_wait_seconds: 40
           command: npm test
         env:
-          BASE_PATH: /${{ github.event.repository.name }}/
-          SITE_ORIGIN: https://ditreneris.github.io
+          # Same canonical gate as ci.yml (www). Pages artifact rebuild below
+          # still uses ditreneris.github.io + BASE_PATH.
+          SITE_ORIGIN: https://www.promptanatomy.help
+          REQUIRE_STRIPE_LINKS: '1'
 
   deploy:
     needs: test

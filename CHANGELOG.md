@@ -6,6 +6,10 @@ Visi reikšmingi pakeitimai projekte dokumentuojami čia. Formatas pagal [Keep a
 
 ## [Unreleased]
 
+### Pataisyta
+
+- **[QA] CI sitemap www host:** `.github/workflows/ci.yml` + deploy test job use `SITE_ORIGIN=https://www.promptanatomy.help` (no GitHub Pages origin during `npm test`) so `sitemap.xml: www host` passes. Pages deploy build still uses `ditreneris.github.io` + `BASE_PATH`.
+
 ## [1.5.0] - 2026-07-29
 
 ### Pridėta
