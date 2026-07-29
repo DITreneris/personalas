@@ -17,17 +17,15 @@
 | `Cross-Origin-Opener-Policy` | `same-origin` | proces izoliacija (Spectre) |
 | `Cross-Origin-Resource-Policy` | `same-origin` | resource isolation (default) |
 | `Origin-Agent-Cluster` | `?1` | process isolation per origin (2026 hardening) |
-| `Content-Security-Policy-Report-Only` | (žr. žemiau) | CSP baseline — Report-Only kol egzistuoja inline event handler'iai |
+| `Content-Security-Policy` | (žr. žemiau) | **Enforce** (Phase 2) — still allows `'unsafe-inline'` until Phase 3 |
 
-## CSP promotion path
-
-CSP yra **Report-Only** (browser logs violations, bet nieko neblokuoja):
+## CSP (enforce)
 
 ```
 default-src 'self';
-script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com https://*.vercel-insights.com https://plausible.io;
-style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-font-src 'self' https://fonts.gstatic.com data:;
+script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com https://*.vercel-insights.com https://plausible.io https://unpkg.com;
+style-src 'self' 'unsafe-inline';
+font-src 'self' data:;
 img-src 'self' data: https:;
 connect-src 'self' https://*.vercel-insights.com https://vitals.vercel-insights.com https://api.stripe.com;
 frame-src https://buy.stripe.com https://js.stripe.com;
@@ -37,23 +35,23 @@ frame-ancestors 'none';
 upgrade-insecure-requests
 ```
 
-### Promotion blokeriai (iki **NE** flip'inti į enforce)
+### Done
 
-1. **Inline `onclick=` / `onkeydown=` handler'iai** [en/index.html](../en/index.html) ir [templates/index-lt.html](../templates/index-lt.html) (e.g. `activateCodeBlock(this)` ant `.code-block`). Su `script-src 'unsafe-inline'` jie veikia, bet `'unsafe-inline'` reikia pašalinti prieš realią CSP apsaugą. Refactor — perkelti į `addEventListener` per [generator.js](../generator.js); separate ticket.
-2. **Inline `<style>` block'ai** [success.html](../success.html), [404.html](../404.html) — `style-src 'unsafe-inline'` reikia kol pašalinti / perkelti į `assets/styles.css`.
+1. **Phase 0:** CSP-Report-Only baseline.
+2. **Phase 1:** inline `onclick`/`onkeydown` removed from templates; delegated listeners in [generator.js](../generator.js).
+3. **Phase 2:** Report-Only → **Enforce** (`Content-Security-Policy`). Lucide via `https://unpkg.com` allowlisted. Google Fonts hosts dropped (self-hosted fonts).
+4. **Fonts:** self-host default ON (`BUILD_SELFHOST_FONTS=0` to opt out); privacy discloses `/assets/fonts/`.
 
-### Migration sequence
+### Remaining (Phase 3)
 
-1. **Phase 0 (DONE):** CSP-Report-Only deploy'intas; monitor Vercel logs 7+ dienų. Jei reports clean — pereinama prie Phase 1.
-2. **Phase 1:** refactor'inti inline `onclick`/`onkeydown` → `addEventListener`. Test'as: `npm test` + manual prompt copy-paste. **Own PR — not bundled with content releases.**
-3. **Phase 2:** flip Report-Only → enforce (`Content-Security-Policy` header'is). Stripe checkout testas privalo praeiti (frame-src / form-action turi white'list'inti `buy.stripe.com`).
-4. **Phase 3:** ištrinti `'unsafe-inline'` iš `script-src` ir `style-src` po Phase 1+2 stabilizavimo. Pridėti nonce'us jei reikia.
-5. **Fonts (parallel, own PR):** opt-in `BUILD_SELFHOST_FONTS=1` — flip tik po privacy copy atnaujinimo (Google Fonts mention).
+1. Extract inline `<script>` from [success.html](../success.html) → external JS.
+2. Remove `'unsafe-inline'` from `script-src` / `style-src` (add nonces if needed).
+3. Prefer self-hosting Lucide instead of unpkg.
 
 ### Stebėjimas
 
-- Vercel logs — search `csp-report` violations (jei vėliau pridėsime `report-uri` direktyvą).
-- Browser DevTools console — `Content Security Policy: ... would have been blocked` warning'ai (Report-Only režime).
+- Browser DevTools console — CSP blocked resource warnings after deploy.
+- Stripe checkout still must load `buy.stripe.com` / `js.stripe.com` frames.
 
 ---
 

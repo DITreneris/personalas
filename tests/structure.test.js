@@ -111,8 +111,12 @@ function run() {
 
   // --- Critical functions ---
   tally(assert(template.includes('generator.js'), 'templates/index-lt.html: generator.js script'));
-  tally(assert(template.includes('copyPrompt') || template.includes('selectText'), 'copy functions reference (generator.js)'));
   const generatorJs = readFile(GENERATOR_PATH);
+  tally(assert(
+    generatorJs && (generatorJs.includes('window.copyPrompt') || generatorJs.includes('copyPromptInternal')),
+    'copy functions reference (generator.js)'
+  ));
+  tally(assert(generatorJs && generatorJs.includes('bindDelegatedPromptInteractions'), 'generator.js: delegated prompt interactions'));
   tally(assert(generatorJs && generatorJs.includes('localStorage') && generatorJs.includes('di_prompt_done_'), 'generator.js: localStorage progress'));
   tally(
     assert(
@@ -929,7 +933,10 @@ function run() {
     tally(assert(enPrivacy.includes('property="og:image"'), 'en/privacy.html OG image'));
     tally(assert(!enPrivacy.includes('hreflang="lt"'), 'en/privacy.html has no hreflang="lt"'));
     tally(assert(enPrivacy.includes('Stripe') && enPrivacy.includes('Resend'), 'en/privacy.html discloses paid PDF sub-processors'));
-    tally(assert(enPrivacy.includes('fonts.googleapis.com'), 'en/privacy.html discloses Google Fonts'));
+    tally(assert(
+      /self-hosted|\/assets\/fonts\//i.test(enPrivacy) && !/fonts\.googleapis\.com/.test(enPrivacy),
+      'en/privacy.html discloses self-hosted fonts (not Google Fonts CDN)'
+    ));
     tally(assert(enPrivacy.includes('California') || enPrivacy.includes('Your rights'), 'en/privacy.html includes privacy rights section'));
     tally(assert(enPrivacy.includes('Effective:'), 'en/privacy.html includes effective date'));
     tally(assert(!/[ąčęėįšųūžĄČĘĖĮŠŲŪŽ]/.test(enPrivacy), 'en/privacy.html: no Lithuanian diacritics'));
@@ -1465,13 +1472,34 @@ function assertGeoSurface(ctx) {
       'Google Search Console verification file body matches Google HTML-tag method');
   }
 
+  // --- CSP Phase 1 + self-hosted fonts ---
+  tallyLocal(!/onclick=/.test(ctx.enIndex || ''), 'en/index.html: no inline onclick handlers');
+  tallyLocal(!/onkeydown=/.test(ctx.enIndex || ''), 'en/index.html: no inline onkeydown handlers');
+  tallyLocal(
+    fs.existsSync(path.join(ROOT, 'assets', 'fonts.css')),
+    'assets/fonts.css exists (self-hosted fonts)'
+  );
+  tallyLocal(
+    /fonts\.css/.test(ctx.enIndex || '') && !/fonts\.googleapis\.com/.test(ctx.enIndex || ''),
+    'en/index.html uses fonts.css (not Google Fonts CDN)'
+  );
+  const page404 = readFile(path.join(ROOT, '404.html'));
+  tallyLocal(
+    page404 && /page-404/.test(page404) && !/<style>/.test(page404),
+    '404.html: page-404 class, no inline <style>'
+  );
+
   // --- vercel.json: CSP + Origin-Agent-Cluster + new content-type rules ---
   const vercel = readFile(path.join(ROOT, 'vercel.json'));
   if (vercel) {
-    tallyLocal(vercel.includes('Content-Security-Policy-Report-Only'),
-      'vercel.json: CSP Report-Only header');
+    tallyLocal(
+      vercel.includes('"Content-Security-Policy"') && !vercel.includes('Content-Security-Policy-Report-Only'),
+      'vercel.json: CSP Enforce header (not Report-Only)'
+    );
     tallyLocal(vercel.includes('https://buy.stripe.com'),
       'vercel.json: CSP allows Stripe checkout frame');
+    tallyLocal(vercel.includes('https://unpkg.com'),
+      'vercel.json: CSP allows Lucide CDN (unpkg)');
     tallyLocal(vercel.includes('Origin-Agent-Cluster') && vercel.includes('"?1"'),
       'vercel.json: Origin-Agent-Cluster: ?1');
     tallyLocal(vercel.includes('llms\\\\.txt'),

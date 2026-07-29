@@ -199,18 +199,39 @@
         setTimeout(function() { toast.classList.remove('show'); }, CONFIG.TOAST_DURATION);
     }
 
-    // ===== GLOBAL (HTML onclick/onkeydown) =====
+    // ===== GLOBAL (legacy window hooks + delegated listeners; no inline handlers) =====
     window.selectText = selectTextInternal;
     window.copyPrompt = debounceCopyPrompt(copyPromptInternal, CONFIG.DEBOUNCE_DELAY);
     window.activateCodeBlock = activateCodeBlock;
     window.handleCodeBlockKeydown = handleCodeBlockKeydown;
 
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            var toast = document.getElementById('toast');
-            if (toast) toast.classList.remove('show');
-        }
-    });
+    function bindDelegatedPromptInteractions() {
+        document.addEventListener('click', function(event) {
+            var copyBtn = event.target.closest('button.btn[data-prompt-id]');
+            if (copyBtn && copyBtn.closest('.prompt-footer')) {
+                var promptId = copyBtn.getAttribute('data-prompt-id');
+                if (promptId) {
+                    window.copyPrompt(copyBtn, promptId);
+                }
+                return;
+            }
+            var codeBlock = event.target.closest('.code-block[role="button"]');
+            if (codeBlock) {
+                activateCodeBlock(codeBlock);
+            }
+        });
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                var toast = document.getElementById('toast');
+                if (toast) toast.classList.remove('show');
+                return;
+            }
+            var codeBlock = event.target.closest('.code-block[role="button"]');
+            if (codeBlock) {
+                handleCodeBlockKeydown(event, codeBlock);
+            }
+        });
+    }
 
     // ===== localStorage – "Pažymėjau kaip atlikau" =====
     var PROMPT_DONE_KEY_PREFIX = 'di_prompt_done_';
@@ -797,6 +818,7 @@
         codeBlocks.forEach(function(block) {
             if (!block.hasAttribute('tabindex')) block.setAttribute('tabindex', '0');
         });
+        bindDelegatedPromptInteractions();
         loadPromptDoneState();
         document.querySelectorAll('.prompt-done').forEach(function(cb) {
             cb.addEventListener('change', function() {

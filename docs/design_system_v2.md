@@ -125,33 +125,33 @@ US English, practical, premium SaaS — see [language-guidelines-en-lt.md](langu
 
 ### Visual QA
 
-- [ ] Typography uses `--fs-*` and `--leading-*`
-- [ ] Commerce CTAs ≥44px touch targets
-- [ ] PDF featured card gold inset visible
-- [ ] Preview dialog footer uses `.btn.btn--ghost`
+- [x] Typography uses `--fs-*` and `--leading-*`
+- [x] Commerce CTAs ≥44px touch targets
+- [x] PDF featured card gold inset visible
+- [x] Preview dialog footer uses `.btn.btn--ghost`
 
 ### UX QA
 
-- [ ] Hero → PDF → See inside → preview → close
-- [ ] Bundle unhides after Stripe init
-- [ ] Copy prompt + toast + mark-as-done
+- [x] Hero → PDF → See inside → preview → close (structure + production visual checks)
+- [x] Bundle unhides after Stripe init
+- [x] Copy prompt + toast + mark-as-done (delegated listeners in generator.js)
 
 ### Content QA
 
-- [ ] Buy CTAs: `Buy/Get [product] — $X.XX`
-- [ ] Trust line matches terms refund copy
-- [ ] Stripe Dashboard page counts match SOT
+- [x] Buy CTAs: `Buy/Get [product] — $X.XX`
+- [x] Trust line matches terms refund copy
+- [x] Stripe Dashboard page counts match SOT (API verified 2026-07-29)
 
 ### Accessibility QA
 
-- [ ] pa11y pass on CI URLs
-- [ ] Focus visible on all interactives
-- [ ] `--text-muted` AA on `--surface-2`
+- [x] pa11y pass on CI URLs
+- [x] Focus visible on all interactives
+- [x] `--text-muted` AA on `--surface-2`
 
 ### Documentation QA
 
-- [ ] This file + CHANGELOG v2.0 entry
-- [ ] MUST_TODO DS items checked
+- [x] This file + CHANGELOG DS v2.0 under [1.3.0] (product SemVer stays 1.x)
+- [x] MUST_TODO DS items checked
 
 ---
 

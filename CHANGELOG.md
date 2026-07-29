@@ -6,6 +6,12 @@ Visi reikšmingi pakeitimai projekte dokumentuojami čia. Formatas pagal [Keep a
 
 ## [Unreleased]
 
+## [1.4.1] - 2026-07-29
+
+### Pakeista
+
+- **[Security][UI] CSP enforce + self-hosted fonts + no inline handlers:** [generator.js](generator.js) delegated click/keydown for code blocks + copy buttons; [templates/index-lt.html](templates/index-lt.html) strips `onclick`/`onkeydown`; [vercel.json](vercel.json) `Content-Security-Policy` (enforce; allow `unpkg` for Lucide); build defaults to self-hosted fonts (`BUILD_SELFHOST_FONTS=0` to opt out); [templates/privacy.html](templates/privacy.html) + satellite/success/terms/404 use `/assets/fonts.css`; 404 styles → [assets/satellite.css](assets/satellite.css) `.page-404`. Ops: Stripe Payment Link success URLs → www; verify scripts under `scripts/verify-stripe-promo-gate.js`. Visual baseline PNGs in [docs/qa/screenshots/v2.0-baseline/](docs/qa/screenshots/v2.0-baseline/).
+
 ## [1.4.0] - 2026-07-29
 
 Audit remediation release (www canonical, sitemap/FAQ hygiene, Phase-D-safe proof, docs). Package **1.4.0**. Manual remaining: Stripe Dashboard page counts + purchase QA — [MUST_TODO.md](MUST_TODO.md). Fonts self-host + CSP enforce stay follow-up PRs — [docs/security.md](docs/security.md).

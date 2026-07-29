@@ -60,12 +60,10 @@ const BG_COLOR = '#F7F8FA';
 const INDEXNOW_KEY = '7a4b9e2c8f1d4a3b9c6e5d2a1f8b7c4d';
 
 /**
- * Opt-in self-hosted fonts for LCP / privacy. Off by default because:
- *   1. Inter weight 500 (medium) is not shipped in docs/pdf-source/fonts/ yet.
- *   2. Removing Google Fonts requires en/privacy.html sub-processor disclosure update.
- * Flip with `BUILD_SELFHOST_FONTS=1 npm run build` once fonts and copy are aligned.
+ * Self-hosted fonts (default ON). Inter 500 is synthesized from 400 when missing.
+ * Opt out: `BUILD_SELFHOST_FONTS=0 npm run build` (restores Google Fonts CDN links).
  */
-const SELF_HOST_FONTS = process.env.BUILD_SELFHOST_FONTS === '1';
+const SELF_HOST_FONTS = process.env.BUILD_SELFHOST_FONTS !== '0';
 
 /**
  * Schema.org Person id fragment used by the Organization.founder reference and the
@@ -912,18 +910,12 @@ function write404Html(sot) {
     '    <link rel="apple-touch-icon" href="/apple-touch-icon.png">\n' +
     '    <link rel="manifest" href="/manifest.webmanifest">\n' +
     '    <link rel="stylesheet" href="' + versionedStylesheetHref('/assets/styles.css') + '">\n' +
-    '    <style>\n' +
-    '        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg, #F7F8FA); color: var(--text, #1A202C); padding: 48px 20px; line-height: 1.55; }\n' +
-    '        main { max-width: 36rem; margin: 0 auto; }\n' +
-    '        h1 { font-size: clamp(1.75rem, 4vw, 2.25rem); margin: 0 0 16px; letter-spacing: -0.02em; }\n' +
-    '        ul { padding-left: 1.25rem; }\n' +
-    '        a { color: var(--accent-primary, #103B5A); font-weight: 600; }\n' +
-    '        a:focus-visible { outline: var(--ring-focus, 3px solid #cfa73a); outline-offset: 2px; }\n' +
-    '    </style>\n' +
+    '    <link rel="stylesheet" href="' + versionedStylesheetHref('/assets/satellite.css') + '">\n' +
+    (SELF_HOST_FONTS ? '    <link rel="stylesheet" href="/assets/fonts.css">\n' : '') +
     '    <script defer src="/_vercel/insights/script.js"></script>\n' +
     '    <script defer src="/_vercel/speed-insights/script.js"></script>\n' +
     '</head>\n' +
-    '<body>\n' +
+    '<body class="page-404">\n' +
     '    <main>\n' +
     '        <h1>Page not found.</h1>\n' +
     '        <p>The page you requested does not exist. It may have moved, or the link may be out of date.</p>\n' +

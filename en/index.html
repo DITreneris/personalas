@@ -37,11 +37,9 @@
     <link rel="icon" href="https://www.promptanatomy.help/favicon.ico" sizes="any">
     <link rel="icon" type="image/svg+xml" href="https://www.promptanatomy.help/favicon.svg">
     <link rel="apple-touch-icon" href="https://www.promptanatomy.help/apple-touch-icon.png">
-    <link rel="stylesheet" href="../assets/styles.css?v=1.4.0">
-    <link rel="stylesheet" href="../assets/landing.css?v=1.4.0">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/styles.css?v=1.4.1">
+    <link rel="stylesheet" href="../assets/landing.css?v=1.4.1">
+    <link rel="stylesheet" href="../assets/fonts.css">
     <script defer src="/_vercel/insights/script.js"></script>
     <script defer src="/_vercel/speed-insights/script.js"></script>
 </head>
@@ -354,9 +352,7 @@
                      id="block1" 
                      role="button"
                      tabindex="0"
-                     aria-label="Select and copy prompt 1"
-                     onclick="activateCodeBlock(this)"
-                     onkeydown="handleCodeBlockKeydown(event, this)">
+                     aria-label="Select and copy prompt 1">
                     <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Copy</span>
                     <pre class="code-text" id="prompt1">You are a recruitment analyst. Your goal is to identify where recruitment is stuck and what to change, using the numbers.
 
@@ -391,8 +387,7 @@ Explain simply:
                 </div>
             </div>
             <div class="prompt-footer">
-                <button type="button" class="btn" 
-                        onclick="copyPrompt(this, 'prompt1')"
+                <button type="button" class="btn"
                         aria-label="Copy prompt 1 to clipboard"
                         data-prompt-id="prompt1">
                     <span aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i></span>
@@ -421,9 +416,7 @@ Explain simply:
                      id="block2" 
                      role="button"
                      tabindex="0"
-                     aria-label="Select and copy prompt 2"
-                     onclick="activateCodeBlock(this)"
-                     onkeydown="handleCodeBlockKeydown(event, this)">
+                     aria-label="Select and copy prompt 2">
                     <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Copy</span>
                     <pre class="code-text" id="prompt2">You are a candidate profile specialist. Your goal is to clearly describe the ideal candidate for the role (traits, what can be taught, motivation).
 
@@ -455,8 +448,7 @@ Answer simply:
                 </div>
             </div>
             <div class="prompt-footer">
-                <button type="button" class="btn" 
-                        onclick="copyPrompt(this, 'prompt2')"
+                <button type="button" class="btn"
                         aria-label="Copy prompt 2 to clipboard"
                         data-prompt-id="prompt2">
                     <span aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i></span>
@@ -485,9 +477,7 @@ Answer simply:
                      id="block3" 
                      role="button"
                      tabindex="0"
-                     aria-label="Select and copy prompt 3"
-                     onclick="activateCodeBlock(this)"
-                     onkeydown="handleCodeBlockKeydown(event, this)">
+                     aria-label="Select and copy prompt 3">
                     <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Copy</span>
                     <pre class="code-text" id="prompt3">You are a job ad editor. Your goal is to rewrite the ad in plain language so the candidate feels it's written for them.
 
@@ -517,8 +507,7 @@ Do:
                 </div>
             </div>
             <div class="prompt-footer">
-                <button type="button" class="btn" 
-                        onclick="copyPrompt(this, 'prompt3')"
+                <button type="button" class="btn"
                         aria-label="Copy prompt 3 to clipboard"
                         data-prompt-id="prompt3">
                     <span aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i></span>
@@ -547,9 +536,7 @@ Do:
                      id="block4" 
                      role="button"
                      tabindex="0"
-                     aria-label="Select and copy prompt 4"
-                     onclick="activateCodeBlock(this)"
-                     onkeydown="handleCodeBlockKeydown(event, this)">
+                     aria-label="Select and copy prompt 4">
                     <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Copy</span>
                     <pre class="code-text" id="prompt4">You are a candidate sourcing consultant. Your goal is to suggest concrete, simple ways to find more candidates (LinkedIn, network, direct outreach).
 
@@ -580,8 +567,7 @@ Suggest:
                 </div>
             </div>
             <div class="prompt-footer">
-                <button type="button" class="btn" 
-                        onclick="copyPrompt(this, 'prompt4')"
+                <button type="button" class="btn"
                         aria-label="Copy prompt 4 to clipboard"
                         data-prompt-id="prompt4">
                     <span aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i></span>
@@ -610,9 +596,7 @@ Suggest:
                      id="block5" 
                      role="button"
                      tabindex="0"
-                     aria-label="Select and copy prompt 5"
-                     onclick="activateCodeBlock(this)"
-                     onkeydown="handleCodeBlockKeydown(event, this)">
+                     aria-label="Select and copy prompt 5">
                     <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Copy</span>
                     <pre class="code-text" id="prompt5">You are an interview specialist. Your goal is to create a simple interview plan: questions that help understand the person, and what to watch for.
 
@@ -643,8 +627,7 @@ Give:
                 </div>
             </div>
             <div class="prompt-footer">
-                <button type="button" class="btn" 
-                        onclick="copyPrompt(this, 'prompt5')"
+                <button type="button" class="btn"
                         aria-label="Copy prompt 5 to clipboard"
                         data-prompt-id="prompt5">
                     <span aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i></span>
@@ -673,9 +656,7 @@ Give:
                      id="block6" 
                      role="button"
                      tabindex="0"
-                     aria-label="Select and copy prompt 6"
-                     onclick="activateCodeBlock(this)"
-                     onkeydown="handleCodeBlockKeydown(event, this)">
+                     aria-label="Select and copy prompt 6">
                     <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Copy</span>
                     <pre class="code-text" id="prompt6">You are an offer and decline analyst. Your goal is to uncover possible reasons for decline and suggest how to talk to the candidate and what to improve.
 
@@ -708,8 +689,7 @@ Give:
                 </div>
             </div>
             <div class="prompt-footer">
-                <button type="button" class="btn" 
-                        onclick="copyPrompt(this, 'prompt6')"
+                <button type="button" class="btn"
                         aria-label="Copy prompt 6 to clipboard"
                         data-prompt-id="prompt6">
                     <span aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i></span>
@@ -738,9 +718,7 @@ Give:
                      id="block7" 
                      role="button"
                      tabindex="0"
-                     aria-label="Select and copy prompt 7"
-                     onclick="activateCodeBlock(this)"
-                     onkeydown="handleCodeBlockKeydown(event, this)">
+                     aria-label="Select and copy prompt 7">
                     <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Copy</span>
                     <pre class="code-text" id="prompt7">You are a job offer writer. Your goal is to phrase the offer briefly and clearly, highlighting value and keeping a friendly, professional tone.
 
@@ -772,8 +750,7 @@ Do:
                 </div>
             </div>
             <div class="prompt-footer">
-                <button type="button" class="btn" 
-                        onclick="copyPrompt(this, 'prompt7')"
+                <button type="button" class="btn"
                         aria-label="Copy prompt 7 to clipboard"
                         data-prompt-id="prompt7">
                     <span aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i></span>
@@ -802,9 +779,7 @@ Do:
                      id="block8" 
                      role="button"
                      tabindex="0"
-                     aria-label="Select and copy prompt 8"
-                     onclick="activateCodeBlock(this)"
-                     onkeydown="handleCodeBlockKeydown(event, this)">
+                     aria-label="Select and copy prompt 8">
                     <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Copy</span>
                     <pre class="code-text" id="prompt8">You are a new hire onboarding specialist. Your goal is to create a simple 3‑month plan: what to understand in week one, what to expect after 1 and 3 months, how the manager can help.
 
@@ -836,8 +811,7 @@ Give:
                 </div>
             </div>
             <div class="prompt-footer">
-                <button type="button" class="btn" 
-                        onclick="copyPrompt(this, 'prompt8')"
+                <button type="button" class="btn"
                         aria-label="Copy prompt 8 to clipboard"
                         data-prompt-id="prompt8">
                     <span aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i></span>
@@ -866,9 +840,7 @@ Give:
                      id="block9"
                      role="button"
                      tabindex="0"
-                     aria-label="Select and copy prompt 9"
-                     onclick="activateCodeBlock(this)"
-                     onkeydown="handleCodeBlockKeydown(event, this)">
+                     aria-label="Select and copy prompt 9">
                     <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Copy</span>
                     <pre class="code-text" id="prompt9">You are an employee retention analyst. Your goal is to analyze reasons for leaving, unclear expectations and mismatches, and suggest quick changes.
 
@@ -899,7 +871,6 @@ Tell me:
             </div>
             <div class="prompt-footer">
                 <button type="button" class="btn"
-                        onclick="copyPrompt(this, 'prompt9')"
                         aria-label="Copy prompt 9 to clipboard"
                         data-prompt-id="prompt9">
                     <span aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i></span>
@@ -928,9 +899,7 @@ Tell me:
                      id="block10"
                      role="button"
                      tabindex="0"
-                     aria-label="Select and copy prompt 10"
-                     onclick="activateCodeBlock(this)"
-                     onkeydown="handleCodeBlockKeydown(event, this)">
+                     aria-label="Select and copy prompt 10">
                     <span class="code-block-toolbar" aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i> Copy</span>
                     <pre class="code-text" id="prompt10">You are an HR recruitment strategist. Your goal is to put the full recruitment plan in one place: from the problem and weekly actions to the ad, interviews, acceptance likelihood, and first 3 months of support. Write simply, with concrete actions only.
 
@@ -967,7 +936,6 @@ Give:
             </div>
             <div class="prompt-footer">
                 <button type="button" class="btn"
-                        onclick="copyPrompt(this, 'prompt10')"
                         aria-label="Copy prompt 10 to clipboard"
                         data-prompt-id="prompt10">
                     <span aria-hidden="true"><i data-lucide="copy" class="icon icon--sm"></i></span>
@@ -1019,6 +987,6 @@ Give:
     </div>
 
     <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
-    <script src="../generator.js?v=1.4.0"></script>
+    <script src="../generator.js?v=1.4.1"></script>
 </body>
 </html>

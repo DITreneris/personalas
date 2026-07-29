@@ -183,3 +183,37 @@ body {
         animation-duration: 0.01ms;
     }
 }
+
+/* 404 — keep styles out of inline <style> for CSP style-src */
+body.page-404 {
+    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg, #F7F8FA);
+    color: var(--text, #1A202C);
+    padding: 48px 20px;
+    line-height: 1.55;
+}
+
+body.page-404 main {
+    max-width: 36rem;
+    margin: 0 auto;
+}
+
+body.page-404 h1 {
+    font-size: clamp(1.75rem, 4vw, 2.25rem);
+    margin: 0 0 16px;
+    letter-spacing: -0.02em;
+}
+
+body.page-404 ul {
+    padding-left: 1.25rem;
+}
+
+body.page-404 a {
+    color: var(--accent-primary, #103B5A);
+    font-weight: 600;
+}
+
+body.page-404 a:focus-visible {
+    outline: var(--ring-focus, 3px solid #cfa73a);
+    outline-offset: 2px;
+}
