@@ -95,7 +95,7 @@ Env šablonas: [.env.example](../.env.example). Pilna lentelė: [DEPLOYMENT.md](
 - **Viešai:** tik **Prompt Anatomy** — `/en/`, PDF, terms, privacy, success, el. laiškai.
 - **Mother brand / entity:** community, footer, `Organization.url`, `llms.txt` Training hub → **`promptanatomy.app`** (ne tik `.help`).
 - **Draudžiama viešame UI:** „Personalas“, „Series No. 3“, „Spin-off“, lietuviškos raidės išsiunčiamuose HTML.
-- **Vidinis repo pavadinimas:** Personalas (`product.name` SOT) — ne rodyti lankytojui.
+- **Vidinis repo pavadinimas:** Personalas (`product.repoName` SOT / `package.json` name) — ne rodyti lankytojui; viešas `product.name` = Prompt Anatomy.
 - **Privacy URL:** `/privacy.html` → `/en/privacy.html` (ne `privatumas`).
 
 Detaliau: [language-guidelines-en-lt.md](language-guidelines-en-lt.md).

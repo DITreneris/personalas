@@ -80,7 +80,7 @@ Viena nuosekli taisyklė visiems agentams ir PR peržiūrai:
 
 | **Draudžiama viešame UI** | „Personalas“, „Series No. 3“, „Spin-off“, „Promptų anatomija“, lietuviškos raidės (ąčę…) |
 
-| **Vidinis** | `product.name: "Personalas"` repo/SOT — **ne** rodyti lankytojui |
+| **Vidinis** | `product.repoName: "Personalas"` / npm `name` — **ne** rodyti lankytojui; viešas `product.name` = Prompt Anatomy |
 
 | **PDF viršeliai** | Redaguoti `docs/pdf-source/*.html` → `npm run pdf:export` → `npm run pdf:covers` |
 

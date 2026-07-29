@@ -6,9 +6,16 @@ Visi reikšmingi pakeitimai projekte dokumentuojami čia. Formatas pagal [Keep a
 
 ## [Unreleased]
 
+## [1.5.1] - 2026-07-29
+
 ### Pataisyta
 
 - **[QA] CI sitemap www host:** `.github/workflows/ci.yml` + deploy test job use `SITE_ORIGIN=https://www.promptanatomy.help` (no GitHub Pages origin during `npm test`) so `sitemap.xml: www host` passes. Pages deploy build still uses `ditreneris.github.io` + `BASE_PATH`.
+- **[UI][a11y] success Download contrast:** [assets/satellite.css](assets/satellite.css) — `.satellite-card a:not(.btn)` so primary `.btn` keeps `--cta-text` on navy (fixes pa11y WCAG AA 1:1 on `#download`).
+- **[Security] CSP Phase 3 (script):** inline poll script → [assets/success.js](assets/success.js); `script-src` be `'unsafe-inline'` ([vercel.json](vercel.json)). `style-src` unsafe-inline lieka.
+- **[Content] Public SOT brand:** `product.name` → Prompt Anatomy; `repoName: Personalas`; removed `Series No. 3`.
+- **[Security] Webhook 500:** no `detail` message body in [api/stripe-webhook.js](api/stripe-webhook.js).
+- **[Chore] npm audit:** production deps — 0 vulnerabilities after `npm audit fix` (dev tooling advisories may remain).
 
 ## [1.5.0] - 2026-07-29
 

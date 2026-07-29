@@ -51,9 +51,19 @@ body {
     padding-left: 1.25rem;
 }
 
-.satellite-card a {
+/* Do not restyle .btn — navy-on-navy fails WCAG AA (pa11y on #download). */
+.satellite-card a:not(.btn) {
     color: var(--accent-primary);
     font-weight: 600;
+}
+
+.satellite-card a.btn {
+    color: var(--cta-text, #ffffff);
+}
+
+.satellite-card a.btn.btn-secondary,
+.satellite-card a.btn.btn--ghost {
+    color: var(--accent-primary);
 }
 
 .satellite-card a:focus-visible {

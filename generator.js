@@ -1,5 +1,5 @@
 /**
- * Personalas – shared runtime (EN public product)
+ * Prompt Anatomy hire spoke – shared runtime (EN public product)
  * Locale from <html lang> (build outputs en-US). Authoring template uses lang="lt"; shipped pages use en-US only.
  */
 (function() {

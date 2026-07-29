@@ -50,7 +50,7 @@ See [docs/pdf-source/README.md](docs/pdf-source/README.md).
 
 ## Internal (not public brand)
 
-- Repo / `config/sot.json` `product.name` may stay `Personalas` for internal labels
+- Repo npm name / `config/sot.json` `product.repoName` may stay `Personalas` for internal labels; public `product.name` is Prompt Anatomy
 - **Never** put “Personalas”, “Series No. 3”, or Lithuanian UI text on shipped HTML — see [docs/language-guidelines-en-lt.md](docs/language-guidelines-en-lt.md)
 
 ## Documentation

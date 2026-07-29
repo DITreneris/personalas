@@ -1018,8 +1018,12 @@ function run() {
   const successPath = path.join(ROOT, 'success.html');
   const success = readFile(successPath);
   tally(assert(success !== null, 'success.html exists'));
-  tally(assert(success && success.includes('session_id'), 'success.html reads session_id'));
-  tally(assert(success && success.includes('/api/download-link'), 'success.html polls /api/download-link'));
+  const successJs = readFile(path.join(ROOT, 'assets', 'success.js'));
+  tally(assert(successJs !== null, 'assets/success.js exists (CSP Phase 3)'));
+  tally(assert(success && /assets\/success\.js/.test(success) && !/<script(?![^>]*src=)/.test(success),
+    'success.html: external success.js only (no inline script)'));
+  tally(assert(successJs && successJs.includes('session_id'), 'success.js reads session_id'));
+  tally(assert(successJs && successJs.includes('/api/download-link'), 'success.js polls /api/download-link'));
   tally(assert(success && success.includes('lang="en-US"'), 'success.html lang="en-US"'));
   tally(assert(success && success.includes('https://www.promptanatomy.help/success.html'), 'success.html canonical uses www'));
   tally(assert(success && !success.includes('href="https://promptanatomy.help/'), 'success.html: no apex canonical/OG'));
@@ -1037,6 +1041,10 @@ function run() {
 
   const satelliteCss = readFile(path.join(ROOT, 'assets', 'satellite.css'));
   tally(assert(satelliteCss && satelliteCss.includes('.satellite-card'), 'assets/satellite.css exists (DS v2.0 PR-4)'));
+  tally(assert(satelliteCss && /a:not\(\.btn\)/.test(satelliteCss),
+    'satellite.css: link color excludes .btn (pa11y contrast)'));
+  tally(assert(satelliteCss && /a\.btn\s*\{[^}]*--cta-text/.test(satelliteCss),
+    'satellite.css: .btn keeps on-accent text color'));
   tally(
     assert(
       success && success.includes('assets/satellite.css') && !/\.btn\s*\{[^}]*background:\s*var\(--accent\)/.test(success),
@@ -1635,6 +1643,10 @@ function assertGeoSurface(ctx) {
       'vercel.json: CSP allows Stripe checkout frame');
     tallyLocal(vercel.includes('https://unpkg.com'),
       'vercel.json: CSP allows Lucide CDN (unpkg)');
+    tallyLocal(
+      /script-src[^;]*'self'/.test(vercel) && !/script-src[^;]*'unsafe-inline'/.test(vercel),
+      'vercel.json: CSP script-src without unsafe-inline (Phase 3)'
+    );
     tallyLocal(vercel.includes('Origin-Agent-Cluster') && vercel.includes('"?1"'),
       'vercel.json: Origin-Agent-Cluster: ?1');
     tallyLocal(vercel.includes('llms\\\\.txt'),
@@ -1665,6 +1677,15 @@ function assertGeoSurface(ctx) {
       'sot.json: product.operatorTwitter');
     tallyLocal(ctx.sot.product && ctx.sot.product.siteUrl === 'https://www.promptanatomy.help',
       'sot.json: product.siteUrl is www');
+    tallyLocal(ctx.sot.product && ctx.sot.product.name === 'Prompt Anatomy',
+      'sot.json: product.name is Prompt Anatomy (public)');
+    tallyLocal(ctx.sot.product && !/\bPersonalas\b/.test(JSON.stringify({
+      name: ctx.sot.product.name,
+      series: ctx.sot.product.series
+    })),
+      'sot.json: no Personalas in public product.name/series');
+    tallyLocal(ctx.sot.product && !/Series No\. 3/i.test(JSON.stringify(ctx.sot.product)),
+      'sot.json: no Series No. 3 in product fields');
     tallyLocal(ctx.sot.brand && ctx.sot.brand.logoUrl === 'https://www.promptanatomy.help/favicon.svg',
       'sot.json: brand.logoUrl is www');
     tallyLocal(ctx.sot.brand && ctx.sot.brand.productSiteUrl === 'https://www.promptanatomy.help/en/',

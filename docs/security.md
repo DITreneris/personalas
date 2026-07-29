@@ -17,13 +17,13 @@
 | `Cross-Origin-Opener-Policy` | `same-origin` | proces izoliacija (Spectre) |
 | `Cross-Origin-Resource-Policy` | `same-origin` | resource isolation (default) |
 | `Origin-Agent-Cluster` | `?1` | process isolation per origin (2026 hardening) |
-| `Content-Security-Policy` | (žr. žemiau) | **Enforce** (Phase 2) — still allows `'unsafe-inline'` until Phase 3 |
+| `Content-Security-Policy` | (žr. žemiau) | **Enforce** — `script-src` be `'unsafe-inline'`; `style-src` dar leidžia inline |
 
 ## CSP (enforce)
 
 ```
 default-src 'self';
-script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com https://*.vercel-insights.com https://plausible.io https://unpkg.com;
+script-src 'self' https://va.vercel-scripts.com https://*.vercel-insights.com https://plausible.io https://unpkg.com;
 style-src 'self' 'unsafe-inline';
 font-src 'self' data:;
 img-src 'self' data: https:;
@@ -41,12 +41,12 @@ upgrade-insecure-requests
 2. **Phase 1:** inline `onclick`/`onkeydown` removed from templates; delegated listeners in [generator.js](../generator.js).
 3. **Phase 2:** Report-Only → **Enforce** (`Content-Security-Policy`). Lucide via `https://unpkg.com` allowlisted. Google Fonts hosts dropped (self-hosted fonts).
 4. **Fonts:** self-host default ON (`BUILD_SELFHOST_FONTS=0` to opt out); privacy discloses `/assets/fonts/`.
+5. **Phase 3 (script):** [success.html](../success.html) → [assets/success.js](../assets/success.js); `'unsafe-inline'` removed from `script-src`.
 
-### Remaining (Phase 3)
+### Remaining
 
-1. Extract inline `<script>` from [success.html](../success.html) → external JS.
-2. Remove `'unsafe-inline'` from `script-src` / `style-src` (add nonces if needed).
-3. Prefer self-hosting Lucide instead of unpkg.
+1. Remove `'unsafe-inline'` from `style-src` (nonces / move critical CSS) if needed.
+2. Prefer self-hosting Lucide instead of unpkg.
 
 ### Stebėjimas
 

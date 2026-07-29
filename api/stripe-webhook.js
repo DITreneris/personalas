@@ -61,6 +61,6 @@ module.exports = async function stripeWebhook(req, res) {
     const message = error && error.message ? error.message : String(error);
     console.error('[stripe-webhook] fulfillment failed for', event.data.object.id, '-', message);
     if (error && error.stack) console.error(error.stack);
-    sendJson(res, 500, { error: 'Fulfillment failed', detail: message });
+    sendJson(res, 500, { error: 'Fulfillment failed' });
   }
 };
