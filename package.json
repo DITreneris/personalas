@@ -1,6 +1,6 @@
 {
   "name": "personalas",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "private": true,
   "description": "Personalas – US-localized HR hiring prompts, static HTML site",
   "repository": {
@@ -16,7 +16,7 @@
     "test:structure": "node tests/structure.test.js",
     "lint:html": "npx html-validator-cli --file index.html --validator=https://html5.validator.nu/",
     "lint:html:privacy": "npx html-validator-cli --file privacy.html --validator=https://html5.validator.nu/",
-    "lint:html:locales": "npx html-validator-cli --file en/index.html --validator=https://html5.validator.nu/ && npx html-validator-cli --file en/privacy.html --validator=https://html5.validator.nu/",
+    "lint:html:locales": "npx html-validator-cli --file en/index.html --validator=https://html5.validator.nu/ && npx html-validator-cli --file en/privacy.html --validator=https://html5.validator.nu/ && npx html-validator-cli --file en/hr-ai-prompts/job-description/index.html --validator=https://html5.validator.nu/ && npx html-validator-cli --file en/hr-ai-prompts/interview-scorecard/index.html --validator=https://html5.validator.nu/ && npx html-validator-cli --file en/hr-ai-prompts/master-hiring-prompt/index.html --validator=https://html5.validator.nu/",
     "lint:html:static": "npx html-validator-cli --file success.html --validator=https://html5.validator.nu/ && npx html-validator-cli --file terms.html --validator=https://html5.validator.nu/",
     "lint:js": "eslint . --ext .js",
     "pdf:validate": "node scripts/build-pdf-html.js",

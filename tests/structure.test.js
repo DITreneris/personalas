@@ -144,6 +144,16 @@ function run() {
   tally(assert(privacyGateway && privacyGateway.includes('lang="en-US"'), 'root privacy.html lang="en-US"'));
   tally(assert(privacyGateway && privacyGateway.includes('en/privacy.html') && !privacyGateway.includes('<a href="lt/'), 'privacy gateway: only EN link in body'));
   tally(assert(privacyGateway && !privacyGateway.includes('hreflang="lt"'), 'root privacy.html has no hreflang="lt"'));
+  tally(
+    assert(
+      privacyGateway &&
+        /noindex/.test(privacyGateway) &&
+        !privacyGateway.includes(
+          '<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">'
+        ),
+      'privacy.html gateway: noindex, follow (308 → /en/privacy.html)'
+    )
+  );
   tally(assert(!fs.existsSync(path.join(ROOT, 'privatumas.html')), 'legacy privatumas.html removed after build'));
 
   // --- Built EN locale pages (npm run build) ---
@@ -157,6 +167,36 @@ function run() {
   tally(assert(landingCss !== null && landingCss.length > 0, 'assets/landing.css exists'));
   tally(assert(readFile(enPrivacyPath) !== null, 'en/privacy.html exists'));
   tally(assert(!fs.existsSync(path.join(ROOT, 'en', 'privatumas.html')), 'no en/privatumas.html (renamed to privacy.html)'));
+
+  if (enIndex) {
+    tally(assert(enIndex.includes('/en/hr-ai-prompts/job-description/'), 'en/index.html links job-description spoke'));
+    tally(assert(enIndex.includes('/en/hr-ai-prompts/interview-scorecard/'), 'en/index.html links interview-scorecard spoke'));
+    tally(assert(enIndex.includes('/en/hr-ai-prompts/master-hiring-prompt/'), 'en/index.html links master-hiring-prompt spoke'));
+    tally(assert(enIndex.includes('free-tier-safety') || enIndex.includes('Strip candidate SSN'), 'en/index.html free-tier PII safety note'));
+  }
+
+  const spokePaths = [
+    ['job-description', 'prompt3'],
+    ['interview-scorecard', 'prompt5'],
+    ['master-hiring-prompt', 'prompt10'],
+  ];
+  spokePaths.forEach(function (pair) {
+    const slug = pair[0];
+    const promptId = pair[1];
+    const spokeHtml = readFile(path.join(ROOT, 'en', 'hr-ai-prompts', slug, 'index.html'));
+    tally(assert(spokeHtml !== null && spokeHtml.length > 0, 'spoke ' + slug + ' exists'));
+    if (spokeHtml) {
+      tally(assert(spokeHtml.includes('lang="en-US"'), 'spoke ' + slug + ' lang en-US'));
+      tally(assert(spokeHtml.includes('/en/hr-ai-prompts/' + slug + '/'), 'spoke ' + slug + ' canonical path'));
+      tally(assert(spokeHtml.includes('id="' + promptId + '"'), 'spoke ' + slug + ' has ' + promptId));
+      tally(assert(spokeHtml.includes('/en/#pdf-guides'), 'spoke ' + slug + ' PDF CTA'));
+      tally(assert(spokeHtml.includes('answer-lead'), 'spoke ' + slug + ' answer lead'));
+      tally(assert(spokeHtml.includes('prompt-safety'), 'spoke ' + slug + ' safety note'));
+      tally(assert(spokeHtml.includes('"@type":"FAQPage"'), 'spoke ' + slug + ' FAQPage JSON-LD'));
+      tally(assert(!/[ąčęėįšųūžĄČĘĖĮŠŲŪŽ]/.test(spokeHtml), 'spoke ' + slug + ': no Lithuanian diacritics'));
+      tally(assertPublicEnSurface('spoke ' + slug, spokeHtml));
+    }
+  });
 
   // No lt/ output
   tally(assert(!fs.existsSync(path.join(ROOT, 'lt', 'index.html')), 'no lt/index.html (EN-only output)'));
@@ -222,6 +262,28 @@ function run() {
           enIndex.includes('promptanatomy.app</a>') &&
           enIndex.includes('info@promptanatomy.app</a>'),
         'en/index.html footer: app link and email without Prompt Anatomy prefix'
+      )
+    );
+    tally(assert(enIndex.includes('class="footer-entity"'), 'en/index.html footer: entity line class'));
+    tally(
+      assert(
+        enIndex.includes('Part of Prompt Anatomy · Training &amp; checkout →') ||
+          enIndex.includes('Part of Prompt Anatomy · Training & checkout →'),
+        'en/index.html footer: entity line canonical EN copy'
+      )
+    );
+    tally(
+      assert(
+        enIndex.includes('utm_source=help') &&
+          enIndex.includes('utm_medium=entity_footer') &&
+          enIndex.includes('utm_campaign=ecosystem'),
+        'en/index.html footer: entity line UTM help/entity_footer/ecosystem'
+      )
+    );
+    tally(
+      assert(
+        enIndex.includes('data-analytics="entity_footer_click"'),
+        'en/index.html footer: entity_footer_click analytics hook'
       )
     );
     tally(assert(
@@ -992,6 +1054,9 @@ function run() {
   tally(assert(sitemap && sitemap.includes('/en/'), 'sitemap.xml: includes /en/ entry'));
   tally(assert(sitemap && sitemap.includes('/en/privacy.html'), 'sitemap.xml: includes /en/privacy.html'));
   tally(assert(sitemap && sitemap.includes('/terms.html'), 'sitemap.xml: includes /terms.html'));
+  tally(assert(sitemap && sitemap.includes('/en/hr-ai-prompts/job-description/'), 'sitemap.xml: job-description spoke'));
+  tally(assert(sitemap && sitemap.includes('/en/hr-ai-prompts/interview-scorecard/'), 'sitemap.xml: interview-scorecard spoke'));
+  tally(assert(sitemap && sitemap.includes('/en/hr-ai-prompts/master-hiring-prompt/'), 'sitemap.xml: master-hiring-prompt spoke'));
   tally(assert(sitemap && !/<loc>https:\/\/www\.promptanatomy\.help\/<\/loc>/.test(sitemap),
     'sitemap.xml: excludes gateway / (redirect)'));
   tally(assert(sitemap && !/<loc>https:\/\/www\.promptanatomy\.help\/privacy\.html<\/loc>/.test(sitemap),
@@ -1013,6 +1078,26 @@ function run() {
   tally(assert(fulfillment && fulfillment.includes('STRIPE_PRICE_BEGINNER_PDF') && fulfillment.includes('STRIPE_PRICE_ADVANCED_PDF'), 'fulfillment.js references both Stripe price env vars'));
   tally(assert(fulfillment && fulfillment.includes('STRIPE_PRICE_BUNDLE_PDF'), 'fulfillment.js references bundle Stripe price env'));
   tally(assert(fulfillment && fulfillment.includes('REDIS_KEY_PREFIX') && fulfillment.includes('function redisKey'), 'fulfillment.js supports REDIS_KEY_PREFIX'));
+  tally(assert(fulfillment && fulfillment.includes("VERCEL_ENV === 'production'") && fulfillment.includes('SITE_URL is required in production'),
+    'fulfillment.js: SITE_URL required in production'));
+  tally(assert(fulfillment && /getProductFromSession[\s\S]*line_items[\s\S]*metadata\.product/.test(fulfillment),
+    'fulfillment.js: product resolve prefers line_items price over metadata'));
+  const rateLimitPath = path.join(apiDir, '_lib', 'rate-limit.js');
+  tally(assert(fs.existsSync(rateLimitPath), 'api/_lib/rate-limit.js exists'));
+  const rateLimit = readFile(rateLimitPath);
+  tally(assert(rateLimit && rateLimit.includes('checkRateLimit') && rateLimit.includes('clientIp'),
+    'rate-limit.js exports checkRateLimit + clientIp'));
+  const downloadLinkSrc = readFile(path.join(apiDir, 'download-link.js'));
+  tally(assert(downloadLinkSrc && downloadLinkSrc.includes('checkRateLimit') && downloadLinkSrc.includes('429'),
+    'download-link.js: Upstash rate limit + 429'));
+  const downloadSrc = readFile(path.join(apiDir, 'download.js'));
+  tally(assert(downloadSrc && downloadSrc.includes('MAX_TOKEN_LENGTH') && downloadSrc.includes('2048'),
+    'download.js: token length cap 2048'));
+  tally(assert(downloadSrc && downloadSrc.includes('checkRateLimit') && downloadSrc.includes('429'),
+    'download.js: Upstash rate limit + 429'));
+  const webhookSrc = readFile(path.join(apiDir, 'stripe-webhook.js'));
+  tally(assert(webhookSrc && webhookSrc.includes('MAX_WEBHOOK_BODY_BYTES') && webhookSrc.includes('1024 * 1024'),
+    'stripe-webhook.js: 1 MiB body cap'));
 
   // --- Success page ---
   const successPath = path.join(ROOT, 'success.html');
@@ -1038,6 +1123,10 @@ function run() {
   tally(assert(terms && terms.includes('/en/privacy.html'), 'terms.html links to privacy policy'));
   tally(assert(terms && terms.includes('https://www.promptanatomy.help/terms.html'), 'terms.html canonical uses www'));
   tally(assert(terms && !terms.includes('href="https://promptanatomy.help/'), 'terms.html: no apex canonical/OG'));
+  tally(assert(
+    terms && /"@type"\s*:\s*"WebSite"[^}]*"url"\s*:\s*"https:\/\/www\.promptanatomy\.help\/en\/"/.test(terms),
+    'terms.html: WebSite.url is /en/ product home'
+  ));
 
   const satelliteCss = readFile(path.join(ROOT, 'assets', 'satellite.css'));
   tally(assert(satelliteCss && satelliteCss.includes('.satellite-card'), 'assets/satellite.css exists (DS v2.0 PR-4)'));
@@ -1168,6 +1257,8 @@ function run() {
   if (enPrivacy) {
     tally(assert(enPrivacy.includes(addrStreet), 'en/privacy.html includes business street'));
     tally(assert(enPrivacy.includes(addrLocality), 'en/privacy.html includes business locality'));
+    tally(assert(enPrivacy.includes('unnecessary candidate PII') || enPrivacy.includes('AI prompts you copy'),
+      'en/privacy.html: public-model PII guidance'));
     tally(assert(!enPrivacy.includes('{{SOT_BUSINESS_ADDRESS}}'),
       'en/privacy.html: business address token fully substituted'));
   }
@@ -1483,6 +1574,10 @@ function assertGeoSurface(ctx) {
     tallyLocal(/"@type":"Organization"[^}]*"url":"https:\/\/www\.promptanatomy\.app\/?"/.test(ctx.enIndex) ||
       ctx.enIndex.includes('"url":"https://www.promptanatomy.app"'),
       'en/index.html: Organization.url is mother brand .app');
+    tallyLocal(
+      ctx.enIndex.includes('"url":"https://www.promptanatomy.help/en/"'),
+      'en/index.html: WebSite.url is /en/ product home'
+    );
     tallyLocal(ctx.enIndex.includes('https://www.promptanatomy.app'),
       'en/index.html: Organization sameAs/url includes promptanatomy.app');
     tallyLocal(ctx.enIndex.includes('https://promptanatomy.blog'),
@@ -1519,12 +1614,19 @@ function assertGeoSurface(ctx) {
 
   // --- root gateway: meta robots + enriched Org ---
   if (ctx.rootIndex) {
-    tallyLocal(ctx.rootIndex.includes(ROBOTS_META_FULL),
-      'index.html gateway: meta robots');
+    tallyLocal(/noindex/.test(ctx.rootIndex) && /follow/.test(ctx.rootIndex),
+      'index.html gateway: noindex, follow (308 → /en/)');
+    tallyLocal(!ctx.rootIndex.includes(ROBOTS_META_FULL),
+      'index.html gateway: not indexable robots meta');
     tallyLocal(ctx.rootIndex.includes('"@type":"Person"'),
       'index.html gateway: Person node');
     tallyLocal(ctx.rootIndex.includes('<link rel="manifest"'),
       'index.html gateway: manifest link');
+    tallyLocal(
+      /"@type":"WebSite"[^}]*"url":"https:\/\/www\.promptanatomy\.help\/en\/"/.test(ctx.rootIndex) ||
+        /"url":"https:\/\/www\.promptanatomy\.help\/en\/"/.test(ctx.rootIndex),
+      'index.html gateway: WebSite.url is /en/'
+    );
   }
 
   // --- terms.html: meta robots + BreadcrumbList + dateModified + OG enrichments ---
@@ -1556,6 +1658,7 @@ function assertGeoSurface(ctx) {
   tallyLocal(fourOhFour !== null, '404.html exists at site root');
   if (fourOhFour) {
     tallyLocal(/noindex/.test(fourOhFour), '404.html: noindex meta');
+    tallyLocal(!/rel="canonical"/.test(fourOhFour), '404.html: no canonical to home');
     tallyLocal(fourOhFour.includes('lang="en-US"'), '404.html: lang en-US');
     tallyLocal(fourOhFour.includes('href="/en/"'), '404.html: links to /en/');
     tallyLocal(assertPublicEnSurface('404.html', fourOhFour), '404.html: public EN surface invariants');
@@ -1583,6 +1686,12 @@ function assertGeoSurface(ctx) {
     tallyLocal(llms.includes('> '), 'llms.txt: blockquote summary present');
     tallyLocal(/## Training hub/.test(llms) && llms.includes('promptanatomy.app'),
       'llms.txt: Training hub section points to promptanatomy.app');
+    tallyLocal(llms.includes('/en/hr-ai-prompts/job-description/'),
+      'llms.txt: job-description spoke link');
+    tallyLocal(llms.includes('/en/hr-ai-prompts/interview-scorecard/'),
+      'llms.txt: interview-scorecard spoke link');
+    tallyLocal(llms.includes('/en/hr-ai-prompts/master-hiring-prompt/'),
+      'llms.txt: master-hiring-prompt spoke link');
     tallyLocal(/## Optional/.test(llms) && llms.includes('Privacy'),
       'llms.txt: Optional section includes Privacy');
     tallyLocal(llms.includes('$5.99') && llms.includes('$11.99') && llms.includes('$15.99'),
@@ -1635,6 +1744,10 @@ function assertGeoSurface(ctx) {
   // --- vercel.json: CSP + Origin-Agent-Cluster + new content-type rules ---
   const vercel = readFile(path.join(ROOT, 'vercel.json'));
   if (vercel) {
+    tallyLocal(
+      /"source":\s*"\/en"/.test(vercel) && /"destination":\s*"\/en\/"/.test(vercel),
+      'vercel.json: /en → /en/ permanent redirect'
+    );
     tallyLocal(
       vercel.includes('"Content-Security-Policy"') && !vercel.includes('Content-Security-Policy-Report-Only'),
       'vercel.json: CSP Enforce header (not Report-Only)'

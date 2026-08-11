@@ -48,14 +48,21 @@ function readSitemapUrls() {
  */
 function fileToUrls(file, origin) {
   // Only sitemap-canonical URLs (no gateway redirects, no noindex success).
+  const spokeUrls = [
+    origin + '/en/hr-ai-prompts/job-description/',
+    origin + '/en/hr-ai-prompts/interview-scorecard/',
+    origin + '/en/hr-ai-prompts/master-hiring-prompt/',
+  ];
+  const core = [origin + '/en/', origin + '/en/privacy.html', origin + '/terms.html'];
   const map = {
-    'templates/index-lt.html': [origin + '/en/'],
+    'templates/index-lt.html': [origin + '/en/'].concat(spokeUrls),
+    'templates/prompt-spoke.html': spokeUrls.slice(),
     'templates/privacy.html': [origin + '/en/privacy.html'],
     'terms.html': [origin + '/terms.html'],
-    'en/index.html': [origin + '/en/'],
+    'en/index.html': [origin + '/en/'].concat(spokeUrls),
     'en/privacy.html': [origin + '/en/privacy.html'],
-    'config/sot.json': [origin + '/en/', origin + '/en/privacy.html', origin + '/terms.html'],
-    'scripts/build-locale-pages.js': [origin + '/en/', origin + '/en/privacy.html', origin + '/terms.html'],
+    'config/sot.json': core.concat(spokeUrls),
+    'scripts/build-locale-pages.js': core.concat(spokeUrls),
   };
   return map[file] || [];
 }

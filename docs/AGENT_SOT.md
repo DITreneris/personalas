@@ -27,9 +27,10 @@ Kontaktinė forma (Google Apps Script) – **neįjungta**; žr. [INTEGRACIJA.md]
 | Redaguoti (šaltinis) | Generuojama / neliesti ranka |
 |----------------------|------------------------------|
 | [templates/index-lt.html](../templates/index-lt.html) | `en/index.html`, šaknies `index.html` (vartas) |
+| [templates/prompt-spoke.html](../templates/prompt-spoke.html) | `en/hr-ai-prompts/<slug>/index.html` (3 spoke) |
 | [assets/styles.css](../assets/styles.css), [assets/landing.css](../assets/landing.css) | Tokenai + komponentų CSS (v0.2; be inline `<style>` šablone) |
 | [templates/privacy.html](../templates/privacy.html) | `en/privacy.html`, šaknies `privacy.html` (vartas) |
-| [config/sot.json](../config/sot.json) | Marketing, PDF specs, `businessAddress`, Stripe Payment Links |
+| [config/sot.json](../config/sot.json) | Marketing, `promptSpokes[]`, PDF specs, `businessAddress`, Stripe Payment Links |
 | [docs/pdf-source/*.html](pdf-source/) | Eksportuoti PDF per `pdf:export` |
 | [api/_lib/fulfillment.js](../api/_lib/fulfillment.js), `api/*.js` | — |
 | [success.html](../success.html), [terms.html](../terms.html) | Hand-edit (trust adresas sinchronizuoti su SOT) |
@@ -70,7 +71,7 @@ Vykdoma seka ([package.json](../package.json)):
 3. `node tests/structure.test.js`
 4. `npm run lint:html` (šaknies `index.html`)
 5. `npm run lint:html:privacy` (`privacy.html`)
-6. `npm run lint:html:locales` (`en/index.html`, `en/privacy.html`)
+6. `npm run lint:html:locales` (`en/index.html`, `en/privacy.html`, 3× `en/hr-ai-prompts/*/index.html`)
 7. `npm run lint:html:static` (`success.html`, `terms.html`)
 8. `npm run lint:js`
 
@@ -93,7 +94,7 @@ Env šablonas: [.env.example](../.env.example). Pilna lentelė: [DEPLOYMENT.md](
 ## 5. Kalba ir prekės ženklas (santrauka)
 
 - **Viešai:** tik **Prompt Anatomy** — `/en/`, PDF, terms, privacy, success, el. laiškai.
-- **Mother brand / entity:** community, footer, `Organization.url`, `llms.txt` Training hub → **`promptanatomy.app`** (ne tik `.help`).
+- **Mother brand / entity:** community, footer, `Organization.url`, `llms.txt` Training hub → **`promptanatomy.app`** (ne tik `.help`). Footer entity line (hub QW1b): `Part of Prompt Anatomy · Training & checkout → promptanatomy.app` su `utm_source=help`.
 - **Draudžiama viešame UI:** „Personalas“, „Series No. 3“, „Spin-off“, lietuviškos raidės išsiunčiamuose HTML.
 - **Vidinis repo pavadinimas:** Personalas (`product.repoName` SOT / `package.json` name) — ne rodyti lankytojui; viešas `product.name` = Prompt Anatomy.
 - **Privacy URL:** `/privacy.html` → `/en/privacy.html` (ne `privatumas`).
@@ -114,6 +115,9 @@ Detaliau: [language-guidelines-en-lt.md](language-guidelines-en-lt.md).
 - `http://127.0.0.1:3000/privacy.html`
 - `http://127.0.0.1:3000/en/`
 - `http://127.0.0.1:3000/en/privacy.html`
+- `http://127.0.0.1:3000/en/hr-ai-prompts/job-description/`
+- `http://127.0.0.1:3000/en/hr-ai-prompts/interview-scorecard/`
+- `http://127.0.0.1:3000/en/hr-ai-prompts/master-hiring-prompt/`
 - `http://127.0.0.1:3000/success.html`
 - `http://127.0.0.1:3000/terms.html`
 
@@ -125,7 +129,7 @@ Scenarijai: [TESTAVIMAS.md](TESTAVIMAS.md) (įsk. **Mobile matrix**). Stripe gyv
 
 Visi GEO / structured-data / robots / IndexNow artefaktai emit'inami iš vienos vietos — [scripts/build-locale-pages.js](../scripts/build-locale-pages.js) — naudojant SOT lauks iš [config/sot.json](../config/sot.json). Build laiko guardrail'as — [tests/structure.test.js](../tests/structure.test.js) `assertGeoSurface()` (80+ assert'ų).
 
-**GEO north star:** brand destination = **`https://www.promptanatomy.app`**. Šis repo (`.help`) = Hire spoke (PDF + free prompts). `Organization.url` = `brand.motherBrandUrl` (`.app`); `WebSite.url` lieka ant `.help`. CTA / `llms.txt` Training hub → `.app`.
+**GEO north star:** brand destination = **`https://www.promptanatomy.app`**. Šis repo (`.help`) = Hire spoke (PDF + free prompts). `Organization.url` = `brand.motherBrandUrl` (`.app`); `WebSite.url` = **`https://www.promptanatomy.help/en/`** (product home). CTA / `llms.txt` Training hub → `.app`.
 
 ### Robots.txt kontraktas
 
@@ -161,14 +165,15 @@ Vienas `@graph` su `WebSite` (`@id` `/#website`, `publisher` ref), `Organization
 
 ### Meta robots + OG
 
-- 4 indeksuojami puslapiai (en/index.html, en/privacy.html, terms.html, root gateway) — `<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">`.
+- **3 indeksuojami** baziniai puslapiai (`en/index.html`, `en/privacy.html`, `terms.html`) + **3 prompt spoke** (`/en/hr-ai-prompts/job-description/`, `…/interview-scorecard/`, `…/master-hiring-prompt/`) — `<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">`.
+- Šaknies gateway'ai (`index.html`, `privacy.html`) — `noindex, follow` (308 → `/en/*`; ne sitemap).
 - `success.html` — lieka `noindex, nofollow, max-image-preview:large` (transactional).
-- Visi 5 puslapiai — `og:site_name`, `og:image:alt`, `twitter:image:alt`, `<meta name="twitter:site" content="@promptanatom">`, `<link rel="manifest" href="/manifest.webmanifest">`, `<meta name="theme-color" content="#103B5A">`.
+- Visi vieši HTML — `og:site_name`, `og:image:alt`, `twitter:image:alt`, `<meta name="twitter:site" content="@promptanatom">`, `<link rel="manifest" href="/manifest.webmanifest">`, `<meta name="theme-color" content="#103B5A">`.
 
 ### Sitemap.xml
 
 - `xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"`.
-- Kanoniniai loc'ai tik: `/en/`, `/en/privacy.html`, `/terms.html` (be gateway `/` ir `/privacy.html`).
+- Kanoniniai loc'ai: `/en/`, `/en/privacy.html`, `/terms.html`, plius 3× `/en/hr-ai-prompts/<slug>/` (be gateway `/` ir `/privacy.html`).
 - Kiekvienas URL — `<lastmod>` iš `git log -1 --format=%cs <source-file>` (fallback'as — today UTC).
 - `/en/` — 3 `<image:image>` (OG default + 2 PDF covers).
 
@@ -179,7 +184,7 @@ Vienas `@graph` su `WebSite` (`@id` `/#website`, `publisher` ref), `Organization
 | [llms.txt](../llms.txt) | <5 KB AI-friendly site map (H1 + blockquote + Training hub → `.app` + Free/Paid/Contact + Optional) | 24h |
 | [llms-full.txt](../llms-full.txt) | Full markdown digest (10 promptų + 6-phase workflow) | 24h |
 | [manifest.webmanifest](../manifest.webmanifest) | PWA-lite (`start_url: /en/`, theme_color navy) | 24h |
-| [404.html](../404.html) | EN-only noindex,follow, canonical → /en/ | 5min |
+| [404.html](../404.html) | EN-only `noindex, follow`; **be** canonical į `/en/` (tik body nuorodos) | 5min |
 | `{INDEXNOW_KEY}.txt` | IndexNow protocol key file | immutable |
 
 ### CSP

@@ -112,7 +112,67 @@
       "telegramCta": "Join the Telegram community",
       "appCta": "Open Prompt Anatomy course →",
       "illustrationAlt": "The copy-paste workflow: pick prompt, copy, paste into AI, get answer — unstructured copy-paste is the problem. Prompt Anatomy."
-    }
+    },
+    "promptSpokeSafety": "Strip candidate SSN and unnecessary PII before pasting into public AI tools. Human review required — educational workflow, not legal or HR advice.",
+    "promptSpokes": [
+      {
+        "slug": "job-description",
+        "promptId": "prompt3",
+        "blockId": "block3",
+        "title": "Rewrite the job ad in plain language",
+        "metaDescription": "Free US hiring prompt: rewrite jargon-heavy job ads in plain language to lift apply rates. Copy-paste for ChatGPT, Claude, or Gemini.",
+        "answerLead": "Use this prompt when your US job ad is not attracting qualified applicants. It rewrites the posting in plain language so candidates feel it was written for them.",
+        "llmsLabel": "Job ad rewrite prompt (plain language)",
+        "faq": [
+          {
+            "q": "Will this leak candidate data?",
+            "a": "No candidate PII is required. Paste only the job ad text and company/role fields. Do not paste resumes or personal identifiers into public AI chats."
+          },
+          {
+            "q": "Where are the full PDF hiring guides?",
+            "a": "Paid Beginner and Advanced PDF playbooks are on the main Hire kit landing under PDF guides, with Stripe checkout and instant email delivery."
+          }
+        ]
+      },
+      {
+        "slug": "interview-scorecard",
+        "promptId": "prompt5",
+        "blockId": "block5",
+        "title": "How to run a better interview?",
+        "metaDescription": "Free structured interview plan prompt for US HR teams — questions and signals to watch. Copy-paste for ChatGPT, Claude, or Gemini.",
+        "answerLead": "Use this prompt to build a simple structured interview plan: questions that reveal fit and clear signals for the panel to score consistently.",
+        "llmsLabel": "Structured interview plan prompt",
+        "faq": [
+          {
+            "q": "Is this a full interview scorecard PDF?",
+            "a": "This page is the free copy-paste prompt. Multi-candidate scorecards and rubrics are in the Advanced HR Hiring Guide PDF on the main landing."
+          },
+          {
+            "q": "Do I need to upload interview recordings?",
+            "a": "No. Work from role context and notes you control. Do not paste sensitive candidate data into public models."
+          }
+        ]
+      },
+      {
+        "slug": "master-hiring-prompt",
+        "promptId": "prompt10",
+        "blockId": "block10",
+        "title": "Master prompt (one for everything)",
+        "metaDescription": "Free end-to-end US hiring loop prompt — funnel, job ad, interviews, offer, and first 90 days. Copy-paste for ChatGPT, Claude, or Gemini.",
+        "answerLead": "Use the master prompt when you need one end-to-end hiring plan: diagnose the funnel, improve the job ad, run interviews, lift offer accept odds, and support the first 90 days.",
+        "llmsLabel": "Master hiring loop prompt (end-to-end)",
+        "faq": [
+          {
+            "q": "Does this replace the other nine prompts?",
+            "a": "It covers the full loop in one pass. Use the focused prompts on the main landing when you need deeper work on a single phase."
+          },
+          {
+            "q": "Where do I buy the PDF playbooks?",
+            "a": "Open the Hire kit landing and go to PDF guides for Beginner, Advanced, or both guides via Stripe."
+          }
+        ]
+      }
+    ]
   },
   "legal": {
     "metaDescription": "US HR hiring playbooks from $5.99 — checklists, rubrics, and 10 free copy-paste prompts on the page. Instant PDF download.",

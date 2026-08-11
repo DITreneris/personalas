@@ -856,6 +856,9 @@
             var pdfRoot = document.getElementById('pdf-guides');
             bindAnalyticsClickables(pdfRoot);
             bindAnalyticsClickables(document.getElementById('pdfStickyCta'));
+            bindAnalyticsClickables(document.querySelector('.footer'));
+            bindAnalyticsClickables(document.querySelector('.prompt-spoke-card'));
+            bindAnalyticsClickables(document.querySelector('.prompt-spoke-ctas'));
             var heroPdf = document.querySelector('.header a[href="#pdf-guides"]');
             if (heroPdf) {
                 heroPdf.addEventListener('click', function() {

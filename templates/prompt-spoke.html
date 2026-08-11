@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    {{SPOKE_HEAD}}
+    <title>{{SPOKE_TITLE}} – Prompt Anatomy</title>
+    <link rel="icon" href="https://www.promptanatomy.help/favicon.ico" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="https://www.promptanatomy.help/favicon.svg">
+    <link rel="apple-touch-icon" href="https://www.promptanatomy.help/apple-touch-icon.png">
+    <link rel="stylesheet" href="{{STYLES_HREF}}">
+    <link rel="stylesheet" href="{{LANDING_HREF}}">
+    <link rel="stylesheet" href="{{SATELLITE_HREF}}">
+    <link rel="stylesheet" href="/assets/fonts.css">
+    <script defer src="/_vercel/insights/script.js"></script>
+    <script defer src="/_vercel/speed-insights/script.js"></script>
+</head>
+<body class="page-prompt-spoke">
+    <main class="satellite-container satellite-container--wide">
+        <nav class="spoke-breadcrumb" aria-label="Breadcrumb">
+            <a href="/en/">Home</a>
+            <span aria-hidden="true"> · </span>
+            <a href="/en/#free-prompts-band">Free prompts</a>
+            <span aria-hidden="true"> · </span>
+            <span aria-current="page">{{SPOKE_TITLE}}</span>
+        </nav>
+        <article class="satellite-card prompt-spoke-card">
+            <h1 id="spoke-title">{{SPOKE_TITLE}}</h1>
+            <p class="answer-lead">{{SPOKE_ANSWER_LEAD}}</p>
+            <p class="prompt-safety" role="note">{{SPOKE_SAFETY}}</p>
+
+            <div class="code-block"
+                 id="{{SPOKE_BLOCK_ID}}"
+                 role="button"
+                 tabindex="0"
+                 aria-label="Select and copy this prompt">
+                <span class="code-block-toolbar" aria-hidden="true">Copy</span>
+                <pre class="code-text" id="{{SPOKE_PROMPT_ID}}">{{SPOKE_PROMPT_BODY}}</pre>
+            </div>
+            <div class="prompt-spoke-actions">
+                <button type="button" class="btn"
+                        aria-label="Copy prompt to clipboard"
+                        data-prompt-id="{{SPOKE_PROMPT_ID}}"
+                        data-analytics="spoke_prompt_copy">
+                    <span>Copy prompt</span>
+                </button>
+            </div>
+
+            <div class="prompt-spoke-ctas">
+                <a href="/en/#pdf-guides" class="btn" data-analytics="spoke_pdf_cta">See the PDF guides</a>
+                <a href="/en/#free-prompts-band" class="btn btn--ghost">All 10 free prompts</a>
+            </div>
+
+            <h2 class="spoke-related-title">Related prompts</h2>
+            <ul class="spoke-related">
+                {{SPOKE_SIBLING_LINKS}}
+            </ul>
+        </article>
+
+        <footer class="spoke-footer footer">
+            <p class="footer-entity">Part of Prompt Anatomy · Training &amp; checkout → <a href="{{MOTHER_BRAND_URL}}/?utm_source=help&amp;utm_medium=entity_footer&amp;utm_campaign=ecosystem" target="_blank" rel="noopener noreferrer" data-analytics="entity_footer_click">promptanatomy.app</a></p>
+            <p class="footer-legal"><a href="/en/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a> · <a href="/terms.html#refunds">Refunds</a></p>
+        </footer>
+    </main>
+
+    <textarea class="hidden" id="hiddenTextarea" aria-label="Field for text to copy" aria-hidden="true"></textarea>
+    <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true" aria-label="Copy notification">
+        <span>Copied.</span>
+    </div>
+    <script src="{{GENERATOR_SRC}}"></script>
+</body>
+</html>

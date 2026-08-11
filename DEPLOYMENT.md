@@ -16,6 +16,16 @@
    - Jei reikia **vienareikšmės** bazės (pvz. preview URL): `SITE_PUBLIC_BASE=https://<projektas>.vercel.app` (be galo `/`).
 4. Po deploy patikrinkite OG / canonical naršyklės devtools arba [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/).
 
+### Google Search Console (po deploy)
+
+1. **„Puslapis su peradresavimu“** — tikėtina (gateway `/`, `/privacy.html`, `/lt/*`, `/en`→`/en/`). **Nepakartokite „Patvirtinti pataisymą“** kaip bug'ą — 308 lieka sąmoningai; indeksuojami tik sitemap URL.
+2. **URL Inspection** → `https://www.promptanatomy.help/en/` (ir prireikus privacy/terms) → Request indexing jei crawl senas.
+3. **Prompt spokes:** Inspection + Request indexing:
+   - `https://www.promptanatomy.help/en/hr-ai-prompts/job-description/`
+   - `https://www.promptanatomy.help/en/hr-ai-prompts/interview-scorecard/`
+   - `https://www.promptanatomy.help/en/hr-ai-prompts/master-hiring-prompt/`
+4. **„Google pasirinko kitą kanoninį“** — po recrawl Google-selected turėtų būti www `/en/` (arba `/en/privacy.html` / spoke URL). Jei apex be www — patikrinkite Vercel apex→www 308.
+
 ### Paid PDF environment variables (Stripe + Resend + Redis)
 
 Vercel Project → Settings → Environment Variables. **Niekada necommitinti slaptažodžių į repo.**
@@ -33,7 +43,7 @@ Vercel Project → Settings → Environment Variables. **Niekada necommitinti sl
 | `UPSTASH_REDIS_REST_URL` | Taip | Upstash Redis REST URL fulfillment būsenai ir token jti. |
 | `UPSTASH_REDIS_REST_TOKEN` | Taip | Upstash Redis REST token (palaikomi ir `KV_REST_API_*`, `VERCEL_KV_REST_API_*` vardai). |
 | `REDIS_KEY_PREFIX` | Pasirinkt. | Prefiksas bendram Upstash DB (pvz. `personalas:` → raktai `personalas:fulfillment:cs_...`). |
-| `SITE_URL` | Rekomenduojama | Kanoninis URL emailed download nuorodoms. Prefer `https://www.promptanatomy.help` (matches sitemap / SOT). |
+| `SITE_URL` | **Taip (Production)** | Kanoninis URL emailed / in-page download nuorodoms. **Privaloma** kai `VERCEL_ENV=production` (fail-closed be Host header). Prefer `https://www.promptanatomy.help` (matches sitemap / SOT). Preview/local gali naudoti Host fallback. |
 | `BLOB_READ_WRITE_TOKEN` | Taip (Blob) | Auto, kai Vercel projekte sukurtas **Private** Blob store. Naudojamas fulfillment `fetch` į `*.private.blob.vercel-storage.com` (žr. [api/_lib/fulfillment.js](api/_lib/fulfillment.js)). |
 | `PDF_BEGINNER_SOURCE_URL` | Production | Private Blob URL Beginner PDF (žr. žemiau `npm run pdf:upload:blob`). |
 | `PDF_ADVANCED_SOURCE_URL` | Production | Private Blob URL Advanced PDF. |

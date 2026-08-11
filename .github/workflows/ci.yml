@@ -44,6 +44,9 @@ jobs:
           npx pa11y http://127.0.0.1:3000/privacy.html --config .pa11yrc.json
           npx pa11y http://127.0.0.1:3000/en/ --config .pa11yrc.json
           npx pa11y http://127.0.0.1:3000/en/privacy.html --config .pa11yrc.json
+          npx pa11y http://127.0.0.1:3000/en/hr-ai-prompts/job-description/ --config .pa11yrc.json
+          npx pa11y http://127.0.0.1:3000/en/hr-ai-prompts/interview-scorecard/ --config .pa11yrc.json
+          npx pa11y http://127.0.0.1:3000/en/hr-ai-prompts/master-hiring-prompt/ --config .pa11yrc.json
           npx pa11y http://127.0.0.1:3000/success.html --config .pa11yrc.json
           npx pa11y http://127.0.0.1:3000/terms.html --config .pa11yrc.json
         env:

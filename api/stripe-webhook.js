@@ -3,6 +3,8 @@
 const Stripe = require('stripe');
 const { fulfillCheckoutSession } = require('./_lib/fulfillment');
 
+const MAX_WEBHOOK_BODY_BYTES = 1024 * 1024;
+
 function sendJson(res, statusCode, payload) {
   res.statusCode = statusCode;
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
@@ -12,9 +14,37 @@ function sendJson(res, statusCode, payload) {
 function readRawBody(req) {
   return new Promise((resolve, reject) => {
     const chunks = [];
-    req.on('data', (chunk) => chunks.push(Buffer.from(chunk)));
-    req.on('end', () => resolve(Buffer.concat(chunks)));
-    req.on('error', reject);
+    let size = 0;
+    let settled = false;
+
+    function fail(error) {
+      if (settled) return;
+      settled = true;
+      reject(error);
+      try {
+        req.destroy();
+      } catch (_e) {
+        // ignore
+      }
+    }
+
+    req.on('data', (chunk) => {
+      const buf = Buffer.from(chunk);
+      size += buf.length;
+      if (size > MAX_WEBHOOK_BODY_BYTES) {
+        const err = new Error('Request body too large');
+        err.statusCode = 413;
+        fail(err);
+        return;
+      }
+      chunks.push(buf);
+    });
+    req.on('end', () => {
+      if (settled) return;
+      settled = true;
+      resolve(Buffer.concat(chunks));
+    });
+    req.on('error', fail);
   });
 }
 
@@ -38,7 +68,18 @@ module.exports = async function stripeWebhook(req, res) {
 
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
   const signature = req.headers['stripe-signature'];
-  const rawBody = await readRawBody(req);
+
+  let rawBody;
+  try {
+    rawBody = await readRawBody(req);
+  } catch (error) {
+    if (error && error.statusCode === 413) {
+      sendJson(res, 413, { error: 'Payload too large' });
+      return;
+    }
+    sendJson(res, 400, { error: 'Invalid request body' });
+    return;
+  }
 
   let event;
   try {
@@ -54,8 +95,11 @@ module.exports = async function stripeWebhook(req, res) {
     return;
   }
 
+  // Preview/local may pass Host-derived origin; production uses SITE_URL only.
+  const origin = process.env.VERCEL_ENV === 'production' ? '' : getOrigin(req);
+
   try {
-    const result = await fulfillCheckoutSession(stripe, event.data.object.id, getOrigin(req));
+    const result = await fulfillCheckoutSession(stripe, event.data.object.id, origin);
     sendJson(res, 200, { received: true, fulfillment: result.status });
   } catch (error) {
     const message = error && error.message ? error.message : String(error);

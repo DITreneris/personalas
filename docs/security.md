@@ -48,6 +48,18 @@ upgrade-insecure-requests
 1. Remove `'unsafe-inline'` from `style-src` (nonces / move critical CSS) if needed.
 2. Prefer self-hosting Lucide instead of unpkg.
 
+### Paid PDF API hardening (1.6.0)
+
+| Control | Detail |
+|---------|--------|
+| `SITE_URL` | **Required** when `VERCEL_ENV=production` — download URLs never built from `Host` / `X-Forwarded-Host` |
+| Rate limits | Upstash Redis fixed window via [api/_lib/rate-limit.js](../api/_lib/rate-limit.js): `/api/download-link` 30/min per IP + 10/15min per `session_id`; `/api/download` 30/min per IP |
+| Token length | `/api/download` rejects `t` longer than 2048 chars |
+| Product resolve | [fulfillment.js](../api/_lib/fulfillment.js) prefers Stripe `line_items` price IDs over `metadata.product` |
+| Webhook body | [stripe-webhook.js](../api/stripe-webhook.js) rejects bodies over 1 MiB before signature verify |
+
+**Residual risk:** `GET /api/download-link?session_id=cs_…` stays unauthenticated by design (Stripe Payment Link → `success.html` poll). A leaked `session_id` is a short-lived capability to mint in-page download tokens. Mitigations: TLS, rate limits, 15‑minute in-page token TTL, Redis fulfillment binding. Post-promo candidates: single-use jti, refund auto-revoke.
+
 ### Stebėjimas
 
 - Browser DevTools console — CSP blocked resource warnings after deploy.

@@ -1,6 +1,11 @@
 'use strict';
 
 const { loadProductPdf, resolveDownload } = require('./_lib/fulfillment');
+const { checkRateLimit, clientIp } = require('./_lib/rate-limit');
+
+const MAX_TOKEN_LENGTH = 2048;
+const IP_LIMIT = 30;
+const IP_WINDOW_SECONDS = 60;
 
 function sendText(res, statusCode, message) {
   res.statusCode = statusCode;
@@ -18,6 +23,23 @@ module.exports = async function download(req, res) {
   const token = req.query && req.query.t ? String(req.query.t) : '';
   if (!token) {
     sendText(res, 400, 'Missing download token.');
+    return;
+  }
+  if (token.length > MAX_TOKEN_LENGTH) {
+    sendText(res, 400, 'Invalid download token.');
+    return;
+  }
+
+  try {
+    const ipLimit = await checkRateLimit('download', clientIp(req), IP_LIMIT, IP_WINDOW_SECONDS);
+    if (!ipLimit.allowed) {
+      res.setHeader('Retry-After', String(ipLimit.retryAfterSeconds));
+      sendText(res, 429, 'Too many requests. Try again shortly.');
+      return;
+    }
+  } catch (error) {
+    console.error('[download] rate limit check failed:', error && error.message ? error.message : error);
+    sendText(res, 503, 'Service temporarily unavailable.');
     return;
   }
 

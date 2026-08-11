@@ -140,9 +140,8 @@ function isBundleFulfillment(fulfillment) {
 }
 
 function getProductFromSession(session) {
-  const metadataProduct = session && session.metadata ? getProductById(session.metadata.product) : null;
-  if (metadataProduct) return metadataProduct;
-
+  // Prefer paid line_items price IDs over metadata so a mis-set Payment Link
+  // metadata.product cannot upgrade the fulfilled tier above what was charged.
   const lineItems = session && session.line_items && Array.isArray(session.line_items.data)
     ? session.line_items.data
     : [];
@@ -152,6 +151,9 @@ function getProductFromSession(session) {
     const product = getProductByPriceId(priceId);
     if (product) return product;
   }
+
+  const metadataProduct = session && session.metadata ? getProductById(session.metadata.product) : null;
+  if (metadataProduct) return metadataProduct;
 
   throw new Error('Checkout Session does not contain a configured PDF product.');
 }
@@ -257,7 +259,12 @@ async function releaseLock(key) {
 }
 
 function getSiteUrl(origin) {
-  if (process.env.SITE_URL) return process.env.SITE_URL.replace(/\/$/, '');
+  const configured = (process.env.SITE_URL || '').trim().replace(/\/$/, '');
+  if (configured) return configured;
+  // Production must not build download URLs from Host / X-Forwarded-Host.
+  if (process.env.VERCEL_ENV === 'production') {
+    throw new Error('SITE_URL is required in production.');
+  }
   if (origin) return origin.replace(/\/$/, '');
   if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
   return 'https://www.promptanatomy.help';

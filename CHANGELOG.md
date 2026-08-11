@@ -6,6 +6,20 @@ Visi reikšmingi pakeitimai projekte dokumentuojami čia. Formatas pagal [Keep a
 
 ## [Unreleased]
 
+## [1.6.0] - 2026-08-11
+
+### Pridėta
+
+- **[UI] Entity footer line (QW1b):** Landing footer `.footer-entity` — `Part of Prompt Anatomy · Training & checkout → promptanatomy.app` su UTM `utm_source=help` / `utm_medium=entity_footer` / `utm_campaign=ecosystem` ir `data-analytics="entity_footer_click"` ([templates/index-lt.html](templates/index-lt.html), [assets/landing.css](assets/landing.css), [generator.js](generator.js) binds `.footer`).
+- **[Feature][Content] Prompt spoke pages:** Indexable `/en/hr-ai-prompts/{job-description,interview-scorecard,master-hiring-prompt}/` from prompts 3/5/10 — answer leads, PII safety, FAQ JSON-LD, sitemap + `llms.txt` + IndexNow ([templates/prompt-spoke.html](templates/prompt-spoke.html), [config/sot.json](config/sot.json) `marketing.promptSpokes`). Landing „Open dedicated page →“ + free-band safety; privacy public-model PII note.
+- **[Security] Paid PDF API hardening:** Upstash rate limits on `/api/download-link` + `/api/download` ([api/_lib/rate-limit.js](api/_lib/rate-limit.js)); `SITE_URL` required in Production; download token length cap; webhook body 1 MiB cap; product resolve prefers Stripe `line_items` price over `metadata.product`. Docs: [docs/security.md](docs/security.md), [DEPLOYMENT.md](DEPLOYMENT.md).
+
+### Pataisyta
+
+- **[QA] GSC indexing hygiene:** Gateway `/` + `/privacy.html` → `noindex, follow`; `WebSite.url` / `isPartOf` → `/en/`; `404.html` be canonical į home; Vercel `/en` → `/en/`; docs checklist — [DEPLOYMENT.md](DEPLOYMENT.md), [docs/AGENT_SOT.md](docs/AGENT_SOT.md) §6a.
+- **[QA] Spoke CI coverage:** `lint:html:locales` + pa11y include three prompt spokes; `terms.html` `WebSite.url` → `/en/`.
+- **[QA] Purchase QA helper:** [scripts/run-purchase-qa-checks.js](scripts/run-purchase-qa-checks.js) checks poll in `assets/success.js` (CSP Phase 3); Redis probe errors become notes.
+
 ## [1.5.1] - 2026-07-29
 
 ### Pataisyta

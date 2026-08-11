@@ -60,9 +60,12 @@ async function main() {
 
   const success = await fetchText(SITE + '/success.html');
   if (success.status !== 200) throw new Error('success.html status');
-  if (!/download-link/.test(success.text)) throw new Error('success poll missing');
+  if (!/assets\/success\.js/.test(success.text)) throw new Error('success.js script missing');
   if (!/paid-pdf-license/.test(success.text)) throw new Error('success license link missing');
-  pass('success.html poll + license link');
+  const successJs = await fetchText(SITE + '/assets/success.js');
+  if (successJs.status !== 200) throw new Error('success.js status');
+  if (!/download-link/.test(successJs.text)) throw new Error('success poll missing in success.js');
+  pass('success.html poll (success.js) + license link');
 
   const terms = await fetchText(SITE + '/terms.html');
   if (terms.status !== 200) throw new Error('terms.html status');
@@ -112,19 +115,26 @@ async function main() {
       }
 
       if (env.UPSTASH_REDIS_REST_URL && env.UPSTASH_REDIS_REST_TOKEN) {
-        const prefix = (env.REDIS_KEY_PREFIX || '').trim();
-        const key = prefix + 'fulfillment:' + paid.id;
-        const r = await fetch(
-          env.UPSTASH_REDIS_REST_URL.replace(/\/$/, '') +
-            '/get/' +
-            encodeURIComponent(key),
-          { headers: { Authorization: 'Bearer ' + env.UPSTASH_REDIS_REST_TOKEN } }
-        );
-        const rj = await r.json().catch(() => ({}));
-        if (rj.result) {
-          pass('Redis fulfillment record present (idempotency key)');
-        } else {
-          notes.push('Redis miss at ' + key);
+        try {
+          const prefix = (env.REDIS_KEY_PREFIX || '').trim();
+          const key = prefix + 'fulfillment:' + paid.id;
+          const r = await fetch(
+            env.UPSTASH_REDIS_REST_URL.replace(/\/$/, '') +
+              '/get/' +
+              encodeURIComponent(key),
+            { headers: { Authorization: 'Bearer ' + env.UPSTASH_REDIS_REST_TOKEN } }
+          );
+          const rj = await r.json().catch(() => ({}));
+          if (rj.result) {
+            pass('Redis fulfillment record present (idempotency key)');
+          } else {
+            notes.push('Redis miss at ' + key);
+          }
+        } catch (redisErr) {
+          notes.push(
+            'Redis probe failed: ' +
+              (redisErr && redisErr.message ? redisErr.message : String(redisErr))
+          );
         }
       }
     }
