@@ -2,7 +2,7 @@
 <html lang="en-US">
 <head>
   <meta charset="utf-8">
-  <title>Sample — HR Prompt Formula + Prompt 1 — Prompt Anatomy</title>
+  <title>Sample — 15-minute hiring kickoff worksheet — Prompt Anatomy</title>
   <link rel="stylesheet" href="pdf-print.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
@@ -47,38 +47,57 @@
 
 <section class="page sample-page">
   <p class="sample-banner">Free sample · Beginner guide</p>
-  <div class="page-eyebrow"><span>Excerpt</span><span class="page-eyebrow-tag">Formula + Prompt 1</span></div>
-  <h2>The HR Prompt Formula</h2>
-  <p>Strong prompts give the model a role, one task, hiring context, output shape, and guardrails.</p>
-  <table>
-    <tr><th>Field</th><th>What to include</th></tr>
-    <tr><td><strong>Role</strong></td><td>Who the AI acts as (e.g., recruitment analyst, interview specialist)</td></tr>
-    <tr><td><strong>Task</strong></td><td>One deliverable (diagnose funnel, draft interview plan, phrase offer)</td></tr>
-    <tr><td><strong>Context</strong></td><td>Role, location (US), stage, company size — no candidate PII</td></tr>
-    <tr><td><strong>Format</strong></td><td>Bullets, table, max length, tone</td></tr>
-    <tr><td><strong>Constraints</strong></td><td>EEO-aware, US formats ($, MM/DD/YYYY), what to avoid</td></tr>
-  </table>
-
-  <p class="prompt-label-row"><span>Prompt 1 — Diagnose the funnel</span><span class="prompt-tag">~5–10 min</span></p>
-  <pre class="prompt-block">You are a recruitment analyst. Identify where recruitment is stuck and what to change, using the numbers.
-
-Company/location: [company, e.g., New York, NY]
-Role location: [e.g., Remote – US, Hybrid – New York, NY, or On-site – Austin, TX]
-Role: [job title]   State: [two-letter, e.g., NY]   Zip Code: [optional]
-
-We have:
-- Candidates: [ ]   Interviews: [ ]   Offers: [ ]   Accepted: [ ]
-
-Explain: 1) Where are we most stuck? 2) Why? 3) What can we change this week?</pre>
-  <div class="worked-output">
-    <span class="wo-label">Sample AI output — AE role, Austin, TX</span>
-    <p><strong>Most stuck:</strong> interview-to-offer (2 offers from 14 interviews = 14%).</p>
-    <p><strong>Why:</strong> screening passes candidates who miss the discovery competency you score in panel.</p>
-    <p><strong>This week:</strong> tighten the screen with a 3-question discovery probe; calibrate panel on one shared rubric anchor.</p>
+  <div class="page-eyebrow"><span>Excerpt</span><span class="page-eyebrow-tag">Kickoff</span></div>
+  <h2>15-minute hiring kickoff worksheet</h2>
+  <p>Print this page. Run it before you open ChatGPT. Hiring manager and HR fill it together.</p>
+  <div class="kickoff-worksheet">
+    <div class="kw-row">
+      <div class="kw-check"></div>
+      <div class="kw-label"><strong>Role title &amp; level</strong> — reporting line, headcount this seat replaces.</div>
+      <div class="kw-line"></div>
+    </div>
+    <div class="kw-row">
+      <div class="kw-check"></div>
+      <div class="kw-label"><strong>3 must-have competencies</strong> — not 15 nice-to-haves.</div>
+      <div class="kw-line"></div>
+    </div>
+    <div class="kw-row">
+      <div class="kw-check"></div>
+      <div class="kw-label"><strong>Salary band approved internally</strong> — write the band, not "TBD".</div>
+      <div class="kw-line"></div>
+    </div>
+    <div class="kw-row">
+      <div class="kw-check"></div>
+      <div class="kw-label"><strong>Interview panel named</strong> — who owns which competency.</div>
+      <div class="kw-line"></div>
+    </div>
+    <div class="kw-row">
+      <div class="kw-check"></div>
+      <div class="kw-label"><strong>Target start date</strong> (MM/DD/YYYY) and funnel goal (applicants → offers).</div>
+      <div class="kw-line"></div>
+    </div>
+    <div class="kw-row">
+      <div class="kw-check"></div>
+      <div class="kw-label"><strong>Knockout criteria</strong> — documented (e.g., must work US business hours).</div>
+      <div class="kw-line"></div>
+    </div>
+    <div class="kw-row">
+      <div class="kw-check"></div>
+      <div class="kw-label"><strong>Where we are stuck today</strong> — write the funnel counts (applicants, interviews, offers).</div>
+      <div class="kw-line"></div>
+    </div>
   </div>
+  <h3>Signatures</h3>
+  <div class="fill-grid">
+    <div class="fill-field"><span class="ff-label">Hiring manager:</span><span class="ff-line"></span></div>
+    <div class="fill-field"><span class="ff-label">Recruiter / HRBP:</span><span class="ff-line"></span></div>
+    <div class="fill-field"><span class="ff-label">Date (MM/DD/YYYY):</span><span class="ff-line"></span></div>
+    <div class="fill-field"><span class="ff-label">Next review:</span><span class="ff-line"></span></div>
+  </div>
+  <p class="muted"><strong>After kickoff:</strong> define who fits, then rewrite the ad, then source. Do not skip the profile — it prevents generic job ads.</p>
 
   <div class="full-guide-promo">
-    <strong>This is 2 of 16 pages.</strong> The full Beginner guide includes 9 prompts with worked outputs, a fillable 15-minute kickoff worksheet, a 7-point AI safety verify + decision log, and an Advanced upsell — see <strong>promptanatomy.help/en/#pdf-guides</strong>.
+    <strong>This is the fillable kickoff (1 of 16 pages).</strong> The full Beginner guide walks one open role through the first structured loop, a 7-point AI safety check, and a decision log — see <strong>promptanatomy.help/en/#pdf-guides</strong>.
   </div>
 
   <div class="brand-footer">

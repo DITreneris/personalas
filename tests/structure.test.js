@@ -1192,7 +1192,8 @@ function run() {
   }
   tally(assert(sot && sot.pdfGuides && sot.pdfGuides.beginner && Array.isArray(sot.pdfGuides.beginner.chapters) && sot.pdfGuides.beginner.chapters.length >= 8, 'sot.json beginner chapters'));
   tally(assert(sot && sot.pdfGuides && sot.pdfGuides.advanced && Array.isArray(sot.pdfGuides.advanced.chapters) && sot.pdfGuides.advanced.chapters.length >= 8, 'sot.json advanced chapters'));
-  tally(assert(sot && sot.pdfGuides.advanced.chapters.length === sot.pdfGuides.advanced.pages, 'sot advanced chapters length === pages (32)'));
+  tally(assert(sot && sot.pdfGuides.advanced.chapters[0] !== 'Cover', 'sot advanced chapters omit Cover (TOC starts at Read this first)'));
+  tally(assert(sot && sot.pdfGuides.advanced.chapters.length === sot.pdfGuides.advanced.pages - 1, 'sot advanced chapters length === pages - 1 (32 pages, cover not listed)'));
   tally(assert(sot && Array.isArray(sot.buyerFaq) && sot.buyerFaq.length === 5, 'sot.json buyerFaq has 5 items'));
   tally(
     assert(

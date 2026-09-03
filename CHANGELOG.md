@@ -4,7 +4,11 @@ Visi reikšmingi pakeitimai projekte dokumentuojami čia. Formatas pagal [Keep a
 
 ---
 
-## [Unreleased]
+## [1.6.1] - 2026-09-03
+
+### Pakeista
+
+- **[Content] PDF voice pass — book frame, not prompt methodics:** [docs/pdf-source/beginner-personalas-hr.html](docs/pdf-source/beginner-personalas-hr.html) + [docs/pdf-source/advanced-personalas-hr.html](docs/pdf-source/advanced-personalas-hr.html) — cover hooks and p.2 leads open on a stuck hire; TOC drops Cover; Beginner p.3 is “How a stuck hire talks to AI”; Street/Zip stripped from PDF prompts only; Advanced p.23 is “One-page hiring plan”; PDF-only / NEW / “why this is good” residue removed. Free sample [docs/pdf-source/sample-kickoff-excerpt.html](docs/pdf-source/sample-kickoff-excerpt.html) is the 15-minute kickoff worksheet (landing link already promised that). SOT chapter labels synced in [config/sot.json](config/sot.json) (Advanced landing TOC omits Cover). Page lock stays 16 / 32.
 
 ## [1.6.0] - 2026-08-11
 

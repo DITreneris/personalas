@@ -7,7 +7,7 @@ HTML + CSS source for the two paid Prompt Anatomy HR PDF guides. Output PDFs are
 - [beginner-personalas-hr.html](beginner-personalas-hr.html) — **16-page** Beginner guide (v2.0): 9 prompts with worked outputs, fillable kickoff worksheet, 7-point AI safety verify + decision log, Advanced upsell.
 - [advanced-personalas-hr.html](advanced-personalas-hr.html) — **32-page** Advanced guide (v2.0). Hand-authored — edit sections directly. (The old `scripts/generate-advanced-pdf-html.js` codegen was deleted in v2.0 polish to prevent accidental overwrites; see CHANGELOG.)
 - [pdf-print.css](pdf-print.css) — shared print stylesheet. Self-hosted font support — see [fonts/README.md](fonts/README.md).
-- [sample-kickoff-excerpt.html](sample-kickoff-excerpt.html) — free sample (Formula + Prompt 1 + worked output). Exported as `assets/samples/prompt-anatomy-hiring-kickoff-sample.pdf`.
+- [sample-kickoff-excerpt.html](sample-kickoff-excerpt.html) — free sample (15-minute kickoff worksheet). Exported as `assets/samples/prompt-anatomy-hiring-kickoff-sample.pdf`.
 
 ## Output filenames (local dev)
 
