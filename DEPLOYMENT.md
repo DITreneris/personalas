@@ -70,7 +70,7 @@ Vercel Project → Settings → Environment Variables. **Niekada necommitinti sl
    ```
    Stripe pakeičia `{CHECKOUT_SESSION_ID}` realiu session id, kurį `success.html` perduoda `/api/download-link`.
 4. **Stripe receipts** ON (Stripe Dashboard → Settings → Customer emails → Successful payments).
-5. Pridėkite live webhook į `https://promptanatomy.help/api/stripe-webhook`, prenumeruokite `checkout.session.completed` ir `checkout.session.async_payment_succeeded`.
+5. Pridėkite live webhook į `https://www.promptanatomy.help/api/stripe-webhook` (ne apex — apex POST 308 į www ir Stripe neatneša body), prenumeruokite `checkout.session.completed` ir `checkout.session.async_payment_succeeded`.
 6. (Pasirinktinai) Stripe Payment Link → metadata: `product=beginner` arba `product=advanced` – ankstyvas produkto identifikavimas; jei nenustatyta, fulfillment naudoja Price ID.
 
 ### PDF saugykla ir authoring
