@@ -85,6 +85,8 @@ Vercel `outputDirectory` is `.` (repo root). Customer files must not include the
 
 Local `npx serve .` still serves the full repo (dev). Production lock for `scripts/` / `docs/` / `tests/` / `templates/` is **404 redirects**, not `.vercelignore`.
 
+**Build env:** Vercel `buildCommand` pins `SITE_ORIGIN=https://www.promptanatomy.help`. `VERCEL=1` ignores leftover `BASE_PATH` (old GitHub Pages `/personalas/`). Remove `BASE_PATH` from the Vercel dashboard if it is still set.
+
 ---
 
 ## SEO + GEO + AI crawler policy

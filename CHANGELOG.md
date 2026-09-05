@@ -6,6 +6,12 @@ Visi reikšmingi pakeitimai projekte dokumentuojami čia. Formatas pagal [Keep a
 
 ## [Unreleased]
 
+## [1.6.4] - 2026-09-05
+
+### Pataisyta
+
+- **[Fix] Vercel build:** ignore leftover `BASE_PATH=/personalas/` when `VERCEL=1` (old GitHub Pages env). 1.6.3 failed `en/index.html: WebSite.url is /en/ product home` (451/1). [vercel.json](vercel.json) `buildCommand` now pins `SITE_ORIGIN=https://www.promptanatomy.help` like CI.
+
 ## [1.6.3] - 2026-09-05
 
 ### Pataisyta

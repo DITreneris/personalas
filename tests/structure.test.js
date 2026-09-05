@@ -1065,6 +1065,7 @@ function run() {
   tally(assert(sitemap && !sitemap.includes('/success.html'), 'sitemap.xml: excludes transactional success.html'));
   tally(assert(sitemap && sitemap.includes('https://www.promptanatomy.help/'), 'sitemap.xml: www host'));
   tally(assert(sitemap && !/<loc>https:\/\/promptanatomy\.help\//.test(sitemap), 'sitemap.xml: no apex (non-www) loc'));
+  tally(assert(enIndex && !enIndex.includes('/personalas/en/'), 'en/index.html: no GitHub Pages /personalas/ base path'));
 
   // --- Paid PDF API skeleton ---
   const apiDir = path.join(ROOT, 'api');
@@ -1815,6 +1816,11 @@ function assertGeoSurface(ctx) {
     tallyLocal(
       !/"source":\s*"\/templates\/:path\*"[\s\S]{0,80}"destination":\s*"\/en\/"/.test(vercel),
       'vercel.json: templates no longer soft-redirect to /en/'
+    );
+    tallyLocal(
+      vercel.includes('SITE_ORIGIN=https://www.promptanatomy.help') &&
+        vercel.includes('REQUIRE_STRIPE_LINKS=1'),
+      'vercel.json: buildCommand pins www SITE_ORIGIN + Stripe links'
     );
   }
 

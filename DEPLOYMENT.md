@@ -12,7 +12,7 @@
 2. **Production** domenas: `www.promptanatomy.help` (Vercel apex `promptanatomy.help` → 308 į `www`). GSC nuosavybė ir sitemap turi būti **www** prefikse.
 3. **Site environment variables** (Production / Preview pagal poreikį):
    - `SITE_ORIGIN` – numatytai build skripte `https://www.promptanatomy.help`; **Production** Vercel UI nustatykite tą patį (sitemap `<loc>` turi sutapti su sitemap URL hostu).
-   - `BASE_PATH` – palikite **tuščią**, jei svetainė publikuojama iš domeno šaknies (`/`, `/en/`).
+   - `BASE_PATH` – **neturi** būti nustatyta (senas GitHub Pages `/personalas/` laužo `WebSite.url`). Build ant Vercel ignoruoja `BASE_PATH`. Dashboard → Environment Variables: ištrinkite, jei likęs.
    - Jei reikia **vienareikšmės** bazės (pvz. preview URL): `SITE_PUBLIC_BASE=https://<projektas>.vercel.app` (be galo `/`).
 4. Po deploy patikrinkite OG / canonical naršyklės devtools arba [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/).
 

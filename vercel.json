@@ -21,7 +21,7 @@
     { "source": "/vercel.json", "destination": "/404.html", "statusCode": 404 },
     { "source": "/:file.md", "destination": "/404.html", "statusCode": 404 }
   ],
-  "buildCommand": "REQUIRE_STRIPE_LINKS=1 npm test",
+  "buildCommand": "SITE_ORIGIN=https://www.promptanatomy.help REQUIRE_STRIPE_LINKS=1 npm test",
   "installCommand": "npm install",
   "outputDirectory": ".",
   "framework": null,

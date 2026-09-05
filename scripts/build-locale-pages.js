@@ -30,7 +30,9 @@ function versionedStylesheetHref(href) {
 }
 
 const SITE_ORIGIN = (process.env.SITE_ORIGIN || 'https://www.promptanatomy.help').replace(/\/+$/, '');
-const rawBase = process.env.BASE_PATH || '';
+// GitHub Pages subpath is retired. Vercel is domain root — ignore leftover
+// BASE_PATH=/personalas/ from the old Pages env (1.6.3 deploy: 451/1).
+const rawBase = process.env.VERCEL ? '' : (process.env.BASE_PATH || '');
 const BASE_PATH = rawBase ? rawBase.replace(/\/*$/, '') + '/' : '';
 const SITE_PUBLIC_BASE = (process.env.SITE_PUBLIC_BASE || '').trim().replace(/\/+$/, '');
 
