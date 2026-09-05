@@ -1493,6 +1493,13 @@ function assertGeoSurface(ctx) {
         'robots.txt: User-agent ' + ua);
     });
     tallyLocal(/^Disallow: \/api\//m.test(ctx.robots), 'robots.txt: Disallow /api/');
+    tallyLocal(/^Disallow: \/docs\//m.test(ctx.robots), 'robots.txt: Disallow /docs/');
+    tallyLocal(/^Disallow: \/scripts\//m.test(ctx.robots), 'robots.txt: Disallow /scripts/');
+    tallyLocal(/^Disallow: \/tests\//m.test(ctx.robots), 'robots.txt: Disallow /tests/');
+    tallyLocal(/^Disallow: \/templates\//m.test(ctx.robots), 'robots.txt: Disallow /templates/');
+    tallyLocal(/^Disallow: \/api\/_lib\//m.test(ctx.robots), 'robots.txt: Disallow /api/_lib/');
+    tallyLocal(/^Disallow: \/api\/_private\//m.test(ctx.robots), 'robots.txt: Disallow /api/_private/');
+    tallyLocal(/^Disallow: \/config\//m.test(ctx.robots), 'robots.txt: Disallow /config/');
     tallyLocal(/Allow: \//.test(ctx.robots), 'robots.txt: at least one Allow: /');
     tallyLocal(ctx.robots.includes('Sitemap: https://'), 'robots.txt: absolute Sitemap');
     tallyLocal(ctx.robots.includes('IndexNow: https://') && ctx.robots.includes(INDEXNOW_KEY_LITERAL + '.txt'),
@@ -1782,6 +1789,51 @@ function assertGeoSurface(ctx) {
       'vercel.json: Google Search Console verification file header rule');
     tallyLocal(/"\/404\\\\.html"/.test(vercel),
       'vercel.json: 404.html cache header rule');
+    [
+      '/docs/:path*',
+      '/scripts/:path*',
+      '/tests/:path*',
+      '/templates/:path*',
+      '/api/_lib/:path*',
+      '/api/_private/:path*'
+    ].forEach(function (src) {
+      tallyLocal(
+        vercel.includes('"source": "' + src + '"') &&
+          /"statusCode":\s*404/.test(vercel),
+        'vercel.json: 404 lock ' + src
+      );
+    });
+    tallyLocal(
+      vercel.includes('"/:file.md"') && /"statusCode":\s*404/.test(vercel),
+      'vercel.json: 404 lock /:file.md'
+    );
+    tallyLocal(
+      !/"source":\s*"\/api\/download"/.test(vercel) &&
+        !vercel.includes('"/api/download/:path*"'),
+      'vercel.json: no 404 rule on /api/download'
+    );
+    tallyLocal(
+      !/"source":\s*"\/templates\/:path\*"[\s\S]{0,80}"destination":\s*"\/en\/"/.test(vercel),
+      'vercel.json: templates no longer soft-redirect to /en/'
+    );
+  }
+
+  const vercelIgnore = readFile(path.join(ROOT, '.vercelignore'));
+  tallyLocal(vercelIgnore !== null, '.vercelignore exists');
+  if (vercelIgnore) {
+    ['docs/', 'scripts/', 'tests/', 'templates/', '*.md', 'google-apps-script.js'].forEach(function (line) {
+      tallyLocal(
+        vercelIgnore.split(/\r?\n/).indexOf(line) !== -1,
+        '.vercelignore lists ' + line
+      );
+    });
+    const vercelIgnoreRules = vercelIgnore.split(/\r?\n/).filter(function (line) {
+      return line.trim() && !line.trim().startsWith('#');
+    }).join('\n');
+    tallyLocal(
+      !/^\s*api\//m.test(vercelIgnoreRules) && !vercelIgnoreRules.includes('config/sot.json'),
+      '.vercelignore does not exclude api/ or config/sot.json'
+    );
   }
 
   // --- SOT shape: new fields present ---

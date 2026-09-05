@@ -6,6 +6,12 @@ Visi reikšmingi pakeitimai projekte dokumentuojami čia. Formatas pagal [Keep a
 
 ## [Unreleased]
 
+## [1.6.2] - 2026-09-05
+
+### Pridėta
+
+- **[Security] Public static surface lockdown:** [`.vercelignore`](.vercelignore) excludes internal trees (`docs/`, `scripts/`, `tests/`, `templates/`, `*.md`) from the Vercel CDN; [vercel.json](vercel.json) 404s `/docs/`, `/scripts/`, `/tests/`, `/templates/`, `/api/_lib/`, `/api/_private/`, `/:file.md` (function routes unchanged). GitHub Pages artifact deploy **retired**. Docs: [docs/security.md](docs/security.md), [docs/AGENT_SOT.md](docs/AGENT_SOT.md) §6.
+
 ### Pataisyta
 
 - **[QA] Stripe webhook host:** live endpoint must be `https://www.promptanatomy.help/api/stripe-webhook`. Apex `promptanatomy.help` **POST 308 → www** and Stripe does not replay the body, so fulfillment never runs. Docs: [DEPLOYMENT.md](DEPLOYMENT.md), [MUST_TODO.md](MUST_TODO.md), [docs/AGENT_SOT.md](docs/AGENT_SOT.md) §10.

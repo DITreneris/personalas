@@ -1,7 +1,7 @@
 # MUST_TODO (open)
 
-Atviri post-promo punktai (GSC). Money-path QA uždarytas 2026-09-05.  
-Shipped engineering (1.6.1): PDF voice pass + Blob overwrite — [CHANGELOG.md](CHANGELOG.md).
+Atviri post-promo punktai (GSC + public surface). Money-path QA uždarytas 2026-09-05.
+Shipped engineering (1.6.2): static surface lockdown — [CHANGELOG.md](CHANGELOG.md).
 
 ## Purchase QA (manual, before promo)
 
@@ -14,23 +14,24 @@ node scripts/verify-stripe-promo-gate.js
 node scripts/run-purchase-qa-checks.js
 ```
 
-1. [x] Confirm Vercel Production env: `SITE_URL=https://www.promptanatomy.help` (**required** — fulfillment fails closed without it) — local `.env` is www; Redis/download path healthy on Production (403/404, not 503)
-2. [x] Buy Beginner → `success.html` ready + masked email + Download + Redis fulfillment (live session 2026-09-05; poll `/api/download-link` 200)
-3. [x] Buy Advanced → same (live 2026-09-05 09:21 EEST; Stripe receipt #1580-6052 $11.99 + LT 21% VAT; poll 200 `productId=advanced` + Redis fulfillment)
-4. [x] Webhook replay → Redis `already_fulfilled` — Dashboard Resend on www `.help` (2026-09-05 09:43 EEST): Beginner `evt_1UCCsl…` + Advanced `evt_1UCCyo…` both **200** `{ "received": true, "fulfillment": "already_fulfilled" }` (Recovered / Resent manually). Event-level `pending_webhooks` may stay >0 because this Stripe account also delivers to `.space` / `.ceo` / `.online` / `.app` — look at the **.help** attempt only.
+1. [x] Confirm Vercel Production env: `SITE_URL=https://www.promptanatomy.help` (**required** — fulfillment fails closed without it)
+2. [x] Buy Beginner → `success.html` ready + masked email + Download + Redis fulfillment
+3. [x] Buy Advanced → same (poll 200 + Redis fulfillment)
+4. [x] Webhook replay → Redis `already_fulfilled` on www `.help` (apex POST 308 — do not re-add an apex endpoint)
 
-**Webhook (2026-09-03):** live Stripe endpoint is **www** `https://www.promptanatomy.help/api/stripe-webhook` (apex disabled). Apex POST still 308s — do not re-add an apex endpoint.
+**Promo: go** (2026-09-05). Purchase QA complete. Remaining: GSC spoke indexing + public-surface ops.
 
-Helpers 2026-09-05: `run-purchase-qa-checks.js` PASS — latest paid session is Advanced (`productId=advanced`), download-link 200 + Redis idempotency key.
+## Public surface (after 1.6.2 deploy)
 
-## Post-deploy (after 1.6.1 is on production)
+1. [ ] GitHub → Settings → Pages → Source **None** (workflow stop does **not** unpublish `ditreneris.github.io/personalas`)
+2. [ ] Confirm 404 (not 200, not 308 → `/en/`): `/DEPLOYMENT.md`, `/MUST_TODO.md`, `/docs/security.md`, `/api/_lib/fulfillment.js`, `/scripts/check-fulfillment.js`, `/google-apps-script.js`, `/docs/pdf-source/beginner-personalas-hr.html`, `/vercel.json`
+3. [ ] Confirm 200: `/en/`, `/config/sot.json`, `/google7305663b2567346e.html`, IndexNow `.txt`, `/llms.txt`
+4. [ ] API healthy: `GET /api/download?t=short` → **403** (or 503 if Redis down); junk `POST /api/stripe-webhook` → **400**, not 308
 
-1. [x] Hit `/en/` + three spokes (`/en/hr-ai-prompts/{job-description,interview-scorecard,master-hiring-prompt}/`) — 200 on 2026-09-03; live `config/sot.json` has voice-pass chapters (no Cover)
-2. [x] `success.html` poll after a test purchase (rate-limit must not block normal poll) — Beginner + Advanced 2026-09-05 both reached ready
-3. [ ] GSC URL Inspection + Request indexing for the three spokes — [DEPLOYMENT.md](DEPLOYMENT.md)
-4. [ ] Optional: `npm run seo:indexnow:diff` after `main` deploy
+## Post-deploy (SEO)
 
-**Promo: go** (2026-09-05). Purchase QA complete (SITE_URL, Beginner, Advanced, webhook replay). Remaining: GSC spoke indexing (SEO, not a money-path gate).
+1. [ ] GSC URL Inspection + Request indexing for the three spokes — [DEPLOYMENT.md](DEPLOYMENT.md)
+2. [ ] Optional: `npm run seo:indexnow:diff` after `main` deploy (also runs in `.github/workflows/deploy.yml` after tests)
 
 ## Next bets (from former roadmap)
 
@@ -40,6 +41,7 @@ Helpers 2026-09-05: `run-purchase-qa-checks.js` PASS — latest paid session is 
 
 ## Done (do not re-open)
 
-Shipped: EN-only `/en/`, Stripe products/links/webhook/env, PDF Blob, success poll contract, terms license anchor, DS v2.0, GEO/CSP — see CHANGELOG **1.4.0** / **1.4.1** / **1.5.x**.  
-**1.6.0:** prompt spokes + entity footer + GSC hygiene + download API rate limits / `SITE_URL` prod gate / price-first product resolve.  
+Shipped: EN-only `/en/`, Stripe products/links/webhook/env, PDF Blob, success poll contract, terms license anchor, DS v2.0, GEO/CSP — see CHANGELOG **1.4.0** / **1.4.1** / **1.5.x**.
+**1.6.0:** prompt spokes + entity footer + GSC hygiene + download API rate limits / `SITE_URL` prod gate / price-first product resolve.
 **1.6.1:** PDF voice pass (book frame), Advanced landing TOC omits Cover, Blob PDFs overwritten.
+**1.6.2:** public static surface lockdown (`.vercelignore` + 404 redirects); GitHub Pages deploy retired.

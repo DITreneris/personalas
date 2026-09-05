@@ -4,7 +4,7 @@
 
 **Vieša kalba ir kelias:** anglų (`en-US`), **`/en/`**. Lietuvių kalba projekte nebepalaikoma – build’as generuoja tik `/en/` puslapius; `/lt/*` URL nukreipiami į `/en/*` per [vercel.json](vercel.json) redirect taisykles.
 
-**Mokami PDF:** Stripe + Vercel serverless (`api/`) + Upstash Redis + Resend. **GitHub Pages šio srauto nepalaiko** (nėra serverio); paid PDF veikia tik Vercel deploy’e.
+**Mokami PDF:** Stripe + Vercel serverless (`api/`) + Upstash Redis + Resend. **GitHub Pages retired** — nebekeliama (servino visą repo, įskaitant mokamą PDF HTML). Paid PDF tik Vercel.
 
 ### Vercel + promptanatomy.help (pagrindinis deploy)
 
@@ -87,10 +87,13 @@ Vercel Project → Settings → Environment Variables. **Niekada necommitinti sl
 - Viešas site root **negali** hostinti mokamų PDF.
 - **Cover / preview PNG:** `assets/pdf-covers/` — `npm run pdf:covers:preview` po eksporto.
 
-### GitHub Pages (pasirinktinai)
+### GitHub Pages (retired)
 
-- URL priklauso nuo repo vardo, pvz. `https://ditreneris.github.io/personalas/`.
-- [.github/workflows/deploy.yml](.github/workflows/deploy.yml) build metu nustato `SITE_ORIGIN=https://ditreneris.github.io` ir `BASE_PATH=/<repo>/` – canonical ir sitemap jau sutampa, papildomo patch žingsnio nereikia.
+- Workflow nebekelia Pages artifact. [.github/workflows/deploy.yml](.github/workflows/deploy.yml) = `test` + IndexNow ant `main`.
+- Senas `https://ditreneris.github.io/personalas/` lieka kol GitHub → Settings → Pages → Source **None**.
+- Static preview nenaudojamas; paid PDF tik Vercel.
+
+**Viešas paviršius:** [`.vercelignore`](.vercelignore) + [vercel.json](vercel.json) 404 (žr. [docs/security.md](docs/security.md) Static surface). Lokaliai `npx serve .` vis tiek rodo visą repo.
 
 **Build / SEO:** žr. [scripts/build-locale-pages.js](scripts/build-locale-pages.js) – `SITE_ORIGIN`, `BASE_PATH`, pasirinktinai `SITE_PUBLIC_BASE`.
 
@@ -103,22 +106,9 @@ Vercel Project → Settings → Environment Variables. **Niekada necommitinti sl
 
 ---
 
-## GitHub Pages – bendras procesas
+## GitHub Pages – retired
 
-### Pirmas kartas
-
-1. **GitHub:** repozitorija [DITreneris/personalas](https://github.com/DITreneris/personalas) (ar jūsų analogas).
-2. **Lokaliai:** `git remote -v` – įsitikinkite, kad `personalas` (ar naudojamas vardas) rodo į teisingą URL.
-3. **GitHub:** Settings → Pages → **Build and deployment** → Source: **GitHub Actions**.
-4. Po pirmo push į `main` workflow [.github/workflows/deploy.yml](.github/workflows/deploy.yml) paleidžiamas automatiškai: testai → deploy.
-
-### Vėlesni deploy
-
-- Kiekvienas push į `main` paleidžia testus ir deploy į `https://ditreneris.github.io/<repo-name>/`.
-
-### Rankinis deploy
-
-- **Actions** → workflow **Deploy to GitHub Pages** → **Run workflow** (branch: `main`).
+Nebeįjungti. Jei `ditreneris.github.io/personalas` dar 200 — Settings → Pages → Source **None**.
 
 ---
 
@@ -165,9 +155,9 @@ npx pa11y http://127.0.0.1:3000/terms.html --config .pa11yrc.json
 
 | Problema | Sprendimas |
 |----------|------------|
-| Pages rodo 404 | Patikrinti, ar Settings → Pages šaltinis = **GitHub Actions**. |
-| Workflow nepaleidžiamas | Patikrinti, ar failas `.github/workflows/deploy.yml` yra `main` šakoje. |
-| **Deploy workflow failed** | Actions → atidaryti nepavykusį run → žiūrėti **test** job: jei nepraėjo `npm test`, lokaliai paleisti `npm test` ir taisyti; jei nepraėjo **deploy** job – tikrinti environment/permissions. |
+| `github.io` vis dar servina `docs/pdf-source/` | Settings → Pages → Source **None**. Workflow stop senos svetainės nepašalina. |
+| Workflow nepaleidžiamas | Patikrinti, ar failas `.github/workflows/deploy.yml` yra `main` šakoje (dabar IndexNow, ne Pages). |
+| **IndexNow workflow failed** | Actions → atidaryti run → **test** job: jei nepraėjo `npm test`, lokaliai `npm test`. IndexNow step yra `continue-on-error`. |
 | **CI workflow failed** | Dažniausiai `pa11y` (a11y klaidos) arba `npm test`. CI naudoja `.pa11yrc.json` (Chrome `--no-sandbox` ir kt., kad pa11y veiktų GitHub Actions). Lokaliai: `npm test`, tada `npx serve -s . -l 3000` ir `npx pa11y http://127.0.0.1:3000/ --config .pa11yrc.json` (arba be config, jei nereikia sandbox). |
 | Svetainė tuščia / neteisingas kelias | Projektas – statinis iš root; `path: .` – teisingas. Jei naudojate subfolderį, pakeisti `path`. |
 | Stripe webhook 308 / no fulfillment | Endpoint must be **www** `https://www.promptanatomy.help/api/stripe-webhook`. Apex POST 308 → www; Stripe does not replay the body. Disable any apex webhook. Healthy junk POST on www = 400 (signature). |

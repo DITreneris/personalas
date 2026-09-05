@@ -42,5 +42,6 @@ Tier žemėlapis. Lifecycle ir ownership — [DOCUMENTATION.md](DOCUMENTATION.md
 |------------|-----------|
 | [archive/design_systemv02.md](archive/design_systemv02.md) | DS v0.2–v0.3 PR log (istorija) |
 | [archive/CHANGELOG-HISTORY.md](archive/CHANGELOG-HISTORY.md) | CHANGELOG prieš 1.3.0 |
+| [archive/google-apps-script.js](archive/google-apps-script.js) | Disabled contact-form stub (not wired) |
 
 PDF authoring HTML: [pdf-source/](pdf-source/). Root agent entry: [.cursorrules](../.cursorrules) → AGENT_SOT.

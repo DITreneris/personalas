@@ -1,0 +1,14 @@
+# Internal files — not part of the customer site.
+# Build still sees the full Git clone (npm test on Vercel).
+# Do NOT ignore api/**/*.js or config/sot.json (runtime).
+
+docs/
+tests/
+scripts/
+templates/
+.github/
+.cursorrules
+.eslintrc.json
+.pa11yrc.json
+google-apps-script.js
+*.md

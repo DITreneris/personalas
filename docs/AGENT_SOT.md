@@ -16,7 +16,7 @@
 | `/lt/*` produkcijoje | **308 redirect** į `/en/*` ([vercel.json](../vercel.json)) — nėra atskiro LT QA puslapio |
 | **Local KPI (spoke)** | **Mokami PDF** (Stripe) + 10 nemokamų promptų; `primaryKpi: pdf` (hero → `#pdf-guides`) — **neperrašo** brand HQ |
 | Fulfillment | Vercel serverless `api/` + Upstash Redis + Resend + Blob (arba `api/_private/pdfs/` lokaliai) |
-| GitHub Pages | Tik statika — **be** mokamų PDF fulfillment |
+| GitHub Pages | **Retired** — nebekeliama; senas `github.io` unpublish per Settings → Pages → None |
 
 Kontaktinė forma (Google Apps Script) – **neįjungta**; žr. [INTEGRACIJA.md](../INTEGRACIJA.md).
 
@@ -105,7 +105,9 @@ Detaliau: [language-guidelines-en-lt.md](language-guidelines-en-lt.md).
 
 ## 6. Deploy ir QA URL
 
-**Produkcija:** Vercel, `npm test` build komanda ([vercel.json](../vercel.json)).
+**Produkcija:** Vercel only, `npm test` build komanda ([vercel.json](../vercel.json)). `outputDirectory` lieka `.`; viešą paviršių riboja [`.vercelignore`](../.vercelignore) + 404 redirect’ai. GitHub Pages deploy **retired**.
+
+**Vieši root failai (allowlist):** `/en/**`, gateway HTML, `success.html`, `terms.html`, `404.html`, `/assets/**`, `/images/**`, `generator.js`, faviconai, `manifest.webmanifest`, `robots.txt`, `sitemap.xml`, `llms.txt`, `llms-full.txt`, GSC HTML, IndexNow `{key}.txt`, `/config/sot.json`. Serverless: `/api/stripe-webhook`, `/api/download`, `/api/download-link`. **Ne** `docs/`, `scripts/`, `tests/`, `templates/`, `*.md`, `api/_lib` kaip statinis JS.
 
 **Post-deploy (pirmiausia):** `/en/`, tada vartai ir statiniai puslapiai.
 
@@ -138,7 +140,7 @@ Visi GEO / structured-data / robots / IndexNow artefaktai emit'inami iš vienos 
 | **ALLOW search/citation** | `OAI-SearchBot`, `ChatGPT-User`, `PerplexityBot`, `Perplexity-User`, `Claude-SearchBot`, `Claude-User`, `Applebot-Extended` | `Allow: /` (referral į PDF **ir** brand discovery → `.app`) |
 | **ALLOW landing, DISALLOW PDF assets + /api/** | `GPTBot`, `ClaudeBot`, `Google-Extended`, `Amazonbot` | Brand'as matomas AI answers'uose, bet sample turinys neteka į training set'us |
 | **BLOCK** | `anthropic-ai`, `cohere-ai`, `CCBot`, `Bytespider`, `Meta-ExternalAgent` | Training-only, no referral |
-| **Default `*`** | (Googlebot, Bingbot, kiti) | `Disallow: /api/`, `Allow: /` |
+| **Default `*`** | (Googlebot, Bingbot, kiti) | `Disallow: /api/`, `/docs/`, `/scripts/`, `/tests/`, `/templates/`, `/api/_lib/`, `/api/_private/`, `/config/`; `Allow: /` |
 
 `Sitemap:` ir `# IndexNow:` eilutės — privalomos pabaigoje.
 
@@ -160,7 +162,7 @@ Vienas `@graph` su `WebSite` (`@id` `/#website`, `publisher` ref), `Organization
 
 - Key konstanta — [scripts/build-locale-pages.js](../scripts/build-locale-pages.js) `INDEXNOW_KEY` (kartojama [scripts/indexnow-ping.js](../scripts/indexnow-ping.js); rotacija — abi vietos sinchronu).
 - Hosted `https://www.promptanatomy.help/{INDEXNOW_KEY}.txt` (vercel.json — `immutable` cache).
-- Ping per `npm run seo:indexnow:diff` (`--since-head`), automatiškai wired į [.github/workflows/deploy.yml](../.github/workflows/deploy.yml) post-deploy step'ą tik ant `main`; `continue-on-error: true` (non-blocking).
+- Ping per `npm run seo:indexnow:diff` (`--since-head`), automatiškai wired į [.github/workflows/deploy.yml](../.github/workflows/deploy.yml) po `test` job tik ant `main` (Pages deploy pašalintas); `continue-on-error: true` (non-blocking).
 - Diff mapping `fileToUrls()` mappina template → public URL (laukia priežiūros kai keičiasi sitemap struktūra).
 
 ### Meta robots + OG

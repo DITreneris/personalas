@@ -2,7 +2,7 @@
 
 **Production:** Vercel (`promptanatomy.help` / `www`) — static site + serverless `api/` for Stripe PDF fulfillment (webhook, download tokens, Resend email). See [DEPLOYMENT.md](DEPLOYMENT.md).
 
-GitHub Pages remains optional for static-only preview (no paid PDF fulfillment).
+GitHub Pages is **retired** (it published the full repo, including paid PDF HTML). Paid PDF fulfillment is Vercel-only.
 
 ## Paid PDF (live)
 
@@ -12,12 +12,12 @@ GitHub Pages remains optional for static-only preview (no paid PDF fulfillment).
 
 ## Kontaktų forma (rezervuota)
 
-Šiame projekte **kontaktų forma dar neįjungta**. Pavyzdinis backend stub: [google-apps-script.js](google-apps-script.js) (Prompt Anatomy EN placeholders; not wired).
+Šiame projekte **kontaktų forma dar neįjungta**. Šaknies `google-apps-script.js` pašalintas (nebeviešinamas). Pavyzdinis stubas — [docs/archive/google-apps-script.js](docs/archive/google-apps-script.js) (ne hot-path).
 
 Jei įjungsite formą vėliau:
 
 1. Modal arba forma ant landing (žr. CSS komentarą „MODAL / KONTAKTŲ FORMA“).
-2. Backend: Google Apps Script arba kita serverless forma — ne commitinti secretų.
+2. Backend: Google Apps Script arba kita serverless forma — ne commitinti secretų; **nedėti** šaknies `.js`, kurį Vercel servintų.
 3. Atnaujinti [templates/privacy.html](templates/privacy.html) + `npm run build`, ir šį failą.
 
 ## Feedback Store (rezervuota)

@@ -1,8 +1,7 @@
-# GitHub Pages deploy – Personalas (statinė svetainė)
-# Reikalavimas: Repo Settings → Pages → Build and deployment: GitHub Actions
-# Nuoroda: https://github.com/DITreneris/spinoff01 (QA standartas)
+# Post-main IndexNow ping. GitHub Pages deploy is retired (leaked the full repo).
+# Production = Vercel only. Manual: GitHub → Settings → Pages → Source: None.
 
-name: Deploy to GitHub Pages
+name: IndexNow (post-main)
 
 on:
   push:
@@ -11,11 +10,9 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
-  group: pages
+  group: indexnow
   cancel-in-progress: true
 
 jobs:
@@ -36,43 +33,24 @@ jobs:
           retry_wait_seconds: 40
           command: npm test
         env:
-          # Same canonical gate as ci.yml (www). Pages artifact rebuild below
-          # still uses ditreneris.github.io + BASE_PATH.
           SITE_ORIGIN: https://www.promptanatomy.help
           REQUIRE_STRIPE_LINKS: '1'
 
-  deploy:
+  indexnow:
     needs: test
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    environment:
-      name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - uses: actions/checkout@v5
+        with:
+          fetch-depth: 2
       - uses: actions/setup-node@v5
         with:
           node-version: '22'
       - run: npm install
-      - run: npm run build
-        env:
-          BASE_PATH: /${{ github.event.repository.name }}/
-          SITE_ORIGIN: https://ditreneris.github.io
-      - name: Strip node_modules from Pages artifact
-        run: rm -rf node_modules
-        shell: bash
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: .
-      - id: deploy
-        uses: actions/deploy-pages@v4
-
-      # Post-deploy: ping IndexNow with URLs changed in the latest commit so
-      # Bing / Yandex / ChatGPT Search backends pull fresh content quickly.
-      # Only runs after a successful deploy on main. Non-blocking: failures
-      # log a warning and do not fail the workflow.
-      - name: IndexNow ping (post-deploy)
-        if: github.ref == 'refs/heads/main'
+      # Bing / Yandex / ChatGPT Search backends. Non-blocking.
+      - name: IndexNow ping
         continue-on-error: true
         run: npm run seo:indexnow:diff
         env:

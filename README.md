@@ -4,7 +4,7 @@
 
 **Live site:** [https://www.promptanatomy.help/en/](https://www.promptanatomy.help/en/) (EN-only). Root `/` and `/privacy.html` are EN gateways → `/en/`. Legacy `/lt/*` URLs redirect to `/en/*` ([vercel.json](vercel.json)). Canonical host: **www**.
 
-**Production:** [Vercel](https://www.promptanatomy.help) — paid PDFs need serverless `api/` + Stripe, Upstash, Resend ([DEPLOYMENT.md](DEPLOYMENT.md)). GitHub Pages is static-only (no paid PDF fulfillment).
+**Production:** [Vercel](https://www.promptanatomy.help) — paid PDFs need serverless `api/` + Stripe, Upstash, Resend ([DEPLOYMENT.md](DEPLOYMENT.md)). GitHub Pages deploy is **retired** (it published the full repo).
 
 ## Build
 
@@ -62,11 +62,6 @@ See [docs/pdf-source/README.md](docs/pdf-source/README.md).
 - [docs/language-guidelines-en-lt.md](docs/language-guidelines-en-lt.md) — public brand + EN-only  
 - [DEPLOYMENT.md](DEPLOYMENT.md) — Vercel / env
 
-## GitHub Pages (optional)
+## GitHub Pages (retired)
 
-Push to `main` → Actions → Deploy to GitHub Pages. Configure [Settings → Pages](https://github.com/DITreneris/personalas/settings/pages) → source: GitHub Actions.
-
-```bash
-git remote add personalas https://github.com/DITreneris/personalas.git
-git push personalas main
-```
+Do not enable Pages. The old workflow published `docs/pdf-source/` (paid HTML) at `ditreneris.github.io`. Unpublish: Settings → Pages → Source **None**. Paid PDF fulfillment is Vercel-only.

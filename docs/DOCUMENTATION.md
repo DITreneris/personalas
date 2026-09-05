@@ -60,7 +60,7 @@ Keičiant brand HQ, spoke KPI, locale ar GEO destination hierarchy — **ne** ko
 | [../MUST_TODO.md](../MUST_TODO.md) | Orchestrator | Tik atviri promo / purchase QA |
 | [../DEPLOYMENT.md](../DEPLOYMENT.md) | Orchestrator | Env, Vercel, post-deploy |
 | [../INTEGRACIJA.md](../INTEGRACIJA.md) | Orchestrator | Integracijos statusas (forma, API, Feedback Store) |
-| [security.md](security.md) | QA | npm audit, CSP, GEO blurb |
+| [security.md](security.md) | QA | npm audit, CSP, static surface, GEO blurb |
 | [TESTAVIMAS.md](TESTAVIMAS.md) | QA | Gyvas testavimas + Mobile matrix |
 | [QA_STANDARTAS.md](QA_STANDARTAS.md) | QA | Merge / release vartai |
 | [pdf-source/README.md](pdf-source/README.md) | Content | PDF export SOP |

@@ -10,8 +10,16 @@
     { "source": "/privatumas.html", "destination": "/en/privacy.html", "permanent": true },
     { "source": "/en/privatumas.html", "destination": "/en/privacy.html", "permanent": true },
     { "source": "/privacy.html", "destination": "/en/privacy.html", "permanent": true },
-    { "source": "/templates/:path*", "destination": "/en/", "permanent": false },
-    { "source": "/docs/pdf-source/:path*", "destination": "/en/", "permanent": false }
+    { "source": "/templates/:path*", "destination": "/404.html", "statusCode": 404 },
+    { "source": "/docs/:path*", "destination": "/404.html", "statusCode": 404 },
+    { "source": "/scripts/:path*", "destination": "/404.html", "statusCode": 404 },
+    { "source": "/tests/:path*", "destination": "/404.html", "statusCode": 404 },
+    { "source": "/api/_lib/:path*", "destination": "/404.html", "statusCode": 404 },
+    { "source": "/api/_private/:path*", "destination": "/404.html", "statusCode": 404 },
+    { "source": "/.github/:path*", "destination": "/404.html", "statusCode": 404 },
+    { "source": "/google-apps-script.js", "destination": "/404.html", "statusCode": 404 },
+    { "source": "/vercel.json", "destination": "/404.html", "statusCode": 404 },
+    { "source": "/:file.md", "destination": "/404.html", "statusCode": 404 }
   ],
   "buildCommand": "REQUIRE_STRIPE_LINKS=1 npm test",
   "installCommand": "npm install",

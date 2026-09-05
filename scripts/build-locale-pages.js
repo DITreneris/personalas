@@ -1186,6 +1186,13 @@ function buildRobotsTxt(absRoot) {
   blocks.push('# Default policy for all other bots (Googlebot, Bingbot, etc.).');
   blocks.push('User-agent: *');
   blocks.push('Disallow: /api/');
+  blocks.push('Disallow: /docs/');
+  blocks.push('Disallow: /scripts/');
+  blocks.push('Disallow: /tests/');
+  blocks.push('Disallow: /templates/');
+  blocks.push('Disallow: /api/_lib/');
+  blocks.push('Disallow: /api/_private/');
+  blocks.push('Disallow: /config/');
   blocks.push('Allow: /');
   blocks.push('');
 

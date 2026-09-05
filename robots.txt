@@ -64,6 +64,13 @@ Disallow: /
 # Default policy for all other bots (Googlebot, Bingbot, etc.).
 User-agent: *
 Disallow: /api/
+Disallow: /docs/
+Disallow: /scripts/
+Disallow: /tests/
+Disallow: /templates/
+Disallow: /api/_lib/
+Disallow: /api/_private/
+Disallow: /config/
 Allow: /
 
 Sitemap: https://www.promptanatomy.help/sitemap.xml
