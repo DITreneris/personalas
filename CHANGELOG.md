@@ -6,6 +6,12 @@ Visi reikšmingi pakeitimai projekte dokumentuojami čia. Formatas pagal [Keep a
 
 ## [Unreleased]
 
+## [1.6.3] - 2026-09-05
+
+### Pataisyta
+
+- **[Fix] Vercel build:** [`.vercelignore`](.vercelignore) no longer excludes `scripts/`, `docs/`, `tests/`, or `templates/` — those are required during `npm test` on Vercel (1.6.2 hid `build-locale-pages.js` and failed deploy). Public lock stays [vercel.json](vercel.json) 404. Docs: [docs/security.md](docs/security.md).
+
 ## [1.6.2] - 2026-09-05
 
 ### Pridėta

@@ -93,7 +93,7 @@ Vercel Project → Settings → Environment Variables. **Niekada necommitinti sl
 - Senas `https://ditreneris.github.io/personalas/` lieka kol GitHub → Settings → Pages → Source **None**.
 - Static preview nenaudojamas; paid PDF tik Vercel.
 
-**Viešas paviršius:** [`.vercelignore`](.vercelignore) + [vercel.json](vercel.json) 404 (žr. [docs/security.md](docs/security.md) Static surface). Lokaliai `npx serve .` vis tiek rodo visą repo.
+**Viešas paviršius:** [vercel.json](vercel.json) 404 slėpia `docs/` / `scripts/` / `tests/` / `templates/`. [`.vercelignore`](.vercelignore) tik `*.md` / `.github/` — **ne** build katalogus (žr. [docs/security.md](docs/security.md) Static surface). Lokaliai `npx serve .` vis tiek rodo visą repo.
 
 **Build / SEO:** žr. [scripts/build-locale-pages.js](scripts/build-locale-pages.js) – `SITE_ORIGIN`, `BASE_PATH`, pasirinktinai `SITE_PUBLIC_BASE`.
 

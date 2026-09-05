@@ -105,7 +105,7 @@ Detaliau: [language-guidelines-en-lt.md](language-guidelines-en-lt.md).
 
 ## 6. Deploy ir QA URL
 
-**Produkcija:** Vercel only, `npm test` build komanda ([vercel.json](../vercel.json)). `outputDirectory` lieka `.`; viešą paviršių riboja [`.vercelignore`](../.vercelignore) + 404 redirect’ai. GitHub Pages deploy **retired**.
+**Produkcija:** Vercel only, `npm test` build komanda ([vercel.json](../vercel.json)). `outputDirectory` lieka `.`. [`.vercelignore`](../.vercelignore) tik ne-build failams (`*.md`, `.github/`); `scripts/` / `docs/` / `tests/` / `templates/` **ne** ignore — kitaip Vercel neranda `build-locale-pages.js`. Viešą lock'ą daro 404 redirect’ai. GitHub Pages deploy **retired**.
 
 **Vieši root failai (allowlist):** `/en/**`, gateway HTML, `success.html`, `terms.html`, `404.html`, `/assets/**`, `/images/**`, `generator.js`, faviconai, `manifest.webmanifest`, `robots.txt`, `sitemap.xml`, `llms.txt`, `llms-full.txt`, GSC HTML, IndexNow `{key}.txt`, `/config/sot.json`. Serverless: `/api/stripe-webhook`, `/api/download`, `/api/download-link`. **Ne** `docs/`, `scripts/`, `tests/`, `templates/`, `*.md`, `api/_lib` kaip statinis JS.
 

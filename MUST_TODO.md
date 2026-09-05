@@ -1,7 +1,7 @@
 # MUST_TODO (open)
 
 Atviri post-promo punktai (GSC + public surface). Money-path QA uždarytas 2026-09-05.
-Shipped engineering (1.6.2): static surface lockdown — [CHANGELOG.md](CHANGELOG.md).
+Shipped engineering (1.6.3): Vercel ignore hotfix — [CHANGELOG.md](CHANGELOG.md).
 
 ## Purchase QA (manual, before promo)
 
@@ -45,3 +45,4 @@ Shipped: EN-only `/en/`, Stripe products/links/webhook/env, PDF Blob, success po
 **1.6.0:** prompt spokes + entity footer + GSC hygiene + download API rate limits / `SITE_URL` prod gate / price-first product resolve.
 **1.6.1:** PDF voice pass (book frame), Advanced landing TOC omits Cover, Blob PDFs overwritten.
 **1.6.2:** public static surface lockdown (`.vercelignore` + 404 redirects); GitHub Pages deploy retired.
+**1.6.3:** `.vercelignore` no longer drops `scripts/` / `docs/` / `tests/` / `templates/` (Vercel build needs them).

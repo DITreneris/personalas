@@ -1,14 +1,11 @@
-# Internal files — not part of the customer site.
-# Build still sees the full Git clone (npm test on Vercel).
-# Do NOT ignore api/**/*.js or config/sot.json (runtime).
+# Exclude files that are NOT needed during `npm test` on Vercel.
+# .vercelignore is applied BEFORE the build — ignoring scripts/docs/tests/templates
+# breaks `npm run build` / pdf:validate / structure tests.
+# Those trees stay in the upload; vercel.json 404s hide them from the public CDN.
+# Do NOT ignore api/**/*.js, config/sot.json, or .eslintrc.json.
 
-docs/
-tests/
-scripts/
-templates/
 .github/
 .cursorrules
-.eslintrc.json
 .pa11yrc.json
 google-apps-script.js
 *.md

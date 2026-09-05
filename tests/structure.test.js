@@ -1821,7 +1821,7 @@ function assertGeoSurface(ctx) {
   const vercelIgnore = readFile(path.join(ROOT, '.vercelignore'));
   tallyLocal(vercelIgnore !== null, '.vercelignore exists');
   if (vercelIgnore) {
-    ['docs/', 'scripts/', 'tests/', 'templates/', '*.md', 'google-apps-script.js'].forEach(function (line) {
+    ['*.md', 'google-apps-script.js', '.github/'].forEach(function (line) {
       tallyLocal(
         vercelIgnore.split(/\r?\n/).indexOf(line) !== -1,
         '.vercelignore lists ' + line
@@ -1834,6 +1834,12 @@ function assertGeoSurface(ctx) {
       !/^\s*api\//m.test(vercelIgnoreRules) && !vercelIgnoreRules.includes('config/sot.json'),
       '.vercelignore does not exclude api/ or config/sot.json'
     );
+    ['docs/', 'scripts/', 'tests/', 'templates/'].forEach(function (line) {
+      tallyLocal(
+        vercelIgnoreRules.split(/\r?\n/).indexOf(line) === -1,
+        '.vercelignore does not exclude build-time ' + line
+      );
+    });
   }
 
   // --- SOT shape: new fields present ---
