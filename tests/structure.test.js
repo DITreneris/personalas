@@ -1790,31 +1790,49 @@ function assertGeoSurface(ctx) {
       'vercel.json: Google Search Console verification file header rule');
     tallyLocal(/"\/404\\\\.html"/.test(vercel),
       'vercel.json: 404.html cache header rule');
+    let vercelCfg = null;
+    try {
+      vercelCfg = JSON.parse(vercel);
+    } catch (_e) {
+      vercelCfg = null;
+    }
+    tallyLocal(vercelCfg !== null, 'vercel.json: valid JSON');
+    const vercelRoutes = (vercelCfg && vercelCfg.routes) || [];
+    const vercelRedirects = (vercelCfg && vercelCfg.redirects) || [];
+    const hasRoute404 = function (src) {
+      return vercelRoutes.some(function (r) {
+        return (r.src === src || r.source === src) && Number(r.status || r.statusCode) === 404;
+      });
+    };
     [
-      '/docs/:path*',
-      '/scripts/:path*',
-      '/tests/:path*',
-      '/templates/:path*',
-      '/api/_lib/:path*',
-      '/api/_private/:path*'
+      '/docs(?:/.*)?',
+      '/scripts(?:/.*)?',
+      '/tests(?:/.*)?',
+      '/templates(?:/.*)?',
+      '/api/_lib(?:/.*)?',
+      '/api/_private(?:/.*)?'
     ].forEach(function (src) {
-      tallyLocal(
-        vercel.includes('"source": "' + src + '"') &&
-          /"statusCode":\s*404/.test(vercel),
-        'vercel.json: 404 lock ' + src
-      );
+      tallyLocal(hasRoute404(src), 'vercel.json: 404 lock ' + src.replace('(?:/.*)?', '/'));
     });
     tallyLocal(
-      vercel.includes('"/:file.md"') && /"statusCode":\s*404/.test(vercel),
+      vercelRoutes.some(function (r) {
+        return /\\?\.md/.test(String(r.src || '')) && Number(r.status || r.statusCode) === 404;
+      }),
       'vercel.json: 404 lock /:file.md'
     );
     tallyLocal(
-      !/"source":\s*"\/api\/download"/.test(vercel) &&
-        !vercel.includes('"/api/download/:path*"'),
+      !vercelRoutes.some(function (r) {
+        return /api\/download/.test(String(r.src || r.source || ''));
+      }) &&
+        !vercelRedirects.some(function (r) {
+          return /api\/download/.test(String(r.source || r.src || ''));
+        }),
       'vercel.json: no 404 rule on /api/download'
     );
     tallyLocal(
-      !/"source":\s*"\/templates\/:path\*"[\s\S]{0,80}"destination":\s*"\/en\/"/.test(vercel),
+      !vercelRedirects.some(function (r) {
+        return /templates/.test(String(r.source || '')) && r.destination === '/en/';
+      }),
       'vercel.json: templates no longer soft-redirect to /en/'
     );
     tallyLocal(

@@ -79,11 +79,11 @@ Vercel `outputDirectory` is `.` (repo root). Customer files must not include the
 | Control | Detail |
 |---------|--------|
 | [`.vercelignore`](../.vercelignore) | Applied **before** build. Ignore only non-build files (`.github/`, `*.md`, `.cursorrules`, `.pa11yrc.json`). **Do not** ignore `scripts/`, `docs/`, `tests/`, `templates/`, `.eslintrc.json`, `api/**/*.js`, or `config/sot.json` — Vercel `npm test` needs them. |
-| [vercel.json](../vercel.json) 404 | Public lock for build-needed trees: `/docs/`, `/scripts/`, `/tests/`, `/templates/`, `/api/_lib/`, `/api/_private/`, `/.github/`, `/:file.md`, `/vercel.json`, `/google-apps-script.js` → `/404.html` `statusCode: 404`. Function routes `/api/download`, `/api/download-link`, `/api/stripe-webhook` stay. |
+| [vercel.json](../vercel.json) 404 | Public lock via `routes` `status: 404` (not `redirects` — Vercel only allows redirect 301–308): `/docs/`, `/scripts/`, `/tests/`, `/templates/`, `/api/_lib/`, `/api/_private/`, `/.github/`, `*.md`, `/vercel.json`, `/google-apps-script.js` → `/404.html`. Function routes `/api/download`, `/api/download-link`, `/api/stripe-webhook` stay. |
 | GitHub Pages | Deploy **retired**. Unpublish leftover `github.io` via Settings → Pages → None. |
 | Allowlist | See [AGENT_SOT.md](AGENT_SOT.md) §6. GSC HTML + IndexNow `{key}.txt` stay public (protocol). `api/_lib` is not a public static JS URL. |
 
-Local `npx serve .` still serves the full repo (dev). Production lock for `scripts/` / `docs/` / `tests/` / `templates/` is **404 redirects**, not `.vercelignore`.
+Local `npx serve .` still serves the full repo (dev). Production lock for `scripts/` / `docs/` / `tests/` / `templates/` is **`routes` 404**, not `.vercelignore`.
 
 **Build env:** Vercel `buildCommand` pins `SITE_ORIGIN=https://www.promptanatomy.help`. `VERCEL=1` ignores leftover `BASE_PATH` (old GitHub Pages `/personalas/`). Remove `BASE_PATH` from the Vercel dashboard if it is still set.
 

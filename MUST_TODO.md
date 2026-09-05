@@ -1,7 +1,7 @@
 # MUST_TODO (open)
 
 Atviri post-promo punktai (GSC + public surface). Money-path QA uždarytas 2026-09-05.
-Shipped engineering (1.6.4): Vercel `BASE_PATH` hotfix — [CHANGELOG.md](CHANGELOG.md).
+Shipped engineering (1.6.5): Vercel 404 `routes` lock — [CHANGELOG.md](CHANGELOG.md).
 
 ## Purchase QA (manual, before promo)
 
@@ -47,3 +47,4 @@ Shipped: EN-only `/en/`, Stripe products/links/webhook/env, PDF Blob, success po
 **1.6.2:** public static surface lockdown (`.vercelignore` + 404 redirects); GitHub Pages deploy retired.
 **1.6.3:** `.vercelignore` no longer drops `scripts/` / `docs/` / `tests/` / `templates/` (Vercel build needs them).
 **1.6.4:** Vercel ignores leftover `BASE_PATH=/personalas/`; buildCommand pins www `SITE_ORIGIN`.
+**1.6.5:** public 404 lock uses `vercel.json` `routes` (Vercel drops `redirects` with `statusCode: 404`).

@@ -6,6 +6,12 @@ Visi reikšmingi pakeitimai projekte dokumentuojami čia. Formatas pagal [Keep a
 
 ## [Unreleased]
 
+## [1.6.5] - 2026-09-05
+
+### Pataisyta
+
+- **[Fix] Vercel 404 lock:** `redirects` `statusCode: 404` is invalid on Vercel (only 301–308) and those rules were dropped before `npm test`. Public lock is now [`vercel.json`](vercel.json) `routes` with `status: 404`. Docs: [docs/security.md](docs/security.md).
+
 ## [1.6.4] - 2026-09-05
 
 ### Pataisyta
