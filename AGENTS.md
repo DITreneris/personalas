@@ -104,6 +104,7 @@ PDF: `pdf:validate`, `pdf:export`, `pdf:covers` — AGENT_SOT.
 - Greita paieška: `rg -i "personalas|series no|spin-off|promptų|biblioteka|marketingas|prompt.?library"` ant viešų HTML
 - Šaltinis: `templates/index-lt.html`, `templates/privacy.html`
 - Stripe receipts: Public details support email = `info@promptanatomy.app` (Dashboard; own-account API blocked) — [docs/AGENT_SOT.md](docs/AGENT_SOT.md) §5 + §10
+- Vercel deploy / `.vercelignore` / 404 lock — [`.cursor/skills/vercel-deploy/SKILL.md`](.cursor/skills/vercel-deploy/SKILL.md) + [docs/AGENT_SOT.md](docs/AGENT_SOT.md) §6 + §10
 
 ---
 

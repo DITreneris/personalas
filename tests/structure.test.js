@@ -1704,12 +1704,12 @@ function assertGeoSurface(ctx) {
     tallyLocal(llms.includes('> '), 'llms.txt: blockquote summary present');
     tallyLocal(/## Training hub/.test(llms) && llms.includes('promptanatomy.app'),
       'llms.txt: Training hub section points to promptanatomy.app');
-    tallyLocal(llms.includes('/en/hr-ai-prompts/job-description/'),
-      'llms.txt: job-description spoke link');
-    tallyLocal(llms.includes('/en/hr-ai-prompts/interview-scorecard/'),
-      'llms.txt: interview-scorecard spoke link');
-    tallyLocal(llms.includes('/en/hr-ai-prompts/master-hiring-prompt/'),
-      'llms.txt: master-hiring-prompt spoke link');
+    tallyLocal(llms.includes('/en/hr-ai-prompts/job-description/index.md'),
+      'llms.txt: job-description spoke markdown twin');
+    tallyLocal(llms.includes('/en/hr-ai-prompts/interview-scorecard/index.md'),
+      'llms.txt: interview-scorecard spoke markdown twin');
+    tallyLocal(llms.includes('/en/hr-ai-prompts/master-hiring-prompt/index.md'),
+      'llms.txt: master-hiring-prompt spoke markdown twin');
     tallyLocal(/## Optional/.test(llms) && llms.includes('Privacy'),
       'llms.txt: Optional section includes Privacy');
     tallyLocal(llms.includes('$5.99') && llms.includes('$11.99') && llms.includes('$15.99'),
@@ -1717,6 +1717,57 @@ function assertGeoSurface(ctx) {
     tallyLocal(llms.includes('): '),
       'llms.txt: link lines include colon descriptions');
   }
+
+  const DESCRIBEDBY = 'rel="describedby"';
+  const MD_ALT = 'type="text/markdown"';
+  if (ctx.enIndex) {
+    tallyLocal(ctx.enIndex.includes(DESCRIBEDBY) && ctx.enIndex.includes('/llms.txt'),
+      'en/index.html: rel=describedby /llms.txt');
+    tallyLocal(ctx.enIndex.includes(MD_ALT) && ctx.enIndex.includes('/en/index.md'),
+      'en/index.html: markdown alternate /en/index.md');
+  }
+  if (ctx.enPrivacy) {
+    tallyLocal(ctx.enPrivacy.includes(DESCRIBEDBY) && ctx.enPrivacy.includes('/llms.txt'),
+      'en/privacy.html: rel=describedby /llms.txt');
+    tallyLocal(!ctx.enPrivacy.includes(MD_ALT),
+      'en/privacy.html: no markdown alternate');
+  }
+  if (ctx.terms) {
+    tallyLocal(ctx.terms.includes(DESCRIBEDBY) && ctx.terms.includes('/llms.txt'),
+      'terms.html: rel=describedby /llms.txt');
+  }
+  if (ctx.success) {
+    tallyLocal(!ctx.success.includes(DESCRIBEDBY) && !ctx.success.includes(MD_ALT),
+      'success.html: no describedby / markdown alternate');
+  }
+  if (ctx.sitemap) {
+    tallyLocal(!ctx.sitemap.includes('.md'), 'sitemap.xml: no markdown locs');
+  }
+
+  const landingMd = readFile(path.join(ROOT, 'en', 'index.md'));
+  tallyLocal(landingMd !== null && /^# /.test(landingMd), 'en/index.md exists with H1');
+  if (landingMd) {
+    tallyLocal(!/personalas/i.test(landingMd), 'en/index.md: no Personalas');
+    tallyLocal(landingMd.includes('llms-full.txt') && landingMd.includes('/en/#pdf-guides'),
+      'en/index.md: digest + PDF links');
+  }
+
+  ['job-description', 'interview-scorecard', 'master-hiring-prompt'].forEach(function (slug) {
+    const spokeHtml = readFile(path.join(ROOT, 'en', 'hr-ai-prompts', slug, 'index.html'));
+    const spokeMd = readFile(path.join(ROOT, 'en', 'hr-ai-prompts', slug, 'index.md'));
+    tallyLocal(spokeHtml && spokeHtml.includes(DESCRIBEDBY) && spokeHtml.includes(MD_ALT),
+      'spoke ' + slug + ' HTML: describedby + markdown alternate');
+    tallyLocal(spokeMd !== null && /^# /.test(spokeMd),
+      'spoke ' + slug + ' index.md exists with H1');
+    if (spokeMd) {
+      tallyLocal(spokeMd.includes('>') && spokeMd.includes('```'),
+        'spoke ' + slug + ' index.md: blockquote + fenced prompt');
+      tallyLocal(!/personalas/i.test(spokeMd),
+        'spoke ' + slug + ' index.md: no Personalas');
+      tallyLocal(spokeMd.includes('promptanatomy.app'),
+        'spoke ' + slug + ' index.md: Training hub .app');
+    }
+  });
 
   const llmsFull = readFile(path.join(ROOT, 'llms-full.txt'));
   tallyLocal(llmsFull !== null, 'llms-full.txt exists');
@@ -1782,6 +1833,10 @@ function assertGeoSurface(ctx) {
       'vercel.json: Origin-Agent-Cluster: ?1');
     tallyLocal(vercel.includes('llms\\\\.txt'),
       'vercel.json: llms.txt header rule');
+    tallyLocal(vercel.includes('text/markdown'),
+      'vercel.json: EN markdown Content-Type header');
+    tallyLocal(vercel.includes('describedby'),
+      'vercel.json: Link describedby on /en/');
     tallyLocal(vercel.includes('manifest\\\\.webmanifest'),
       'vercel.json: manifest.webmanifest header rule');
     tallyLocal(vercel.includes(INDEXNOW_KEY_LITERAL),
@@ -1845,7 +1900,7 @@ function assertGeoSurface(ctx) {
   const vercelIgnore = readFile(path.join(ROOT, '.vercelignore'));
   tallyLocal(vercelIgnore !== null, '.vercelignore exists');
   if (vercelIgnore) {
-    ['*.md', 'google-apps-script.js', '.github/'].forEach(function (line) {
+    ['*.md', '!en/**/*.md', 'google-apps-script.js', '.github/'].forEach(function (line) {
       tallyLocal(
         vercelIgnore.split(/\r?\n/).indexOf(line) !== -1,
         '.vercelignore lists ' + line

@@ -1,7 +1,7 @@
 # MUST_TODO (open)
 
 Atviri post-promo punktai (GSC + public surface). Money-path QA uždarytas 2026-09-05.
-Shipped engineering (1.6.5): Vercel 404 `routes` lock — [CHANGELOG.md](CHANGELOG.md).
+Shipped engineering (1.6.6): llms.txt v2 twins. Prior: 1.6.5 Vercel 404 `routes` lock — [CHANGELOG.md](CHANGELOG.md).
 
 ## Purchase QA (manual, before promo)
 
@@ -23,15 +23,23 @@ node scripts/run-purchase-qa-checks.js
 
 ## Public surface (after 1.6.2 deploy)
 
-1. [ ] GitHub → Settings → Pages → Source **None** (workflow stop does **not** unpublish `ditreneris.github.io/personalas`)
-2. [ ] Confirm 404 (not 200, not 308 → `/en/`): `/DEPLOYMENT.md`, `/MUST_TODO.md`, `/docs/security.md`, `/api/_lib/fulfillment.js`, `/scripts/check-fulfillment.js`, `/google-apps-script.js`, `/docs/pdf-source/beginner-personalas-hr.html`, `/vercel.json`
-3. [ ] Confirm 200: `/en/`, `/config/sot.json`, `/google7305663b2567346e.html`, IndexNow `.txt`, `/llms.txt`
-4. [ ] API healthy: `GET /api/download?t=short` → **403** (or 503 if Redis down); junk `POST /api/stripe-webhook` → **400**, not 308
+Live-checked 2026-09-05 on `www.promptanatomy.help` (and `ditreneris.github.io/personalas/`).
 
-## Post-deploy (SEO)
+1. [x] GitHub Pages unpublished — `https://ditreneris.github.io/personalas/` → **404** (keep Settings → Pages → Source **None**)
+2. [x] Confirm 404 (not 200, not 308 → `/en/`): `/DEPLOYMENT.md`, `/MUST_TODO.md`, `/docs/security.md`, `/api/_lib/fulfillment.js`, `/scripts/check-fulfillment.js`, `/google-apps-script.js`, `/docs/pdf-source/beginner-personalas-hr.html`, `/vercel.json`
+3. [x] Confirm 200: `/en/`, `/config/sot.json`, `/google7305663b2567346e.html`, IndexNow `.txt`, `/llms.txt`, `/robots.txt`, `/sitemap.xml`
+4. [x] API healthy: `GET /api/download?t=short` → **403**; junk `POST /api/stripe-webhook` → **400** (not 308)
 
-1. [ ] GSC URL Inspection + Request indexing for the three spokes — [DEPLOYMENT.md](DEPLOYMENT.md)
-2. [ ] Optional: `npm run seo:indexnow:diff` after `main` deploy (also runs in `.github/workflows/deploy.yml` after tests)
+## Post-deploy (SEO) — operator dashboards
+
+1. [ ] GSC (www property) submit `https://www.promptanatomy.help/sitemap.xml` + URL Inspection + Request indexing for `/en/`, privacy, terms, and the three spokes — [DEPLOYMENT.md](DEPLOYMENT.md)
+2. [ ] Bing Webmaster: import from GSC, same sitemap, confirm IndexNow key
+3. [ ] Optional: `npm run seo:indexnow:diff` after `main` deploy (also runs in `.github/workflows/deploy.yml` after tests)
+
+## Post-deploy (llms.txt v2 — after 1.6.6)
+
+1. [ ] Confirm **200** + `Content-Type: text/markdown` on `/en/index.md`, `/en/hr-ai-prompts/job-description/index.md`, `/en/hr-ai-prompts/interview-scorecard/index.md`, `/en/hr-ai-prompts/master-hiring-prompt/index.md`
+2. [ ] Confirm `/README.md` still **404**; view-source `/en/` has `rel="describedby"` → `/llms.txt` and markdown `rel="alternate"`
 
 ## Next bets (from former roadmap)
 
@@ -48,3 +56,4 @@ Shipped: EN-only `/en/`, Stripe products/links/webhook/env, PDF Blob, success po
 **1.6.3:** `.vercelignore` no longer drops `scripts/` / `docs/` / `tests/` / `templates/` (Vercel build needs them).
 **1.6.4:** Vercel ignores leftover `BASE_PATH=/personalas/`; buildCommand pins www `SITE_ORIGIN`.
 **1.6.5:** public 404 lock uses `vercel.json` `routes` (Vercel drops `redirects` with `statusCode: 404`).
+**1.6.6:** llms.txt v2 (`describedby` + EN `index.md` twins). GSC/Bing indexing still operator.

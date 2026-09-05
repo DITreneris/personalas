@@ -10,9 +10,9 @@ This page is the Hire kit (US HR prompts + PDF guides). The full Prompt Anatomy 
 ## Free resources
 - [Landing - 10 free prompts and 6-phase workflow](https://www.promptanatomy.help/en/): Copy-paste US hiring prompts on this Hire kit site.
 - [Full prompt digest (markdown)](https://www.promptanatomy.help/llms-full.txt): All 10 free prompts in plain markdown for assistants.
-- [Job ad rewrite prompt (plain language)](https://www.promptanatomy.help/en/hr-ai-prompts/job-description/): Dedicated indexable page for this free prompt.
-- [Structured interview plan prompt](https://www.promptanatomy.help/en/hr-ai-prompts/interview-scorecard/): Dedicated indexable page for this free prompt.
-- [Master hiring loop prompt (end-to-end)](https://www.promptanatomy.help/en/hr-ai-prompts/master-hiring-prompt/): Dedicated indexable page for this free prompt.
+- [Job ad rewrite prompt (plain language)](https://www.promptanatomy.help/en/hr-ai-prompts/job-description/index.md): Dedicated indexable page for this free prompt.
+- [Structured interview plan prompt](https://www.promptanatomy.help/en/hr-ai-prompts/interview-scorecard/index.md): Dedicated indexable page for this free prompt.
+- [Master hiring loop prompt (end-to-end)](https://www.promptanatomy.help/en/hr-ai-prompts/master-hiring-prompt/index.md): Dedicated indexable page for this free prompt.
 
 ## Paid PDF guides
 - [Beginner HR Hiring Guide - $5.99 - 16 pages](https://www.promptanatomy.help/en/#pdf-guides): Starter US hiring playbook PDF.

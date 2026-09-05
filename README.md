@@ -30,13 +30,14 @@ npm test        # build + pdf:validate + structure tests + HTML/JS lint
 The build script emits every SEO / GEO / AI-crawler surface from `config/sot.json` — never hand-edit the outputs:
 
 - [robots.txt](robots.txt) — per-AI-bot policy (allow citation bots like `OAI-SearchBot`, `PerplexityBot`; carve out `/assets/samples/` + `/assets/pdf-covers/` + `/api/` from training bots like `GPTBot`, `Google-Extended`; block training-only crawlers like `CCBot`, `Bytespider`).
-- [sitemap.xml](sitemap.xml) — canonical locs only: `/en/`, `/en/privacy.html`, `/terms.html`; `xmlns:image`, per-URL `<lastmod>` from git, image entries on `/en/`.
-- [llms.txt](llms.txt) + [llms-full.txt](llms-full.txt) — AI site map (`H1` + blockquote + **Training hub → `.app`** + Free/Paid/Contact + `## Optional` legal) and full prompt digest.
+- [sitemap.xml](sitemap.xml) — canonical HTML only: `/en/`, `/en/privacy.html`, `/terms.html`, plus 3× `/en/hr-ai-prompts/<slug>/`; `xmlns:image`, per-URL `<lastmod>` from git, image entries on `/en/`. No `.md` locs.
+- [llms.txt](llms.txt) + [llms-full.txt](llms-full.txt) — AI site map (`H1` + blockquote + **Training hub → `.app`** + Free/Paid/Contact + `## Optional` legal) and full prompt digest. Spoke bullets in `llms.txt` point at `index.md` twins (v2). Google Search ignores `llms.txt`.
+- `rel="describedby"` → `/llms.txt` on public HTML; landing + spokes also `rel="alternate" type="text/markdown"`. Generated `/en/index.md` + 3 spoke `index.md` (`.vercelignore` `!en/**/*.md`).
 - [manifest.webmanifest](manifest.webmanifest) — PWA-lite manifest (`start_url: /en/`, theme_color navy).
-- [404.html](404.html) — EN-only, `noindex, follow`, canonical to `/en/`.
+- [404.html](404.html) — EN-only, `noindex, follow`, **no** canonical to `/en/` (body links only).
 - `7a4b...4d.txt` — IndexNow protocol key (www host). Post-deploy ping: [.github/workflows/deploy.yml](.github/workflows/deploy.yml) via `npm run seo:indexnow:diff` (non-blocking); only sitemap-canonical URLs.
 - JSON-LD: `WebSite` (`.help`) + `Organization` (`url` = `.app`; `sameAs` = app, blog, site, telegram, X, LinkedIn) + `Person` Tomas Staniulis + `FAQPage` (**8** Q+A = 3 front + 5 buyer) + 3× `Product`/`Offer`/`MerchantReturnPolicy` + `BreadcrumbList` + `speakable` + WebPage `dateModified`.
-- Headers ([vercel.json](vercel.json)): `Content-Security-Policy` **enforce**, `Origin-Agent-Cluster: ?1`, content-type rules for `llms.txt` / `manifest.webmanifest` / IndexNow key.
+- Headers ([vercel.json](vercel.json)): `Content-Security-Policy` **enforce**, `Origin-Agent-Cluster: ?1`, content-type rules for `llms.txt` / EN `*.md` / `manifest.webmanifest` / IndexNow key.
 
 **Full contract:** [docs/AGENT_SOT.md](docs/AGENT_SOT.md) §1 + §6a, [docs/security.md](docs/security.md).
 

@@ -95,7 +95,7 @@ Detaliau — [docs/AGENT_SOT.md](AGENT_SOT.md) §1 + §6a. Trumpai:
 
 - **Brand north star:** `Organization.url` + `llms.txt` Training hub → `promptanatomy.app`; šis site = Hire spoke (`WebSite.url` ant `.help`).
 - [robots.txt](../robots.txt) — 16 AI UA įrašai (allow citation / disallow training carveouts / block training-only).
-- [llms.txt](../llms.txt) ir [llms-full.txt](../llms-full.txt) — AI-friendly site map (Training hub → `.app`, Optional legal).
+- [llms.txt](../llms.txt) ir [llms-full.txt](../llms-full.txt) — AI-friendly site map (Training hub → `.app`, Optional legal). Google Search ignores `llms.txt`. v2: `rel="describedby"` + spoke `/en/**/index.md` twins.
 - IndexNow key — `INDEXNOW_KEY` konstanta [scripts/build-locale-pages.js](../scripts/build-locale-pages.js) (rotacija — taip pat atnaujinti [scripts/indexnow-ping.js](../scripts/indexnow-ping.js) ir [vercel.json](../vercel.json) header rule); host **www**.
 - JSON-LD — `Organization` (HQ `.app`, ecosystem `sameAs`) + Person + WebSite + FAQPage (8) + 3× Product + WebPage `speakable` + `dateModified` + BreadcrumbList.
 - CSP — **enforce** ([vercel.json](../vercel.json)); žr. aukščiau security skyrių.

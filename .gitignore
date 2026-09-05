@@ -19,7 +19,9 @@ Desktop.ini
 .settings/
 
 # ─── Cursor / plans (development) ───
-.cursor/
+.cursor/*
+!.cursor/skills/
+!.cursor/skills/**
 
 # ─── Markdown: ignoruoti pagal nutylėjimą; versijuojami doc ───
 *.md
@@ -31,6 +33,8 @@ Desktop.ini
 !MUST_TODO.md
 !docs/
 !docs/**/*.md
+!.cursor/skills/**/*.md
+!en/**/*.md
 
 # ─── Scratch / local illustration masters ───
 /01.png

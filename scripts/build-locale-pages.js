@@ -702,9 +702,8 @@ function gitLastModified(relPath) {
 }
 
 /**
- * llms.txt -- short (<5 KB) machine-friendly site map for AI assistants
- * (Anthropic + Perplexity actively read it; Google says not required).
- * Format per 2026 best practice: H1 + blockquote summary + sections by function.
+ * llms.txt -- short (<5 KB) machine-friendly site map for AI assistants.
+ * Google Search ignores this file. Spoke links point at markdown twins (v2).
  */
 function buildLlmsTxt(sot) {
   const base = absoluteBaseSlash().replace(/\/+$/, '');
@@ -743,7 +742,7 @@ function buildLlmsTxt(sot) {
         base +
         '/en/hr-ai-prompts/' +
         spoke.slug +
-        '/): Dedicated indexable page for this free prompt.'
+        '/index.md): Dedicated indexable page for this free prompt.'
     );
   });
   lines.push(
@@ -1005,6 +1004,29 @@ const ROBOTS_META = '<meta name="robots" content="index, follow, max-snippet:-1,
 /** Gateways 308 → /en/* — must not ask to be indexed (GSC hygiene). */
 const GATEWAY_ROBOTS_META = '<meta name="robots" content="noindex, follow">';
 
+/**
+ * llms.txt v2 discovery (llmstxt.org, Aug 2026). describedby on public HTML;
+ * markdown alternate only on landing + prompt spokes. Not a Google ranking signal.
+ */
+function agentDiscoveryLinks(markdownAbsUrl) {
+  const links = ['<link rel="describedby" href="/llms.txt">'];
+  if (markdownAbsUrl) {
+    links.push(
+      '<link rel="alternate" type="text/markdown" href="' + escapeHtmlAttr(markdownAbsUrl) + '">'
+    );
+  }
+  return links;
+}
+
+function decodeHtmlEntities(s) {
+  return String(s == null ? '' : s)
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>');
+}
+
 // ---- Inject SEO and script path ----
 function injectHead(html, basePath, sot) {
   const abs = absoluteBaseSlash();
@@ -1053,12 +1075,13 @@ function injectHead(html, basePath, sot) {
       linkDefault,
       linkManifest,
       metaThemeColor,
+    ].concat(agentDiscoveryLinks(abs + 'en/index.md')).concat([
       socialBlock,
       jsonLd,
       faqJsonLd,
       productsJsonLd,
       verification,
-    ]
+    ])
       .filter(Boolean)
       .join('\n    ') +
     '\n';
@@ -1111,6 +1134,7 @@ function injectPrivacyHead(html, pathSuffix, title, description, opts) {
     '<link rel="alternate" hreflang="x-default" href="' + escapeHtmlAttr(canonicalUrl) + '">',
     '<link rel="manifest" href="/manifest.webmanifest">',
     '<meta name="theme-color" content="' + THEME_COLOR + '">',
+  ].concat(agentDiscoveryLinks()).concat([
     '<meta name="description" content="' + escapeHtmlAttr(description) + '">',
     '<meta property="og:type" content="website">',
     '<meta property="og:site_name" content="' + escapeHtmlAttr(brandName) + '">',
@@ -1134,7 +1158,7 @@ function injectPrivacyHead(html, pathSuffix, title, description, opts) {
       dateModifiedSrc: opts.dateModifiedSrc || 'templates/privacy.html',
     }),
     buildVerificationMeta(opts.sot),
-  ]
+  ])
     .filter(Boolean)
     .join('\n    ');
   return html.replace(/(<meta name="viewport"[^>]*>\s*)(<title)/i, '$1' + block + '\n    $2');
@@ -1288,6 +1312,7 @@ function buildRootSeoFragment(sot) {
     '<link rel="alternate" hreflang="x-default" href="' + escapeHtmlAttr(enLanding) + '">',
     '<link rel="manifest" href="/manifest.webmanifest">',
     '<meta name="theme-color" content="' + THEME_COLOR + '">',
+  ].concat(agentDiscoveryLinks()).concat([
     '<meta property="og:type" content="website">',
     '<meta property="og:site_name" content="' + escapeHtmlAttr(brandName) + '">',
     '<meta property="og:title" content="' + escapeHtmlAttr(ogTitle) + '">',
@@ -1308,7 +1333,7 @@ function buildRootSeoFragment(sot) {
     '<script type="application/ld+json">' +
       JSON.stringify({ '@context': 'https://schema.org', '@graph': graph }).replace(/</g, '\\u003c') +
       '</script>',
-  ];
+  ]);
   if (verification) lines.push(verification);
   return lines.join('\n    ') + '\n    ';
 }
@@ -1353,6 +1378,7 @@ function buildRootPrivacyFragment(sot) {
     '<link rel="alternate" hreflang="x-default" href="' + escapeHtmlAttr(enPrivacyUrl) + '">',
     '<link rel="manifest" href="/manifest.webmanifest">',
     '<meta name="theme-color" content="' + THEME_COLOR + '">',
+  ].concat(agentDiscoveryLinks()).concat([
     '<meta name="description" content="' + escapeHtmlAttr(desc) + '">',
     '<meta property="og:type" content="website">',
     '<meta property="og:site_name" content="' + escapeHtmlAttr(brandName) + '">',
@@ -1375,7 +1401,7 @@ function buildRootPrivacyFragment(sot) {
       breadcrumbLabel: 'Privacy',
       dateModifiedSrc: 'templates/privacy.html',
     }),
-  ];
+  ]);
   if (verification) lines.push(verification);
   return lines.join('\n    ') + '\n    ';
 }
@@ -2018,6 +2044,7 @@ function main() {
   enIndex = injectHead(enIndex, BASE_PATH, sot);
   write('en/index.html', enIndex);
   writePromptSpokes(sot, enIndex);
+  writeLandingIndexMd(sot);
 
   let enPrivacy = buildPrivacyEn(privacyHtml, sot);
   enPrivacy = injectPrivacyHead(enPrivacy, 'en/privacy.html', PRIVACY_PAGE_TITLE, privacyEnDesc, {
@@ -2038,7 +2065,7 @@ function main() {
   finalizeRootIndexHtml(sot);
   finalizeRootPrivacyHtml(sot);
 
-  console.log('Build done: en/index.html, en/privacy.html, privacy.html, robots.txt, sitemap.xml, llms.txt, llms-full.txt, manifest.webmanifest, 404.html, en/hr-ai-prompts/*, ' + INDEXNOW_KEY + '.txt');
+  console.log('Build done: en/index.html, en/index.md, en/privacy.html, privacy.html, robots.txt, sitemap.xml, llms.txt, llms-full.txt, manifest.webmanifest, 404.html, en/hr-ai-prompts/* (+ index.md), ' + INDEXNOW_KEY + '.txt');
   console.log('BASE_PATH:', BASE_PATH || '(root – no subpath)');
   console.log('SITE_ORIGIN:', SITE_ORIGIN);
   console.log('SITE_PUBLIC_BASE:', SITE_PUBLIC_BASE || '(not set)');
@@ -2119,6 +2146,7 @@ function buildSpokeHead(sot, spoke, pageUrl) {
     '<link rel="alternate" hreflang="x-default" href="' + escapeHtmlAttr(pageUrl) + '">',
     '<link rel="manifest" href="/manifest.webmanifest">',
     '<meta name="theme-color" content="' + THEME_COLOR + '">',
+  ].concat(agentDiscoveryLinks(pageUrl + 'index.md')).concat([
     '<meta property="og:type" content="website">',
     '<meta property="og:site_name" content="' + escapeHtmlAttr(brandName) + '">',
     '<meta property="og:title" content="' + escapeHtmlAttr(title) + '">',
@@ -2139,7 +2167,7 @@ function buildSpokeHead(sot, spoke, pageUrl) {
     '<script type="application/ld+json">' +
       JSON.stringify(webPageLd).replace(/</g, '\\u003c') +
       '</script>',
-  ];
+  ]);
   return lines.join('\n    ');
 }
 
@@ -2200,7 +2228,80 @@ function writePromptSpokes(sot, enIndexHtml) {
     const dir = path.join(outRoot, spoke.slug);
     fs.mkdirSync(dir, { recursive: true });
     write(path.join('en', 'hr-ai-prompts', spoke.slug, 'index.html'), html);
+    write(path.join('en', 'hr-ai-prompts', spoke.slug, 'index.md'), buildSpokeIndexMd(sot, spoke, body, safety, mother));
   });
+}
+
+function writeLandingIndexMd(sot) {
+  const base = absoluteBaseSlash().replace(/\/+$/, '');
+  const brand = (sot && sot.brand && sot.brand.publicName) || 'Prompt Anatomy';
+  const hubUrl = ((sot && sot.brand && sot.brand.motherBrandUrl) || 'https://www.promptanatomy.app').replace(/\/+$/, '') + '/';
+  const lines = [
+    '# ' + brand + ' – US HR hiring prompts',
+    '',
+    '> Hire kit: 10 free copy-paste US hiring prompts and paid PDF playbooks. English-only.',
+    '',
+    'Canonical HTML: ' + base + '/en/',
+    '',
+    '## Training hub',
+    '- [Prompt Anatomy course](' + hubUrl + ')',
+    '',
+    '## Free prompt pages (markdown)',
+  ];
+  getPromptSpokes(sot).forEach(function (spoke) {
+    lines.push(
+      '- [' +
+        (spoke.llmsLabel || spoke.title) +
+        '](' +
+        base +
+        '/en/hr-ai-prompts/' +
+        spoke.slug +
+        '/index.md)'
+    );
+  });
+  lines.push(
+    '',
+    '## Full digest',
+    '- [All 10 free prompts](' + base + '/llms-full.txt)',
+    '',
+    '## Paid PDF guides',
+    '- [PDF guides on the landing](' + base + '/en/#pdf-guides)',
+    ''
+  );
+  write('en/index.md', lines.join('\n'));
+}
+
+function buildSpokeIndexMd(sot, spoke, promptBody, safety, mother) {
+  const base = absoluteBaseSlash().replace(/\/+$/, '');
+  const htmlUrl = base + '/en/hr-ai-prompts/' + spoke.slug + '/';
+  const hubUrl = String(mother || 'https://www.promptanatomy.app').replace(/\/+$/, '') + '/';
+  const lines = [
+    '# ' + spoke.title,
+    '',
+    '> ' + (spoke.answerLead || ''),
+    '',
+    safety,
+    '',
+    'Canonical HTML: ' + htmlUrl,
+    '',
+    '```',
+    decodeHtmlEntities(promptBody),
+    '```',
+    '',
+    '## FAQ',
+    '',
+  ];
+  (spoke.faq || []).forEach(function (item) {
+    lines.push('### ' + item.q);
+    lines.push('');
+    lines.push(item.a);
+    lines.push('');
+  });
+  lines.push('## Training hub');
+  lines.push('');
+  lines.push('- [Prompt Anatomy course](' + hubUrl + ')');
+  lines.push('');
+  return lines.join('\n');
 }
 
 main();

@@ -10,6 +10,7 @@ Tier žemėlapis. Lifecycle ir ownership — [DOCUMENTATION.md](DOCUMENTATION.md
 | Dokumentas | Paskirtis |
 |------------|-----------|
 | [AGENT_SOT.md](AGENT_SOT.md) | Keliai, build, deploy, brand, mobile, pamokos |
+| [../.cursor/skills/vercel-deploy/SKILL.md](../.cursor/skills/vercel-deploy/SKILL.md) | Vercel build / public lock skill + [lessons.md](../.cursor/skills/vercel-deploy/lessons.md) |
 | [DOCUMENTATION.md](DOCUMENTATION.md) | DMS: tieriai, lifecycle, sync matrix, ownership |
 | [INDEX.md](INDEX.md) | Šis žemėlapis |
 

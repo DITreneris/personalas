@@ -105,9 +105,9 @@ Detaliau: [language-guidelines-en-lt.md](language-guidelines-en-lt.md).
 
 ## 6. Deploy ir QA URL
 
-**Produkcija:** Vercel only, `npm test` build komanda ([vercel.json](../vercel.json) pins `SITE_ORIGIN=https://www.promptanatomy.help`). `outputDirectory` lieka `.`. [`.vercelignore`](../.vercelignore) tik ne-build failams (`*.md`, `.github/`); `scripts/` / `docs/` / `tests/` / `templates/` **ne** ignore — kitaip Vercel neranda `build-locale-pages.js`. Viešą lock'ą daro `routes` `status: 404` (ne `redirects` `statusCode: 404` — Vercel tokį drop’ina). GitHub Pages deploy **retired**. **Ne** `BASE_PATH=/personalas/` — Vercel ignore’ina `BASE_PATH` (`VERCEL=1`); dashboard’e ištrinkite seną Pages kintamąjį.
+**Produkcija:** Vercel only, `npm test` build komanda ([vercel.json](../vercel.json) pins `SITE_ORIGIN=https://www.promptanatomy.help`). `outputDirectory` lieka `.`. [`.vercelignore`](../.vercelignore) tik ne-build failams (`*.md` + `!en/**/*.md` twin exception, `.github/`); `scripts/` / `docs/` / `tests/` / `templates/` **ne** ignore — kitaip Vercel neranda `build-locale-pages.js`. Viešą lock'ą daro `routes` `status: 404` (ne `redirects` `statusCode: 404` — Vercel tokį drop’ina). GitHub Pages deploy **retired**. **Ne** `BASE_PATH=/personalas/` — Vercel ignore’ina `BASE_PATH` (`VERCEL=1`); dashboard’e ištrinkite seną Pages kintamąjį.
 
-**Vieši root failai (allowlist):** `/en/**`, gateway HTML, `success.html`, `terms.html`, `404.html`, `/assets/**`, `/images/**`, `generator.js`, faviconai, `manifest.webmanifest`, `robots.txt`, `sitemap.xml`, `llms.txt`, `llms-full.txt`, GSC HTML, IndexNow `{key}.txt`, `/config/sot.json`. Serverless: `/api/stripe-webhook`, `/api/download`, `/api/download-link`. **Ne** `docs/`, `scripts/`, `tests/`, `templates/`, `*.md`, `api/_lib` kaip statinis JS.
+**Vieši root failai (allowlist):** `/en/**` (įsk. `/en/**/*.md` agent twins), gateway HTML, `success.html`, `terms.html`, `404.html`, `/assets/**`, `/images/**`, `generator.js`, faviconai, `manifest.webmanifest`, `robots.txt`, `sitemap.xml`, `llms.txt`, `llms-full.txt`, GSC HTML, IndexNow `{key}.txt`, `/config/sot.json`. Serverless: `/api/stripe-webhook`, `/api/download`, `/api/download-link`. **Ne** `docs/`, `scripts/`, `tests/`, `templates/`, šaknies `*.md`, `api/_lib` kaip statinis JS.
 
 **Post-deploy (pirmiausia):** `/en/`, tada vartai ir statiniai puslapiai.
 
@@ -132,6 +132,8 @@ Scenarijai: [TESTAVIMAS.md](TESTAVIMAS.md) (įsk. **Mobile matrix**). Stripe gyv
 Visi GEO / structured-data / robots / IndexNow artefaktai emit'inami iš vienos vietos — [scripts/build-locale-pages.js](../scripts/build-locale-pages.js) — naudojant SOT lauks iš [config/sot.json](../config/sot.json). Build laiko guardrail'as — [tests/structure.test.js](../tests/structure.test.js) `assertGeoSurface()` (80+ assert'ų).
 
 **GEO north star:** brand destination = **`https://www.promptanatomy.app`**. Šis repo (`.help`) = Hire spoke (PDF + free prompts). `Organization.url` = `brand.motherBrandUrl` (`.app`); `WebSite.url` = **`https://www.promptanatomy.help/en/`** (product home). CTA / `llms.txt` Training hub → `.app`.
+
+**llms.txt v2 (agent discovery, not Google ranking):** Google Search **ignores** `llms.txt`. Public HTML (`en/index`, privacy, terms, spokes, gateways) emit `<link rel="describedby" href="/llms.txt">`. Landing + 3 spokes also emit `<link rel="alternate" type="text/markdown">` → `/en/index.md` / `/en/hr-ai-prompts/<slug>/index.md`. `success.html` / `404.html` — no discovery links. Sitemap stays HTML-only. `.vercelignore` ir `.gitignore` turi `!en/**/*.md` (twins commit + upload); šaknies `README.md` vis tiek 404 per `routes` `/[^/]+\\.md`.
 
 ### Robots.txt kontraktas
 
@@ -170,7 +172,7 @@ Vienas `@graph` su `WebSite` (`@id` `/#website`, `publisher` ref), `Organization
 - **3 indeksuojami** baziniai puslapiai (`en/index.html`, `en/privacy.html`, `terms.html`) + **3 prompt spoke** (`/en/hr-ai-prompts/job-description/`, `…/interview-scorecard/`, `…/master-hiring-prompt/`) — `<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">`.
 - Šaknies gateway'ai (`index.html`, `privacy.html`) — `noindex, follow` (308 → `/en/*`; ne sitemap).
 - `success.html` — lieka `noindex, nofollow, max-image-preview:large` (transactional).
-- Visi vieši HTML — `og:site_name`, `og:image:alt`, `twitter:image:alt`, `<meta name="twitter:site" content="@promptanatom">`, `<link rel="manifest" href="/manifest.webmanifest">`, `<meta name="theme-color" content="#103B5A">`.
+- Visi vieši HTML — `og:site_name`, `og:image:alt`, `twitter:image:alt`, `<meta name="twitter:site" content="@promptanatom">`, `<link rel="manifest" href="/manifest.webmanifest">`, `<meta name="theme-color" content="#103B5A">`. Indexable + gateway HTML — `rel="describedby"` → `/llms.txt` (ne `success.html` / `404.html`).
 
 ### Sitemap.xml
 
@@ -183,8 +185,9 @@ Vienas `@graph` su `WebSite` (`@id` `/#website`, `publisher` ref), `Organization
 
 | Failas | Paskirtis | Cache |
 |--------|-----------|-------|
-| [llms.txt](../llms.txt) | <5 KB AI-friendly site map (H1 + blockquote + Training hub → `.app` + Free/Paid/Contact + Optional) | 24h |
+| [llms.txt](../llms.txt) | <5 KB AI-friendly site map (H1 + blockquote + Training hub → `.app` + Free/Paid/Contact + Optional; spoke links → `index.md`) | 24h |
 | [llms-full.txt](../llms-full.txt) | Full markdown digest (10 promptų + 6-phase workflow) | 24h |
+| `/en/index.md` + 3× spoke `index.md` | llms.txt v2 markdown twins | 24h |
 | [manifest.webmanifest](../manifest.webmanifest) | PWA-lite (`start_url: /en/`, theme_color navy) | 24h |
 | [404.html](../404.html) | EN-only `noindex, follow`; **be** canonical į `/en/` (tik body nuorodos) | 5min |
 | `{INDEXNOW_KEY}.txt` | IndexNow protocol key file | immutable |
@@ -256,7 +259,7 @@ Prieš merge: **`npm test`** privalo praeiti.
 
 ## 10. Pamokos (lessons) – agentams
 
-Šiame repo **nėra** `.cursor/skills/*/lessons.md` (skills framework neįdiegtas). Trumpas kaupimas čia; plėsti tik kai kartojasi klaida.
+Trumpa lentelė čia. Vercel deploy detalės: [`.cursor/skills/vercel-deploy/lessons.md`](../.cursor/skills/vercel-deploy/lessons.md). Naują eilutę pridėti kai klaida **pasikartoja**.
 
 | Data | Pamoka | Kodėl |
 |------|--------|-------|
@@ -271,6 +274,9 @@ Prieš merge: **`npm test`** privalo praeiti.
 | 2026-09-03 | Production `/api/download?t=short` **503** = Redis fail-closed | Rate-limit `checkRateLimit` meta; sveika = **403**. Local `.env` Upstash ≠ Vercel env kol neįklijuota ir redeploy |
 | 2026-09-05 | Stripe **Public details** = receipt contact (not our HTML) | Empty `support_email` → account-holder Gmail on “If you have any questions…”. `accounts.update` **cannot** change your own account — Dashboard only. Canon: `info@promptanatomy.app`; no +370 / personal phone |
 | 2026-09-05 | One Stripe account can have many products and many webhook URLs | Replay proof = Dashboard 200 `already_fulfilled` on the **www .help** endpoint, not `pending_webhooks === 0`. Other spokes (`.space` / `.ceo` / `.online` / `.app`) on the same account are valid; event-level pending stays >0 if those return 400 (wrong endpoint secret). Fix that project's `STRIPE_WEBHOOK_SECRET` — do not open a new Stripe account per repo. |
+| 2026-09-05 | `.vercelignore` taikomas **prieš** `npm test` | Ignore `scripts/` / `docs/` / `tests/` / `templates/` → `Cannot find module …/build-locale-pages.js`. Viešas lock = `routes` 404, ne ignore tų katalogų |
+| 2026-09-05 | CI žalia ≠ Vercel žalia | Vercel env gali turėti seną `BASE_PATH=/personalas/`. `VERCEL=1` ignore’ina `BASE_PATH`; `buildCommand` pin’ina `SITE_ORIGIN=https://www.promptanatomy.help`. Skaityk `FAIL:` eilutes, ne tik `Result:` footerį |
+| 2026-09-05 | `redirects` `statusCode: 404` **neteisinga** Vercel’e | Leidžiama tik 301–308; 404 taisyklės drop’inamos prieš testus. Lock = `routes` `{ src, dest: /404.html, status: 404 }`. Neliesti `/api/download` |
 
 ---
 
@@ -279,5 +285,6 @@ Prieš merge: **`npm test`** privalo praeiti.
 - [INDEX.md](INDEX.md) — tier žemėlapis (hub)
 - [DOCUMENTATION.md](DOCUMENTATION.md) — DMS lifecycle
 - [AGENTS.md](../AGENTS.md) — rolės, workflow, CTA §10
+- [../.cursor/skills/vercel-deploy/SKILL.md](../.cursor/skills/vercel-deploy/SKILL.md) — Vercel deploy skill + lessons
 - [.cursorrules](../.cursorrules) — saugumas, a11y, merge vartai
 - Tier 1–2 detalės — [INDEX.md](INDEX.md)

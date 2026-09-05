@@ -3,7 +3,7 @@
 **Hub:** [INDEX.md](INDEX.md) — tier žemėlapis.  
 **Ops kanonas:** [AGENT_SOT.md](AGENT_SOT.md) — keliai, build, deploy, brand (redaguoti čia pirmiausia).
 
-**Paskutinis atnaujinimas:** 2026-07-29
+**Paskutinis atnaujinimas:** 2026-09-05
 
 ---
 
@@ -48,6 +48,7 @@ Keičiant brand HQ, spoke KPI, locale ar GEO destination hierarchy — **ne** ko
 | Dokumentas | Kas atnaujina | Kada |
 |------------|---------------|------|
 | [AGENT_SOT.md](AGENT_SOT.md) | Orchestrator | Keliai, build, deploy, brand, mobile §6b, pamokos §10 |
+| [../.cursor/skills/vercel-deploy/SKILL.md](../.cursor/skills/vercel-deploy/SKILL.md) | Orchestrator / QA | Vercel ignore / routes / buildCommand; lessons kai deploy fail kartojasi |
 | [INDEX.md](INDEX.md) | Orchestrator | Naujas / archived doc → tier žemėlapis |
 | [DOCUMENTATION.md](DOCUMENTATION.md) | Orchestrator | Tieriai, lifecycle, sync matrix, ownership |
 | [language-guidelines-en-lt.md](language-guidelines-en-lt.md) | Content / Orchestrator | Locale, viešas brand |

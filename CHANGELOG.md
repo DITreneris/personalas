@@ -6,6 +6,16 @@ Visi reikšmingi pakeitimai projekte dokumentuojami čia. Formatas pagal [Keep a
 
 ## [Unreleased]
 
+## [1.6.6] - 2026-09-05
+
+### Pridėta
+
+- **[QA] llms.txt v2:** `rel="describedby"` → `/llms.txt` on public HTML (not `success.html` / `404.html`); landing + 3 spokes emit markdown `rel="alternate"` and generated `/en/index.md` + `/en/hr-ai-prompts/<slug>/index.md`. `llms.txt` spoke links point at twins. [`.vercelignore`](.vercelignore) `!en/**/*.md`; [`vercel.json`](vercel.json) `text/markdown` + `Link` describedby. Google Search ignores `llms.txt` — sitemap stays HTML-only. Docs: [docs/AGENT_SOT.md](docs/AGENT_SOT.md) §6a.
+
+### Dokumentacija
+
+- **[Docs] Skills + lessons:** project skill [`.cursor/skills/vercel-deploy/`](.cursor/skills/vercel-deploy/SKILL.md) (Vercel build / public lock). Pamokos: [docs/AGENT_SOT.md](docs/AGENT_SOT.md) §10 + [lessons.md](.cursor/skills/vercel-deploy/lessons.md).
+
 ## [1.6.5] - 2026-09-05
 
 ### Pataisyta
@@ -28,7 +38,7 @@ Visi reikšmingi pakeitimai projekte dokumentuojami čia. Formatas pagal [Keep a
 
 ### Pridėta
 
-- **[Security] Public static surface lockdown:** [`.vercelignore`](.vercelignore) excludes internal trees (`docs/`, `scripts/`, `tests/`, `templates/`, `*.md`) from the Vercel CDN; [vercel.json](vercel.json) 404s `/docs/`, `/scripts/`, `/tests/`, `/templates/`, `/api/_lib/`, `/api/_private/`, `/:file.md` (function routes unchanged). GitHub Pages artifact deploy **retired**. Docs: [docs/security.md](docs/security.md), [docs/AGENT_SOT.md](docs/AGENT_SOT.md) §6.
+- **[Security] Public static surface lockdown:** hide internal trees from the customer CDN; GitHub Pages artifact deploy **retired**. **Superseded:** 1.6.3 — do not `.vercelignore` `scripts/` / `docs/` / `tests/` / `templates/` (build needs them). 1.6.5 — 404 lock is `routes` `status: 404`, not `redirects` `statusCode: 404`. Docs: [docs/security.md](docs/security.md), [docs/AGENT_SOT.md](docs/AGENT_SOT.md) §6.
 
 ### Pataisyta
 
@@ -79,7 +89,7 @@ Visi reikšmingi pakeitimai projekte dokumentuojami čia. Formatas pagal [Keep a
 ### Pakeista
 
 - **[UI] Mobile P0/P1 (sticky clearance, dvh, 48px taps, viewport-fit):** Sticky PDF CTA → `body.has-pdf-sticky-cta` + `--pdf-sticky-offset` (toast/footer/scroll-padding); landscape `safe-area-inset-left/right`; `.page-lanes-nav` top safe-area; `.modal` `100dvh`/`90dvh` + vh fallback; `--btn-min-h-sm: 48px`; satellites `viewport-fit=cover` (privacy/terms/success/404). Failai: [generator.js](generator.js), [assets/landing.css](assets/landing.css), [assets/styles.css](assets/styles.css), [tests/structure.test.js](tests/structure.test.js).
-- **[Docs][Orchestrator] Agents + mobile SOT sync:** [AGENTS.md](AGENTS.md) UI/QA + §10 (48px, sticky clearance); [docs/AGENT_SOT.md](docs/AGENT_SOT.md) §6b sutartys + §10 pamokos (lessons); [docs/design_system_v2.md](docs/design_system_v2.md) `--btn-min-h-sm: 48px`; [docs/TESTAVIMAS.md](docs/TESTAVIMAS.md) / [docs/QA_STANDARTAS.md](docs/QA_STANDARTAS.md) mobile matrix. Skills framework (`.cursor/skills/`) šiame repo neįdiegtas — pamokos kaupiamos AGENT_SOT §10.
+- **[Docs][Orchestrator] Agents + mobile SOT sync:** [AGENTS.md](AGENTS.md) UI/QA + §10 (48px, sticky clearance); [docs/AGENT_SOT.md](docs/AGENT_SOT.md) §6b sutartys + §10 pamokos (lessons); [docs/design_system_v2.md](docs/design_system_v2.md) `--btn-min-h-sm: 48px`; [docs/TESTAVIMAS.md](docs/TESTAVIMAS.md) / [docs/QA_STANDARTAS.md](docs/QA_STANDARTAS.md) mobile matrix. (2026-09-05: Vercel deploy skill — [`.cursor/skills/vercel-deploy/`](.cursor/skills/vercel-deploy/SKILL.md).)
 - **[UI] PDF free-bridge → dual ghost CTAs:** Po Buyer FAQ pašalintas gold-border callout; vietoj jo — lead „Not ready to buy?“ + du `.btn.btn--ghost` („Free prompts →“ / „Start with Prompt 1 →“). SOT `marketing.pdfSection.freeBridge` objektas; build tokenai; [assets/landing.css](assets/landing.css) flex layout. Failai: [config/sot.json](config/sot.json), [templates/index-lt.html](templates/index-lt.html), [scripts/build-locale-pages.js](scripts/build-locale-pages.js).
 
 ## [1.4.1] - 2026-07-29
