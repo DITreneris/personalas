@@ -1154,6 +1154,15 @@ function run() {
   tally(assertPublicEnSurface('terms.html', terms));
   tally(assertPublicEnSurface('success.html', success));
   tally(assert(fulfillment && !/\bPersonalas\b/.test(fulfillment), 'fulfillment.js: no customer-facing Personalas in fulfillment emails'));
+  tally(
+    assert(
+      fulfillment &&
+        fulfillment.includes('function buildBundleEmailText') &&
+        fulfillment.includes('function buildEmailText') &&
+        (fulfillment.match(/14-day no-questions refund/g) || []).length >= 4,
+      'fulfillment.js: single + bundle emails include 14-day refund (text + html)'
+    )
+  );
   tally(assert(fulfillment && fulfillment.includes("'Beginner_HR_Hiring_Guide.pdf'"), 'fulfillment.js: beginner download filename uses HR brand'));
   tally(assert(fulfillment && fulfillment.includes("'Advanced_HR_Hiring_Guide.pdf'"), 'fulfillment.js: advanced download filename uses HR brand'));
   tally(assert(fulfillment && !/personalas-(beginner|advanced)-guide\.pdf/.test(fulfillment), 'fulfillment.js: no LT-prefixed download filenames'));

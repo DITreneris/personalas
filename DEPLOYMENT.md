@@ -33,7 +33,7 @@ Vercel Project → Settings → Environment Variables. **Niekada necommitinti sl
 | Kintamasis | Privaloma | Paskirtis |
 |------------|-----------|-----------|
 | `STRIPE_SECRET_KEY` | Taip | Stripe API raktas, naudojamas webhook’o prie Checkout Session retrieve. |
-| `STRIPE_WEBHOOK_SECRET` | Taip | Tikrina `https://promptanatomy.help/api/stripe-webhook` įvykius. |
+| `STRIPE_WEBHOOK_SECRET` | Taip | Tikrina `https://www.promptanatomy.help/api/stripe-webhook` įvykius (ne apex). |
 | `STRIPE_PRICE_BEGINNER_PDF` | Taip | Stripe Price ID Beginner PDF guide ($5.99). |
 | `STRIPE_PRICE_ADVANCED_PDF` | Taip | Stripe Price ID Advanced PDF guide ($11.99). |
 | `STRIPE_PRICE_BUNDLE_PDF` | Taip | Stripe Price ID Bundle (Both guides, $15.99). |
@@ -57,7 +57,7 @@ Vercel Project → Settings → Environment Variables. **Niekada necommitinti sl
 
 1. Repo SOT: [config/sot.json](config/sot.json) → `product.businessAddress`. Po pakeitimo `npm run build` perrašo `en/index.html` (footer + JSON-LD `PostalAddress`), `en/privacy.html` (Contact sekciją) ir root gateway JSON-LD. Hand-edit jei keičiate: [terms.html](terms.html), [success.html](success.html).
 2. **Fulfillment laiškai (Resend per Vercel):** `api/_lib/fulfillment.js` užkrauna adresą iš SOT. Jei norite rotuoti adresą be redeploy, nustatykite Vercel env `BUSINESS_ADDRESS_OVERRIDE` su JSON tame pačiame formate (`{"name":"…","street":"…","unit":"…","city":"…","region":"…","postalCode":"…","country":"US","countryName":"United States"}`).
-3. **Manual one-time:** Stripe Dashboard → Settings → Business → **Public details** → įrašykite tą patį adresą. Stripe rendered receipts (kurie keliauja po „separate cover") tą adresą deda automatiškai – jo iš mūsų kodo negalime kontroliuoti.
+3. **Manual one-time:** Stripe Dashboard → Settings → Business → **Public details** (API cannot update your own account). Set the same US address as SOT. **Customer-facing contact on Stripe receipts:** Support email = `info@promptanatomy.app`; Support website = `https://www.promptanatomy.help/en/`; **clear Support phone** (do not use a personal Gmail or a non-US number — empty `support_email` falls back to the account-holder email). Stripe receipts travel under separate cover; our Resend fulfillment already uses `info@promptanatomy.app`.
 4. **Po deploy:** užsisakykite testinį PDF (`stripe trigger checkout.session.completed` arba live test pirkimą) ir patvirtinkite, kad Resend laiškas pabaigoje turi 4 eilučių pašto bloką.
 
 ### Stripe konfigūracija
@@ -170,6 +170,8 @@ npx pa11y http://127.0.0.1:3000/terms.html --config .pa11yrc.json
 | **Deploy workflow failed** | Actions → atidaryti nepavykusį run → žiūrėti **test** job: jei nepraėjo `npm test`, lokaliai paleisti `npm test` ir taisyti; jei nepraėjo **deploy** job – tikrinti environment/permissions. |
 | **CI workflow failed** | Dažniausiai `pa11y` (a11y klaidos) arba `npm test`. CI naudoja `.pa11yrc.json` (Chrome `--no-sandbox` ir kt., kad pa11y veiktų GitHub Actions). Lokaliai: `npm test`, tada `npx serve -s . -l 3000` ir `npx pa11y http://127.0.0.1:3000/ --config .pa11yrc.json` (arba be config, jei nereikia sandbox). |
 | Svetainė tuščia / neteisingas kelias | Projektas – statinis iš root; `path: .` – teisingas. Jei naudojate subfolderį, pakeisti `path`. |
+| Stripe webhook 308 / no fulfillment | Endpoint must be **www** `https://www.promptanatomy.help/api/stripe-webhook`. Apex POST 308 → www; Stripe does not replay the body. Disable any apex webhook. Healthy junk POST on www = 400 (signature). |
+| `/api/download?t=short` returns **503** | Redis rate-limit fail-closed (Upstash env missing on Vercel). Healthy invalid token = **403**. Confirm Production `UPSTASH_REDIS_*` + redeploy. |
 
 ---
 

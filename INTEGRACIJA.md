@@ -7,7 +7,7 @@ GitHub Pages remains optional for static-only preview (no paid PDF fulfillment).
 ## Paid PDF (live)
 
 - Stripe Payment Links from [config/sot.json](config/sot.json)
-- Webhook → [api/stripe-webhook.js](api/stripe-webhook.js) → [api/_lib/fulfillment.js](api/_lib/fulfillment.js)
+- Webhook → [api/stripe-webhook.js](api/stripe-webhook.js) → [api/_lib/fulfillment.js](api/_lib/fulfillment.js). Stripe Dashboard URL **must** be `https://www.promptanatomy.help/api/stripe-webhook` (apex POST 308 drops the body).
 - Sub-processors: Stripe, Resend, Upstash Redis, Vercel Blob — disclosed in [templates/privacy.html](templates/privacy.html)
 
 ## Kontaktų forma (rezervuota)

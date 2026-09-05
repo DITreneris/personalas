@@ -143,7 +143,7 @@ async function main() {
   console.log('\nNOTES:');
   for (const n of notes) console.log('-', n);
   console.log(
-    'Manual if needed: Stripe test-mode Beginner+Advanced buys + Resend + webhook replay.'
+    'Manual remaining: GSC spoke indexing (purchase QA green 2026-09-05).'
   );
 }
 

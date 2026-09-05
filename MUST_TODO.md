@@ -1,6 +1,6 @@
 # MUST_TODO (open)
 
-Atviri promo vartai. Detalės – [DEPLOYMENT.md](DEPLOYMENT.md), [docs/TESTAVIMAS.md](docs/TESTAVIMAS.md).  
+Atviri post-promo punktai (GSC). Money-path QA uždarytas 2026-09-05.  
 Shipped engineering (1.6.1): PDF voice pass + Blob overwrite — [CHANGELOG.md](CHANGELOG.md).
 
 ## Purchase QA (manual, before promo)
@@ -15,22 +15,22 @@ node scripts/run-purchase-qa-checks.js
 ```
 
 1. [x] Confirm Vercel Production env: `SITE_URL=https://www.promptanatomy.help` (**required** — fulfillment fails closed without it) — local `.env` is www; Redis/download path healthy on Production (403/404, not 503)
-2. [ ] Stripe **test mode**: buy Beginner → Resend email with working download link — **blocked until www webhook** (see below)
-3. [ ] Stripe **test mode**: buy Advanced → same
-4. [ ] Webhook replay → Redis `already_fulfilled` (`check-fulfillment.js` when Upstash reachable)
+2. [x] Buy Beginner → `success.html` ready + masked email + Download + Redis fulfillment (live session 2026-09-05; poll `/api/download-link` 200)
+3. [x] Buy Advanced → same (live 2026-09-05 09:21 EEST; Stripe receipt #1580-6052 $11.99 + LT 21% VAT; poll 200 `productId=advanced` + Redis fulfillment)
+4. [x] Webhook replay → Redis `already_fulfilled` — Dashboard Resend on www `.help` (2026-09-05 09:43 EEST): Beginner `evt_1UCCsl…` + Advanced `evt_1UCCyo…` both **200** `{ "received": true, "fulfillment": "already_fulfilled" }` (Recovered / Resent manually). Event-level `pending_webhooks` may stay >0 because this Stripe account also delivers to `.space` / `.ceo` / `.online` / `.app` — look at the **.help** attempt only.
 
-**Webhook blocker (2026-09-03):** Stripe has an enabled endpoint on **apex** `promptanatomy.help/api/stripe-webhook`. Apex **POST 308 → www**; Stripe does not follow that redirect, so fulfillment will not run. www `POST /api/stripe-webhook` itself returns 400 (signature) — the function is up. Add a Stripe webhook at `https://www.promptanatomy.help/api/stripe-webhook` (`checkout.session.completed` + `async_payment_succeeded`), put the new signing secret in Vercel `STRIPE_WEBHOOK_SECRET`, disable the apex endpoint. Then do the test buys.
+**Webhook (2026-09-03):** live Stripe endpoint is **www** `https://www.promptanatomy.help/api/stripe-webhook` (apex disabled). Apex POST still 308s — do not re-add an apex endpoint.
 
-Helpers 2026-09-03: `verify-stripe-promo-gate.js` PASS (products + Payment Link success URLs are www). `run-purchase-qa-checks.js` PASS on static + 404 for the 2026-09-02 live session (new empty Redis — expected).
+Helpers 2026-09-05: `run-purchase-qa-checks.js` PASS — latest paid session is Advanced (`productId=advanced`), download-link 200 + Redis idempotency key.
 
 ## Post-deploy (after 1.6.1 is on production)
 
 1. [x] Hit `/en/` + three spokes (`/en/hr-ai-prompts/{job-description,interview-scorecard,master-hiring-prompt}/`) — 200 on 2026-09-03; live `config/sot.json` has voice-pass chapters (no Cover)
-2. [ ] `success.html` poll after a test purchase (rate-limit must not block normal poll)
+2. [x] `success.html` poll after a test purchase (rate-limit must not block normal poll) — Beginner + Advanced 2026-09-05 both reached ready
 3. [ ] GSC URL Inspection + Request indexing for the three spokes — [DEPLOYMENT.md](DEPLOYMENT.md)
 4. [ ] Optional: `npm run seo:indexnow:diff` after `main` deploy
 
-**Promo: hold** until test buys + webhook replay are green.
+**Promo: go** (2026-09-05). Purchase QA complete (SITE_URL, Beginner, Advanced, webhook replay). Remaining: GSC spoke indexing (SEO, not a money-path gate).
 
 ## Next bets (from former roadmap)
 

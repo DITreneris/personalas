@@ -4,6 +4,14 @@ Visi reikšmingi pakeitimai projekte dokumentuojami čia. Formatas pagal [Keep a
 
 ---
 
+## [Unreleased]
+
+### Pataisyta
+
+- **[QA] Stripe webhook host:** live endpoint must be `https://www.promptanatomy.help/api/stripe-webhook`. Apex `promptanatomy.help` **POST 308 → www** and Stripe does not replay the body, so fulfillment never runs. Docs: [DEPLOYMENT.md](DEPLOYMENT.md), [MUST_TODO.md](MUST_TODO.md), [docs/AGENT_SOT.md](docs/AGENT_SOT.md) §10.
+- **[QA] Stripe receipt public contact:** Dashboard → Settings → Public details — `business_profile.support_email` = `info@promptanatomy.app` (empty support email falls back to the account-holder address on receipts). Own-account API update is blocked; Dashboard only. SOP: [DEPLOYMENT.md](DEPLOYMENT.md), lesson [docs/AGENT_SOT.md](docs/AGENT_SOT.md) §10.
+- **[QA] Bundle fulfillment email:** 14-day refund + Stripe receipt line now match single-product copy ([api/_lib/fulfillment.js](api/_lib/fulfillment.js)).
+
 ## [1.6.1] - 2026-09-03
 
 ### Pakeista

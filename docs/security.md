@@ -60,6 +60,11 @@ upgrade-insecure-requests
 
 **Residual risk:** `GET /api/download-link?session_id=cs_…` stays unauthenticated by design (Stripe Payment Link → `success.html` poll). A leaked `session_id` is a short-lived capability to mint in-page download tokens. Mitigations: TLS, rate limits, 15‑minute in-page token TTL, Redis fulfillment binding. Post-promo candidates: single-use jti, refund auto-revoke.
 
+**Ops health checks (production):**
+
+- Stripe webhook URL **must** be `https://www.promptanatomy.help/api/stripe-webhook`. Apex POST 308 drops the body — fulfillment never runs. Healthy junk POST on www = **400** (signature), not 308.
+- `GET /api/download?t=short` **503** = Redis rate-limit fail-closed (missing Upstash env). Healthy invalid token = **403**.
+
 ### Stebėjimas
 
 - Browser DevTools console — CSP blocked resource warnings after deploy.

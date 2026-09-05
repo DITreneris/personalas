@@ -33,4 +33,10 @@ Po UI / sticky / CSS pakeitimų (ir po deploy) patikrinkite realiuose įrenginiu
 
 **Minimalus įrenginių rinkinys:** 1× iPhone Safari, 1× Android Chrome; pageidautina + mažas ekranas (SE klasė) ir lėtesnis tinklas Checkout’ui.
 
-Žurnalas: įrašykite datą, aplinką (Vercel / GitHub Pages), rezultatą.
+## Žurnalas
+
+| Data | Aplinka | Rezultatas |
+|------|---------|------------|
+| 2026-09-05 | Vercel Production | Beginner live buy: `success.html` ready + masked email + Download + Redis fulfillment; poll `/api/download-link` 200. |
+| 2026-09-05 | Vercel Production | Advanced live buy 09:21 EEST: Stripe receipt #1580-6052 ($11.99 + LT 21% VAT). Poll 200 `productId=advanced` + Redis fulfillment. |
+| 2026-09-05 | Stripe Dashboard | Webhook replay www `.help`: Beginner `evt_1UCCsl…` 09:43 + Advanced `evt_1UCCyo…` 09:43 — both 200 `already_fulfilled`. **Promo go.** GSC spoke indexing still open. |

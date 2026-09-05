@@ -103,6 +103,7 @@ PDF: `pdf:validate`, `pdf:export`, `pdf:covers` — AGENT_SOT.
 - `npm test`; mobile sticky — [docs/TESTAVIMAS.md](docs/TESTAVIMAS.md) Mobile matrix
 - Greita paieška: `rg -i "personalas|series no|spin-off|promptų|biblioteka|marketingas|prompt.?library"` ant viešų HTML
 - Šaltinis: `templates/index-lt.html`, `templates/privacy.html`
+- Stripe receipts: Public details support email = `info@promptanatomy.app` (Dashboard; own-account API blocked) — [docs/AGENT_SOT.md](docs/AGENT_SOT.md) §5 + §10
 
 ---
 

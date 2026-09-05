@@ -2,7 +2,7 @@
 
 **Vienas šaltinis** Cursor agentams ir PR peržiūrai: keliai, build, deploy, brand. Rolės ir workflow diagrama – [AGENTS.md](../AGENTS.md). Kalbos ir prekės ženklo detalės – [language-guidelines-en-lt.md](language-guidelines-en-lt.md). Deploy operacijos – [DEPLOYMENT.md](../DEPLOYMENT.md).
 
-**Paskutinis atnaujinimas:** 2026-07-29
+**Paskutinis atnaujinimas:** 2026-09-05
 
 ---
 
@@ -81,7 +81,7 @@ Vykdoma seka ([package.json](../package.json)):
 
 | Route | Paskirtis |
 |-------|-----------|
-| `POST /api/stripe-webhook` | `checkout.session.completed`, `async_payment_succeeded` |
+| `POST /api/stripe-webhook` | `checkout.session.completed`, `async_payment_succeeded` — Stripe Dashboard URL **must** be `https://www.promptanatomy.help/api/stripe-webhook` (apex POST 308 drops body; §10) |
 | `GET /api/download-link?session_id=` | Poll iš `success.html` (15 min tokenai) |
 | `GET /api/download?t=` | PDF stream (7 d. email tokenai) |
 
@@ -93,7 +93,7 @@ Env šablonas: [.env.example](../.env.example). Pilna lentelė: [DEPLOYMENT.md](
 
 ## 5. Kalba ir prekės ženklas (santrauka)
 
-- **Viešai:** tik **Prompt Anatomy** — `/en/`, PDF, terms, privacy, success, el. laiškai.
+- **Viešai:** tik **Prompt Anatomy** — `/en/`, PDF, terms, privacy, success, el. laiškai. Stripe receipts (separate cover) support email = **`info@promptanatomy.app`** — Dashboard Public details; empty support_email falls back to the account-holder address. No personal Gmail / non-US phone on receipts.
 - **Mother brand / entity:** community, footer, `Organization.url`, `llms.txt` Training hub → **`promptanatomy.app`** (ne tik `.help`). Footer entity line (hub QW1b): `Part of Prompt Anatomy · Training & checkout → promptanatomy.app` su `utm_source=help`.
 - **Draudžiama viešame UI:** „Personalas“, „Series No. 3“, „Spin-off“, lietuviškos raidės išsiunčiamuose HTML.
 - **Vidinis repo pavadinimas:** Personalas (`product.repoName` SOT / `package.json` name) — ne rodyti lankytojui; viešas `product.name` = Prompt Anatomy.
@@ -264,6 +264,11 @@ Prieš merge: **`npm test`** privalo praeiti.
 | 2026-07-29 | Primary tap = **48px** (`--btn-min-h-sm`), ne 44 | Lighthouse/Material; Apple 44 vis tiek tenkinamas |
 | 2026-07-29 | Nenaudok `user-scalable=no` „mobile polish“ | WCAG / a11y pažeidimas |
 | 2026-07-29 | Emuliatorius ≠ realus iPhone Safari + Android Chrome | Keyboard, clipboard, safe-area, Stripe — tik device / TESTAVIMAS matrix |
+| 2026-09-03 | Stripe webhook **tik www** (`https://www.promptanatomy.help/api/stripe-webhook`) | Apex `promptanatomy.help` POST 308 → www; Stripe neperneša body — fulfillment never runs. Healthy junk POST on www = 400 (signature), not 308 |
+| 2026-09-03 | Dedicated Upstash — **be** `REDIS_KEY_PREFIX` | Prefix tik kai DB dalijama. Naujas Redis = tušti `fulfillment:*`; senų pirkimų eilutės dingsta — resend per `check-fulfillment.js` |
+| 2026-09-03 | Production `/api/download?t=short` **503** = Redis fail-closed | Rate-limit `checkRateLimit` meta; sveika = **403**. Local `.env` Upstash ≠ Vercel env kol neįklijuota ir redeploy |
+| 2026-09-05 | Stripe **Public details** = receipt contact (not our HTML) | Empty `support_email` → account-holder Gmail on “If you have any questions…”. `accounts.update` **cannot** change your own account — Dashboard only. Canon: `info@promptanatomy.app`; no +370 / personal phone |
+| 2026-09-05 | One Stripe account can have many products and many webhook URLs | Replay proof = Dashboard 200 `already_fulfilled` on the **www .help** endpoint, not `pending_webhooks === 0`. Other spokes (`.space` / `.ceo` / `.online` / `.app`) on the same account are valid; event-level pending stays >0 if those return 400 (wrong endpoint secret). Fix that project's `STRIPE_WEBHOOK_SECRET` — do not open a new Stripe account per repo. |
 
 ---
 
