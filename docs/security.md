@@ -57,6 +57,7 @@ upgrade-insecure-requests
 | Token length | `/api/download` rejects `t` longer than 2048 chars |
 | Product resolve | [fulfillment.js](../api/_lib/fulfillment.js) prefers Stripe `line_items` price IDs over `metadata.product` |
 | Webhook body | [stripe-webhook.js](../api/stripe-webhook.js) rejects bodies over 1 MiB before signature verify |
+| Non-PDF checkout | Unknown product (Price ID + `metadata.product` not beginner/advanced/bundle) → **200** `{ ignored: "unknown_product" }`. Shared Stripe account; other spokes (`.ceo` / `.app` / …) must not 500 this endpoint. Real PDF fulfillment errors still **500**. |
 
 **Residual risk:** `GET /api/download-link?session_id=cs_…` stays unauthenticated by design (Stripe Payment Link → `success.html` poll). A leaked `session_id` is a short-lived capability to mint in-page download tokens. Mitigations: TLS, rate limits, 15‑minute in-page token TTL, Redis fulfillment binding. Post-promo candidates: single-use jti, refund auto-revoke.
 

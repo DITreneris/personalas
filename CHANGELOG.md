@@ -4,7 +4,11 @@ Visi reikšmingi pakeitimai projekte dokumentuojami čia. Formatas pagal [Keep a
 
 ---
 
-## [Unreleased]
+## [1.6.7] - 2026-09-08
+
+### Pataisyta
+
+- **[Fix] Stripe webhook ACK non-PDF checkouts:** shared Stripe account delivers other-spoke `checkout.session.completed` (e.g. `.ceo` `metadata.product=operating`) to this endpoint. Unknown product now returns **200** `{ ignored: "unknown_product" }` instead of 500 `Fulfillment failed`, so Stripe stops retrying here. Real PDF failures still 500. Do not `--resend` those sessions. Docs: [docs/security.md](docs/security.md), [DEPLOYMENT.md](DEPLOYMENT.md).
 
 ## [1.6.6] - 2026-09-05
 

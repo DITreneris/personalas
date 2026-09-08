@@ -139,6 +139,12 @@ function isBundleFulfillment(fulfillment) {
   return fulfillment && fulfillment.productId === PRODUCTS.bundle.id;
 }
 
+const UNKNOWN_PDF_PRODUCT_ERROR = 'Checkout Session does not contain a configured PDF product.';
+
+function isUnknownPdfProductError(error) {
+  return Boolean(error && error.message === UNKNOWN_PDF_PRODUCT_ERROR);
+}
+
 function getProductFromSession(session) {
   // Prefer paid line_items price IDs over metadata so a mis-set Payment Link
   // metadata.product cannot upgrade the fulfilled tier above what was charged.
@@ -155,7 +161,7 @@ function getProductFromSession(session) {
   const metadataProduct = session && session.metadata ? getProductById(session.metadata.product) : null;
   if (metadataProduct) return metadataProduct;
 
-  throw new Error('Checkout Session does not contain a configured PDF product.');
+  throw new Error(UNKNOWN_PDF_PRODUCT_ERROR);
 }
 
 function getCustomerEmail(session) {
@@ -674,6 +680,8 @@ async function getDownloadUrlBySessionId(sessionId, origin) {
 
 module.exports = {
   PRODUCTS,
+  UNKNOWN_PDF_PRODUCT_ERROR,
+  isUnknownPdfProductError,
   fulfillCheckoutSession,
   loadProductPdf,
   resolveDownload,

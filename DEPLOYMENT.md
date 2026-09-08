@@ -161,6 +161,7 @@ npx pa11y http://127.0.0.1:3000/terms.html --config .pa11yrc.json
 | **CI workflow failed** | Dažniausiai `pa11y` (a11y klaidos) arba `npm test`. CI naudoja `.pa11yrc.json` (Chrome `--no-sandbox` ir kt., kad pa11y veiktų GitHub Actions). Lokaliai: `npm test`, tada `npx serve -s . -l 3000` ir `npx pa11y http://127.0.0.1:3000/ --config .pa11yrc.json` (arba be config, jei nereikia sandbox). |
 | Svetainė tuščia / neteisingas kelias | Projektas – statinis iš root; `path: .` – teisingas. Jei naudojate subfolderį, pakeisti `path`. |
 | Stripe webhook 308 / no fulfillment | Endpoint must be **www** `https://www.promptanatomy.help/api/stripe-webhook`. Apex POST 308 → www; Stripe does not replay the body. Disable any apex webhook. Healthy junk POST on www = 400 (signature). |
+| Stripe 500 `Fulfillment failed` on a non-PDF buy | Shared account: `.ceo` / other spoke Checkout hits this webhook. After deploy, unknown product = **200** `{ ignored: "unknown_product" }`. Do not `--resend` as a Hire-kit PDF. Replay the event after deploy so Stripe stops retrying this endpoint. |
 | `/api/download?t=short` returns **503** | Redis rate-limit fail-closed (Upstash env missing on Vercel). Healthy invalid token = **403**. Confirm Production `UPSTASH_REDIS_*` + redeploy. |
 
 ---

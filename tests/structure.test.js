@@ -1083,6 +1083,8 @@ function run() {
     'fulfillment.js: SITE_URL required in production'));
   tally(assert(fulfillment && /getProductFromSession[\s\S]*line_items[\s\S]*metadata\.product/.test(fulfillment),
     'fulfillment.js: product resolve prefers line_items price over metadata'));
+  tally(assert(fulfillment && fulfillment.includes('UNKNOWN_PDF_PRODUCT_ERROR') && fulfillment.includes('isUnknownPdfProductError'),
+    'fulfillment.js: exports unknown-PDF product error helper'));
   const rateLimitPath = path.join(apiDir, '_lib', 'rate-limit.js');
   tally(assert(fs.existsSync(rateLimitPath), 'api/_lib/rate-limit.js exists'));
   const rateLimit = readFile(rateLimitPath);
@@ -1099,6 +1101,8 @@ function run() {
   const webhookSrc = readFile(path.join(apiDir, 'stripe-webhook.js'));
   tally(assert(webhookSrc && webhookSrc.includes('MAX_WEBHOOK_BODY_BYTES') && webhookSrc.includes('1024 * 1024'),
     'stripe-webhook.js: 1 MiB body cap'));
+  tally(assert(webhookSrc && webhookSrc.includes('isUnknownPdfProductError') && webhookSrc.includes("ignored: 'unknown_product'"),
+    'stripe-webhook.js: ACK non-PDF checkouts with 200 ignored unknown_product'));
 
   // --- Success page ---
   const successPath = path.join(ROOT, 'success.html');

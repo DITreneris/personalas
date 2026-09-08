@@ -176,7 +176,8 @@ function ensureEnv(keys) {
   if (matchedProduct) {
     console.log('  MATCH: session price', matchedProduct, '→ recognized product.');
   } else {
-    console.error('  MISMATCH: session price not in env. Webhook would fail with "PDF product" error.');
+    console.error('  MISMATCH: session price not in env — not a Hire-kit PDF.');
+    console.error('  Do not --resend. After deploy, webhook returns 200 ignored unknown_product.');
   }
 
   console.log('\n--- Redis fulfillment record ---');
@@ -197,6 +198,12 @@ function ensureEnv(keys) {
 
   if (session.payment_status !== 'paid') {
     console.error('\n[resend] Aborting: session is not paid.');
+    process.exit(4);
+  }
+
+  if (!matchedProduct) {
+    console.error('\n[resend] Aborting: session is not a configured Hire-kit PDF.');
+    console.error('[resend] Fulfill from the originating spoke (.ceo / .app / …), not this repo.');
     process.exit(4);
   }
 

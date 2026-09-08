@@ -1,7 +1,7 @@
 'use strict';
 
 const Stripe = require('stripe');
-const { fulfillCheckoutSession } = require('./_lib/fulfillment');
+const { fulfillCheckoutSession, isUnknownPdfProductError } = require('./_lib/fulfillment');
 
 const MAX_WEBHOOK_BODY_BYTES = 1024 * 1024;
 
@@ -102,6 +102,17 @@ module.exports = async function stripeWebhook(req, res) {
     const result = await fulfillCheckoutSession(stripe, event.data.object.id, origin);
     sendJson(res, 200, { received: true, fulfillment: result.status });
   } catch (error) {
+    if (isUnknownPdfProductError(error)) {
+      // Shared Stripe account: other spokes (.ceo / .app / …) also emit
+      // checkout.session.completed here. ACK so Stripe stops retrying this
+      // endpoint; do not fulfill as a Hire-kit PDF. Real PDF failures stay 500.
+      const metaProduct = event.data.object && event.data.object.metadata
+        ? event.data.object.metadata.product
+        : '';
+      console.warn('[stripe-webhook] ignoring non-PDF checkout', event.data.object.id, metaProduct || '(no metadata.product)');
+      sendJson(res, 200, { received: true, ignored: 'unknown_product' });
+      return;
+    }
     const message = error && error.message ? error.message : String(error);
     console.error('[stripe-webhook] fulfillment failed for', event.data.object.id, '-', message);
     if (error && error.stack) console.error(error.stack);
