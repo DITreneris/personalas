@@ -1,12 +1,12 @@
 # MUST_TODO (open)
 
 Atviri post-promo punktai (GSC + public surface). Money-path QA uždarytas 2026-09-05.
-Shipped engineering (1.6.7): webhook ACK for non-PDF checkouts. Prior: 1.6.6 llms.txt v2 twins — [CHANGELOG.md](CHANGELOG.md).
+Shipped engineering (1.6.8): webhook ACK only on a positive foreign signal; Hire-looking misconfig stays 500. Prior: 1.6.7 shared-account ACK — [CHANGELOG.md](CHANGELOG.md).
 
 ## Purchase QA (manual, before promo)
 
 Recovery: `node scripts/check-fulfillment.js --session=cs_… --resend` (or `--payment_intent=pi_…`).
-Skip `--resend` if the CLI prints **MISMATCH** / `metadata.product` is not beginner|advanced|bundle (other spoke on the same Stripe account). After deploy, webhook returns 200 `{ ignored: "unknown_product" }` — replay that event in Stripe Dashboard.
+Skip `--resend` if the CLI prints **MISMATCH** / `metadata.product` is not beginner|advanced|bundle (other spoke on the same Stripe account). After deploy, webhook returns 200 `{ ignored: "unknown_product" }` only for a positive foreign signal (other PA host or non-Hire metadata). A `.help` session with unknown price is **500** — fix env, do not treat it as another spoke.
 
 Helpers (partial automation — do **not** replace live test buys):
 
@@ -59,3 +59,4 @@ Shipped: EN-only `/en/`, Stripe products/links/webhook/env, PDF Blob, success po
 **1.6.5:** public 404 lock uses `vercel.json` `routes` (Vercel drops `redirects` with `statusCode: 404`).
 **1.6.6:** llms.txt v2 (`describedby` + EN `index.md` twins). GSC + Bing done 2026-09-05.
 **1.6.7:** Stripe webhook 200 `{ ignored: "unknown_product" }` for non-PDF checkouts on the shared account.
+**1.6.8:** ACK only on a positive foreign signal; Hire-looking unmatched price on `.help` stays 500.

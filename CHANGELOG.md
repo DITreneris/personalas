@@ -4,6 +4,12 @@ Visi reikšmingi pakeitimai projekte dokumentuojami čia. Formatas pagal [Keep a
 
 ---
 
+## [1.6.8] - 2026-09-09
+
+### Pataisyta
+
+- **[Fix] Stripe webhook ACK only on a positive foreign signal:** `classifyCheckoutSession` runs before the Redis lock. Other-spoke checkouts (`.ceo` / `.app` / … host or non-Hire `metadata.product` / hub `metadata.plan`) still return **200** `{ ignored: "unknown_product" }`. A `.help` (or unknown-host) session with no Hire Price ID and no Hire metadata is **500** `UNCONFIGURED_HIRE_PRODUCT` so Stripe keeps retrying. Docs: [docs/security.md](docs/security.md), [DEPLOYMENT.md](DEPLOYMENT.md).
+
 ## [1.6.7] - 2026-09-08
 
 ### Pataisyta

@@ -140,28 +140,107 @@ function isBundleFulfillment(fulfillment) {
 }
 
 const UNKNOWN_PDF_PRODUCT_ERROR = 'Checkout Session does not contain a configured PDF product.';
+const UNCONFIGURED_HIRE_PRODUCT_ERROR =
+  'Checkout Session looks like a Hire purchase but is not a configured PDF product.';
+const UNKNOWN_PDF_PRODUCT_CODE = 'UNKNOWN_PDF_PRODUCT';
+const UNCONFIGURED_HIRE_PRODUCT_CODE = 'UNCONFIGURED_HIRE_PRODUCT';
+
+const OTHER_PA_HOSTS = [
+  'promptanatomy.ceo',
+  'promptanatomy.app',
+  'promptanatomy.pro',
+  'promptanatomy.info',
+  'promptanatomy.cloud',
+  'promptanatomy.site',
+  'promptanatomy.blog'
+];
 
 function isUnknownPdfProductError(error) {
-  return Boolean(error && error.message === UNKNOWN_PDF_PRODUCT_ERROR);
+  return Boolean(
+    error &&
+    (error.code === UNKNOWN_PDF_PRODUCT_CODE || error.message === UNKNOWN_PDF_PRODUCT_ERROR)
+  );
 }
 
-function getProductFromSession(session) {
-  // Prefer paid line_items price IDs over metadata so a mis-set Payment Link
-  // metadata.product cannot upgrade the fulfilled tier above what was charged.
+function sessionLinePriceIds(session) {
   const lineItems = session && session.line_items && Array.isArray(session.line_items.data)
     ? session.line_items.data
     : [];
-
+  const ids = [];
   for (const item of lineItems) {
     const priceId = item && item.price ? item.price.id : '';
+    if (priceId) ids.push(priceId);
+  }
+  return ids;
+}
+
+function hostnameFromSuccessUrl(session) {
+  const raw = session && session.success_url ? String(session.success_url) : '';
+  if (!raw) return '';
+  const normalized = raw.replace(/\{CHECKOUT_SESSION_ID\}/g, 'cs_placeholder');
+  try {
+    return new URL(normalized).hostname.toLowerCase();
+  } catch (_e) {
+    return '';
+  }
+}
+
+function isHelpHost(host) {
+  return host === 'www.promptanatomy.help' || host === 'promptanatomy.help';
+}
+
+function isOtherPromptAnatomyHost(host) {
+  if (!host || isHelpHost(host)) return false;
+  return OTHER_PA_HOSTS.some((base) => host === base || host === 'www.' + base);
+}
+
+function isKnownForeignMetadata(session) {
+  const meta = session && session.metadata ? session.metadata : {};
+  const productId = typeof meta.product === 'string' ? meta.product.trim() : '';
+  if (productId && !getProductById(productId)) return true;
+  const plan = meta.plan;
+  return plan === '3' || plan === '6' || plan === 3 || plan === 6;
+}
+
+function getProductFromSessionOrNull(session) {
+  // Prefer paid line_items price IDs over metadata so a mis-set Payment Link
+  // metadata.product cannot upgrade the fulfilled tier above what was charged.
+  const priceIds = sessionLinePriceIds(session);
+  for (const priceId of priceIds) {
     const product = getProductByPriceId(priceId);
     if (product) return product;
   }
 
   const metadataProduct = session && session.metadata ? getProductById(session.metadata.product) : null;
-  if (metadataProduct) return metadataProduct;
+  return metadataProduct || null;
+}
 
-  throw new Error(UNKNOWN_PDF_PRODUCT_ERROR);
+function classifyCheckoutSession(session) {
+  const priceIds = sessionLinePriceIds(session);
+  const successHost = hostnameFromSuccessUrl(session);
+  const product = getProductFromSessionOrNull(session);
+  if (product) {
+    return { action: 'fulfill', product, priceIds, successHost };
+  }
+  if (isKnownForeignMetadata(session) || isOtherPromptAnatomyHost(successHost)) {
+    return { action: 'ack', code: UNKNOWN_PDF_PRODUCT_CODE, priceIds, successHost };
+  }
+  return { action: 'reject', code: UNCONFIGURED_HIRE_PRODUCT_CODE, priceIds, successHost };
+}
+
+function throwClassificationError(classified) {
+  const isAck = classified && classified.action === 'ack';
+  const error = new Error(isAck ? UNKNOWN_PDF_PRODUCT_ERROR : UNCONFIGURED_HIRE_PRODUCT_ERROR);
+  error.code = isAck ? UNKNOWN_PDF_PRODUCT_CODE : UNCONFIGURED_HIRE_PRODUCT_CODE;
+  error.priceIds = classified && classified.priceIds ? classified.priceIds : [];
+  error.successHost = classified && classified.successHost ? classified.successHost : '';
+  throw error;
+}
+
+function getProductFromSession(session) {
+  const classified = classifyCheckoutSession(session);
+  if (classified.action === 'fulfill') return classified.product;
+  throwClassificationError(classified);
 }
 
 function getCustomerEmail(session) {
@@ -476,6 +555,12 @@ async function fulfillCheckoutSession(stripe, sessionId, origin) {
     return { status: 'not_paid', sessionId };
   }
 
+  const classified = classifyCheckoutSession(session);
+  if (classified.action !== 'fulfill') {
+    throwClassificationError(classified);
+  }
+  const product = classified.product;
+
   const fulfillmentKey = `fulfillment:${session.id}`;
   const existing = await redisGetJson(fulfillmentKey);
   if (existing && existing.status === 'fulfilled') {
@@ -494,7 +579,6 @@ async function fulfillCheckoutSession(stripe, sessionId, origin) {
       return { status: 'already_fulfilled', sessionId };
     }
 
-    const product = getProductFromSession(session);
     const email = getCustomerEmail(session);
     const now = new Date().toISOString();
 
@@ -681,7 +765,12 @@ async function getDownloadUrlBySessionId(sessionId, origin) {
 module.exports = {
   PRODUCTS,
   UNKNOWN_PDF_PRODUCT_ERROR,
+  UNCONFIGURED_HIRE_PRODUCT_ERROR,
+  UNKNOWN_PDF_PRODUCT_CODE,
+  UNCONFIGURED_HIRE_PRODUCT_CODE,
   isUnknownPdfProductError,
+  classifyCheckoutSession,
+  getProductFromSession,
   fulfillCheckoutSession,
   loadProductPdf,
   resolveDownload,

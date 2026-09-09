@@ -2,7 +2,7 @@
 
 **Vienas šaltinis** Cursor agentams ir PR peržiūrai: keliai, build, deploy, brand. Rolės ir workflow diagrama – [AGENTS.md](../AGENTS.md). Kalbos ir prekės ženklo detalės – [language-guidelines-en-lt.md](language-guidelines-en-lt.md). Deploy operacijos – [DEPLOYMENT.md](../DEPLOYMENT.md).
 
-**Paskutinis atnaujinimas:** 2026-09-05
+**Paskutinis atnaujinimas:** 2026-09-09
 
 ---
 
@@ -275,6 +275,7 @@ Trumpa lentelė čia. Vercel deploy detalės: [`.cursor/skills/vercel-deploy/les
 | 2026-09-05 | Stripe **Public details** = receipt contact (not our HTML) | Empty `support_email` → account-holder Gmail on “If you have any questions…”. `accounts.update` **cannot** change your own account — Dashboard only. Canon: `info@promptanatomy.app`; no +370 / personal phone |
 | 2026-09-05 | One Stripe account can have many products and many webhook URLs | Replay proof = Dashboard 200 `already_fulfilled` on the **www .help** endpoint, not `pending_webhooks === 0`. Other spokes (`.space` / `.ceo` / `.online` / `.app`) on the same account are valid; event-level pending stays >0 if those return 400 (wrong endpoint secret). Fix that project's `STRIPE_WEBHOOK_SECRET` — do not open a new Stripe account per repo. |
 | 2026-09-08 | `.help` webhook must **200 ignore** non-PDF checkouts | Shared account delivers `.ceo` `operating` (and other spokes) here. 500 `Fulfillment failed` retries for days and looks like a down endpoint. Unknown product → 200 `{ ignored: "unknown_product" }`. Do not `--resend` those sessions as Hire-kit PDFs. |
+| 2026-09-09 | ACK only on a positive foreign signal | 1.6.8: classify before Redis lock. `.help` + unmatched price + no Hire metadata stays **500** (env/metadata bug). 200 only for other PA host or non-Hire metadata. |
 | 2026-09-05 | `.vercelignore` taikomas **prieš** `npm test` | Ignore `scripts/` / `docs/` / `tests/` / `templates/` → `Cannot find module …/build-locale-pages.js`. Viešas lock = `routes` 404, ne ignore tų katalogų |
 | 2026-09-05 | CI žalia ≠ Vercel žalia | Vercel env gali turėti seną `BASE_PATH=/personalas/`. `VERCEL=1` ignore’ina `BASE_PATH`; `buildCommand` pin’ina `SITE_ORIGIN=https://www.promptanatomy.help`. Skaityk `FAIL:` eilutes, ne tik `Result:` footerį |
 | 2026-09-05 | `redirects` `statusCode: 404` **neteisinga** Vercel’e | Leidžiama tik 301–308; 404 taisyklės drop’inamos prieš testus. Lock = `routes` `{ src, dest: /404.html, status: 404 }`. Neliesti `/api/download` |

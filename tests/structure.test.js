@@ -1085,6 +1085,10 @@ function run() {
     'fulfillment.js: product resolve prefers line_items price over metadata'));
   tally(assert(fulfillment && fulfillment.includes('UNKNOWN_PDF_PRODUCT_ERROR') && fulfillment.includes('isUnknownPdfProductError'),
     'fulfillment.js: exports unknown-PDF product error helper'));
+  tally(assert(fulfillment && fulfillment.includes('classifyCheckoutSession') && fulfillment.includes('UNCONFIGURED_HIRE_PRODUCT'),
+    'fulfillment.js: classifyCheckoutSession + UNCONFIGURED_HIRE_PRODUCT'));
+  tally(assert(fulfillment && /async function fulfillCheckoutSession[\s\S]*classifyCheckoutSession[\s\S]*acquireLock/.test(fulfillment),
+    'fulfillment.js: classifyCheckoutSession before acquireLock'));
   const rateLimitPath = path.join(apiDir, '_lib', 'rate-limit.js');
   tally(assert(fs.existsSync(rateLimitPath), 'api/_lib/rate-limit.js exists'));
   const rateLimit = readFile(rateLimitPath);

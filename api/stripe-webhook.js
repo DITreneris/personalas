@@ -105,11 +105,22 @@ module.exports = async function stripeWebhook(req, res) {
     if (isUnknownPdfProductError(error)) {
       // Shared Stripe account: other spokes (.ceo / .app / …) also emit
       // checkout.session.completed here. ACK so Stripe stops retrying this
-      // endpoint; do not fulfill as a Hire-kit PDF. Real PDF failures stay 500.
+      // endpoint; do not fulfill as a Hire-kit PDF. Hire-looking misconfig
+      // (UNCONFIGURED_HIRE_PRODUCT) stays 500. Real PDF failures stay 500.
       const metaProduct = event.data.object && event.data.object.metadata
         ? event.data.object.metadata.product
         : '';
-      console.warn('[stripe-webhook] ignoring non-PDF checkout', event.data.object.id, metaProduct || '(no metadata.product)');
+      const priceIds = error.priceIds && error.priceIds.length
+        ? error.priceIds.join(',')
+        : '(no price ids)';
+      console.warn(
+        '[stripe-webhook] ignoring non-PDF checkout',
+        event.data.object.id,
+        error.code || 'UNKNOWN_PDF_PRODUCT',
+        error.successHost || '(no host)',
+        priceIds,
+        metaProduct || '(no metadata.product)'
+      );
       sendJson(res, 200, { received: true, ignored: 'unknown_product' });
       return;
     }

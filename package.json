@@ -1,6 +1,6 @@
 {
   "name": "personalas",
-  "version": "1.6.7",
+  "version": "1.6.8",
   "private": true,
   "description": "Personalas – US-localized HR hiring prompts, static HTML site",
   "repository": {
@@ -12,7 +12,7 @@
     "generate:og": "node scripts/generate-og-image.js",
     "generate:community-illustration": "node scripts/optimize-community-illustration.js",
     "generate:favicon": "node scripts/generate-favicon-assets.js",
-    "test": "npm run build && npm run pdf:validate && node tests/structure.test.js && npm run lint:html && npm run lint:html:privacy && npm run lint:html:locales && npm run lint:html:static && npm run lint:js",
+    "test": "npm run build && npm run pdf:validate && node tests/structure.test.js && node tests/fulfillment-classify.test.js && npm run lint:html && npm run lint:html:privacy && npm run lint:html:locales && npm run lint:html:static && npm run lint:js",
     "test:structure": "node tests/structure.test.js",
     "lint:html": "npx html-validator-cli --file index.html --validator=https://html5.validator.nu/",
     "lint:html:privacy": "npx html-validator-cli --file privacy.html --validator=https://html5.validator.nu/",
