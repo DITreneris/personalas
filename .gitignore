@@ -31,6 +31,8 @@ Desktop.ini
 !DEPLOYMENT.md
 !AGENTS.md
 !MUST_TODO.md
+!ROADMAP.md
+!TODO.md
 !docs/
 !docs/**/*.md
 !.cursor/skills/**/*.md

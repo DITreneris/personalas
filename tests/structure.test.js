@@ -286,6 +286,46 @@ function run() {
         'en/index.html footer: entity_footer_click analytics hook'
       )
     );
+    tally(
+      assert(
+        enIndex.includes('utm_medium=badge') &&
+          enIndex.includes('data-analytics="badge_app_click"'),
+        'en/index.html hero badge: UTM help/badge + analytics hook'
+      )
+    );
+    tally(
+      assert(
+        enIndex.includes('utm_medium=community_illustration') &&
+          enIndex.includes('data-analytics="community_illustration_click"'),
+        'en/index.html community illustration: UTM + analytics hook'
+      )
+    );
+    tally(
+      assert(
+        enIndex.includes('utm_medium=community') &&
+          enIndex.includes('data-analytics="community_cta_click"') &&
+          enIndex.includes('class="community-cta-primary"'),
+        'en/index.html community CTA: UTM help/community + analytics hook'
+      )
+    );
+    tally(
+      assert(
+        enIndex.includes('utm_medium=footer_contact') &&
+          enIndex.includes('data-analytics="footer_contact_click"'),
+        'en/index.html footer-contact: UTM help/footer_contact + analytics hook'
+      )
+    );
+    const appHrefs = [...enIndex.matchAll(/href="(https:\/\/www\.promptanatomy\.app[^"]*)"/g)].map(function (m) {
+      return m[1];
+    });
+    tally(
+      assert(
+        appHrefs.length >= 4 && appHrefs.every(function (h) {
+          return h.indexOf('utm_source=help') !== -1;
+        }),
+        'en/index.html: every .app href carries utm_source=help (' + appHrefs.length + ' found)'
+      )
+    );
     tally(assert(
       enIndex.includes('footer-disclaimer') || enIndex.includes('legal-disclaimer') || enIndex.includes('Not legal or HR advice'),
       'en/index.html HR advisory disclaimer'
@@ -1337,8 +1377,10 @@ function run() {
     )[0] || '';
     tally(
       assert(
-        /href="https:\/\/www\.promptanatomy\.app\/?"/.test(communityIllustrationOpenTag),
-        'en/index.html community illustration links to mother brand'
+        /href="https:\/\/www\.promptanatomy\.app\/?\?[^"]*utm_source=help/.test(
+          communityIllustrationOpenTag
+        ),
+        'en/index.html community illustration links to mother brand with utm_source=help'
       )
     );
     tally(

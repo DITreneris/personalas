@@ -24,6 +24,8 @@ Tier žemėlapis. Lifecycle ir ownership — [DOCUMENTATION.md](DOCUMENTATION.md
 | [../INTEGRACIJA.md](../INTEGRACIJA.md) | Stripe / forma / Feedback Store statusas |
 | [../CHANGELOG.md](../CHANGELOG.md) | SemVer (recent); senesni → archive |
 | [../MUST_TODO.md](../MUST_TODO.md) | Atviri promo / purchase QA |
+| [../ROADMAP.md](../ROADMAP.md) | Product bet B + horizons (H0–H3) |
+| [../TODO.md](../TODO.md) | Open H0 checklist |
 | [security.md](security.md) | npm audit, CSP, GEO blurb |
 | [TESTAVIMAS.md](TESTAVIMAS.md) | Post-deploy + Mobile matrix |
 

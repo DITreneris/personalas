@@ -4,6 +4,12 @@ Visi reikšmingi pakeitimai projekte dokumentuojami čia. Formatas pagal [Keep a
 
 ---
 
+## [Nereleisuota]
+
+### Pakeista
+
+- **[Orchestrator] B × H0 attribution + GitHub harvest:** every `/en/` `.app` outbound (badge, community illustration/CTA, footer contact) carries `utm_source=help` + medium slots + Plausible `data-analytics` hooks; structure tests lock it. README buyer-first screen with GitHub UTM CTAs + blog deepen [Hiring Prompts Without the Data Leak](https://www.promptanatomy.blog/articles/hiring-prompts-help-launch/). New [ROADMAP.md](ROADMAP.md) / [TODO.md](TODO.md) (`.gitignore` exceptions); INDEX + DOCUMENTATION ownership; MUST_TODO points at ROADMAP.
+
 ## [1.6.8] - 2026-09-09
 
 ### Pataisyta

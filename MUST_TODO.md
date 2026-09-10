@@ -44,9 +44,12 @@ Live-checked 2026-09-05 on `www.promptanatomy.help` (and `ditreneris.github.io/p
 
 ## Next bets (from former roadmap)
 
+Product bet **B** and horizons — [ROADMAP.md](ROADMAP.md). H0 checklist — [TODO.md](TODO.md).
+
 1. **Trust:** real buyer reviews (no fabricated testimonials; Phase D constraints stay)
 2. Keep CSP enforce + delegated handlers (no inline `onclick` regression)
 3. Post-promo security: single-use download jti, refund auto-revoke
+4. **H0:** Hire→`.app` UTM complete + GitHub README harvest (see TODO)
 
 ## Done (do not re-open)
 

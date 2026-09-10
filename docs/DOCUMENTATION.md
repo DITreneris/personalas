@@ -3,7 +3,7 @@
 **Hub:** [INDEX.md](INDEX.md) — tier žemėlapis.  
 **Ops kanonas:** [AGENT_SOT.md](AGENT_SOT.md) — keliai, build, deploy, brand (redaguoti čia pirmiausia).
 
-**Paskutinis atnaujinimas:** 2026-09-05
+**Paskutinis atnaujinimas:** 2026-09-10
 
 ---
 
@@ -59,6 +59,8 @@ Keičiant brand HQ, spoke KPI, locale ar GEO destination hierarchy — **ne** ko
 | [design_system_v2.md](design_system_v2.md) | UI | Token / CTA / a11y kanonas |
 | [../CHANGELOG.md](../CHANGELOG.md) | Orchestrator / QA | Kiekvienas release (SemVer); senesni → archive |
 | [../MUST_TODO.md](../MUST_TODO.md) | Orchestrator | Tik atviri promo / purchase QA |
+| [../ROADMAP.md](../ROADMAP.md) | Orchestrator | Product bet / horizons; kill gates |
+| [../TODO.md](../TODO.md) | Orchestrator | Active horizon checklist (H0) |
 | [../DEPLOYMENT.md](../DEPLOYMENT.md) | Orchestrator | Env, Vercel, post-deploy |
 | [../INTEGRACIJA.md](../INTEGRACIJA.md) | Orchestrator | Integracijos statusas (forma, API, Feedback Store) |
 | [security.md](security.md) | QA | npm audit, CSP, static surface, GEO blurb |
