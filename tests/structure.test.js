@@ -354,7 +354,12 @@ function run() {
         'landing.css: hero h1 not grouped with uppercase rule'
       )
     );
-    tally(assert(heroBlock && heroBlock[0].includes('U.S. hiring'), 'hero headline uses U.S. disambiguation'));
+    tally(assert(
+      heroBlock &&
+        heroBlock[0].includes('<h1>Run a repeatable hiring loop in minutes') &&
+        !/<h1>[^<]*U\.S\./.test(heroBlock[0]),
+      'hero headline is hiring loop without U.S.'
+    ));
     const heroSubheadMatch = heroBlock && heroBlock[0].match(/<p>([^<]*)<\/p>/);
     tally(
       assert(
