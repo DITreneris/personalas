@@ -8,6 +8,8 @@ Visi reikšmingi pakeitimai projekte dokumentuojami čia. Formatas pagal [Keep a
 
 ### Pakeista
 
+- **[UI][Content] OG social card v4:** drop “U.S.” from the share card. [config/sot.json](config/sot.json) `ogTitle` + `ogImage` (headline, support, gold verb “Copy the free prompts”); [scripts/generate-og-image.js](scripts/generate-og-image.js) → [images/og-default-v4.png](images/og-default-v4.png); `OG_IMAGE_REL` v4; [vercel.json](vercel.json) cache headers v4. v3 file stays so old URLs do not 404. Page title and meta description stay US-scoped.
+
 - **[Orchestrator] B × H0 attribution + GitHub harvest:** every `/en/` `.app` outbound (badge, community illustration/CTA, footer contact) carries `utm_source=help` + medium slots + Plausible `data-analytics` hooks; structure tests lock it. README buyer-first screen with GitHub UTM CTAs + blog deepen [Hiring Prompts Without the Data Leak](https://www.promptanatomy.blog/articles/hiring-prompts-help-launch/). New [ROADMAP.md](ROADMAP.md) / [TODO.md](TODO.md) (`.gitignore` exceptions); INDEX + DOCUMENTATION ownership; MUST_TODO points at ROADMAP.
 
 ## [1.6.8] - 2026-09-09

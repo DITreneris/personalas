@@ -1,5 +1,5 @@
 /**
- * One-off / CI: generate images/og-default-v3.png (1200×630) from SVG via sharp.
+ * One-off / CI: generate images/og-default-v4.png (1200×630) from SVG via sharp.
  * Copy from config/sot.json → marketing.seo.ogImage
  * Run: node scripts/generate-og-image.js
  */
@@ -17,7 +17,7 @@ try {
 }
 
 const ROOT = path.join(__dirname, '..');
-const OUT = path.join(ROOT, 'images', 'og-default-v3.png');
+const OUT = path.join(ROOT, 'images', 'og-default-v4.png');
 const SOT_PATH = path.join(ROOT, 'config', 'sot.json');
 
 function escapeXml(text) {
@@ -60,10 +60,10 @@ function buildSvg(copy) {
   </defs>
   <rect width="1200" height="630" fill="url(#g)"/>
   <rect x="60" y="60" width="6" height="510" fill="#cfa73a"/>
-  <text x="600" y="230" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Inter, system-ui, sans-serif" font-size="46" font-weight="700">${l1}</text>
-  <text x="600" y="295" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Inter, system-ui, sans-serif" font-size="46" font-weight="700">${l2}</text>
-  <text x="600" y="390" text-anchor="middle" fill="#cfe1ee" font-family="Segoe UI, Inter, system-ui, sans-serif" font-size="26" font-weight="500">${sub}</text>
-  <text x="600" y="490" text-anchor="middle" fill="#cfa73a" font-family="Segoe UI, Inter, system-ui, sans-serif" font-size="22" font-weight="600">Prompt Anatomy</text>
+  <text x="600" y="155" text-anchor="middle" fill="#cfa73a" font-family="Segoe UI, Inter, system-ui, sans-serif" font-size="22" font-weight="600">Prompt Anatomy</text>
+  <text x="600" y="270" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Inter, system-ui, sans-serif" font-size="52" font-weight="700">${l1}</text>
+  <text x="600" y="340" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Inter, system-ui, sans-serif" font-size="40" font-weight="600">${l2}</text>
+  <text x="600" y="455" text-anchor="middle" fill="#cfa73a" font-family="Segoe UI, Inter, system-ui, sans-serif" font-size="30" font-weight="600">${sub}</text>
 </svg>`;
 }
 

@@ -37,7 +37,7 @@ const BASE_PATH = rawBase ? rawBase.replace(/\/*$/, '') + '/' : '';
 const SITE_PUBLIC_BASE = (process.env.SITE_PUBLIC_BASE || '').trim().replace(/\/+$/, '');
 
 /** Bump filename when busting Twitter/OG image cache (same URL = stale card). */
-const OG_IMAGE_REL = 'images/og-default-v3.png';
+const OG_IMAGE_REL = 'images/og-default-v4.png';
 
 /** Alt text from config/sot.json → marketing.seo.ogImage.alt */
 function getOgImageAlt(sot) {
